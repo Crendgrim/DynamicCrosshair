@@ -1,6 +1,8 @@
 plugins {
 	id 'fabric-loom' version '0.11-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.modrinth.minotaur' version '2.+'
+	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -69,5 +71,42 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+modrinth {
+	token = System.getenv("MODRINTH_TOKEN")
+	projectId = project.modrinth_id
+	uploadFile = remapJar
+	versionType = project.version_type
+	changelog = project.changelog
+	gameVersions = [project.minecraft_version]
+	loaders = ['fabric']
+	dependencies {
+		required.project 'P7dR8mSH' // Fabric API
+		required.project '9s6osm5g' // Cloth Config
+		optional.project 'mOgUt4GM' // Mod Menu
+	}
+}
+
+curseforge {
+	apiKey = "${System.getenv("CURSEFORGE_TOKEN")}"
+	project {
+		id = project.curseforge_id
+		changelog = project.changelog
+		releaseType = project.version_type
+		addGameVersion project.minecraft_version
+
+		mainArtifact(remapJar) {
+			displayName = "${project.mod_name} ${project.version}"
+			relations {
+				requiredDependency "fabric-api"
+				requiredDependency "cloth-config"
+				optionalDependency "modmenu"
+			}
+		}
+	}
+	options {
+		forgeGradleIntegration = false
 	}
 }
