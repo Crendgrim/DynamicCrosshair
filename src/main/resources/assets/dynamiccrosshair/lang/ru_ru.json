@@ -27,5 +27,5 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modInteractable": "Смотрит на интерактивный блок",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modCorrectTool": "Держит в руках подходящий инструмент",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modIncorrectTool": "Держит в руках неподходящий инструмент",
-  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "Holding usable item"
+  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "Держит в руках используемый предмет"
 }
