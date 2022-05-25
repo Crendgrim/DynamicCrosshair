@@ -27,5 +27,10 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modInteractable": "Looking at interactable block",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modCorrectTool": "Holding correct tool",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modIncorrectTool": "Holding incorrect tool",
-  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "Holding usable item"
+  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "Holding usable item",
+
+  "text.dynamiccrosshair.option.mode.Always": "Always",
+  "text.dynamiccrosshair.option.mode.IfTargeting": "If Targeting",
+  "text.dynamiccrosshair.option.mode.IfInteractable": "If Interactable",
+  "text.dynamiccrosshair.option.mode.Disabled": "Disabled"
 }
