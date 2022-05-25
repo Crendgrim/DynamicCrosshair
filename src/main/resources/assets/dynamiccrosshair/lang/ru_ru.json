@@ -28,4 +28,9 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modCorrectTool": "Держит в руках подходящий инструмент",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modIncorrectTool": "Держит в руках неподходящий инструмент",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "Держит в руках используемый предмет"
+  
+  "text.dynamiccrosshair.option.mode.Always": "Всегда",
+  "text.dynamiccrosshair.option.mode.IfTargeting": "Если нацелен",
+  "text.dynamiccrosshair.option.mode.IfInteractable": "Если можно взаимодействовать",
+  "text.dynamiccrosshair.option.mode.Disabled": "Отключено"
 }
