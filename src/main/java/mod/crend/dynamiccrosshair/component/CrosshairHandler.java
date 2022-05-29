@@ -367,13 +367,6 @@ public class CrosshairHandler {
                         return true;
                 }
             }
-            else if (block instanceof FlowerPotBlock && !player.shouldCancelInteraction()) {
-                boolean potItemIsAir = ((FlowerPotBlock) block).getContent() == Blocks.AIR;
-                boolean handItemIsPottable = handItem instanceof BlockItem && IFlowerPotBlockMixin.getCONTENT_TO_POTTED().containsKey(((BlockItem) handItem).getBlock());
-                if (potItemIsAir == handItemIsPottable) {
-                    return true;
-                }
-            }
         }
         return false;
     }
@@ -409,9 +402,21 @@ public class CrosshairHandler {
                     ||  block instanceof AnvilBlock
                     || (block instanceof CraftingTableBlock && !(block instanceof FletchingTableBlock))
                     || (block instanceof ComposterBlock && ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(mainHandStack.getItem()))
-                    || (block instanceof FlowerPotBlock && ((FlowerPotBlock) block).getContent() != Blocks.AIR)
             ) {
                 return true;
+            }
+            // Special case: Flower pots behave oddly
+            if (block instanceof FlowerPotBlock) {
+                Item handItem = player.getMainHandStack().getItem();
+                boolean potItemIsAir = ((FlowerPotBlock) block).getContent() == Blocks.AIR;
+                boolean handItemIsPottable = handItem instanceof BlockItem && IFlowerPotBlockMixin.getCONTENT_TO_POTTED().containsKey(((BlockItem) handItem).getBlock());
+                if (potItemIsAir && handItemIsPottable) {
+                    modifierUse = ModifierUse.USE_ITEM;
+                    return false;
+                }
+                if (!potItemIsAir && !handItemIsPottable) {
+                    return true;
+                }
             }
             // Special case: Cake gets eaten (modified), so "use" makes more sense to me
             if (block instanceof CakeBlock) {
