@@ -311,6 +311,11 @@ public class CrosshairHandler {
                     return true;
                 }
             }
+            if (handItem instanceof CompassItem) {
+                if (block == Blocks.LODESTONE) {
+                    return true;
+                }
+            }
             if (handItem instanceof WritableBookItem || handItem instanceof WrittenBookItem) return true;
         } else if (hitResult.getType() == HitResult.Type.MISS && DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
             if (handItem == Items.WATER_BUCKET || handItem == Items.LAVA_BUCKET) {
