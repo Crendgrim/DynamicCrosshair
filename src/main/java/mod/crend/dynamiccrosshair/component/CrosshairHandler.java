@@ -114,6 +114,8 @@ public class CrosshairHandler {
                     Block block = MinecraftClient.getInstance().world.getBlockState(((BlockHitResult) hitResult).getBlockPos()).getBlock();
                     // Special case: cake eats input
                     if (block instanceof CakeBlock && !player.shouldCancelInteraction() && player.getHungerManager().isNotFull()) return false;
+                    // Special case: signs and flower pots eat input
+                    if (!player.shouldCancelInteraction() && (block instanceof SignBlock || block instanceof FlowerPotBlock)) return false;
                     ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, player.getActiveHand(), handItemStack, (BlockHitResult) hitResult);
                     BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
                     if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return true;
@@ -290,7 +292,9 @@ public class CrosshairHandler {
                 if (handItem == Items.WATER_BUCKET || handItem == Items.LAVA_BUCKET) {
                     if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return true;
                     if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
-                        activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
+                        if (player.shouldCancelInteraction() || !(block instanceof SignBlock || block instanceof FlowerPotBlock)) {
+                            activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
+                        }
                         return false;
                     }
                     return true;
