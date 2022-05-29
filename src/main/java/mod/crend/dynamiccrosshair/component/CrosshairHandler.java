@@ -257,6 +257,7 @@ public class CrosshairHandler {
                     || handItem instanceof GlassBottleItem
                     || handItem instanceof PotionItem
                     || handItem instanceof BucketItem
+                    || handItem instanceof BoneMealItem
                     || handItem instanceof WritableBookItem
                     || handItem instanceof WrittenBookItem);
         }
@@ -301,6 +302,14 @@ public class CrosshairHandler {
                 if (block.equals(Blocks.LAVA_CAULDRON) && !player.shouldCancelInteraction()) return true;
                 if (block.equals(Blocks.POWDER_SNOW_CAULDRON) && !player.shouldCancelInteraction()) return true;
                 return false; // crosshair will be updated later because PowderSnowBucketItem is also a BlockItem
+            }
+            if (handItem instanceof BoneMealItem) {
+                if (BoneMealItem.useOnFertilizable(handItemStack, MinecraftClient.getInstance().world, ((BlockHitResult) hitResult).getBlockPos())) {
+                    return true;
+                }
+                if (BoneMealItem.useOnGround(handItemStack, MinecraftClient.getInstance().world, ((BlockHitResult) hitResult).getBlockPos(), null)) {
+                    return true;
+                }
             }
             if (handItem instanceof WritableBookItem || handItem instanceof WrittenBookItem) return true;
         } else if (hitResult.getType() == HitResult.Type.MISS && DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
