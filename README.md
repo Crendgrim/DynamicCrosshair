@@ -32,5 +32,8 @@ Get packaged versions from [Modrinth](https://modrinth.com/mod/dynamiccrosshair)
 This mod is very strongly coupled to vanilla Minecraft and has to hardcode a lot of interaction rules.
 Thus, playing on a non-vanilla world will make the advanced features (context-dependent style) unreliable.
 
+Modded items are forced to have a crosshair active when holding them in the main hand.
+There sadly is no general way to differentiate between regular items and tools/weapons.
+
 I highly suggest my other mod [Auto HUD](https://modrinth.com/mod/autohud), which allows to dynamically hide and reveal HUD elements
 based on context.

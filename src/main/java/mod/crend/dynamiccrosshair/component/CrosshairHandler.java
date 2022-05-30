@@ -31,6 +31,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RaycastContext;
 
 import java.util.LinkedList;
@@ -610,6 +611,16 @@ public class CrosshairHandler {
 
         if (DynamicCrosshair.config.dynamicCrosshairOnBlock() == InteractableCrosshairPolicy.IfTargeting && hitResult.getType() == HitResult.Type.BLOCK) {
             return true;
+        }
+
+        // Force modded items to have a crosshair. This has to be done because modded tools/weapons cannot be distinguished
+        // from regular items and thus will hide the crosshair.
+        // Hopefully we can do this better in the future.
+        if (DynamicCrosshair.config.isDynamicCrosshair() && activeCrosshair == DynamicCrosshair.config.getCrosshairStyleRegular()) {
+            Item handItem = player.getMainHandStack().getItem();
+            if (!Registry.ITEM.getId(handItem).getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
+                return true;
+            }
         }
 
         if (!useEntityCrosshair && !DynamicCrosshair.config.isDynamicCrosshair()) {
