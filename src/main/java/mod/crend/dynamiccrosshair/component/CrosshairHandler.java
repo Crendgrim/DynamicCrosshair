@@ -85,7 +85,7 @@ public class CrosshairHandler {
             } else if (checkRangedWeapon(hitResult, handItem)) {
                 activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingRangedWeapon();
                 return true;
-            } else if (checkThrowable(hitResult, handItem)) {
+            } else if (checkThrowable(player, hitResult, handItem)) {
                 activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingThrowable();
                 return true;
             } else if (checkTool(player, handItem, hitResult)) {
@@ -227,13 +227,13 @@ public class CrosshairHandler {
         return false;
     }
 
-    private static boolean checkThrowable(HitResult hitResult, Item handItem) {
+    private static boolean checkThrowable(ClientPlayerEntity player, HitResult hitResult, Item handItem) {
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingThrowable(), hitResult)) {
             if (handItem instanceof EggItem) return true;
             if (handItem instanceof SnowballItem) return true;
             if (handItem instanceof ThrowablePotionItem) return true;
             if (handItem instanceof ExperienceBottleItem) return true;
-            if (handItem instanceof EnderPearlItem) return true;
+            if (handItem instanceof EnderPearlItem && !player.getItemCooldownManager().isCoolingDown(handItem)) return true;
         }
         return false;
     }
@@ -266,7 +266,12 @@ public class CrosshairHandler {
         }
 
         // Enable crosshair on food and drinks also when not targeting if "when interactable" is chosen
-        if (handItem.isFood() && player.getHungerManager().isNotFull()) return true;
+        if (handItem.isFood()) {
+            if (handItem instanceof ChorusFruitItem) {
+                if (!player.getItemCooldownManager().isCoolingDown(handItem)) return true;
+            }
+            else if (player.getHungerManager().isNotFull()) return true;
+        }
         if (handItem.getUseAction(handItemStack) == UseAction.DRINK) return true;
 
         if (handItem instanceof SpawnEggItem && hitResult.getType() != HitResult.Type.MISS) return true;
