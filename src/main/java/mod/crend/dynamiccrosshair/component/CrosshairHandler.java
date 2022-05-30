@@ -292,6 +292,15 @@ public class CrosshairHandler {
                 if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return true;
             }
             if (handItem instanceof BucketItem) {
+                if (handItem instanceof EntityBucketItem) {
+                    if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
+                        if (!player.shouldCancelInteraction() && (block instanceof SignBlock || block instanceof FlowerPotBlock)) {
+                            return false;
+                        }
+                        activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
+                    }
+                    return true;
+                }
                 if (block.equals(Blocks.WATER_CAULDRON) && !player.shouldCancelInteraction()) return true;
                 if (block.equals(Blocks.LAVA_CAULDRON) && !player.shouldCancelInteraction()) return true;
                 if (block.equals(Blocks.POWDER_SNOW_CAULDRON) && !player.shouldCancelInteraction()) return true;
