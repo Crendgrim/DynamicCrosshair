@@ -95,6 +95,7 @@ curseforge {
 		id = project.curseforge_id
 		changelog = project.changelog
 		releaseType = project.version_type
+		addGameVersion "Fabric"
 		addGameVersion project.minecraft_version
 
 		mainArtifact(remapJar) {
