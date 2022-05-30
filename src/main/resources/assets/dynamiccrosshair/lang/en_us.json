@@ -33,5 +33,23 @@
   "text.dynamiccrosshair.option.mode.Always": "Always",
   "text.dynamiccrosshair.option.mode.IfTargeting": "If Targeting",
   "text.dynamiccrosshair.option.mode.IfInteractable": "If Interactable",
-  "text.dynamiccrosshair.option.mode.Disabled": "Disabled"
+  "text.dynamiccrosshair.option.mode.Disabled": "Disabled",
+
+  "text.dynamiccrosshair.style.DEFAULT": "Default",
+  "text.dynamiccrosshair.style.CROSS": "Cross",
+  "text.dynamiccrosshair.style.DIAGONAL_CROSS": "Diagonal Cross",
+  "text.dynamiccrosshair.style.CIRCLE": "Circle",
+  "text.dynamiccrosshair.style.SQUARE": "Square",
+  "text.dynamiccrosshair.style.DIAMOND": "Diamond",
+  "text.dynamiccrosshair.style.CARET": "Caret",
+
+  "text.dynamiccrosshair.modifierStyle.DISABLED": "Disabled",
+  "text.dynamiccrosshair.modifierStyle.DOT": "Dot",
+  "text.dynamiccrosshair.modifierStyle.DIAGONAL_CROSS": "Diagonal Cross",
+  "text.dynamiccrosshair.modifierStyle.BRACKETS": "Brackets",
+  "text.dynamiccrosshair.modifierStyle.BRACKETS_BOTTOM": "Brackets Bottom",
+  "text.dynamiccrosshair.modifierStyle.BRACKETS_TOP": "Brackets Top",
+  "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "Round Brackets",
+  "text.dynamiccrosshair.modifierStyle.LINES": "Lines",
+  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Line Bottom"
 }

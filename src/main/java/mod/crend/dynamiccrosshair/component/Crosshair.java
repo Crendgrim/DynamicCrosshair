@@ -18,4 +18,9 @@ public enum Crosshair {
 
     public int getX() { return x; }
     public int getY() { return y; }
+
+    @Override
+    public String toString() {
+        return "text.dynamiccrosshair.style." + name();
+    }
 }
