@@ -587,6 +587,10 @@ public class CrosshairHandler {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return false;
 
+        // Hide crosshair when rendering any screen
+        // This makes it not show up when using a transparent GUI resource pack
+        if (DynamicCrosshair.config.isHideWithScreen() && MinecraftClient.getInstance().currentScreen != null) return false;
+
         HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
         if (hitResult == null) return false; // Failsafe: no target when not in world
         boolean useEntityCrosshair = false;

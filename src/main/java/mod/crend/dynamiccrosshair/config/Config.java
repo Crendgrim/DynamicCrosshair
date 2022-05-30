@@ -9,6 +9,7 @@ import mod.crend.dynamiccrosshair.component.CrosshairModifier;
 public class Config implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     boolean dynamicCrosshair = true;
+    boolean hideWithScreen = true;
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     CrosshairSettings crosshairSettings = new CrosshairSettings();
 
@@ -28,6 +29,7 @@ public class Config implements ConfigData {
         BlockCrosshairPolicy holdingUsableItem = BlockCrosshairPolicy.IfInteractable;
     }
     public boolean isDynamicCrosshair() { return dynamicCrosshair; }
+    public boolean isHideWithScreen() { return hideWithScreen; }
     public InteractableCrosshairPolicy dynamicCrosshairOnBlock() { return crosshairSettings.onBlock; }
     public boolean dynamicCrosshairOnEntity() { return crosshairSettings.onEntity; }
     public CrosshairPolicy dynamicCrosshairHoldingTool() { return crosshairSettings.holdingTool; }

@@ -3,6 +3,7 @@
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "Dynamically hide the crosshair",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip": "Hides the crosshair unless holding a tool, weapon, or targeting an entity",
+  "text.autoconfig.dynamiccrosshair.option.hideWithScreen": "Hide the crosshair whenever a screen is open",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud": "Dynamic crosshair when showing whole HUD",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud.@Tooltip": "Toggling this off disables the dynamic crosshair when using the Toggle HUD keybind to disable the mod",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairStyle": "Use dynamic crosshair style",
