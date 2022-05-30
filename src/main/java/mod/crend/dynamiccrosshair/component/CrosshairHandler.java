@@ -71,7 +71,7 @@ public class CrosshairHandler {
     private static boolean checkHand(ClientPlayerEntity player, ItemStack handItemStack, HitResult hitResult) {
         Item handItem = handItemStack.getItem();
         if (hitResult.getType() == HitResult.Type.ENTITY) {
-            if (canUseItem(player, handItemStack, hitResult, handItem)) {
+            if (canUseItem(player, handItemStack, hitResult, handItem, false)) {
                 modifierUse = ModifierUse.USE_ITEM;
                 return true;
             } else {
@@ -79,19 +79,33 @@ public class CrosshairHandler {
                 return modifierUse != ModifierUse.NONE;
             }
         } else if (!handItemStack.isEmpty()) {
-            if (canUseItem(player, handItemStack, hitResult, handItem)) {
+            boolean ignoreUse = false;
+            if (hitResult.getType() == HitResult.Type.BLOCK) {
+                BlockState blockState = MinecraftClient.getInstance().world.getBlockState(((BlockHitResult) hitResult).getBlockPos());
+                Block block = blockState.getBlock();
+
+                // Special case: cake eats input
+                if (block instanceof CakeBlock && !player.shouldCancelInteraction() && player.getHungerManager().isNotFull()) {
+                    ignoreUse = true;
+                }
+                // Special case: signs and flower pots eat inputs
+                if (!player.shouldCancelInteraction() && (block instanceof SignBlock || block instanceof FlowerPotBlock)) {
+                    ignoreUse = true;
+                }
+            }
+            if (canUseItem(player, handItemStack, hitResult, handItem, ignoreUse)) {
                 modifierUse = ModifierUse.USE_ITEM;
                 return true;
-            } else if (checkRangedWeapon(hitResult, handItem)) {
+            } else if (!ignoreUse && checkRangedWeapon(hitResult, handItem)) {
                 activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingRangedWeapon();
                 return true;
-            } else if (checkThrowable(player, hitResult, handItem)) {
+            } else if (!ignoreUse && checkThrowable(player, hitResult, handItem)) {
                 activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingThrowable();
                 return true;
-            } else if (checkTool(player, handItem, hitResult)) {
+            } else if (checkTool(player, handItem, hitResult, ignoreUse)) {
                 activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingTool();
                 return true;
-            } else if (checkBlock(player, handItemStack, hitResult, handItem)) {
+            } else if (!ignoreUse && checkBlock(player, handItemStack, hitResult, handItem)) {
                 activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
                 return true;
             }
@@ -112,11 +126,6 @@ public class CrosshairHandler {
             if (handItem instanceof BlockItem) {
                 if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
                     IBlockItemMixin blockItem = (IBlockItemMixin) handItem;
-                    Block block = MinecraftClient.getInstance().world.getBlockState(((BlockHitResult) hitResult).getBlockPos()).getBlock();
-                    // Special case: cake eats input
-                    if (block instanceof CakeBlock && !player.shouldCancelInteraction() && player.getHungerManager().isNotFull()) return false;
-                    // Special case: signs and flower pots eat input
-                    if (!player.shouldCancelInteraction() && (block instanceof SignBlock || block instanceof FlowerPotBlock)) return false;
                     ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, player.getActiveHand(), handItemStack, (BlockHitResult) hitResult);
                     BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
                     if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return true;
@@ -182,7 +191,7 @@ public class CrosshairHandler {
             }
         }
     }
-    private static boolean checkTool(ClientPlayerEntity player, Item handItem, HitResult hitResult) {
+    private static boolean checkTool(ClientPlayerEntity player, Item handItem, HitResult hitResult, boolean ignoreUse) {
         if (!policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingTool(), hitResult)) return false;
         if (handItem instanceof ToolItem) {
             if (DynamicCrosshair.config.isDynamicCrosshairStyle() && hitResult.getType() == HitResult.Type.BLOCK) {
@@ -206,7 +215,7 @@ public class CrosshairHandler {
             }
             return true;
         }
-        if (handItem instanceof FlintAndSteelItem) {
+        if (handItem instanceof FlintAndSteelItem && !ignoreUse) {
             if (hitResult.getType() == HitResult.Type.BLOCK) modifierUse = CrosshairHandler.ModifierUse.USE_ITEM;
             return true;
         }
@@ -220,7 +229,7 @@ public class CrosshairHandler {
             }
             return true;
         }
-        if (handItem instanceof FishingRodItem) {
+        if (handItem instanceof FishingRodItem && !ignoreUse) {
             modifierUse = CrosshairHandler.ModifierUse.USE_ITEM;
             return true;
         }
@@ -246,7 +255,7 @@ public class CrosshairHandler {
         return false;
     }
 
-    private static boolean canUseItem(ClientPlayerEntity player, ItemStack handItemStack, HitResult hitResult, Item handItem) {
+    private static boolean canUseItem(ClientPlayerEntity player, ItemStack handItemStack, HitResult hitResult, Item handItem, boolean ignoreUse) {
         if (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem() == BlockCrosshairPolicy.Disabled) return false;
         if (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem() == BlockCrosshairPolicy.Always
                 || (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem() == BlockCrosshairPolicy.IfTargeting && hitResult.getType() == HitResult.Type.BLOCK)) {
@@ -264,6 +273,7 @@ public class CrosshairHandler {
                     || handItem instanceof WritableBookItem
                     || handItem instanceof WrittenBookItem);
         }
+        if (ignoreUse) return false;
 
         // Enable crosshair on food and drinks also when not targeting if "when interactable" is chosen
         if (handItem.isFood()) {
@@ -294,9 +304,6 @@ public class CrosshairHandler {
             if (handItem instanceof BucketItem) {
                 if (handItem instanceof EntityBucketItem) {
                     if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
-                        if (!player.shouldCancelInteraction() && (block instanceof SignBlock || block instanceof FlowerPotBlock)) {
-                            return false;
-                        }
                         activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
                     }
                     return true;
@@ -307,9 +314,7 @@ public class CrosshairHandler {
                 if (handItem == Items.WATER_BUCKET || handItem == Items.LAVA_BUCKET) {
                     if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return true;
                     if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
-                        if (player.shouldCancelInteraction() || !(block instanceof SignBlock || block instanceof FlowerPotBlock)) {
-                            activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
-                        }
+                        activeCrosshair = DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
                         return false;
                     }
                     return true;
