@@ -3,6 +3,7 @@
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "Динамически прятать прицел",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность",
+    "text.autoconfig.dynamiccrosshair.option.hideWithScreen": "Прятать прицел когда меню открыто",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud": "Прицел при отображении интерфейса",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud.@Tooltip": "При выключении данной настройки прицел прячется при отключения интерфейса",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairStyle": "Использовать стили прицела",
@@ -31,6 +32,24 @@
   
   "text.dynamiccrosshair.option.mode.Always": "Всегда",
   "text.dynamiccrosshair.option.mode.IfTargeting": "Если нацелен",
-  "text.dynamiccrosshair.option.mode.IfInteractable": "Если можно взаимодействовать",
-  "text.dynamiccrosshair.option.mode.Disabled": "Отключено"
+  "text.dynamiccrosshair.option.mode.IfInteractable": "Если блок интеракт.",
+  "text.dynamiccrosshair.option.mode.Disabled": "Отключено",
+
+  "text.dynamiccrosshair.style.DEFAULT": "Стандарт",
+  "text.dynamiccrosshair.style.CROSS": "Крест",
+  "text.dynamiccrosshair.style.DIAGONAL_CROSS": "Диагонал. крест",
+  "text.dynamiccrosshair.style.CIRCLE": "Круг",
+  "text.dynamiccrosshair.style.SQUARE": "Квадрат",
+  "text.dynamiccrosshair.style.DIAMOND": "Ромб",
+  "text.dynamiccrosshair.style.CARET": "Карет",
+
+  "text.dynamiccrosshair.modifierStyle.DISABLED": "Отключено",
+  "text.dynamiccrosshair.modifierStyle.DOT": "Точка",
+  "text.dynamiccrosshair.modifierStyle.DIAGONAL_CROSS": "Диагонал. крест",
+  "text.dynamiccrosshair.modifierStyle.BRACKETS": "Скобки",
+  "text.dynamiccrosshair.modifierStyle.BRACKETS_BOTTOM": "Скобки снизу",
+  "text.dynamiccrosshair.modifierStyle.BRACKETS_TOP": "Скобки сверху",
+  "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "Круглые скобки",
+  "text.dynamiccrosshair.modifierStyle.LINES": "Линии",
+  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Линия снизу"
 }
