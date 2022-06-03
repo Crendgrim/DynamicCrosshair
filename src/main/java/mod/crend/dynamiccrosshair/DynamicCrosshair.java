@@ -26,6 +26,7 @@ public class DynamicCrosshair implements ClientModInitializer {
         config = ConfigHandler.getConfig();
 
         addApi(new VanillaApiImpl());
+        CompatLoader.load();
         FabricLoader.getInstance().getEntrypointContainers("dynamiccrosshair", DynamicCrosshairApi.class).forEach(entrypoint -> {
             addApi(entrypoint.getEntrypoint());
         });
