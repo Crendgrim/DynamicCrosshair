@@ -1,4 +1,4 @@
-package mod.crend.dynamiccrosshair.component;
+package mod.crend.dynamiccrosshair.config;
 
 public enum CrosshairModifier {
     DISABLED(240, 240),
