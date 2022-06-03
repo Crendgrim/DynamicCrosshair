@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.component;
 
-enum ModifierHit {
+public enum ModifierHit {
     NONE,
     CORRECT_TOOL,
     INCORRECT_TOOL
