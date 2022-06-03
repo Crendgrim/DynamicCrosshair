@@ -1,8 +1,15 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.*;
+import net.minecraft.util.Identifier;
 
 public class VanillaApiImpl implements DynamicCrosshairApi {
+
+    @Override
+    public String getNamespace() {
+        return Identifier.DEFAULT_NAMESPACE;
+    }
+
     VanillaBlockHandler blockHandler = new VanillaBlockHandler();
     VanillaEntityHandler entityHandler = new VanillaEntityHandler();
     VanillaItemHandler itemHandler = new VanillaItemHandler();

@@ -9,7 +9,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -17,6 +16,9 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CrosshairHandler {
 
@@ -36,11 +38,27 @@ public class CrosshairHandler {
         return (policy == BlockCrosshairPolicy.Always || (policy != BlockCrosshairPolicy.Disabled && isTargeting));
     }
 
+    private static String getNamespace(ItemStack itemStack) {
+        return Registry.ITEM.getId(itemStack.getItem()).getNamespace();
+    }
+    private static String getNamespace(BlockState blockState) {
+        return Registry.BLOCK.getId(blockState.getBlock()).getNamespace();
+    }
+    private static String getNamespace(Entity entity) {
+        return Registry.ENTITY_TYPE.getId(entity.getType()).getNamespace();
+    }
+
     // Return true if main hand item is usable
     private static Crosshair checkHandOnEntity(ClientPlayerEntity player, ItemStack handItemStack, Entity entity) {
         Crosshair crosshair = checkHandUsableItem(player, handItemStack, true);
-        for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-            crosshair = Crosshair.combine(crosshair, a.getEntityHandler().checkEntity(player, handItemStack, entity));
+        Set<String> namespaces = new HashSet<>();
+        namespaces.add(getNamespace(handItemStack));
+        namespaces.add(getNamespace(entity));
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                crosshair = Crosshair.combine(crosshair, api.getEntityHandler().checkEntity(player, handItemStack, entity));
+            }
         }
         return crosshair;
     }
@@ -53,8 +71,14 @@ public class CrosshairHandler {
     }
     private static Crosshair checkHandOnBlock(ClientPlayerEntity player, ItemStack handItemStack, BlockPos blockPos, BlockState blockState) {
         Crosshair crosshair = checkHandCommon(player, handItemStack, true);
-        for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-            crosshair = Crosshair.combine(crosshair, a.getUsableItemHandler().checkUsableItemOnBlock(player, handItemStack, blockPos, blockState));
+        Set<String> namespaces = new HashSet<>();
+        namespaces.add(getNamespace(handItemStack));
+        namespaces.add(getNamespace(blockState));
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnBlock(player, handItemStack, blockPos, blockState));
+            }
         }
         return crosshair;
     }
@@ -65,8 +89,10 @@ public class CrosshairHandler {
     }
     private static Crosshair checkHandOnMiss(ClientPlayerEntity player, ItemStack handItemStack) {
         Crosshair crosshair = checkHandCommon(player, handItemStack, false);
-        for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-            crosshair = Crosshair.combine(crosshair, a.getUsableItemHandler().checkUsableItemOnMiss(player, handItemStack));
+        String ns = getNamespace(handItemStack);
+        if (DynamicCrosshair.apis.containsKey(ns)) {
+            DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+            crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnMiss(player, handItemStack));
         }
         return crosshair;
     }
@@ -76,30 +102,29 @@ public class CrosshairHandler {
         return crosshair;
     }
     private static Crosshair checkHandUsableItem(ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
-        switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
-            case Always -> {
-                for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                    if (a.getUsableItemHandler().isUsableItem(handItemStack)) {
+        String ns = getNamespace(handItemStack);
+        if (DynamicCrosshair.apis.containsKey(ns)) {
+            DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+            switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
+                case Always -> {
+                    if (api.getUsableItemHandler().isUsableItem(handItemStack)) {
                         return Crosshair.USE_ITEM;
                     }
                 }
-            }
-            case IfInteractable -> {
-                Crosshair crosshair = null;
-                for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                    crosshair = Crosshair.combine(crosshair, a.getUsableItemHandler().checkUsableItem(player, handItemStack));
+                case IfInteractable -> {
+                    return api.getUsableItemHandler().checkUsableItem(player, handItemStack);
                 }
-                return crosshair;
-            }
-            case IfTargeting -> {
-                if (isTargeting) {
-                    Crosshair crosshair = null;
-                    for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                        crosshair = Crosshair.combine(crosshair, a.getUsableItemHandler().checkUsableItem(player, handItemStack));
+                case IfTargeting -> {
+                    if (isTargeting) {
+                        return api.getUsableItemHandler().checkUsableItem(player, handItemStack);
                     }
-                    return crosshair;
                 }
             }
+        } else {
+            // Force modded items to have a crosshair. This has to be done because modded tools/weapons cannot be distinguished
+            // from regular items and thus will hide the crosshair.
+            // These only take effect if mod compatibility isn't set up.
+            return Crosshair.REGULAR;
         }
         return null;
     }
@@ -107,33 +132,32 @@ public class CrosshairHandler {
         Crosshair crosshair = checkHandUsableItem(player, handItemStack, isTargeting);
         if (crosshair != null) return crosshair;
 
+        String ns = getNamespace(handItemStack);
+        if (!DynamicCrosshair.apis.containsKey(ns)) {
+            return null;
+        }
+        DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon(), isTargeting)) {
-            for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                crosshair = a.getRangedWeaponHandler().checkRangedWeapon(player, handItemStack);
-                if (crosshair != null) return crosshair;
-            }
+            crosshair = api.getRangedWeaponHandler().checkRangedWeapon(player, handItemStack);
+            if (crosshair != null) return crosshair;
         }
 
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingThrowable(), isTargeting)) {
-            for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                crosshair = a.getThrowableItemHandler().checkThrowable(player, handItemStack);
-                if (crosshair != null) return crosshair;
-            }
+            crosshair = api.getThrowableItemHandler().checkThrowable(player, handItemStack);
+            if (crosshair != null) return crosshair;
         }
 
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingTool(), isTargeting)) {
-            for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                crosshair = a.getToolItemHandler().checkTool(player, handItemStack);
-                if (crosshair != null) return crosshair;
-            }
+            crosshair = api.getToolItemHandler().checkTool(player, handItemStack);
+            if (crosshair != null) return crosshair;
         }
 
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingBlock(), isTargeting)) {
-            for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                crosshair = a.getBlockItemHandler().checkBlock(player, handItemStack);
-                if (crosshair != null) return crosshair;
-            }
+            crosshair = api.getBlockItemHandler().checkBlock(player, handItemStack);
+            if (crosshair != null) return crosshair;
         }
+
         return null;
     }
 
@@ -141,7 +165,11 @@ public class CrosshairHandler {
     private static void checkBreakable(ClientPlayerEntity player, BlockPos blockPos, BlockState blockState) {
         if (DynamicCrosshair.config.dynamicCrosshairHoldingTool() == CrosshairPolicy.Disabled) return;
 
-        DynamicCrosshair.apis.forEach(a -> activeCrosshair.updateFrom(a.getBlockBreakHandler().checkBlockBreaking(player, player.getMainHandStack(), blockPos, blockState)));
+        String ns = getNamespace(blockState);
+        if (DynamicCrosshair.apis.containsKey(ns)) {
+            DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+            activeCrosshair.updateFrom(api.getBlockBreakHandler().checkBlockBreaking(player, player.getMainHandStack(), blockPos, blockState));
+        }
     }
 
 
@@ -151,9 +179,15 @@ public class CrosshairHandler {
         if (DynamicCrosshair.config.dynamicCrosshairOnBlock() != InteractableCrosshairPolicy.Disabled && hitResult.getType() == HitResult.Type.BLOCK && !cancelInteraction) {
             BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
             BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
-            for (DynamicCrosshairApi a : DynamicCrosshair.apis) {
-                if (activeCrosshair.updateFrom(a.getBlockInteractHandler().checkBlockInteractable(player, player.getMainHandStack(), blockPos, blockState))) {
-                    return true;
+            Set<String> namespaces = new HashSet<>();
+            namespaces.add(getNamespace(blockState));
+            namespaces.add(getNamespace(mainHandStack));
+            for (String ns : namespaces) {
+                if (DynamicCrosshair.apis.containsKey(ns)) {
+                    DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                    if (activeCrosshair.updateFrom(api.getBlockInteractHandler().checkBlockInteractable(player, mainHandStack, blockPos, blockState))) {
+                        return true;
+                    }
                 }
             }
         }
@@ -224,16 +258,6 @@ public class CrosshairHandler {
                 if (activeCrosshair.updateFrom(checkHandsOnMiss(player))) {
                     return true;
                 }
-            }
-        }
-
-        // Force modded items to have a crosshair. This has to be done because modded tools/weapons cannot be distinguished
-        // from regular items and thus will hide the crosshair.
-        // Hopefully we can do this better in the future.
-        if (DynamicCrosshair.config.isDynamicCrosshair() && activeCrosshair.getStyle() == Style.Regular) {
-            Item handItem = player.getMainHandStack().getItem();
-            if (!Registry.ITEM.getId(handItem).getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
-                return true;
             }
         }
 

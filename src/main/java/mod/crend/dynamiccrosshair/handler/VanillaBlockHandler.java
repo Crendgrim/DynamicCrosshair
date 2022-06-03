@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair.handler;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.IBlockBreakHandler;
 import mod.crend.dynamiccrosshair.api.IBlockInteractHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
@@ -14,8 +15,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 
 public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHandler {
     @Override
@@ -49,11 +52,14 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
         Block block = blockState.getBlock();
         if (block instanceof BlockWithEntity) {
             // Skip the following...
+            String ns = Registry.BLOCK.getId(block).getNamespace();
             if (!(     block instanceof BeehiveBlock
                     || block instanceof AbstractSignBlock
                     || (blockState.isOf(Blocks.LECTERN) && !blockState.get(LecternBlock.HAS_BOOK))
                     || block instanceof CampfireBlock
                     || block instanceof BannerBlock
+                    // Skip blocks from mods that have a compatibility handler registered
+                    || (!(ns.equals(Identifier.DEFAULT_NAMESPACE)) && DynamicCrosshair.apis.containsKey(ns))
             )) {
                 return Crosshair.INTERACTABLE;
             }

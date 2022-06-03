@@ -8,6 +8,8 @@ import net.minecraft.util.math.BlockPos;
 
 public interface DynamicCrosshairApi {
 
+    String getNamespace();
+
     default IBlockBreakHandler getBlockBreakHandler() {
         return (player, itemStack, blockPos, blockState) -> null;
     }
