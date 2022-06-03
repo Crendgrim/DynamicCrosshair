@@ -37,3 +37,6 @@ There sadly is no general way to differentiate between regular items and tools/w
 
 I highly suggest my other mod [Auto HUD](https://modrinth.com/mod/autohud), which allows to dynamically hide and reveal HUD elements
 based on context.
+
+The following mods have (some level of) explicit support:
+* Arcanus
