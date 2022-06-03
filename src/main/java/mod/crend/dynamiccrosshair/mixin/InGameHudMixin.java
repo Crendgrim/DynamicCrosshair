@@ -4,7 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
-import mod.crend.dynamiccrosshair.component.CrosshairModifier;
+import mod.crend.dynamiccrosshair.config.CrosshairModifier;
+import mod.crend.dynamiccrosshair.config.CrosshairStyle;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,9 +25,10 @@ public class InGameHudMixin {
     private void drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
+            CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
             RenderSystem.setShaderTexture(0, CrosshairHandler.crosshairTexture);
-            instance.drawTexture(matrixStack, x, y, crosshair.getX(), crosshair.getY(), 15, 15);
-            for (CrosshairModifier modifier : CrosshairHandler.getActiveCrosshairModifiers()) {
+            instance.drawTexture(matrixStack, x, y, crosshairStyle.getX(), crosshairStyle.getY(), 15, 15);
+            for (CrosshairModifier modifier : crosshair.getModifiers()) {
                 instance.drawTexture(matrixStack, x, y, modifier.getX(), modifier.getY(), 15, 15);
             }
             RenderSystem.setShaderTexture(0, InGameHud.GUI_ICONS_TEXTURE);
