@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.component;
 
-enum ModifierUse {
+public enum ModifierUse {
     NONE,
     USE_ITEM,
     INTERACTABLE

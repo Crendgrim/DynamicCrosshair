@@ -25,9 +25,11 @@ public class InGameHudMixin {
     private void drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
-            CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
             RenderSystem.setShaderTexture(0, CrosshairHandler.crosshairTexture);
-            instance.drawTexture(matrixStack, x, y, crosshairStyle.getX(), crosshairStyle.getY(), 15, 15);
+            if (crosshair.hasStyle()) {
+                CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
+                instance.drawTexture(matrixStack, x, y, crosshairStyle.getX(), crosshairStyle.getY(), 15, 15);
+            }
             for (CrosshairModifier modifier : crosshair.getModifiers()) {
                 instance.drawTexture(matrixStack, x, y, modifier.getX(), modifier.getY(), 15, 15);
             }
