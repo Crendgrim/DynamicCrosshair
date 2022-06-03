@@ -1,5 +1,7 @@
 package mod.crend.dynamiccrosshair.handler;
 
+import mod.crend.dynamiccrosshair.api.IBlockBreakHandler;
+import mod.crend.dynamiccrosshair.api.IBlockInteractHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.Style;
 import mod.crend.dynamiccrosshair.mixin.IAbstractBlockMixin;

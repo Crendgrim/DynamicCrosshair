@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair.handler;
 
+import mod.crend.dynamiccrosshair.api.IEntityHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;

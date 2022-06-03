@@ -1,4 +1,4 @@
-package mod.crend.dynamiccrosshair.handler;
+package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.client.network.ClientPlayerEntity;

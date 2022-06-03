@@ -1,4 +1,4 @@
-package mod.crend.dynamiccrosshair.handler;
+package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.block.BlockState;
@@ -6,9 +6,9 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
-public interface IBlockInteractHandler {
+public interface IBlockBreakHandler {
     /**
-     * Set the crosshair based on whether the targeted block can be interacted with.
+     * Set the crosshair based on whether the targeted block can be broken.
      *
      * @param player The player entity
      * @param itemStack The tool in the player's main hand
@@ -16,5 +16,5 @@ public interface IBlockInteractHandler {
      * @param blockState The targeted block's state
      * @return a Crosshair object overwriting the crosshair settings
      */
-    Crosshair checkBlockInteractable(ClientPlayerEntity player, ItemStack itemStack, BlockPos blockPos, BlockState blockState);
+    Crosshair checkBlockBreaking(ClientPlayerEntity player, ItemStack itemStack, BlockPos blockPos, BlockState blockState);
 }
