@@ -102,25 +102,34 @@ public class CrosshairHandler {
         return crosshair;
     }
     private static Crosshair checkHandUsableItem(ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
-        String ns = getNamespace(handItemStack);
-        if (DynamicCrosshair.apis.containsKey(ns)) {
-            DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-            switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
-                case Always -> {
-                    if (api.getUsableItemHandler().isUsableItem(handItemStack)) {
-                        return Crosshair.USE_ITEM;
+        Set<String> namespaces = new HashSet<>();
+        String nsItem = getNamespace(handItemStack);
+        namespaces.add(nsItem);
+        // Hack: use default namespace for usable items so food and drink items get automatically picked up
+        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
+                    case Always -> {
+                        if (api.getUsableItemHandler().isUsableItem(handItemStack)) {
+                            return Crosshair.USE_ITEM;
+                        }
                     }
-                }
-                case IfInteractable -> {
-                    return api.getUsableItemHandler().checkUsableItem(player, handItemStack);
-                }
-                case IfTargeting -> {
-                    if (isTargeting) {
-                        return api.getUsableItemHandler().checkUsableItem(player, handItemStack);
+                    case IfInteractable -> {
+                        Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(player, handItemStack);
+                        if (crosshair != null) return crosshair;
+                    }
+                    case IfTargeting -> {
+                        if (isTargeting) {
+                            Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(player, handItemStack);
+                            if (crosshair != null) return crosshair;
+                        }
                     }
                 }
             }
-        } else {
+        }
+        if (!DynamicCrosshair.apis.containsKey(nsItem)) {
             // Force modded items to have a crosshair. This has to be done because modded tools/weapons cannot be distinguished
             // from regular items and thus will hide the crosshair.
             // These only take effect if mod compatibility isn't set up.
