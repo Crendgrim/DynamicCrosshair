@@ -8,20 +8,31 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Crosshair implements Cloneable {
+
+    public enum Flag {
+        FixedStyle,
+        FixedModifierUse,
+        FixedModifierHit,
+        FixedAll
+    }
+
+    public static final Crosshair NONE = new Crosshair();
     public static final Crosshair REGULAR = new Crosshair(Style.Regular);
-    public static final Crosshair HOLDING_BLOCK = new Crosshair(Style.HoldingBlock);
-    public static final Crosshair RANGED_WEAPON = new Crosshair(Style.HoldingRangedWeapon);
-    public static final Crosshair THROWABLE = new Crosshair(Style.HoldingThrowable);
-    public static final Crosshair TOOL = new Crosshair(Style.HoldingTool);
-    public static final Crosshair CORRECT_TOOL = new Crosshair(Style.HoldingTool, ModifierHit.CORRECT_TOOL);
-    public static final Crosshair INCORRECT_TOOL = new Crosshair(Style.HoldingTool, ModifierHit.INCORRECT_TOOL);
-    public static final Crosshair USE_ITEM = new Crosshair(ModifierUse.USE_ITEM);
-    public static final Crosshair INTERACTABLE = new Crosshair(ModifierUse.INTERACTABLE);
+    public static final Crosshair HOLDING_BLOCK = new Crosshair(Style.HoldingBlock).setFlag(Flag.FixedAll);
+    public static final Crosshair RANGED_WEAPON = new Crosshair(Style.HoldingRangedWeapon).setFlag(Flag.FixedAll);
+    public static final Crosshair THROWABLE = new Crosshair(Style.HoldingThrowable).setFlag(Flag.FixedAll);
+    public static final Crosshair TOOL = new Crosshair(Style.HoldingTool).setFlag(Flag.FixedStyle);
+    public static final Crosshair CORRECT_TOOL = new Crosshair(Style.HoldingTool, ModifierHit.CORRECT_TOOL).setFlag(Flag.FixedStyle, Flag.FixedModifierHit);
+    public static final Crosshair INCORRECT_TOOL = new Crosshair(Style.HoldingTool, ModifierHit.INCORRECT_TOOL).setFlag(Flag.FixedStyle, Flag.FixedModifierHit);
+    public static final Crosshair USE_ITEM = new Crosshair(ModifierUse.USE_ITEM).setFlag(Flag.FixedModifierUse);
+    public static final Crosshair INTERACTABLE = new Crosshair(ModifierUse.INTERACTABLE).setFlag(Flag.FixedModifierUse);
 
     private Style style = Style.NONE;
     private ModifierUse modifierUse = ModifierUse.NONE;
     private ModifierHit modifierHit = ModifierHit.NONE;
-
+    private boolean lockStyle = false;
+    private boolean lockModifierUse = false;
+    private boolean lockModifierHit = false;
 
     boolean changed = false;
 
@@ -74,35 +85,71 @@ public class Crosshair implements Cloneable {
         return changed;
     }
 
-    public void setStyle(Style style) {
+    void setStyle(Style style) {
         this.style = style;
         this.changed = true;
     }
 
-    public void setModifierHit(ModifierHit modifierHit) {
+    void setModifierHit(ModifierHit modifierHit) {
         this.modifierHit = modifierHit;
         this.changed = true;
     }
 
-    public void setModifierUse(ModifierUse modifierUse) {
+    void setModifierUse(ModifierUse modifierUse) {
         this.modifierUse = modifierUse;
         this.changed = true;
     }
 
-    public boolean updateFrom(Crosshair other) {
+    Crosshair setFlag(Flag flag) {
+        switch (flag) {
+            case FixedStyle -> lockStyle = true;
+            case FixedModifierUse -> lockModifierUse = true;
+            case FixedModifierHit -> lockModifierHit = true;
+            case FixedAll -> {
+                lockStyle = true;
+                lockModifierUse = true;
+                lockModifierHit = true;
+            }
+        }
+        return this;
+    }
+    Crosshair setFlag(Flag... flags) {
+        for (Flag flag : flags) {
+            setFlag(flag);
+        }
+        return this;
+    }
+
+    public Crosshair withFlag(Flag flag) {
+        return clone().setFlag(flag);
+    }
+    public Crosshair withFlag(Flag... flags) {
+        return clone().setFlag(flags);
+    }
+
+    boolean updateFrom(Crosshair other) {
         if (other == null) return false;
         boolean ret = false;
-        if (other.style != Style.NONE) {
-            setStyle(other.style);
-            ret = true;
+        if (!this.lockStyle || other.style == Style.HoldingTool) {
+            if (other.style != Style.NONE) {
+                setStyle(other.style);
+                ret = true;
+            }
+            this.lockStyle = other.lockStyle;
         }
-        if (this.modifierHit == ModifierHit.NONE && other.modifierHit != ModifierHit.NONE) {
-            setModifierHit(other.modifierHit);
-            ret = true;
+        if (!this.lockModifierHit) {
+            if (other.modifierHit != ModifierHit.NONE) {
+                setModifierHit(other.modifierHit);
+                ret = true;
+            }
+            this.lockModifierHit = other.lockModifierHit;
         }
-        if (this.modifierUse == ModifierUse.NONE && other.modifierUse != ModifierUse.NONE) {
-            setModifierUse(other.modifierUse);
-            ret = true;
+        if (!this.lockModifierUse) {
+            if (other.modifierUse != ModifierUse.NONE) {
+                setModifierUse(other.modifierUse);
+                ret = true;
+            }
+            this.lockModifierUse = other.lockModifierUse;
         }
         return ret;
     }

@@ -216,12 +216,8 @@ public class CrosshairHandler {
                 BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
                 BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
                 checkBreakable(player, blockPos, blockState);
-                if (isInteractable) {
-                    activeCrosshair.setModifierUse(ModifierUse.INTERACTABLE);
-                } else {
-                    if (activeCrosshair.updateFrom(checkHandsOnBlock(player, blockPos, blockState))) {
-                        return true;
-                    }
+                if (activeCrosshair.updateFrom(checkHandsOnBlock(player, blockPos, blockState))) {
+                    return true;
                 }
             }
             case MISS -> {
