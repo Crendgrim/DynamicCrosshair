@@ -34,7 +34,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
             return Crosshair.TOOL;
         }
         if (handItem instanceof FishingRodItem) {
-            return new Crosshair(Style.HoldingTool, ModifierUse.USE_ITEM);
+            return new Crosshair(Style.HoldingTool, ModifierUse.USE_ITEM).withFlag(Crosshair.Flag.FixedAll);
         }
         return null;
     }
@@ -73,6 +73,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
                     ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, player.getActiveHand(), itemStack, (BlockHitResult) hitResult);
                     BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
                     if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return Crosshair.HOLDING_BLOCK;
+                    return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
                 }
             } else return Crosshair.HOLDING_BLOCK;
         }
@@ -83,6 +84,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
                     BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
                     BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
                     if (blockState.isIn(BlockTags.RAILS)) return Crosshair.HOLDING_BLOCK;
+                    return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
                 }
             } else return Crosshair.HOLDING_BLOCK;
         }
@@ -95,6 +97,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
                     if ((block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) && MinecraftClient.getInstance().world.isAir(blockPos.up())) {
                         return Crosshair.HOLDING_BLOCK;
                     }
+                    return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
                 }
             } else return Crosshair.HOLDING_BLOCK;
         }

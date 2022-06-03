@@ -3,10 +3,13 @@ package mod.crend.dynamiccrosshair.handler;
 import mod.crend.dynamiccrosshair.api.IBlockBreakHandler;
 import mod.crend.dynamiccrosshair.api.IBlockInteractHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.component.Style;
+import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.mixin.IAbstractBlockMixin;
 import mod.crend.dynamiccrosshair.mixin.IFlowerPotBlockMixin;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.CampfireBlockEntity;
+import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.*;
@@ -27,7 +30,6 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
             }
         }
         if (handItem instanceof ShearsItem) {
-            Crosshair crosshair = new Crosshair(Style.HoldingTool);
             Block block = blockState.getBlock();
             if (blockState.isIn(BlockTags.LEAVES)
                     || blockState.isIn(BlockTags.WOOL)
@@ -83,9 +85,28 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
                 return Crosshair.USE_ITEM;
             }
             if (!potItemIsAir && !handItemIsPottable) {
-                return Crosshair.INTERACTABLE;
+                return Crosshair.INTERACTABLE.withFlag(Crosshair.Flag.FixedStyle);
             }
+            return Crosshair.NONE.withFlag(Crosshair.Flag.FixedStyle, Crosshair.Flag.FixedModifierUse);
         }
+
+        // Special case: Signs eat all inputs
+        if (block instanceof AbstractSignBlock) {
+            Item handItem = itemStack.getItem();
+            if (handItem instanceof DyeItem || handItem.equals(Items.GLOW_INK_SAC) || handItem.equals(Items.INK_SAC)) {
+                BlockEntity blockEntity = MinecraftClient.getInstance().world.getBlockEntity(blockPos);
+                if (blockEntity instanceof SignBlockEntity) {
+                    if (handItem.equals(Items.GLOW_INK_SAC) && !((SignBlockEntity) blockEntity).isGlowingText())
+                        return Crosshair.USE_ITEM;
+                    if (handItem.equals(Items.INK_SAC) && ((SignBlockEntity) blockEntity).isGlowingText())
+                        return Crosshair.USE_ITEM;
+                    if (handItem instanceof DyeItem && ((SignBlockEntity) blockEntity).getTextColor() != ((DyeItem) handItem).getColor())
+                        return Crosshair.USE_ITEM;
+                }
+            }
+            return Crosshair.NONE.withFlag(Crosshair.Flag.FixedStyle, Crosshair.Flag.FixedModifierUse);
+        }
+
         // Special case: Cake gets eaten (modified), so "use" makes more sense to me
         if (block instanceof CakeBlock) {
             if (player.getHungerManager().isNotFull() && (!player.shouldCancelInteraction() || (player.getMainHandStack().isEmpty() && player.getOffHandStack().isEmpty()))) {
@@ -95,8 +116,8 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
         // Special case: Redstone ore: can be placed against, but still activates
         if (block instanceof RedstoneOreBlock) {
             if (!player.shouldCancelInteraction() || (player.getMainHandStack().isEmpty() && player.getOffHandStack().isEmpty())) {
-                return Crosshair.USE_ITEM;
-                // TODO this had a "return false" to continue checking style...
+                // Allow extra crosshair style
+                return new Crosshair(ModifierUse.USE_ITEM).withFlag(Crosshair.Flag.FixedModifierUse);
             }
         }
 
@@ -117,6 +138,22 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
                 return Crosshair.INTERACTABLE;
             }
         }
+
+        if (block instanceof LecternBlock) {
+            Item handItem = itemStack.getItem();
+            if (handItem.equals(Items.WRITTEN_BOOK)
+                    || handItem.equals(Items.WRITABLE_BOOK)
+                    || (!player.shouldCancelInteraction() && blockState.get(LecternBlock.HAS_BOOK)))
+                return Crosshair.USE_ITEM;
+            return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
+        }
+
+        if (block instanceof CampfireBlock) {
+            BlockEntity blockEntity = MinecraftClient.getInstance().world.getBlockEntity(blockPos);
+            if (blockEntity instanceof CampfireBlockEntity && (((CampfireBlockEntity) blockEntity).getRecipeFor(itemStack)).isPresent())
+                return Crosshair.USE_ITEM;
+        }
+
         return null;
     }
 

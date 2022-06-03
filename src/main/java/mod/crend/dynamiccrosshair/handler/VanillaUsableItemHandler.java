@@ -11,9 +11,6 @@ import mod.crend.dynamiccrosshair.mixin.IHoeItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IShovelItemMixin;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.CampfireBlockEntity;
-import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.*;
@@ -163,29 +160,6 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         }
         if (handItem instanceof WritableBookItem || handItem instanceof WrittenBookItem) return Crosshair.USE_ITEM;
 
-        if (block instanceof BlockWithEntity) {
-            if (block instanceof AbstractSignBlock) {
-                if (!player.shouldCancelInteraction() && (handItem instanceof DyeItem || handItem.equals(Items.GLOW_INK_SAC) || handItem.equals(Items.INK_SAC))) {
-                    BlockEntity blockEntity = MinecraftClient.getInstance().world.getBlockEntity(blockPos);
-                    if (blockEntity instanceof SignBlockEntity) {
-                        if (handItem.equals(Items.GLOW_INK_SAC) && !((SignBlockEntity) blockEntity).isGlowingText()) return Crosshair.USE_ITEM;
-                        if (handItem.equals(Items.INK_SAC) && ((SignBlockEntity) blockEntity).isGlowingText()) return Crosshair.USE_ITEM;
-                        if (handItem instanceof DyeItem && ((SignBlockEntity) blockEntity).getTextColor() != ((DyeItem) handItem).getColor()) return Crosshair.USE_ITEM;
-                    }
-                }
-            }
-            else if (block instanceof LecternBlock) {
-                if (handItem.equals(Items.WRITTEN_BOOK)
-                        || handItem.equals(Items.WRITABLE_BOOK)
-                        || (!player.shouldCancelInteraction() && blockState.get(LecternBlock.HAS_BOOK)))
-                    return Crosshair.USE_ITEM;
-            }
-            else if (block instanceof CampfireBlock && !player.shouldCancelInteraction()) {
-                BlockEntity blockEntity = MinecraftClient.getInstance().world.getBlockEntity(blockPos);
-                if (blockEntity instanceof CampfireBlockEntity && (((CampfireBlockEntity) blockEntity).getRecipeFor(handItemStack)).isPresent())
-                    return Crosshair.USE_ITEM;
-            }
-        }
         return null;
     }
 
