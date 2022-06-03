@@ -280,7 +280,7 @@ public class CrosshairHandler {
             if (handItem instanceof ChorusFruitItem) {
                 if (!player.getItemCooldownManager().isCoolingDown(handItem)) return true;
             }
-            else if (player.getHungerManager().isNotFull()) return true;
+            else if (player.getHungerManager().isNotFull() || handItem.getFoodComponent().isAlwaysEdible()) return true;
         }
         if (handItem.getUseAction(handItemStack) == UseAction.DRINK) return true;
 
