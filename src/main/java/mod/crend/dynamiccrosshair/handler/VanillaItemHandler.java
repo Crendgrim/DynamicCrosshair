@@ -1,6 +1,10 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.api.IBlockItemHandler;
+import mod.crend.dynamiccrosshair.api.IRangedWeaponHandler;
+import mod.crend.dynamiccrosshair.api.IThrowableItemHandler;
+import mod.crend.dynamiccrosshair.api.IToolItemHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.Style;
