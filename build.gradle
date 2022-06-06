@@ -15,6 +15,19 @@ group = project.maven_group
 repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/" }
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+	maven {
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
 }
 
 dependencies {
@@ -29,6 +42,10 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	modCompileOnly("maven.modrinth:arcanus:${project.arcanus_version}") { transitive = false }
+
+	modCompileOnly("curse.maven:mythic-mounts-${project.mythicmounts_version}") { transitive = false }
 }
 
 processResources {
@@ -80,7 +97,7 @@ modrinth {
 	uploadFile = remapJar
 	versionType = project.version_type
 	changelog = project.changelog
-	gameVersions = [project.minecraft_version]
+	gameVersions = List.of(project.supported_versions.split(';'))
 	loaders = ['fabric']
 	dependencies {
 		required.project 'P7dR8mSH' // Fabric API
@@ -96,7 +113,9 @@ curseforge {
 		changelog = project.changelog
 		releaseType = project.version_type
 		addGameVersion "Fabric"
-		addGameVersion project.minecraft_version
+		project.supported_versions.split(';').each {
+			addGameVersion it
+		}
 
 		mainArtifact(remapJar) {
 			displayName = "${project.mod_name} ${project.version}"

@@ -2,8 +2,6 @@ package mod.crend.dynamiccrosshair.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.component.CrosshairModifier;
 
 @me.shedaniel.autoconfig.annotation.Config(name = "dynamiccrosshair")
 public class Config implements ConfigData {
@@ -40,25 +38,25 @@ public class Config implements ConfigData {
 
     boolean dynamicCrosshairStyle = true;
     @ConfigEntry.Gui.CollapsibleObject
-    CrosshairStyle crosshairStyle = new CrosshairStyle();
+    CrosshairStyles crosshairStyle = new CrosshairStyles();
     @ConfigEntry.Gui.CollapsibleObject
     CrosshairModifiers crosshairModifiers = new CrosshairModifiers();
     public boolean isDynamicCrosshairStyle() { return dynamicCrosshairStyle; }
-    static class CrosshairStyle {
+    static class CrosshairStyles {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        Crosshair regular = Crosshair.CROSS;
+        CrosshairStyle regular = CrosshairStyle.CROSS;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        Crosshair onBlock = Crosshair.CROSS;
+        CrosshairStyle onBlock = CrosshairStyle.CROSS;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        Crosshair onEntity = Crosshair.DIAGONAL_CROSS;
+        CrosshairStyle onEntity = CrosshairStyle.DIAGONAL_CROSS;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        Crosshair holdingTool = Crosshair.SQUARE;
+        CrosshairStyle holdingTool = CrosshairStyle.SQUARE;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        Crosshair holdingRangedWeapon = Crosshair.CIRCLE;
+        CrosshairStyle holdingRangedWeapon = CrosshairStyle.CIRCLE;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        Crosshair holdingThrowable = Crosshair.CIRCLE;
+        CrosshairStyle holdingThrowable = CrosshairStyle.CIRCLE;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        Crosshair holdingBlock = Crosshair.DIAMOND;
+        CrosshairStyle holdingBlock = CrosshairStyle.DIAMOND;
     }
     static class CrosshairModifiers {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
@@ -71,13 +69,13 @@ public class Config implements ConfigData {
         CrosshairModifier modUsableItem = CrosshairModifier.ROUND_BRACKETS;
     }
 
-    public Crosshair getCrosshairStyleRegular() { return crosshairStyle.regular; }
-    public Crosshair getCrosshairStyleOnBlock() { return crosshairStyle.onBlock; }
-    public Crosshair getCrosshairStyleOnEntity() { return crosshairStyle.onEntity; }
-    public Crosshair getCrosshairStyleHoldingTool() { return crosshairStyle.holdingTool; }
-    public Crosshair getCrosshairStyleHoldingRangedWeapon() { return crosshairStyle.holdingRangedWeapon; }
-    public Crosshair getCrosshairStyleHoldingThrowable() { return crosshairStyle.holdingThrowable; }
-    public Crosshair getCrosshairStyleHoldingBlock() { return crosshairStyle.holdingBlock; }
+    public CrosshairStyle getCrosshairStyleRegular() { return crosshairStyle.regular; }
+    public CrosshairStyle getCrosshairStyleOnBlock() { return crosshairStyle.onBlock; }
+    public CrosshairStyle getCrosshairStyleOnEntity() { return crosshairStyle.onEntity; }
+    public CrosshairStyle getCrosshairStyleHoldingTool() { return crosshairStyle.holdingTool; }
+    public CrosshairStyle getCrosshairStyleHoldingRangedWeapon() { return crosshairStyle.holdingRangedWeapon; }
+    public CrosshairStyle getCrosshairStyleHoldingThrowable() { return crosshairStyle.holdingThrowable; }
+    public CrosshairStyle getCrosshairStyleHoldingBlock() { return crosshairStyle.holdingBlock; }
     public CrosshairModifier getCrosshairModifierInteractable() { return crosshairModifiers.modInteractable; }
     public CrosshairModifier getCrosshairModifierCorrectTool() { return crosshairModifiers.modCorrectTool; }
     public CrosshairModifier getCrosshairModifierIncorrectTool() { return crosshairModifiers.modIncorrectTool; }
