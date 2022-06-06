@@ -17,12 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
     @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
-    private void preCrosshair(final MatrixStack matrixStack, final CallbackInfo ci) {
+    private void dynamiccrosshair$preCrosshair(final MatrixStack matrixStack, final CallbackInfo ci) {
         if (!CrosshairHandler.shouldShowCrosshair()) ci.cancel();
     }
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0))
-    private void drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    private void dynamiccrosshair$drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
             RenderSystem.setShaderTexture(0, CrosshairHandler.crosshairTexture);
@@ -40,7 +40,7 @@ public class InGameHudMixin {
     }
 
     @Inject(method = "tick()V", at = @At(value = "TAIL"))
-    private void tickDynamicCrosshair(CallbackInfo ci) {
+    private void dynamiccrosshair$tickDynamicCrosshair(CallbackInfo ci) {
         CrosshairHandler.tick();
     }
 
