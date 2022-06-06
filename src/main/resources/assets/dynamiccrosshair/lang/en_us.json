@@ -51,5 +51,8 @@
   "text.dynamiccrosshair.modifierStyle.BRACKETS_TOP": "Brackets Top",
   "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "Round Brackets",
   "text.dynamiccrosshair.modifierStyle.LINES": "Lines",
-  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Line Bottom"
+  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Line Bottom",
+
+  "modmenu.summaryTranslation.dynamiccrosshair": "Dynamic Crosshair that changes shape based on what is targeted",
+  "modmenu.descriptionTranslation.dynamiccrosshair": "Dynamic Crosshair that changes shape based on what is targeted"
 }

@@ -51,5 +51,8 @@
   "text.dynamiccrosshair.modifierStyle.BRACKETS_TOP": "Скобки сверху",
   "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "Круглые скобки",
   "text.dynamiccrosshair.modifierStyle.LINES": "Линии",
-  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Линия снизу"
+  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Линия снизу",
+
+  "modmenu.summaryTranslation.dynamiccrosshair": "Динамический прицел, который меняется в зависимости от цели",
+  "modmenu.descriptionTranslation.dynamiccrosshair": "Динамический прицел, который меняется в зависимости от цели"
 }
