@@ -6,10 +6,7 @@ import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.Style;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
-import mod.crend.dynamiccrosshair.mixin.IAxeItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IHoeItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IShovelItemMixin;
+import mod.crend.dynamiccrosshair.mixin.*;
 import net.minecraft.block.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -19,6 +16,7 @@ import net.minecraft.potion.Potions;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.RaycastContext;
 
@@ -49,8 +47,22 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         if (handItem.isFood()) {
             if (handItem instanceof ChorusFruitItem) {
                 if (!player.getItemCooldownManager().isCoolingDown(handItem)) return Crosshair.USE_ITEM;
-            } else if (player.getHungerManager().isNotFull() || handItem.getFoodComponent().isAlwaysEdible())
-                return Crosshair.USE_ITEM;
+            } else {
+                // Special case: sweet and glow berries can sometimes be placed
+                if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled
+                        && (handItem == Items.SWEET_BERRIES || handItem == Items.GLOW_BERRIES)) {
+                    HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
+                    if (hitResult.getType() == HitResult.Type.BLOCK) {
+                        IBlockItemMixin blockItem = (IBlockItemMixin) handItem;
+                        ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, player.getActiveHand(), handItemStack, (BlockHitResult) hitResult);
+                        BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
+                        if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return Crosshair.HOLDING_BLOCK;
+                    }
+                }
+                if (player.getHungerManager().isNotFull() || handItem.getFoodComponent().isAlwaysEdible()) {
+                    return Crosshair.USE_ITEM;
+                }
+            }
         }
         if (handItem.getUseAction(handItemStack) == UseAction.DRINK) return Crosshair.USE_ITEM;
 
