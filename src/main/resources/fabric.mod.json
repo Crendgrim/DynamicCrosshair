@@ -24,7 +24,8 @@
     ]
   },
   "mixins": [
-    "dynamiccrosshair.mixins.json"
+    "dynamiccrosshair.mixins.json",
+    "compat.mixins.json"
   ],
 
   "depends": {
