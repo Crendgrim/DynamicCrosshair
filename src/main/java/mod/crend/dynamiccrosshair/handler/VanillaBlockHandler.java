@@ -119,6 +119,14 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
                 return Crosshair.USE_ITEM;
             }
         }
+        // Special case: Sweet berries get harvested
+        if (block instanceof SweetBerryBushBlock && blockState.get(SweetBerryBushBlock.AGE) > 1) {
+            return Crosshair.USE_ITEM;
+        }
+        // Special case: Glow berries get harvested
+        if (block instanceof CaveVines && CaveVines.hasBerries(blockState)) {
+            return Crosshair.USE_ITEM;
+        }
         // Special case: Redstone ore: can be placed against, but still activates
         if (block instanceof RedstoneOreBlock) {
             if (!player.shouldCancelInteraction() || (player.getMainHandStack().isEmpty() && player.getOffHandStack().isEmpty())) {
