@@ -97,7 +97,7 @@ modrinth {
 	uploadFile = remapJar
 	versionType = project.version_type
 	changelog = project.changelog
-	gameVersions = [project.minecraft_version]
+	gameVersions = List.of(project.supported_versions.split(';'))
 	loaders = ['fabric']
 	dependencies {
 		required.project 'P7dR8mSH' // Fabric API
@@ -113,7 +113,9 @@ curseforge {
 		changelog = project.changelog
 		releaseType = project.version_type
 		addGameVersion "Fabric"
-		addGameVersion project.minecraft_version
+		project.supported_versions.split(';').each {
+			addGameVersion it
+		}
 
 		mainArtifact(remapJar) {
 			displayName = "${project.mod_name} ${project.version}"
