@@ -15,6 +15,11 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingThrowable": "Holding throwable item",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingBlock": "Holding block",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingUsableItem": "Holding usable item",
+  "text.autoconfig.dynamiccrosshair.option.color": "Crosshair color",
+  "text.autoconfig.dynamiccrosshair.option.color.crosshairColor": "Set crosshair color",
+  "text.autoconfig.dynamiccrosshair.option.color.customColor": "Custom color (#ARGB format)",
+  "text.autoconfig.dynamiccrosshair.option.color.forceColor.@Tooltip": "This disables the crosshair from inverting colors when over certain textures",
+  "text.autoconfig.dynamiccrosshair.option.color.forceColor": "Force single color crosshair",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle": "Crosshair style",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle.regular": "Regular",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle.onBlock": "Looking at block",
@@ -52,6 +57,15 @@
   "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "Round Brackets",
   "text.dynamiccrosshair.modifierStyle.LINES": "Lines",
   "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Line Bottom",
+
+  "text.dynamiccrosshair.color.Unchanged": "Do not change",
+  "text.dynamiccrosshair.color.Red": "Red",
+  "text.dynamiccrosshair.color.Yellow": "Yellow",
+  "text.dynamiccrosshair.color.Green": "Green",
+  "text.dynamiccrosshair.color.Cyan": "Cyan",
+  "text.dynamiccrosshair.color.Blue": "Blue",
+  "text.dynamiccrosshair.color.Purple": "Purple",
+  "text.dynamiccrosshair.color.Custom": "Custom color",
 
   "modmenu.summaryTranslation.dynamiccrosshair": "Contextual crosshair style",
   "modmenu.descriptionTranslation.dynamiccrosshair": "Dynamic Crosshair that changes shape based on what is targeted"

@@ -36,6 +36,21 @@ public class Config implements ConfigData {
     public BlockCrosshairPolicy dynamicCrosshairHoldingBlock() { return crosshairSettings.holdingBlock; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return crosshairSettings.holdingUsableItem; }
 
+    static class CrosshairColorSettings {
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        CrosshairColor crosshairColor = CrosshairColor.Unchanged;
+        @ConfigEntry.ColorPicker(allowAlpha = true)
+        int customColor = 0xFFAABBCC;
+        @ConfigEntry.Gui.Tooltip
+        boolean forceColor = false;
+    }
+    @ConfigEntry.Gui.CollapsibleObject
+    CrosshairColorSettings color = new CrosshairColorSettings();
+
+    public CrosshairColor getCrosshairColor() { return color.crosshairColor; }
+    public int getCustomColor() { return color.customColor; }
+    public boolean isForceColor() { return color.forceColor; }
+
     boolean dynamicCrosshairStyle = true;
     @ConfigEntry.Gui.CollapsibleObject
     CrosshairStyles crosshairStyle = new CrosshairStyles();

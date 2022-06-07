@@ -1,9 +1,11 @@
 package mod.crend.dynamiccrosshair.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
+import mod.crend.dynamiccrosshair.config.CrosshairColor;
 import mod.crend.dynamiccrosshair.config.CrosshairModifier;
 import mod.crend.dynamiccrosshair.config.CrosshairStyle;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -23,6 +25,15 @@ public class InGameHudMixin {
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0), require = 0)
     private void dynamiccrosshair$drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+        CrosshairColor color = DynamicCrosshair.config.getCrosshairColor();
+        if (color != CrosshairColor.Unchanged) {
+            int argb = (color == CrosshairColor.Custom ? DynamicCrosshair.config.getCustomColor() : color.color);
+            // convert ARGB hex to r, g, b, a floats
+            RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, ((argb >> 24) & 0xFF) / 255.0f);
+        }
+        if (DynamicCrosshair.config.isForceColor()) {
+            RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+        }
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
             RenderSystem.setShaderTexture(0, CrosshairHandler.crosshairTexture);
