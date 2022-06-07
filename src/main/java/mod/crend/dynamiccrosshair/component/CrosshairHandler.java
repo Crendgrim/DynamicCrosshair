@@ -273,7 +273,12 @@ public class CrosshairHandler {
         if (activeCrosshair.isChanged()) {
             return true;
         }
-        return !DynamicCrosshair.config.isDynamicCrosshair();
+        if (DynamicCrosshair.config.isDynamicCrosshair()) {
+            return false;
+        }
+        // Dynamic crosshair disabled, no other crosshair computed: make sure to show a crosshair
+        activeCrosshair.setStyle(Style.Regular);
+        return true;
     }
 
     public static boolean shouldShowCrosshair() {
