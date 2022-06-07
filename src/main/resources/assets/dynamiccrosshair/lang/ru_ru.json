@@ -3,7 +3,7 @@
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "Динамически прятать прицел",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность",
-    "text.autoconfig.dynamiccrosshair.option.hideWithScreen": "Прятать прицел когда меню открыто",
+  "text.autoconfig.dynamiccrosshair.option.hideWithScreen": "Прятать прицел когда меню открыто",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud": "Прицел при отображении интерфейса",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud.@Tooltip": "При выключении данной настройки прицел прячется при отключения интерфейса",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairStyle": "Использовать стили прицела",
@@ -51,5 +51,8 @@
   "text.dynamiccrosshair.modifierStyle.BRACKETS_TOP": "Скобки сверху",
   "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "Круглые скобки",
   "text.dynamiccrosshair.modifierStyle.LINES": "Линии",
-  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Линия снизу"
+  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Линия снизу",
+
+  "modmenu.summaryTranslation.dynamiccrosshair": "Контекстный стиль прицела",
+  "modmenu.descriptionTranslation.dynamiccrosshair": "Динамический прицел, который меняется в зависимости от цели"
 }

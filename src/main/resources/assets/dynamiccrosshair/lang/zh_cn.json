@@ -51,5 +51,8 @@
   "text.dynamiccrosshair.modifierStyle.BRACKETS_TOP": "顶部二角包裹",
   "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "圆滑四角包裹",
   "text.dynamiccrosshair.modifierStyle.LINES": "四边包裹",
-  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "底边包裹"
+  "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "底边包裹",
+
+  "modmenu.summaryTranslation.dynamiccrosshair": "Contextual crosshair style",
+  "modmenu.descriptionTranslation.dynamiccrosshair": "Dynamic Crosshair that changes shape based on what is targeted"
 }
