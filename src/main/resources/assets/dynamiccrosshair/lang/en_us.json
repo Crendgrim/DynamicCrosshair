@@ -53,6 +53,6 @@
   "text.dynamiccrosshair.modifierStyle.LINES": "Lines",
   "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Line Bottom",
 
-  "modmenu.summaryTranslation.dynamiccrosshair": "Dynamic Crosshair that changes shape based on what is targeted",
+  "modmenu.summaryTranslation.dynamiccrosshair": "Contextual crosshair style",
   "modmenu.descriptionTranslation.dynamiccrosshair": "Dynamic Crosshair that changes shape based on what is targeted"
 }
