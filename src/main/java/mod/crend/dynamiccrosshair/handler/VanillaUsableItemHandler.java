@@ -37,7 +37,9 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
                 || handItem instanceof BucketItem
                 || handItem instanceof BoneMealItem
                 || handItem instanceof WritableBookItem
-                || handItem instanceof WrittenBookItem);
+                || handItem instanceof WrittenBookItem
+                || handItem instanceof GoatHornItem
+        );
     }
 
     @Override
@@ -65,6 +67,13 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             }
         }
         if (handItem.getUseAction(handItemStack) == UseAction.DRINK) return Crosshair.USE_ITEM;
+
+        if (handItem instanceof GoatHornItem) {
+            if (player.getItemCooldownManager().isCoolingDown(handItem)) {
+                return null;
+            }
+            return Crosshair.USE_ITEM;
+        }
 
         // Liquid interactions ignore block hit, cast extra rays
         // This getting called for entity hits is on purpose, as liquid interactions overwrite entity interactions
