@@ -20,7 +20,7 @@ and there is a rounded bracket around it to indicate a "use" action: stripping t
 ![Targetting log](screenshot2.png)
 
 ## Installation
-This mod has been written for Fabric for Minecraft 1.18.2.
+This mod has been written for Fabric for Minecraft >= 1.18. It should still work on 1.17, but may have some wrong interaction rules.
 
 Get packaged versions from [Modrinth](https://modrinth.com/mod/dynamiccrosshair) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/dynamic-crosshair)!
 
@@ -39,7 +39,7 @@ I highly suggest my other mod [Auto HUD](https://modrinth.com/mod/autohud), whic
 based on context.
 
 The following mods have (some level of) explicit support:
-* Arcanus
+* Arcanus (1.18 version)
 
 The following mods are incompatible:
-* Flour's Various Tweaks overrides the dynamic crosshair style option. The crosshair will still hide, but not be contextually styled.
+* Flour's Various Tweaks (1.18 version) overrides the dynamic crosshair style option. The crosshair will still hide, but not be contextually styled.
