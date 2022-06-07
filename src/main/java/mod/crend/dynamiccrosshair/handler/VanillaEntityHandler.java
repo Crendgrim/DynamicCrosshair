@@ -83,7 +83,7 @@ public class VanillaEntityHandler implements IEntityHandler {
             return null;
         } else if (entity instanceof AbstractDonkeyEntity
                 || entity instanceof HorseEntity) {
-            HorseBaseEntity horse = (HorseBaseEntity) entity;
+            AbstractHorseEntity horse = (AbstractHorseEntity) entity;
             if (horse.isBaby() || !horse.isTame()) {
                 return null;
             }

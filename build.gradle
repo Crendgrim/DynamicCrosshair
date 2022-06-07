@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
+	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'com.modrinth.minotaur' version '2.+'
 	id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
@@ -43,9 +43,6 @@ dependencies {
 	}
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-	modCompileOnly("maven.modrinth:arcanus:${project.arcanus_version}") { transitive = false }
-
-	modCompileOnly("curse.maven:mythic-mounts-${project.mythicmounts_version}") { transitive = false }
 }
 
 processResources {
