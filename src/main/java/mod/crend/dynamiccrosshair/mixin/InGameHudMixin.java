@@ -14,14 +14,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(InGameHud.class)
+@Mixin(value=InGameHud.class, priority=900)
 public class InGameHudMixin {
     @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private void dynamiccrosshair$preCrosshair(final MatrixStack matrixStack, final CallbackInfo ci) {
         if (!CrosshairHandler.shouldShowCrosshair()) ci.cancel();
     }
 
-    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0))
+    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0), require = 0)
     private void dynamiccrosshair$drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();

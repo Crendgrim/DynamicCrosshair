@@ -40,3 +40,6 @@ based on context.
 
 The following mods have (some level of) explicit support:
 * Arcanus
+
+The following mods are incompatible:
+* Flour's Various Tweaks overrides the dynamic crosshair style option. The crosshair will still hide, but not be contextually styled.
