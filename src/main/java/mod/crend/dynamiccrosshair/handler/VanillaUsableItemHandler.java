@@ -10,6 +10,7 @@ import mod.crend.dynamiccrosshair.mixin.*;
 import net.minecraft.block.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
@@ -27,6 +28,10 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         Item handItem = handItemStack.getItem();
         return (handItem.isFood()
                 || handItem.getUseAction(handItemStack) == UseAction.DRINK
+                || handItem instanceof ArmorItem
+                || handItem instanceof ElytraItem
+                || handItem instanceof ShieldItem
+                || handItem instanceof FireworkRocketItem
                 || handItem instanceof SpawnEggItem
                 || handItem instanceof FireChargeItem
                 || handItem instanceof MusicDiscItem
@@ -65,6 +70,30 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             }
         }
         if (handItem.getUseAction(handItemStack) == UseAction.DRINK) return Crosshair.USE_ITEM;
+        if (handItem instanceof ArmorItem armorItem) {
+            EquipmentSlot slot = armorItem.getSlotType();
+            if (player.hasStackEquipped(slot)) {
+                return null;
+            }
+            return Crosshair.USE_ITEM;
+        }
+        if (handItem instanceof ElytraItem) {
+            if (player.hasStackEquipped(EquipmentSlot.CHEST)) {
+                return null;
+            }
+            return Crosshair.USE_ITEM;
+        }
+
+        if (handItem instanceof ShieldItem) {
+            return Crosshair.USE_ITEM;
+        }
+
+        if (handItem instanceof FireworkRocketItem) {
+            HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
+            if (hitResult.getType() == HitResult.Type.BLOCK || player.isFallFlying()) {
+                return Crosshair.USE_ITEM;
+            }
+        }
 
         // Liquid interactions ignore block hit, cast extra rays
         // This getting called for entity hits is on purpose, as liquid interactions overwrite entity interactions
