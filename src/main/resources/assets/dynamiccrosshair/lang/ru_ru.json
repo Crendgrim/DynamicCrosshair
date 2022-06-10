@@ -15,6 +15,11 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingThrowable": "Держит в руках кидаемый предмет",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingBlock": "Держит в руках блок",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingUsableItem": "Держит в руках используемый предмет",
+  "text.autoconfig.dynamiccrosshair.option.color": "Цвет прицела",
+  "text.autoconfig.dynamiccrosshair.option.color.crosshairColor": "Цвет прицела",
+  "text.autoconfig.dynamiccrosshair.option.color.customColor": "Свой цвет (формат #ARGB)",
+  "text.autoconfig.dynamiccrosshair.option.color.forceColor.@Tooltip": "Отключает инверсию цвета прицела при нацеливании на светлые участки",
+  "text.autoconfig.dynamiccrosshair.option.color.forceColor": "Отключить инверсию цвета",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle": "Стили прицела",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle.regular": "Стандартный",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle.onBlock": "Смотрит на блок",
@@ -52,6 +57,15 @@
   "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "Круглые скобки",
   "text.dynamiccrosshair.modifierStyle.LINES": "Линии",
   "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "Линия снизу",
+
+  "text.dynamiccrosshair.color.Unchanged": "По умолчанию",
+  "text.dynamiccrosshair.color.Red": "Красный",
+  "text.dynamiccrosshair.color.Yellow": "Жёлтый",
+  "text.dynamiccrosshair.color.Green": "Зелёный",
+  "text.dynamiccrosshair.color.Cyan": "Голубой",
+  "text.dynamiccrosshair.color.Blue": "Синий",
+  "text.dynamiccrosshair.color.Purple": "Фиолетовый",
+  "text.dynamiccrosshair.color.Custom": "Свой цвет",
 
   "modmenu.summaryTranslation.dynamiccrosshair": "Контекстный стиль прицела",
   "modmenu.descriptionTranslation.dynamiccrosshair": "Динамический прицел, который меняется в зависимости от цели"

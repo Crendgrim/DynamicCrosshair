@@ -15,6 +15,11 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingThrowable": "手持投掷物",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingBlock": "手持方块",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingUsableItem": "手持可使用物品",
+  "text.autoconfig.dynamiccrosshair.option.color": "Crosshair color",
+  "text.autoconfig.dynamiccrosshair.option.color.crosshairColor": "Set crosshair color",
+  "text.autoconfig.dynamiccrosshair.option.color.customColor": "Custom color (#ARGB format)",
+  "text.autoconfig.dynamiccrosshair.option.color.forceColor.@Tooltip": "This disables the crosshair from inverting colors when over certain textures",
+  "text.autoconfig.dynamiccrosshair.option.color.forceColor": "Force single color crosshair",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle": "准星样式",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle.regular": "常规",
   "text.autoconfig.dynamiccrosshair.option.crosshairStyle.onBlock": "看向方块",
@@ -52,6 +57,15 @@
   "text.dynamiccrosshair.modifierStyle.ROUND_BRACKETS": "圆滑四角包裹",
   "text.dynamiccrosshair.modifierStyle.LINES": "四边包裹",
   "text.dynamiccrosshair.modifierStyle.LINE_BOTTOM": "底边包裹",
+
+  "text.dynamiccrosshair.color.Unchanged": "Do not change",
+  "text.dynamiccrosshair.color.Red": "Red",
+  "text.dynamiccrosshair.color.Yellow": "Yellow",
+  "text.dynamiccrosshair.color.Green": "Green",
+  "text.dynamiccrosshair.color.Cyan": "Cyan",
+  "text.dynamiccrosshair.color.Blue": "Blue",
+  "text.dynamiccrosshair.color.Purple": "Purple",
+  "text.dynamiccrosshair.color.Custom": "Custom color",
 
   "modmenu.summaryTranslation.dynamiccrosshair": "关联游戏内容的准星样式",
   "modmenu.descriptionTranslation.dynamiccrosshair": "动态准星使准星根据瞄准的东西切换形状"
