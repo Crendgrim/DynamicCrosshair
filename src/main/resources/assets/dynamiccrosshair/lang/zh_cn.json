@@ -40,7 +40,7 @@
   "text.dynamiccrosshair.option.mode.Always": "总是",
   "text.dynamiccrosshair.option.mode.IfTargeting": "若瞄准",
   "text.dynamiccrosshair.option.mode.IfInteractable": "若可交互",
-  "text.dynamiccrosshair.option.mode.IfFullyDrawn": "If Fully Drawn", // It's for ranged weapons, to change the crosshair style if the weapon is fully drawn (bow or trident), or has an arrow/firework loaded (crossbow)
+  "text.dynamiccrosshair.option.mode.IfRangedWeaponFullyDrawn": "If Fully Drawn",
   "text.dynamiccrosshair.option.mode.Disabled": "禁用",
 
   "text.dynamiccrosshair.style.DEFAULT": "默认",

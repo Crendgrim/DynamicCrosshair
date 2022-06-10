@@ -19,7 +19,7 @@ public class Config implements ConfigData {
         CrosshairPolicy holdingTool = CrosshairPolicy.Always;
         boolean holdingMeleeWeapon = true;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        RangedCrosshairPolicy holdingRangedWeapon = RangedCrosshairPolicy.IfFullyDrawn;
+        RangedCrosshairPolicy holdingRangedWeapon = RangedCrosshairPolicy.IfRangedWeaponFullyDrawn;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         CrosshairPolicy holdingThrowable = CrosshairPolicy.Always;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)

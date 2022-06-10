@@ -40,7 +40,7 @@
   "text.dynamiccrosshair.option.mode.Always": "Всегда",
   "text.dynamiccrosshair.option.mode.IfTargeting": "Если нацелен",
   "text.dynamiccrosshair.option.mode.IfInteractable": "Если блок интеракт.",
-  "text.dynamiccrosshair.option.mode.IfFullyDrawn": "Если заряжен",
+  "text.dynamiccrosshair.option.mode.IfRangedWeaponFullyDrawn": "Если заряжен",
   "text.dynamiccrosshair.option.mode.Disabled": "Отключено",
 
   "text.dynamiccrosshair.style.DEFAULT": "Стандарт",
