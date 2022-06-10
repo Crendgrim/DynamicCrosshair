@@ -43,8 +43,6 @@ dependencies {
 	}
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-	modCompileOnly("maven.modrinth:arcanus:${project.arcanus_version}") { transitive = false }
-
 	modCompileOnly("curse.maven:mythic-mounts-${project.mythicmounts_version}") { transitive = false }
 }
 
