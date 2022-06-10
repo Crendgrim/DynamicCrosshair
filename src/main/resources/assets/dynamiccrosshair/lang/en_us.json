@@ -38,6 +38,7 @@
   "text.dynamiccrosshair.option.mode.Always": "Always",
   "text.dynamiccrosshair.option.mode.IfTargeting": "If Targeting",
   "text.dynamiccrosshair.option.mode.IfInteractable": "If Interactable",
+  "text.dynamiccrosshair.option.mode.IfFullyDrawn": "If Fully Drawn",
   "text.dynamiccrosshair.option.mode.Disabled": "Disabled",
 
   "text.dynamiccrosshair.style.DEFAULT": "Default",

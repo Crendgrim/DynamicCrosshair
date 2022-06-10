@@ -18,7 +18,7 @@ public class Config implements ConfigData {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         CrosshairPolicy holdingTool = CrosshairPolicy.Always;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairPolicy holdingRangedWeapon = CrosshairPolicy.Always;
+        RangedCrosshairPolicy holdingRangedWeapon = RangedCrosshairPolicy.IfFullyDrawn;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         CrosshairPolicy holdingThrowable = CrosshairPolicy.Always;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
@@ -31,7 +31,7 @@ public class Config implements ConfigData {
     public InteractableCrosshairPolicy dynamicCrosshairOnBlock() { return crosshairSettings.onBlock; }
     public boolean dynamicCrosshairOnEntity() { return crosshairSettings.onEntity; }
     public CrosshairPolicy dynamicCrosshairHoldingTool() { return crosshairSettings.holdingTool; }
-    public CrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return crosshairSettings.holdingRangedWeapon; }
+    public RangedCrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return crosshairSettings.holdingRangedWeapon; }
     public CrosshairPolicy dynamicCrosshairHoldingThrowable() { return crosshairSettings.holdingThrowable; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingBlock() { return crosshairSettings.holdingBlock; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return crosshairSettings.holdingUsableItem; }
@@ -67,7 +67,7 @@ public class Config implements ConfigData {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         CrosshairStyle holdingTool = CrosshairStyle.SQUARE;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle holdingRangedWeapon = CrosshairStyle.CIRCLE;
+        CrosshairStyle holdingRangedWeapon = CrosshairStyle.DIAGONAL_CROSS;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         CrosshairStyle holdingThrowable = CrosshairStyle.CIRCLE;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)

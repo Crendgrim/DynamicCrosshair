@@ -5,6 +5,7 @@ import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.InteractableCrosshairPolicy;
+import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -147,7 +148,7 @@ public class CrosshairHandler {
         }
         DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
 
-        if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon(), isTargeting)) {
+        if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() != RangedCrosshairPolicy.Disabled) {
             crosshair = api.getRangedWeaponHandler().checkRangedWeapon(player, handItemStack);
             if (crosshair != null) return crosshair;
         }

@@ -9,6 +9,7 @@ import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.Style;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
+import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IItemMixin;
 import net.minecraft.block.Block;
@@ -56,8 +57,35 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
     @Override
     public Crosshair checkRangedWeapon(ClientPlayerEntity player, ItemStack itemStack) {
         Item handItem = itemStack.getItem();
-        if (handItem instanceof RangedWeaponItem || handItem instanceof TridentItem) {
-            return Crosshair.RANGED_WEAPON;
+        if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == RangedCrosshairPolicy.Always) {
+            if (handItem instanceof RangedWeaponItem || handItem instanceof TridentItem) {
+                return Crosshair.RANGED_WEAPON;
+            }
+            return null;
+        }
+        // Policy: IfFullyDrawn
+        if (handItem instanceof BowItem) {
+            if (player.getActiveItem().equals(itemStack)) {
+                float progress = BowItem.getPullProgress(handItem.getMaxUseTime(itemStack) - player.getItemUseTimeLeft());
+                if (progress == 1.0f) {
+                    return Crosshair.RANGED_WEAPON;
+                }
+            }
+            return Crosshair.REGULAR;
+        }
+        if (handItem instanceof CrossbowItem) {
+            if (CrossbowItem.isCharged(itemStack)) {
+                return Crosshair.RANGED_WEAPON;
+            }
+        }
+        if (handItem instanceof TridentItem) {
+            if (player.getActiveItem().equals(itemStack)) {
+                int i = handItem.getMaxUseTime(itemStack) - player.getItemUseTimeLeft();
+                if (i > 10) {
+                    return Crosshair.RANGED_WEAPON;
+                }
+            }
+            return Crosshair.TOOL;
         }
         return null;
     }
