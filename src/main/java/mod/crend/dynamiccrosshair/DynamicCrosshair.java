@@ -1,7 +1,6 @@
 package mod.crend.dynamiccrosshair;
 
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
-import mod.crend.dynamiccrosshair.compat.CompatLoader;
 import mod.crend.dynamiccrosshair.config.Config;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import mod.crend.dynamiccrosshair.handler.VanillaApiImpl;
@@ -26,7 +25,6 @@ public class DynamicCrosshair implements ClientModInitializer {
         config = ConfigHandler.getConfig();
 
         addApi(new VanillaApiImpl());
-        CompatLoader.load();
         FabricLoader.getInstance().getEntrypointContainers("dynamiccrosshair", DynamicCrosshairApi.class).forEach(entrypoint -> {
             addApi(entrypoint.getEntrypoint());
         });
