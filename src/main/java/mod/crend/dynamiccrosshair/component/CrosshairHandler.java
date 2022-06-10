@@ -51,10 +51,18 @@ public class CrosshairHandler {
 
     // Return true if main hand item is usable
     private static Crosshair checkHandOnEntity(ClientPlayerEntity player, ItemStack handItemStack, Entity entity) {
-        Crosshair crosshair = checkHandUsableItem(player, handItemStack, true);
+        Crosshair crosshair = null;
         Set<String> namespaces = new HashSet<>();
         namespaces.add(getNamespace(handItemStack));
         namespaces.add(getNamespace(entity));
+        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                crosshair = checkHandUsableItem(api, player, handItemStack, true);
+                if (crosshair != null) break;
+            }
+        }
         for (String ns : namespaces) {
             if (DynamicCrosshair.apis.containsKey(ns)) {
                 DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
@@ -71,10 +79,18 @@ public class CrosshairHandler {
         return crosshair;
     }
     private static Crosshair checkHandOnBlock(ClientPlayerEntity player, ItemStack handItemStack, BlockPos blockPos, BlockState blockState) {
-        Crosshair crosshair = checkHandCommon(player, handItemStack, true);
+        Crosshair crosshair = null;
         Set<String> namespaces = new HashSet<>();
         namespaces.add(getNamespace(handItemStack));
         namespaces.add(getNamespace(blockState));
+        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                crosshair = checkHandCommon(api, player, handItemStack, true);
+                if (crosshair != null) break;
+            }
+        }
         for (String ns : namespaces) {
             if (DynamicCrosshair.apis.containsKey(ns)) {
                 DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
@@ -89,11 +105,22 @@ public class CrosshairHandler {
         return crosshair;
     }
     private static Crosshair checkHandOnMiss(ClientPlayerEntity player, ItemStack handItemStack) {
-        Crosshair crosshair = checkHandCommon(player, handItemStack, false);
-        String ns = getNamespace(handItemStack);
-        if (DynamicCrosshair.apis.containsKey(ns)) {
-            DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-            crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnMiss(player, handItemStack));
+        Crosshair crosshair = null;
+        Set<String> namespaces = new HashSet<>();
+        namespaces.add(getNamespace(handItemStack));
+        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                crosshair = checkHandCommon(api, player, handItemStack, false);
+                if (crosshair != null) break;
+            }
+        }
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnMiss(player, handItemStack));
+            }
         }
         return crosshair;
     }
@@ -102,51 +129,29 @@ public class CrosshairHandler {
         crosshair = Crosshair.combine(crosshair, checkHandOnMiss(player, player.getOffHandStack()));
         return crosshair;
     }
-    private static Crosshair checkHandUsableItem(ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
-        Set<String> namespaces = new HashSet<>();
-        String nsItem = getNamespace(handItemStack);
-        namespaces.add(nsItem);
-        // Hack: use default namespace for usable items so food and drink items get automatically picked up
-        namespaces.add(Identifier.DEFAULT_NAMESPACE);
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
-                    case Always -> {
-                        if (api.getUsableItemHandler().isUsableItem(handItemStack)) {
-                            return Crosshair.USE_ITEM;
-                        }
-                    }
-                    case IfInteractable -> {
-                        Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(player, handItemStack);
-                        if (crosshair != null) return crosshair;
-                    }
-                    case IfTargeting -> {
-                        if (isTargeting) {
-                            Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(player, handItemStack);
-                            if (crosshair != null) return crosshair;
-                        }
-                    }
+    private static Crosshair checkHandUsableItem(DynamicCrosshairApi api, ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
+        switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
+            case Always -> {
+                if (api.getUsableItemHandler().isUsableItem(handItemStack)) {
+                    return Crosshair.USE_ITEM;
+                }
+            }
+            case IfInteractable -> {
+                Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(player, handItemStack);
+                if (crosshair != null) return crosshair;
+            }
+            case IfTargeting -> {
+                if (isTargeting) {
+                    Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(player, handItemStack);
+                    if (crosshair != null) return crosshair;
                 }
             }
         }
-        if (!DynamicCrosshair.apis.containsKey(nsItem)) {
-            // Force modded items to have a crosshair. This has to be done because modded tools/weapons cannot be distinguished
-            // from regular items and thus will hide the crosshair.
-            // These only take effect if mod compatibility isn't set up.
-            return Crosshair.REGULAR;
-        }
         return null;
     }
-    private static Crosshair checkHandCommon(ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
-        Crosshair crosshair = checkHandUsableItem(player, handItemStack, isTargeting);
+    private static Crosshair checkHandCommon(DynamicCrosshairApi api, ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
+        Crosshair crosshair = checkHandUsableItem(api, player, handItemStack, isTargeting);
         if (crosshair != null) return crosshair;
-
-        String ns = getNamespace(handItemStack);
-        if (!DynamicCrosshair.apis.containsKey(ns)) {
-            return null;
-        }
-        DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
 
         if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() != RangedCrosshairPolicy.Disabled) {
             crosshair = api.getRangedWeaponHandler().checkRangedWeapon(player, handItemStack);
@@ -179,10 +184,16 @@ public class CrosshairHandler {
     private static void checkBreakable(ClientPlayerEntity player, BlockPos blockPos, BlockState blockState) {
         if (DynamicCrosshair.config.dynamicCrosshairHoldingTool() == CrosshairPolicy.Disabled) return;
 
-        String ns = getNamespace(blockState);
-        if (DynamicCrosshair.apis.containsKey(ns)) {
-            DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-            activeCrosshair.updateFrom(api.getBlockBreakHandler().checkBlockBreaking(player, player.getMainHandStack(), blockPos, blockState));
+        Set<String> namespaces = new HashSet<>();
+        namespaces.add(getNamespace(blockState));
+        namespaces.add(getNamespace(player.getMainHandStack()));
+        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+
+        for (String ns : namespaces) {
+            if (DynamicCrosshair.apis.containsKey(ns)) {
+                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
+                activeCrosshair.updateFrom(api.getBlockBreakHandler().checkBlockBreaking(player, player.getMainHandStack(), blockPos, blockState));
+            }
         }
     }
 
@@ -196,6 +207,8 @@ public class CrosshairHandler {
             Set<String> namespaces = new HashSet<>();
             namespaces.add(getNamespace(blockState));
             namespaces.add(getNamespace(mainHandStack));
+            // Fallback: if modded item and block, maybe the vanilla handler can still give us extra data (such as with custom furnaces)
+            namespaces.add(Identifier.DEFAULT_NAMESPACE);
             for (String ns : namespaces) {
                 if (DynamicCrosshair.apis.containsKey(ns)) {
                     DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
