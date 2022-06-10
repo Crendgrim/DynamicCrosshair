@@ -14,7 +14,6 @@ import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.*;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
@@ -32,17 +31,13 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
                 return Crosshair.INCORRECT_TOOL;
             }
         }
+        if (handItem.getMiningSpeedMultiplier(itemStack, blockState) > 1.0f
+                && handItem.canMine(blockState, MinecraftClient.getInstance().world, blockPos, player)) {
+            return Crosshair.CORRECT_TOOL;
+        }
         if (handItem instanceof ShearsItem) {
-            Block block = blockState.getBlock();
-            if (blockState.isIn(BlockTags.LEAVES)
-                    || blockState.isIn(BlockTags.WOOL)
-                    || block.equals(Blocks.COBWEB)
-                    || block.equals(Blocks.VINE)
-                    || block.equals(Blocks.GLOW_LICHEN)) {
-                return Crosshair.CORRECT_TOOL;
-            } else {
-                return Crosshair.INCORRECT_TOOL;
-            }
+            // (shears item && correct tool) is handled by the getMiningSpeedMultiplier branch
+            return Crosshair.INCORRECT_TOOL;
         }
         return null;
     }

@@ -6,6 +6,7 @@ public enum Style {
     OnBlock,
     OnEntity,
     HoldingTool,
+    HoldingMeleeWeapon,
     HoldingRangedWeapon,
     HoldingThrowable,
     HoldingBlock

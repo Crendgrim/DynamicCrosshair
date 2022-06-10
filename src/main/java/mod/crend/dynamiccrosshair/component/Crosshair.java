@@ -19,6 +19,7 @@ public class Crosshair implements Cloneable {
     public static final Crosshair NONE = new Crosshair();
     public static final Crosshair REGULAR = new Crosshair(Style.Regular);
     public static final Crosshair HOLDING_BLOCK = new Crosshair(Style.HoldingBlock).setFlag(Flag.FixedAll);
+    public static final Crosshair MELEE_WEAPON = new Crosshair(Style.HoldingMeleeWeapon).setFlag(Flag.FixedStyle);
     public static final Crosshair RANGED_WEAPON = new Crosshair(Style.HoldingRangedWeapon).setFlag(Flag.FixedAll);
     public static final Crosshair THROWABLE = new Crosshair(Style.HoldingThrowable).setFlag(Flag.FixedAll);
     public static final Crosshair TOOL = new Crosshair(Style.HoldingTool).setFlag(Flag.FixedStyle);
@@ -68,6 +69,7 @@ public class Crosshair implements Cloneable {
             case OnEntity -> DynamicCrosshair.config.getCrosshairStyleOnEntity();
             case HoldingBlock -> DynamicCrosshair.config.getCrosshairStyleHoldingBlock();
             case HoldingTool -> DynamicCrosshair.config.getCrosshairStyleHoldingTool();
+            case HoldingMeleeWeapon -> DynamicCrosshair.config.getCrosshairStyleHoldingMeleeWeapon();
             case HoldingRangedWeapon -> DynamicCrosshair.config.getCrosshairStyleHoldingRangedWeapon();
             case HoldingThrowable -> DynamicCrosshair.config.getCrosshairStyleHoldingThrowable();
         };

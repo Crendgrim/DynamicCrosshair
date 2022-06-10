@@ -1,10 +1,7 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.api.IBlockItemHandler;
-import mod.crend.dynamiccrosshair.api.IRangedWeaponHandler;
-import mod.crend.dynamiccrosshair.api.IThrowableItemHandler;
-import mod.crend.dynamiccrosshair.api.IToolItemHandler;
+import mod.crend.dynamiccrosshair.api.*;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.Style;
@@ -24,7 +21,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.RaycastContext;
 
-public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandler, IRangedWeaponHandler, IBlockItemHandler {
+public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandler, IMeleeWeaponHandler, IRangedWeaponHandler, IBlockItemHandler {
     @Override
     public Crosshair checkTool(ClientPlayerEntity player, ItemStack itemStack) {
         Item handItem = itemStack.getItem();
@@ -51,6 +48,37 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
         ) {
             return Crosshair.THROWABLE;
         }
+        return null;
+    }
+
+    @Override
+    public Crosshair checkMeleeWeapon(ClientPlayerEntity player, ItemStack itemStack, boolean canBeToolCrosshair) {
+        Item handItem = itemStack.getItem();
+
+        if (handItem instanceof SwordItem) {
+            if (canBeToolCrosshair) {
+                HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
+                if (hitResult.getType() == HitResult.Type.BLOCK) {
+                    BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
+                    BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
+                    if (handItem.getMiningSpeedMultiplier(itemStack, blockState) > 1.0f
+                            && handItem.canMine(blockState, MinecraftClient.getInstance().world, blockPos, player)) {
+                        return null;
+                    }
+                }
+            }
+            return Crosshair.MELEE_WEAPON;
+        }
+        if (handItem instanceof TridentItem) {
+            return Crosshair.MELEE_WEAPON;
+        }
+        if (handItem instanceof AxeItem) {
+            if (canBeToolCrosshair) {
+                return null;
+            }
+            return Crosshair.MELEE_WEAPON;
+        }
+
         return null;
     }
 
@@ -85,7 +113,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
                     return Crosshair.RANGED_WEAPON;
                 }
             }
-            return Crosshair.TOOL;
+            return null;
         }
         return null;
     }
