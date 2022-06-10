@@ -36,6 +36,11 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     }
 
     @Override
+    public IMeleeWeaponHandler getMeleeWeaponHandler() {
+        return itemHandler;
+    }
+
+    @Override
     public IRangedWeaponHandler getRangedWeaponHandler() {
         return itemHandler;
     }

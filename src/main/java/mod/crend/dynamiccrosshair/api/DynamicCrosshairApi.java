@@ -26,6 +26,10 @@ public interface DynamicCrosshairApi {
         return (player, itemStack, entity) -> null;
     }
 
+    default IMeleeWeaponHandler getMeleeWeaponHandler() {
+        return (player, itemStack, canBeToolCrosshair) -> null;
+    }
+
     default IRangedWeaponHandler getRangedWeaponHandler() {
         return (player, itemStack) -> null;
     }

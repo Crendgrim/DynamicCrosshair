@@ -158,6 +158,10 @@ public class CrosshairHandler {
             if (crosshair != null) return crosshair;
         }
 
+        if (DynamicCrosshair.config.dynamicCrosshairHoldingMeleeWeapon()) {
+            crosshair = api.getMeleeWeaponHandler().checkMeleeWeapon(player, handItemStack, isTargeting && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled);
+            if (crosshair != null) return crosshair;
+        }
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingTool(), isTargeting)) {
             crosshair = api.getToolItemHandler().checkTool(player, handItemStack);
             if (crosshair != null) return crosshair;
