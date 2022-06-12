@@ -38,8 +38,7 @@ There sadly is no general way to differentiate between regular items and tools/w
 I highly suggest my other mod [Auto HUD](https://modrinth.com/mod/autohud), which allows to dynamically hide and reveal HUD elements
 based on context.
 
-The following mods have (some level of) explicit support:
-* Arcanus (1.18 version)
-
 The following mods are incompatible:
 * Flour's Various Tweaks (1.18 version) overrides the dynamic crosshair style option. The crosshair will still hide, but not be contextually styled.
+
+If you play with content mods, I recommend also installing [Dynamic Crosshair Compat](https://github.com/Crendgrim/DynamicCrosshairCompat) from [Modrinth](https://modrinth.com/mod/dynamiccrosshaircompat) or [Curseforge](https://www.curseforge.com/minecraft/mc-mods/dynamic-crosshair-compat).
