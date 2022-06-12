@@ -17,7 +17,7 @@ public interface IUsableItemHandler {
      * @param itemStack The tool in the player's main hand
      * @return a Crosshair object overwriting the crosshair settings
      */
-    boolean isUsableItem(ItemStack itemStack);
+    default boolean isUsableItem(ItemStack itemStack) { return false; }
 
     /**
      * Set the crosshair based on whether the given item is usable.
@@ -29,7 +29,7 @@ public interface IUsableItemHandler {
      * @param itemStack The item in the player's main hand
      * @return a Crosshair object overwriting the crosshair settings
      */
-    Crosshair checkUsableItem(ClientPlayerEntity player, ItemStack itemStack);
+    default Crosshair checkUsableItem(ClientPlayerEntity player, ItemStack itemStack) { return null; }
 
     /**
      * Set the crosshair based on whether the given item is usable when targeting a block.
@@ -40,7 +40,7 @@ public interface IUsableItemHandler {
      * @param blockState The targeted block's state
      * @return a Crosshair object overwriting the crosshair settings
      */
-    Crosshair checkUsableItemOnBlock(ClientPlayerEntity player, ItemStack itemStack, BlockPos blockPos, BlockState blockState);
+    default Crosshair checkUsableItemOnBlock(ClientPlayerEntity player, ItemStack itemStack, BlockPos blockPos, BlockState blockState) { return null; }
 
     /**
      * Set the crosshair based on whether the given item is usable when targeting nothing.
@@ -49,5 +49,5 @@ public interface IUsableItemHandler {
      * @param itemStack The item in the player's main hand
      * @return a Crosshair object overwriting the crosshair settings
      */
-    Crosshair checkUsableItemOnMiss(ClientPlayerEntity player, ItemStack itemStack);
+    default Crosshair checkUsableItemOnMiss(ClientPlayerEntity player, ItemStack itemStack) { return null; }
 }
