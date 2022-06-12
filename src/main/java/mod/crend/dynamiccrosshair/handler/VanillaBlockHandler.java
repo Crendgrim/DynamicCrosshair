@@ -53,6 +53,7 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
                     || (blockState.isOf(Blocks.LECTERN) && !blockState.get(LecternBlock.HAS_BOOK))
                     || block instanceof CampfireBlock
                     || block instanceof BannerBlock
+                    || block instanceof EndPortalBlock
                     // Skip blocks from mods that have a compatibility handler registered
                     || (!(ns.equals(Identifier.DEFAULT_NAMESPACE)) && DynamicCrosshair.apis.containsKey(ns))
             )) {
