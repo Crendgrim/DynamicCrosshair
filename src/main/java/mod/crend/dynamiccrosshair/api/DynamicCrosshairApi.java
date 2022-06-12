@@ -10,6 +10,18 @@ public interface DynamicCrosshairApi {
 
     String getNamespace();
 
+    /**
+     * Usually, APIs are only checked if any of (held item, targeted entity, targeted block) are under the namespace
+     * this API is registered under. This is to massively reduce unnecessary checks. However, this can pose a problem
+     * if a mod overwrites vanilla behaviour.
+     * Override this method if this API should always be checked.
+     *
+     * @return true if this API should always be checked.
+     */
+    default boolean forceCheck() {
+        return false;
+    }
+
     default IBlockBreakHandler getBlockBreakHandler() {
         return (player, itemStack, blockPos, blockState) -> null;
     }

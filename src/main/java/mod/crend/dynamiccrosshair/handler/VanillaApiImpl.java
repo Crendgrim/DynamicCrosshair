@@ -10,6 +10,12 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         return Identifier.DEFAULT_NAMESPACE;
     }
 
+    @Override
+    public boolean forceCheck() {
+        // Vanilla behaviour should always be checked, so mods inheriting from vanilla items/blocks/entities just work.
+        return true;
+    }
+
     VanillaBlockHandler blockHandler = new VanillaBlockHandler();
     VanillaEntityHandler entityHandler = new VanillaEntityHandler();
     VanillaItemHandler itemHandler = new VanillaItemHandler();

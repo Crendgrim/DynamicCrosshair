@@ -55,7 +55,7 @@ public class CrosshairHandler {
         Set<String> namespaces = new HashSet<>();
         namespaces.add(getNamespace(handItemStack));
         namespaces.add(getNamespace(entity));
-        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
         for (String ns : namespaces) {
             if (DynamicCrosshair.apis.containsKey(ns)) {
                 DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
@@ -83,7 +83,7 @@ public class CrosshairHandler {
         Set<String> namespaces = new HashSet<>();
         namespaces.add(getNamespace(handItemStack));
         namespaces.add(getNamespace(blockState));
-        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
         for (String ns : namespaces) {
             if (DynamicCrosshair.apis.containsKey(ns)) {
                 DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
@@ -108,7 +108,7 @@ public class CrosshairHandler {
         Crosshair crosshair = null;
         Set<String> namespaces = new HashSet<>();
         namespaces.add(getNamespace(handItemStack));
-        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
         for (String ns : namespaces) {
             if (DynamicCrosshair.apis.containsKey(ns)) {
                 DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
@@ -187,7 +187,7 @@ public class CrosshairHandler {
         Set<String> namespaces = new HashSet<>();
         namespaces.add(getNamespace(blockState));
         namespaces.add(getNamespace(player.getMainHandStack()));
-        namespaces.add(Identifier.DEFAULT_NAMESPACE);
+        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
 
         for (String ns : namespaces) {
             if (DynamicCrosshair.apis.containsKey(ns)) {
@@ -208,7 +208,7 @@ public class CrosshairHandler {
             namespaces.add(getNamespace(blockState));
             namespaces.add(getNamespace(mainHandStack));
             // Fallback: if modded item and block, maybe the vanilla handler can still give us extra data (such as with custom furnaces)
-            namespaces.add(Identifier.DEFAULT_NAMESPACE);
+            namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
             for (String ns : namespaces) {
                 if (DynamicCrosshair.apis.containsKey(ns)) {
                     DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
