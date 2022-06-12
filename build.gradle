@@ -82,6 +82,7 @@ modrinth {
 		required.project 'P7dR8mSH' // Fabric API
 		required.project '9s6osm5g' // Cloth Config
 		optional.project 'mOgUt4GM' // Mod Menu
+		optional.project 'EwPIWPJ9' // Dynamic Crosshair Compat
 	}
 }
 
@@ -102,6 +103,7 @@ curseforge {
 				requiredDependency "fabric-api"
 				requiredDependency "cloth-config"
 				optionalDependency "modmenu"
+				optionalDependency "dynamic-crosshair-compat"
 			}
 		}
 	}
