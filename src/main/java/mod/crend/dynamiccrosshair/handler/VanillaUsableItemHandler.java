@@ -10,16 +10,21 @@ import mod.crend.dynamiccrosshair.mixin.*;
 import net.minecraft.block.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.*;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.state.property.Properties;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.RaycastContext;
+
+import java.util.List;
 
 public class VanillaUsableItemHandler implements IUsableItemHandler {
 
@@ -107,6 +112,14 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         // Liquid interactions ignore block hit, cast extra rays
         // This getting called for entity hits is on purpose, as liquid interactions overwrite entity interactions
         if (handItem instanceof GlassBottleItem) {
+            // Dragon's breath
+            List<AreaEffectCloudEntity> list = MinecraftClient.getInstance().world.getEntitiesByClass(AreaEffectCloudEntity.class, player.getBoundingBox().expand(2.0), entity -> {
+                return entity != null && entity.isAlive() && entity.getParticleType().getType() == ParticleTypes.DRAGON_BREATH;
+            });
+            if (!list.isEmpty()) {
+                return Crosshair.USE_ITEM;
+            }
+
             BlockHitResult blockHitResult = IItemMixin.invokeRaycast(MinecraftClient.getInstance().world, MinecraftClient.getInstance().player, RaycastContext.FluidHandling.ANY);
             if (MinecraftClient.getInstance().world.getFluidState(blockHitResult.getBlockPos()).isIn(FluidTags.WATER))
                 return Crosshair.USE_ITEM;
@@ -159,7 +172,11 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         if (handItem instanceof MusicDiscItem && block.equals(Blocks.JUKEBOX)) return Crosshair.USE_ITEM;
         if (handItem instanceof HoneycombItem && HoneycombItem.UNWAXED_TO_WAXED_BLOCKS.get().get(block) != null)
             return Crosshair.USE_ITEM;
-        if (handItem instanceof EnderEyeItem && block.equals(Blocks.END_PORTAL_FRAME)) return Crosshair.USE_ITEM;
+        if (handItem instanceof EnderEyeItem) {
+            if (!block.equals(Blocks.END_PORTAL_FRAME) || !blockState.get(Properties.EYE)) {
+                return Crosshair.USE_ITEM;
+            }
+        }
         if (handItem instanceof GlassBottleItem) {
             if (block.equals(Blocks.WATER_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             if (block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5 && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
