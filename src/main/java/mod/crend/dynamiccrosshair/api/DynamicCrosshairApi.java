@@ -50,6 +50,10 @@ public interface DynamicCrosshairApi {
         return (player, itemStack) -> null;
     }
 
+    default IShieldItemHandler getShieldItemHandler() {
+        return (player, itemStack) -> null;
+    }
+
     default IToolItemHandler getToolItemHandler() {
         return (player, itemStack) -> null;
     }

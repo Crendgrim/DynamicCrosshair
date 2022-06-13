@@ -14,6 +14,7 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingMeleeWeapon": "Holding melee weapon (override tool)",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingRangedWeapon": "手持远程武器",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingThrowable": "手持投掷物",
+  "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingShield": "Holding shield",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingBlock": "手持方块",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingUsableItem": "手持可使用物品",
   "text.autoconfig.dynamiccrosshair.option.color": "Crosshair color",
@@ -36,6 +37,7 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modCorrectTool": "手持正确工具",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modIncorrectTool": "手持错误工具",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "手持可使用物品",
+  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield": "Holding shield",
 
   "text.dynamiccrosshair.option.mode.Always": "总是",
   "text.dynamiccrosshair.option.mode.IfTargeting": "若瞄准",
