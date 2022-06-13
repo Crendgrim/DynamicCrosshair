@@ -16,6 +16,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
@@ -86,13 +87,13 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
     public Crosshair checkRangedWeapon(ClientPlayerEntity player, ItemStack itemStack) {
         Item handItem = itemStack.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == RangedCrosshairPolicy.Always) {
-            if (handItem instanceof RangedWeaponItem || handItem instanceof TridentItem) {
-                return Crosshair.RANGED_WEAPON;
-            }
-            return null;
+            return switch (handItem.getUseAction(itemStack)) {
+                case BOW, CROSSBOW, SPEAR -> Crosshair.RANGED_WEAPON;
+                default -> null;
+            };
         }
         // Policy: IfFullyDrawn
-        if (handItem instanceof BowItem) {
+        if (handItem.getUseAction(itemStack) == UseAction.BOW) {
             if (player.getActiveItem().equals(itemStack)) {
                 float progress = BowItem.getPullProgress(handItem.getMaxUseTime(itemStack) - player.getItemUseTimeLeft());
                 if (progress == 1.0f) {
@@ -101,12 +102,12 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
             }
             return Crosshair.REGULAR;
         }
-        if (handItem instanceof CrossbowItem) {
+        if (handItem.getUseAction(itemStack) == UseAction.CROSSBOW) {
             if (CrossbowItem.isCharged(itemStack)) {
                 return Crosshair.RANGED_WEAPON;
             }
         }
-        if (handItem instanceof TridentItem) {
+        if (handItem.getUseAction(itemStack) == UseAction.SPEAR) {
             if (player.getActiveItem().equals(itemStack)) {
                 int i = handItem.getMaxUseTime(itemStack) - player.getItemUseTimeLeft();
                 if (i > 10) {
