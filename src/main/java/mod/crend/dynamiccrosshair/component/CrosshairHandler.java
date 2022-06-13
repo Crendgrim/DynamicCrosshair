@@ -149,7 +149,7 @@ public class CrosshairHandler {
         }
         return null;
     }
-    private static Crosshair checkHandCommon(DynamicCrosshairApi api, ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
+    private static Crosshair checkHandCommonCrosshair(DynamicCrosshairApi api, ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
         Crosshair crosshair = checkHandUsableItem(api, player, handItemStack, isTargeting);
         if (crosshair != null) return crosshair;
 
@@ -178,6 +178,15 @@ public class CrosshairHandler {
         }
 
         return null;
+    }
+    private static Crosshair checkHandCommon(DynamicCrosshairApi api, ClientPlayerEntity player, ItemStack handItemStack, boolean isTargeting) {
+        Crosshair crosshair = checkHandCommonCrosshair(api, player, handItemStack, isTargeting);
+
+        if (DynamicCrosshair.config.dynamicCrosshairHoldingShield()) {
+            crosshair = Crosshair.combine(crosshair, api.getShieldItemHandler().checkShield(player, handItemStack));
+        }
+
+        return crosshair;
     }
 
     // Tools & Melee Weapons

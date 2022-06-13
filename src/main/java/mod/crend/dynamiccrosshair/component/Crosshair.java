@@ -27,6 +27,7 @@ public class Crosshair implements Cloneable {
     public static final Crosshair INCORRECT_TOOL = new Crosshair(Style.HoldingTool, ModifierHit.INCORRECT_TOOL).setFlag(Flag.FixedStyle, Flag.FixedModifierHit);
     public static final Crosshair USE_ITEM = new Crosshair(ModifierUse.USE_ITEM).setFlag(Flag.FixedModifierUse);
     public static final Crosshair INTERACTABLE = new Crosshair(ModifierUse.INTERACTABLE).setFlag(Flag.FixedModifierUse);
+    public static final Crosshair SHIELD = new Crosshair(ModifierUse.SHIELD).setFlag(Flag.FixedModifierUse);
 
     private Style style = Style.NONE;
     private ModifierUse modifierUse = ModifierUse.NONE;
@@ -171,6 +172,7 @@ public class Crosshair implements Cloneable {
         switch (modifierUse) {
             case USE_ITEM -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierUsableItem());
             case INTERACTABLE -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierInteractable());
+            case SHIELD -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierShield());
         }
         return modifiers;
     }

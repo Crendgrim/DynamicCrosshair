@@ -22,7 +22,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.RaycastContext;
 
-public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandler, IMeleeWeaponHandler, IRangedWeaponHandler, IBlockItemHandler {
+public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandler, IShieldItemHandler, IMeleeWeaponHandler, IRangedWeaponHandler, IBlockItemHandler {
     @Override
     public Crosshair checkTool(ClientPlayerEntity player, ItemStack itemStack) {
         Item handItem = itemStack.getItem();
@@ -48,6 +48,14 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
                 || (handItem instanceof EnderPearlItem && !player.getItemCooldownManager().isCoolingDown(handItem))
         ) {
             return Crosshair.THROWABLE;
+        }
+        return null;
+    }
+
+    @Override
+    public Crosshair checkShield(ClientPlayerEntity player, ItemStack itemStack) {
+        if (itemStack.getItem().getUseAction(itemStack) == UseAction.BLOCK) {
+            return Crosshair.SHIELD;
         }
         return null;
     }

@@ -35,7 +35,6 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
                 || handItem.getUseAction(handItemStack) == UseAction.DRINK
                 || handItem instanceof ArmorItem
                 || handItem instanceof ElytraItem
-                || handItem instanceof ShieldItem
                 || handItem instanceof FireworkRocketItem
                 || handItem instanceof SpawnEggItem
                 || handItem instanceof FireChargeItem
@@ -88,10 +87,6 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             if (player.hasStackEquipped(EquipmentSlot.CHEST)) {
                 return null;
             }
-            return Crosshair.USE_ITEM;
-        }
-
-        if (handItem instanceof ShieldItem) {
             return Crosshair.USE_ITEM;
         }
 

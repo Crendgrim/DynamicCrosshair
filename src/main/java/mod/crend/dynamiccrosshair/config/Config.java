@@ -22,6 +22,7 @@ public class Config implements ConfigData {
         RangedCrosshairPolicy holdingRangedWeapon = RangedCrosshairPolicy.IfRangedWeaponFullyDrawn;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         CrosshairPolicy holdingThrowable = CrosshairPolicy.Always;
+        boolean holdingShield = true;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
@@ -35,6 +36,7 @@ public class Config implements ConfigData {
     public boolean dynamicCrosshairHoldingMeleeWeapon() { return crosshairSettings.holdingMeleeWeapon; }
     public RangedCrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return crosshairSettings.holdingRangedWeapon; }
     public CrosshairPolicy dynamicCrosshairHoldingThrowable() { return crosshairSettings.holdingThrowable; }
+    public boolean dynamicCrosshairHoldingShield() { return crosshairSettings.holdingShield; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingBlock() { return crosshairSettings.holdingBlock; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return crosshairSettings.holdingUsableItem; }
 
@@ -86,6 +88,8 @@ public class Config implements ConfigData {
         CrosshairModifier modIncorrectTool = CrosshairModifier.DIAGONAL_CROSS;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         CrosshairModifier modUsableItem = CrosshairModifier.ROUND_BRACKETS;
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        CrosshairModifier modShield = CrosshairModifier.BRACKETS_BOTTOM;
     }
 
     public CrosshairStyle getCrosshairStyleRegular() { return crosshairStyle.regular; }
@@ -100,4 +104,5 @@ public class Config implements ConfigData {
     public CrosshairModifier getCrosshairModifierCorrectTool() { return crosshairModifiers.modCorrectTool; }
     public CrosshairModifier getCrosshairModifierIncorrectTool() { return crosshairModifiers.modIncorrectTool; }
     public CrosshairModifier getCrosshairModifierUsableItem() { return crosshairModifiers.modUsableItem; }
+    public CrosshairModifier getCrosshairModifierShield() { return crosshairModifiers.modShield; }
 }

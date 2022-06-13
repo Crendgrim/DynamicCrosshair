@@ -57,6 +57,11 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     }
 
     @Override
+    public IShieldItemHandler getShieldItemHandler() {
+        return itemHandler;
+    }
+
+    @Override
     public IToolItemHandler getToolItemHandler() {
         return itemHandler;
     }

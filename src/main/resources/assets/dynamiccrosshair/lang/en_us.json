@@ -14,6 +14,7 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingMeleeWeapon": "Holding melee weapon (override tool)",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingRangedWeapon": "Holding ranged weapon",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingThrowable": "Holding throwable item",
+  "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingShield": "Holding shield",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingBlock": "Holding block",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingUsableItem": "Holding usable item",
   "text.autoconfig.dynamiccrosshair.option.color": "Crosshair color",
@@ -36,6 +37,7 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modCorrectTool": "Holding correct tool",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modIncorrectTool": "Holding incorrect tool",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "Holding usable item",
+  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield": "Holding shield",
 
   "text.dynamiccrosshair.option.mode.Always": "Always",
   "text.dynamiccrosshair.option.mode.IfTargeting": "If Targeting",
