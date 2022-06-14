@@ -8,6 +8,7 @@ import mod.crend.dynamiccrosshair.component.Style;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.*;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.AreaEffectCloudEntity;
@@ -165,43 +166,56 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
                 return Crosshair.USE_ITEM;
             }
         }
+        if (handItem instanceof EntityBucketItem) {
+            if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
+                return new Crosshair(Style.HoldingBlock, ModifierUse.USE_ITEM);
+            }
+            return Crosshair.USE_ITEM;
+        }
+        if (block instanceof AbstractCauldronBlock && !player.shouldCancelInteraction()) {
+            if (handItem instanceof BucketItem bucketItem) {
+                Fluid fluid = ((IBucketItemMixin) bucketItem).getFluid();
+                if (fluid == Fluids.WATER || fluid == Fluids.LAVA) {
+                    return Crosshair.USE_ITEM;
+                }
+                if (fluid == Fluids.EMPTY && ((AbstractCauldronBlock) block).isFull(blockState)) {
+                    return Crosshair.USE_ITEM;
+                }
+            }
+            if (handItem instanceof PowderSnowBucketItem) {
+                return Crosshair.USE_ITEM;
+            }
+            if (block.equals(Blocks.WATER_CAULDRON)) {
+                if (handItem instanceof GlassBottleItem) {
+                    return Crosshair.USE_ITEM;
+                }
+                if (handItem instanceof PotionItem && PotionUtil.getPotion(handItemStack) == Potions.WATER) {
+                    return Crosshair.USE_ITEM;
+                }
+                if (handItem instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock sbb && sbb.getColor() != null) {
+                    return Crosshair.USE_ITEM;
+                }
+                if (handItem instanceof DyeableItem dyeableItem && dyeableItem.hasColor(handItemStack)) {
+                    return Crosshair.USE_ITEM;
+                }
+                if (handItem instanceof BannerItem && BannerBlockEntity.getPatternCount(handItemStack) > 0) {
+                    return Crosshair.USE_ITEM;
+                }
+            }
+        }
         if (handItem instanceof GlassBottleItem) {
-            if (block.equals(Blocks.WATER_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             if (block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5 && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             return null;
         }
-        if (handItem instanceof PotionItem && PotionUtil.getPotion(handItemStack) == Potions.WATER) {
-            if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            return null;
-        }
         if (handItem instanceof BucketItem bucketItem) {
-            if (handItem instanceof EntityBucketItem) {
-                if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
-                    return new Crosshair(Style.HoldingBlock, ModifierUse.USE_ITEM);
-                }
-                return Crosshair.USE_ITEM;
-            }
-            if (block.equals(Blocks.WATER_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            if (block.equals(Blocks.LAVA_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            if (block.equals(Blocks.POWDER_SNOW_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             Fluid fluid = ((IBucketItemMixin) bucketItem).getFluid();
-            if (fluid == Fluids.WATER || fluid == Fluids.LAVA) {
-                if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            }
             if (fluid != Fluids.EMPTY) {
                 if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
                     return Crosshair.HOLDING_BLOCK;
                 }
                 return Crosshair.USE_ITEM;
             }
-            if (block.equals(Blocks.POWDER_SNOW)) return Crosshair.USE_ITEM;
-        }
-        if (handItem instanceof PowderSnowBucketItem) {
-            if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            if (block.equals(Blocks.WATER_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            if (block.equals(Blocks.LAVA_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            if (block.equals(Blocks.POWDER_SNOW_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            return null; // crosshair will be updated later because PowderSnowBucketItem is also a BlockItem
+            else if (block.equals(Blocks.POWDER_SNOW)) return Crosshair.USE_ITEM;
         }
         if (handItem instanceof BoneMealItem) {
             if (BoneMealItem.useOnFertilizable(handItemStack, MinecraftClient.getInstance().world, blockPos)) {
