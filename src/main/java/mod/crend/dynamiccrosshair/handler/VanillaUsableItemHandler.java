@@ -12,6 +12,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
@@ -119,7 +121,7 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             if (MinecraftClient.getInstance().world.getFluidState(blockHitResult.getBlockPos()).isIn(FluidTags.WATER))
                 return Crosshair.USE_ITEM;
         }
-        if (handItem instanceof BucketItem) {
+        if (handItem == Items.BUCKET) {
             BlockHitResult blockHitResult = IItemMixin.invokeRaycast(MinecraftClient.getInstance().world, MinecraftClient.getInstance().player, RaycastContext.FluidHandling.SOURCE_ONLY);
             if (!MinecraftClient.getInstance().world.getFluidState(blockHitResult.getBlockPos()).isEmpty())
                 return Crosshair.USE_ITEM;
@@ -181,7 +183,7 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             return null;
         }
-        if (handItem instanceof BucketItem) {
+        if (handItem instanceof BucketItem bucketItem) {
             if (handItem instanceof EntityBucketItem) {
                 if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
                     return new Crosshair(Style.HoldingBlock, ModifierUse.USE_ITEM);
@@ -191,13 +193,17 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             if (block.equals(Blocks.WATER_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             if (block.equals(Blocks.LAVA_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             if (block.equals(Blocks.POWDER_SNOW_CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
-            if (handItem == Items.WATER_BUCKET || handItem == Items.LAVA_BUCKET) {
+            Fluid fluid = ((IBucketItemMixin) bucketItem).getFluid();
+            if (fluid == Fluids.WATER || fluid == Fluids.LAVA) {
                 if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
+            }
+            if (fluid != Fluids.EMPTY) {
                 if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
                     return Crosshair.HOLDING_BLOCK;
                 }
                 return Crosshair.USE_ITEM;
-            } else if (block.equals(Blocks.POWDER_SNOW)) return Crosshair.USE_ITEM;
+            }
+            if (block.equals(Blocks.POWDER_SNOW)) return Crosshair.USE_ITEM;
         }
         if (handItem instanceof PowderSnowBucketItem) {
             if (block.equals(Blocks.CAULDRON) && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
@@ -229,11 +235,11 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
     public Crosshair checkUsableItemOnMiss(ClientPlayerEntity player, ItemStack handItemStack) {
         Item handItem = handItemStack.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
-            if (handItem == Items.WATER_BUCKET || handItem == Items.LAVA_BUCKET) {
-                return Crosshair.HOLDING_BLOCK;
-            }
             if (handItem instanceof EntityBucketItem) {
                 return new Crosshair(Style.HoldingBlock, ModifierUse.USE_ITEM);
+            }
+            if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() != Fluids.EMPTY) {
+                return Crosshair.HOLDING_BLOCK;
             }
         }
         return null;
