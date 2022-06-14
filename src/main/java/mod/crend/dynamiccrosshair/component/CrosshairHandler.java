@@ -16,10 +16,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class CrosshairHandler {
 
@@ -39,35 +35,16 @@ public class CrosshairHandler {
         return (policy == BlockCrosshairPolicy.Always || (policy != BlockCrosshairPolicy.Disabled && isTargeting));
     }
 
-    private static String getNamespace(ItemStack itemStack) {
-        return Registry.ITEM.getId(itemStack.getItem()).getNamespace();
-    }
-    private static String getNamespace(BlockState blockState) {
-        return Registry.BLOCK.getId(blockState.getBlock()).getNamespace();
-    }
-    private static String getNamespace(Entity entity) {
-        return Registry.ENTITY_TYPE.getId(entity.getType()).getNamespace();
-    }
-
     // Return true if main hand item is usable
     private static Crosshair checkHandOnEntity(ClientPlayerEntity player, ItemStack handItemStack, Entity entity) {
         Crosshair crosshair = null;
-        Set<String> namespaces = new HashSet<>();
-        namespaces.add(getNamespace(handItemStack));
-        namespaces.add(getNamespace(entity));
-        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                crosshair = checkHandUsableItem(api, player, handItemStack, true);
-                if (crosshair != null) break;
-            }
+        ApiList apis = new ApiList().add(handItemStack).add(entity);
+        for (DynamicCrosshairApi api : apis.get()) {
+            crosshair = checkHandUsableItem(api, player, handItemStack, true);
+            if (crosshair != null) break;
         }
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                crosshair = Crosshair.combine(crosshair, api.getEntityHandler().checkEntity(player, handItemStack, entity));
-            }
+        for (DynamicCrosshairApi api : apis.get()) {
+            crosshair = Crosshair.combine(crosshair, api.getEntityHandler().checkEntity(player, handItemStack, entity));
         }
         return crosshair;
     }
@@ -80,22 +57,13 @@ public class CrosshairHandler {
     }
     private static Crosshair checkHandOnBlock(ClientPlayerEntity player, ItemStack handItemStack, BlockPos blockPos, BlockState blockState) {
         Crosshair crosshair = null;
-        Set<String> namespaces = new HashSet<>();
-        namespaces.add(getNamespace(handItemStack));
-        namespaces.add(getNamespace(blockState));
-        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                crosshair = checkHandCommon(api, player, handItemStack, true);
-                if (crosshair != null) break;
-            }
+        ApiList apis = new ApiList().add(handItemStack).add(blockState);
+        for (DynamicCrosshairApi api : apis.get()) {
+            crosshair = checkHandCommon(api, player, handItemStack, true);
+            if (crosshair != null) break;
         }
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnBlock(player, handItemStack, blockPos, blockState));
-            }
+        for (DynamicCrosshairApi api : apis.get()) {
+            crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnBlock(player, handItemStack, blockPos, blockState));
         }
         return crosshair;
     }
@@ -106,21 +74,13 @@ public class CrosshairHandler {
     }
     private static Crosshair checkHandOnMiss(ClientPlayerEntity player, ItemStack handItemStack) {
         Crosshair crosshair = null;
-        Set<String> namespaces = new HashSet<>();
-        namespaces.add(getNamespace(handItemStack));
-        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                crosshair = checkHandCommon(api, player, handItemStack, false);
-                if (crosshair != null) break;
-            }
+        ApiList apis = new ApiList().add(handItemStack);
+        for (DynamicCrosshairApi api : apis.get()) {
+            crosshair = checkHandCommon(api, player, handItemStack, false);
+            if (crosshair != null) break;
         }
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnMiss(player, handItemStack));
-            }
+        for (DynamicCrosshairApi api : apis.get()) {
+            crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnMiss(player, handItemStack));
         }
         return crosshair;
     }
@@ -193,16 +153,9 @@ public class CrosshairHandler {
     private static void checkBreakable(ClientPlayerEntity player, BlockPos blockPos, BlockState blockState) {
         if (DynamicCrosshair.config.dynamicCrosshairHoldingTool() == CrosshairPolicy.Disabled) return;
 
-        Set<String> namespaces = new HashSet<>();
-        namespaces.add(getNamespace(blockState));
-        namespaces.add(getNamespace(player.getMainHandStack()));
-        namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
-
-        for (String ns : namespaces) {
-            if (DynamicCrosshair.apis.containsKey(ns)) {
-                DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                activeCrosshair.updateFrom(api.getBlockBreakHandler().checkBlockBreaking(player, player.getMainHandStack(), blockPos, blockState));
-            }
+        ApiList apis = new ApiList().add(blockState).add(player.getMainHandStack());
+        for (DynamicCrosshairApi api : apis.get()) {
+            activeCrosshair.updateFrom(api.getBlockBreakHandler().checkBlockBreaking(player, player.getMainHandStack(), blockPos, blockState));
         }
     }
 
@@ -213,17 +166,11 @@ public class CrosshairHandler {
         if (DynamicCrosshair.config.dynamicCrosshairOnBlock() != InteractableCrosshairPolicy.Disabled && hitResult.getType() == HitResult.Type.BLOCK && !cancelInteraction) {
             BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
             BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
-            Set<String> namespaces = new HashSet<>();
-            namespaces.add(getNamespace(blockState));
-            namespaces.add(getNamespace(mainHandStack));
-            // Fallback: if modded item and block, maybe the vanilla handler can still give us extra data (such as with custom furnaces)
-            namespaces.addAll(DynamicCrosshair.alwaysCheckedApis);
-            for (String ns : namespaces) {
-                if (DynamicCrosshair.apis.containsKey(ns)) {
-                    DynamicCrosshairApi api = DynamicCrosshair.apis.get(ns);
-                    if (activeCrosshair.updateFrom(api.getBlockInteractHandler().checkBlockInteractable(player, mainHandStack, blockPos, blockState))) {
-                        return true;
-                    }
+
+            ApiList apis = new ApiList().add(blockState).add(mainHandStack);
+            for (DynamicCrosshairApi api : apis.get()) {
+                if (activeCrosshair.updateFrom(api.getBlockInteractHandler().checkBlockInteractable(player, mainHandStack, blockPos, blockState))) {
+                    return true;
                 }
             }
         }
