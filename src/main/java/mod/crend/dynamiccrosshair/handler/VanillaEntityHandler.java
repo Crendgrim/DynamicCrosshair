@@ -2,22 +2,18 @@ package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.IEntityHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
+import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Shearable;
+import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.*;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.*;
 import net.minecraft.tag.ItemTags;
 
 public class VanillaEntityHandler implements IEntityHandler {
@@ -46,9 +42,8 @@ public class VanillaEntityHandler implements IEntityHandler {
             return null;
         }
         if (entity.getType() == EntityType.ARMOR_STAND) return Crosshair.USE_ITEM;
-        else if (entity.getType() == EntityType.AXOLOTL
-                || entity instanceof FishEntity) {
-            if (handItem == Items.WATER_BUCKET) {
+        else if (entity instanceof Bucketable) {
+            if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() == Fluids.WATER) {
                 return Crosshair.USE_ITEM;
             }
             return null;
