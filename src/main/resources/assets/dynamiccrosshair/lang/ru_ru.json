@@ -14,7 +14,7 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingMeleeWeapon": "Держит в руках оружие ближнего боя (переопр. инструмент)",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingRangedWeapon": "Держит в руках оружие дальнего боя",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingThrowable": "Держит в руках кидаемый предмет",
-  "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingShield": "Holding shield",
+  "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingShield": "Держит в руках щит",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingBlock": "Держит в руках блок",
   "text.autoconfig.dynamiccrosshair.option.crosshairSettings.holdingUsableItem": "Держит в руках используемый предмет",
   "text.autoconfig.dynamiccrosshair.option.color": "Цвет прицела",
@@ -37,7 +37,7 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modCorrectTool": "Держит в руках подходящий инструмент",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modIncorrectTool": "Держит в руках неподходящий инструмент",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modUsableItem": "Держит в руках используемый предмет",
-  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield": "Holding shield",
+  "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield": "Держит в руках щит",
 
   "text.dynamiccrosshair.option.mode.Always": "Всегда",
   "text.dynamiccrosshair.option.mode.IfTargeting": "Если нацелен",
