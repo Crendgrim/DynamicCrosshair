@@ -137,8 +137,8 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
                     IBlockItemMixin blockItem = (IBlockItemMixin) handItem;
                     ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, player.getActiveHand(), itemStack, (BlockHitResult) hitResult);
                     BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
-                    if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return Crosshair.HOLDING_BLOCK;
-                    return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
+                    if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return new Crosshair(Style.HoldingBlock);
+                    return Crosshair.NONE;
                 }
             } else return Crosshair.HOLDING_BLOCK;
         }
