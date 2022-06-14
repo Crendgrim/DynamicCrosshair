@@ -18,14 +18,15 @@ public class DynamicCrosshair implements ClientModInitializer {
     public static Config config;
     public static final Map<String, DynamicCrosshairApi> apis = new HashMap<>();
     public static final Set<String> alwaysCheckedApis = new HashSet<>();
+    public static final DynamicCrosshairApi vanillaApi = new VanillaApiImpl();
 
-    public static void addApi(DynamicCrosshairApi apiImpl) {
+    public static void registerApi(DynamicCrosshairApi apiImpl) {
         final String identifier = apiImpl.getNamespace();
         if (identifier.equals(Identifier.DEFAULT_NAMESPACE) || FabricLoader.getInstance().isModLoaded(identifier)) {
             apis.put(identifier, apiImpl);
-        }
-        if (apiImpl.forceCheck()) {
-            alwaysCheckedApis.add(identifier);
+            if (apiImpl.forceCheck()) {
+                alwaysCheckedApis.add(identifier);
+            }
         }
     }
 
@@ -35,8 +36,7 @@ public class DynamicCrosshair implements ClientModInitializer {
         config = ConfigHandler.getConfig();
 
         FabricLoader.getInstance().getEntrypointContainers("dynamiccrosshair", DynamicCrosshairApi.class).forEach(entrypoint -> {
-            addApi(entrypoint.getEntrypoint());
+            registerApi(entrypoint.getEntrypoint());
         });
-        addApi(new VanillaApiImpl());
     }
 }
