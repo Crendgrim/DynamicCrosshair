@@ -90,10 +90,6 @@ public class VanillaEntityHandler implements IEntityHandler {
             if (horse.isTame() && player.shouldCancelInteraction()) {
                 return Crosshair.INTERACTABLE;
             }
-            // horse armor, llama carpets
-            if (horse.hasArmorSlot() && !horse.hasArmorInSlot() && horse.isHorseArmor(itemStack)) {
-                return Crosshair.USE_ITEM;
-            }
             if (entity instanceof AbstractDonkeyEntity) {
                 if (!((AbstractDonkeyEntity) entity).hasChest() && itemStack.isOf(Blocks.CHEST.asItem())) {
                     return Crosshair.USE_ITEM;
