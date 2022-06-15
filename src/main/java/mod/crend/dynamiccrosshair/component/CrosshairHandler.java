@@ -164,10 +164,11 @@ public class CrosshairHandler {
         return false;
     }
 
+    static State state = new State();
+
     // TODO
     // silk touch awareness
     private static boolean checkShowCrosshair() {
-        activeCrosshair = new Crosshair();
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) return false;
@@ -178,6 +179,12 @@ public class CrosshairHandler {
 
         HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
         if (hitResult == null) return false; // Failsafe: no target when not in world
+
+        if (state.changed(hitResult, player)) {
+            activeCrosshair = new Crosshair();
+        } else {
+            return shouldShowCrosshair;
+        }
 
         CrosshairContext mainHandContext = new CrosshairContext(Hand.MAIN_HAND);
         CrosshairContext offHandContext = new CrosshairContext(Hand.OFF_HAND);
