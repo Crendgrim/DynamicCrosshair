@@ -9,7 +9,6 @@ import mod.crend.dynamiccrosshair.config.InteractableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 
@@ -164,30 +163,41 @@ public class CrosshairHandler {
         return false;
     }
 
-    static State state = new State();
+    static State state = null;
 
     // TODO
     // silk touch awareness
     private static boolean checkShowCrosshair() {
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return false;
+        if (player == null) {
+            state = null;
+            return false;
+        }
+
+        HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
+        if (hitResult == null) {
+            state = null;
+            return false; // Failsafe: no target when not in world
+        }
 
         // Hide crosshair when rendering any screen
         // This makes it not show up when using a transparent GUI resource pack
-        if (DynamicCrosshair.config.isHideWithScreen() && MinecraftClient.getInstance().currentScreen != null) return false;
+        if (DynamicCrosshair.config.isHideWithScreen() && MinecraftClient.getInstance().currentScreen != null) {
+            state = null;
+            return false;
+        }
 
-        HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
-        if (hitResult == null) return false; // Failsafe: no target when not in world
+        if (state == null) {
+            state = new State();
+        }
 
-        if (state.changed(hitResult, player)) {
-            activeCrosshair = new Crosshair();
-        } else {
+        if (!state.changed(hitResult, player)) {
             return shouldShowCrosshair;
         }
 
-        CrosshairContext mainHandContext = new CrosshairContext(Hand.MAIN_HAND);
-        CrosshairContext offHandContext = new CrosshairContext(Hand.OFF_HAND);
+        // State changed, build new crosshair
+        activeCrosshair = new Crosshair();
 
         if (!DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             activeCrosshair.setStyle(Style.Regular);
@@ -199,7 +209,7 @@ public class CrosshairHandler {
                 case ENTITY -> DynamicCrosshair.config.dynamicCrosshairOnEntity();
                 case BLOCK -> switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
                     case IfTargeting -> true;
-                    case IfInteractable -> isBlockInteractable(mainHandContext);
+                    case IfInteractable -> isBlockInteractable(state.mainHandContext);
                     case Disabled -> false;
                 };
                 case MISS -> false;
@@ -212,12 +222,12 @@ public class CrosshairHandler {
                 if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
                     activeCrosshair.setStyle(Style.OnEntity);
                 }
-                if (activeCrosshair.updateFrom(checkHandsOnEntity(mainHandContext, offHandContext))) {
+                if (activeCrosshair.updateFrom(checkHandsOnEntity(state.mainHandContext, state.offHandContext))) {
                     return true;
                 }
             }
             case BLOCK -> {
-                boolean isInteractable = isBlockInteractable(mainHandContext);
+                boolean isInteractable = isBlockInteractable(state.mainHandContext);
                 switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
                     case IfTargeting -> activeCrosshair.setStyle(Style.OnBlock);
                     case IfInteractable -> {
@@ -226,13 +236,13 @@ public class CrosshairHandler {
                         }
                     }
                 }
-                checkBreakable(mainHandContext);
-                if (activeCrosshair.updateFrom(checkHandsOnBlock(mainHandContext, offHandContext))) {
+                checkBreakable(state.mainHandContext);
+                if (activeCrosshair.updateFrom(checkHandsOnBlock(state.mainHandContext, state.offHandContext))) {
                     return true;
                 }
             }
             case MISS -> {
-                if (activeCrosshair.updateFrom(checkHandsOnMiss(mainHandContext, offHandContext))) {
+                if (activeCrosshair.updateFrom(checkHandsOnMiss(state.mainHandContext, state.offHandContext))) {
                     return true;
                 }
             }
