@@ -1,16 +1,18 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.IUsableItemHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.Style;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
-import mod.crend.dynamiccrosshair.mixin.*;
+import mod.crend.dynamiccrosshair.mixin.IAxeItemMixin;
+import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
+import mod.crend.dynamiccrosshair.mixin.IHoeItemMixin;
+import mod.crend.dynamiccrosshair.mixin.IShovelItemMixin;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BannerBlockEntity;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.fluid.Fluid;
@@ -23,8 +25,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.RaycastContext;
 
 import java.util.List;
@@ -55,53 +55,48 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
     }
 
     @Override
-    public Crosshair checkUsableItem(ClientPlayerEntity player, ItemStack handItemStack) {
-        Item handItem = handItemStack.getItem();
+    public Crosshair checkUsableItem(CrosshairContext context) {
+        Item handItem = context.getItem();
         // Enable crosshair on food and drinks also when not targeting if "when interactable" is chosen
         if (handItem.isFood()) {
             if (handItem instanceof ChorusFruitItem) {
-                if (!player.getItemCooldownManager().isCoolingDown(handItem)) return Crosshair.USE_ITEM;
+                if (!context.player.getItemCooldownManager().isCoolingDown(handItem)) return Crosshair.USE_ITEM;
             } else {
                 // Special case: sweet and glow berries can sometimes be placed
                 if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled
                         && (handItem == Items.SWEET_BERRIES || handItem == Items.GLOW_BERRIES)) {
-                    HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
-                    if (hitResult.getType() == HitResult.Type.BLOCK) {
-                        IBlockItemMixin blockItem = (IBlockItemMixin) handItem;
-                        ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, player.getActiveHand(), handItemStack, (BlockHitResult) hitResult);
-                        BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
-                        if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return Crosshair.HOLDING_BLOCK;
+                    if (context.isWithBlock()) {
+                        if (context.canPlaceItemAsBlock()) return Crosshair.HOLDING_BLOCK;
                     }
                 }
-                if (player.getHungerManager().isNotFull() || handItem.getFoodComponent().isAlwaysEdible()) {
+                if (context.player.canConsume(false) || handItem.getFoodComponent().isAlwaysEdible()) {
                     return Crosshair.USE_ITEM;
                 }
             }
         }
-        if (handItem.getUseAction(handItemStack) == UseAction.DRINK) return Crosshair.USE_ITEM;
+        if (handItem.getUseAction(context.getItemStack()) == UseAction.DRINK) return Crosshair.USE_ITEM;
         if (handItem instanceof ArmorItem armorItem) {
             EquipmentSlot slot = armorItem.getSlotType();
-            if (player.hasStackEquipped(slot)) {
+            if (context.player.hasStackEquipped(slot)) {
                 return null;
             }
             return Crosshair.USE_ITEM;
         }
         if (handItem instanceof ElytraItem) {
-            if (player.hasStackEquipped(EquipmentSlot.CHEST)) {
+            if (context.player.hasStackEquipped(EquipmentSlot.CHEST)) {
                 return null;
             }
             return Crosshair.USE_ITEM;
         }
 
         if (handItem instanceof FireworkRocketItem) {
-            HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
-            if (hitResult.getType() == HitResult.Type.BLOCK || player.isFallFlying()) {
+            if (context.isWithBlock() || context.player.isFallFlying()) {
                 return Crosshair.USE_ITEM;
             }
         }
 
         if (handItem instanceof GoatHornItem) {
-            if (player.getItemCooldownManager().isCoolingDown(handItem)) {
+            if (context.player.getItemCooldownManager().isCoolingDown(handItem)) {
                 return null;
             }
             return Crosshair.USE_ITEM;
@@ -111,55 +106,56 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         // This getting called for entity hits is on purpose, as liquid interactions overwrite entity interactions
         if (handItem instanceof GlassBottleItem) {
             // Dragon's breath
-            List<AreaEffectCloudEntity> list = MinecraftClient.getInstance().world.getEntitiesByClass(AreaEffectCloudEntity.class, player.getBoundingBox().expand(2.0), entity -> {
+            List<AreaEffectCloudEntity> list = context.world.getEntitiesByClass(AreaEffectCloudEntity.class, context.player.getBoundingBox().expand(2.0), entity -> {
                 return entity != null && entity.isAlive() && entity.getParticleType().getType() == ParticleTypes.DRAGON_BREATH;
             });
             if (!list.isEmpty()) {
                 return Crosshair.USE_ITEM;
             }
 
-            BlockHitResult blockHitResult = IItemMixin.invokeRaycast(MinecraftClient.getInstance().world, MinecraftClient.getInstance().player, RaycastContext.FluidHandling.ANY);
-            if (MinecraftClient.getInstance().world.getFluidState(blockHitResult.getBlockPos()).isIn(FluidTags.WATER))
+            BlockHitResult blockHitResult = context.raycastWithFluid(RaycastContext.FluidHandling.ANY);
+            if (context.world.getFluidState(blockHitResult.getBlockPos()).isIn(FluidTags.WATER))
                 return Crosshair.USE_ITEM;
         }
         if (handItem == Items.BUCKET) {
-            BlockHitResult blockHitResult = IItemMixin.invokeRaycast(MinecraftClient.getInstance().world, MinecraftClient.getInstance().player, RaycastContext.FluidHandling.SOURCE_ONLY);
-            if (!MinecraftClient.getInstance().world.getFluidState(blockHitResult.getBlockPos()).isEmpty())
+            BlockHitResult blockHitResult = context.raycastWithFluid(RaycastContext.FluidHandling.SOURCE_ONLY);
+            if (!context.world.getFluidState(blockHitResult.getBlockPos()).isEmpty())
                 return Crosshair.USE_ITEM;
         }
         return null;
     }
 
     @Override
-    public Crosshair checkUsableItemOnBlock(ClientPlayerEntity player, ItemStack handItemStack, BlockPos blockPos, BlockState blockState) {
-        Item handItem = handItemStack.getItem();
+    public Crosshair checkUsableItemOnBlock(CrosshairContext context) {
+        Item handItem = context.getItem();
 
         if (handItem instanceof SpawnEggItem) return Crosshair.USE_ITEM;
 
+        BlockState blockState = context.getBlockState();
         Block block = blockState.getBlock();
         if (handItem instanceof ToolItem) {
             if (handItem instanceof AxeItem) {
-                if (IAxeItemMixin.getSTRIPPED_BLOCKS().get(blockState.getBlock()) != null
-                        || Oxidizable.getDecreasedOxidationBlock(blockState.getBlock()).isPresent()
-                        || HoneycombItem.WAXED_TO_UNWAXED_BLOCKS.get().get(blockState.getBlock()) != null) {
+                if (IAxeItemMixin.getSTRIPPED_BLOCKS().get(block) != null
+                        || Oxidizable.getDecreasedOxidationBlock(block).isPresent()
+                        || HoneycombItem.WAXED_TO_UNWAXED_BLOCKS.get().get(block) != null) {
                     return Crosshair.USE_ITEM;
                 }
             } else if (handItem instanceof ShovelItem) {
-                if (IShovelItemMixin.getPATH_STATES().get(blockState.getBlock()) != null) {
+                if (IShovelItemMixin.getPATH_STATES().get(block) != null) {
                     return Crosshair.USE_ITEM;
                 }
             } else if (handItem instanceof HoeItem) {
-                if (IHoeItemMixin.getTILLING_ACTIONS().get(blockState.getBlock()) != null) {
+                if (IHoeItemMixin.getTILLING_ACTIONS().get(block) != null) {
                     return Crosshair.USE_ITEM;
                 }
             }
             return null;
         }
         if (handItem instanceof ShearsItem) {
-            if (blockState.getBlock() instanceof AbstractPlantStemBlock && !((AbstractPlantStemBlock)blockState.getBlock()).hasMaxAge(blockState)) {
+            if (block instanceof AbstractPlantStemBlock plantStemBlock && !plantStemBlock.hasMaxAge(blockState)) {
                 return Crosshair.USE_ITEM;
             }
-            if (!player.shouldCancelInteraction() && blockState.getBlock() instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5) {
+            if (!context.player.shouldCancelInteraction() && block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5) {
                 return Crosshair.USE_ITEM;
             }
             return null;
@@ -181,13 +177,13 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             }
             return Crosshair.USE_ITEM;
         }
-        if (block instanceof AbstractCauldronBlock && !player.shouldCancelInteraction()) {
+        if (block instanceof AbstractCauldronBlock cauldron && !context.player.shouldCancelInteraction()) {
             if (handItem instanceof BucketItem bucketItem) {
                 Fluid fluid = ((IBucketItemMixin) bucketItem).getFluid();
                 if (fluid == Fluids.WATER || fluid == Fluids.LAVA) {
                     return Crosshair.USE_ITEM;
                 }
-                if (fluid == Fluids.EMPTY && ((AbstractCauldronBlock) block).isFull(blockState)) {
+                if (fluid == Fluids.EMPTY && cauldron.isFull(blockState)) {
                     return Crosshair.USE_ITEM;
                 }
             }
@@ -198,22 +194,22 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
                 if (handItem instanceof GlassBottleItem) {
                     return Crosshair.USE_ITEM;
                 }
-                if (handItem instanceof PotionItem && PotionUtil.getPotion(handItemStack) == Potions.WATER) {
+                if (handItem instanceof PotionItem && PotionUtil.getPotion(context.getItemStack()) == Potions.WATER) {
                     return Crosshair.USE_ITEM;
                 }
                 if (handItem instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock sbb && sbb.getColor() != null) {
                     return Crosshair.USE_ITEM;
                 }
-                if (handItem instanceof DyeableItem dyeableItem && dyeableItem.hasColor(handItemStack)) {
+                if (handItem instanceof DyeableItem dyeableItem && dyeableItem.hasColor(context.getItemStack())) {
                     return Crosshair.USE_ITEM;
                 }
-                if (handItem instanceof BannerItem && BannerBlockEntity.getPatternCount(handItemStack) > 0) {
+                if (handItem instanceof BannerItem && BannerBlockEntity.getPatternCount(context.getItemStack()) > 0) {
                     return Crosshair.USE_ITEM;
                 }
             }
         }
         if (handItem instanceof GlassBottleItem) {
-            if (block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5 && !player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
+            if (block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5 && !context.player.shouldCancelInteraction()) return Crosshair.USE_ITEM;
             return null;
         }
         if (handItem instanceof BucketItem bucketItem) {
@@ -227,10 +223,10 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             else if (block.equals(Blocks.POWDER_SNOW)) return Crosshair.USE_ITEM;
         }
         if (handItem instanceof BoneMealItem) {
-            if (BoneMealItem.useOnFertilizable(handItemStack, MinecraftClient.getInstance().world, blockPos)) {
+            if (block instanceof Fertilizable fertilizable && fertilizable.isFertilizable(context.world, context.getBlockPos(), blockState, true)) {
                 return Crosshair.USE_ITEM;
             }
-            if (BoneMealItem.useOnGround(handItemStack, MinecraftClient.getInstance().world, blockPos, null)) {
+            if (context.getBlockState().isOf(Blocks.WATER) && context.getFluidState().getLevel() == 8) {
                 return Crosshair.USE_ITEM;
             }
             return null;
@@ -246,8 +242,8 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
     }
 
     @Override
-    public Crosshair checkUsableItemOnMiss(ClientPlayerEntity player, ItemStack handItemStack) {
-        Item handItem = handItemStack.getItem();
+    public Crosshair checkUsableItemOnMiss(CrosshairContext context) {
+        Item handItem = context.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
             if (handItem instanceof EntityBucketItem) {
                 return new Crosshair(Style.HoldingBlock, ModifierUse.USE_ITEM);

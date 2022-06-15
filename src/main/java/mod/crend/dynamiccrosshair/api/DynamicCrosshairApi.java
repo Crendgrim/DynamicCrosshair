@@ -1,10 +1,7 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 
 public interface DynamicCrosshairApi {
 
@@ -23,39 +20,39 @@ public interface DynamicCrosshairApi {
     }
 
     default IBlockBreakHandler getBlockBreakHandler() {
-        return (player, itemStack, blockPos, blockState) -> null;
+        return (context) -> null;
     }
 
     default IBlockInteractHandler getBlockInteractHandler() {
-        return (player, itemStack, blockPos, blockState) -> null;
+        return (context) -> null;
     }
 
     default IBlockItemHandler getBlockItemHandler() {
-        return (player, itemStack) -> null;
+        return (context) -> null;
     }
 
     default IEntityHandler getEntityHandler() {
-        return (player, itemStack, entity) -> null;
+        return (context) -> null;
     }
 
     default IMeleeWeaponHandler getMeleeWeaponHandler() {
-        return (player, itemStack, canBeToolCrosshair) -> null;
+        return (context, canBeToolCrosshair) -> null;
     }
 
     default IRangedWeaponHandler getRangedWeaponHandler() {
-        return (player, itemStack) -> null;
+        return (context) -> null;
     }
 
     default IThrowableItemHandler getThrowableItemHandler() {
-        return (player, itemStack) -> null;
+        return (context) -> null;
     }
 
     default IShieldItemHandler getShieldItemHandler() {
-        return (player, itemStack) -> null;
+        return (context) -> null;
     }
 
     default IToolItemHandler getToolItemHandler() {
-        return (player, itemStack) -> null;
+        return (context) -> null;
     }
 
     default IUsableItemHandler getUsableItemHandler() {
@@ -66,17 +63,17 @@ public interface DynamicCrosshairApi {
             }
 
             @Override
-            public Crosshair checkUsableItem(ClientPlayerEntity player, ItemStack itemStack) {
+            public Crosshair checkUsableItem(CrosshairContext context) {
                 return null;
             }
 
             @Override
-            public Crosshair checkUsableItemOnBlock(ClientPlayerEntity player, ItemStack itemStack, BlockPos blockPos, BlockState blockState) {
+            public Crosshair checkUsableItemOnBlock(CrosshairContext context) {
                 return null;
             }
 
             @Override
-            public Crosshair checkUsableItemOnMiss(ClientPlayerEntity player, ItemStack itemStack) {
+            public Crosshair checkUsableItemOnMiss(CrosshairContext context) {
                 return null;
             }
         };
