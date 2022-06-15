@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 public class VanillaApiImpl implements DynamicCrosshairApi {
@@ -69,5 +70,15 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     @Override
     public IUsableItemHandler getUsableItemHandler() {
         return usableItemHandler;
+    }
+
+    @Override
+    public boolean isAlwaysUsableItem(ItemStack itemStack) {
+        return usableItemHandler.isAlwaysUsableItem(itemStack);
+    }
+
+    @Override
+    public boolean isUsableItem(ItemStack itemStack) {
+        return usableItemHandler.isUsableItem(itemStack);
     }
 }

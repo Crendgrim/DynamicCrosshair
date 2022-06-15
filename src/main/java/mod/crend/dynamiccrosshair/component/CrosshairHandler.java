@@ -49,51 +49,39 @@ public class CrosshairHandler {
         }
         return crosshair;
     }
-    private static Crosshair checkHandOnBlock(CrosshairContext context) {
+    private static Crosshair checkHandOnBlockOrMiss(CrosshairContext context) {
         Crosshair crosshair = null;
         for (DynamicCrosshairApi api : context.apis()) {
             crosshair = checkHandCommon(api, context);
             if (crosshair != null) break;
         }
-        for (DynamicCrosshairApi api : context.apis()) {
-            crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnBlock(context));
-        }
         return crosshair;
     }
-    private static Crosshair checkHandsOnBlock(CrosshairContext mainHandContext, CrosshairContext offHandContext) {
-        Crosshair crosshair = checkHandOnBlock(mainHandContext);
-        crosshair = Crosshair.combine(crosshair, checkHandOnBlock(offHandContext));
+    private static Crosshair checkHandsOnBlockOrMiss(CrosshairContext mainHandContext, CrosshairContext offHandContext) {
+        Crosshair crosshair = checkHandOnBlockOrMiss(mainHandContext);
+        crosshair = Crosshair.combine(crosshair, checkHandOnBlockOrMiss(offHandContext));
         return crosshair;
     }
-    private static Crosshair checkHandOnMiss(CrosshairContext context) {
-        Crosshair crosshair = null;
-        for (DynamicCrosshairApi api : context.apis()) {
-            crosshair = checkHandCommon(api, context);
-            if (crosshair != null) break;
-        }
-        for (DynamicCrosshairApi api : context.apis()) {
-            crosshair = Crosshair.combine(crosshair, api.getUsableItemHandler().checkUsableItemOnMiss(context));
-        }
-        return crosshair;
-    }
-    private static Crosshair checkHandsOnMiss(CrosshairContext mainHandContext, CrosshairContext offHandContext) {
-        Crosshair crosshair = checkHandOnMiss(mainHandContext);
-        crosshair = Crosshair.combine(crosshair, checkHandOnMiss(offHandContext));
-        return crosshair;
-    }
+
     private static Crosshair checkHandUsableItem(DynamicCrosshairApi api, CrosshairContext context) {
         switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
             case Always -> {
-                if (api.getUsableItemHandler().isUsableItem(context.getItemStack())) {
+                if (api.isAlwaysUsableItem(context.getItemStack()) || api.isUsableItem(context.getItemStack())) {
                     return Crosshair.USE_ITEM;
                 }
             }
             case IfInteractable -> {
+                if (api.isAlwaysUsableItem(context.getItemStack())) {
+                    return Crosshair.USE_ITEM;
+                }
                 Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(context);
                 if (crosshair != null) return crosshair;
             }
             case IfTargeting -> {
                 if (context.isTargeting()) {
+                    if (api.isAlwaysUsableItem(context.getItemStack())) {
+                        return Crosshair.USE_ITEM;
+                    }
                     Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(context);
                     if (crosshair != null) return crosshair;
                 }
@@ -237,12 +225,12 @@ public class CrosshairHandler {
                     }
                 }
                 checkBreakable(state.mainHandContext);
-                if (activeCrosshair.updateFrom(checkHandsOnBlock(state.mainHandContext, state.offHandContext))) {
+                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.mainHandContext, state.offHandContext))) {
                     return true;
                 }
             }
             case MISS -> {
-                if (activeCrosshair.updateFrom(checkHandsOnMiss(state.mainHandContext, state.offHandContext))) {
+                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.mainHandContext, state.offHandContext))) {
                     return true;
                 }
             }
