@@ -1,18 +1,14 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 
 public interface IEntityHandler {
 
     /**
      * Set the crosshair based on the targeted entity.
      *
-     * @param player The player entity
-     * @param entity The targeted entity
+     * @param context A context that is guaranteed to contain an item and a targeted entity
      * @return a Crosshair object overwriting the crosshair settings
      */
-    Crosshair checkEntity(ClientPlayerEntity player, ItemStack itemStack, Entity entity);
+    Crosshair checkEntity(CrosshairContext context);
 }

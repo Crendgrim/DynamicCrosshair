@@ -1,42 +1,46 @@
 package mod.crend.dynamiccrosshair.handler;
 
+import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.IEntityHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.*;
+import net.minecraft.item.BucketItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tag.ItemTags;
 
 public class VanillaEntityHandler implements IEntityHandler {
     @Override
-    public Crosshair checkEntity(ClientPlayerEntity player, ItemStack itemStack, Entity entity) {
-        Item handItem = itemStack.getItem();
+    public Crosshair checkEntity(CrosshairContext context) {
+        Item handItem = context.getItem();
+        Entity entity = context.getEntity();
         if (entity instanceof AnimalEntity) {
-            if (((AnimalEntity) entity).isBreedingItem(itemStack)) {
+            if (((AnimalEntity) entity).isBreedingItem(context.getItemStack())) {
                 return Crosshair.USE_ITEM;
             }
         }
-        if (entity instanceof MobEntity) {
+        if (entity instanceof MobEntity mobEntity) {
             if (handItem instanceof SpawnEggItem) return Crosshair.USE_ITEM;
 
             if (handItem == Items.LEAD) {
-                if (((MobEntity) entity).canBeLeashedBy(player)) {
+                if (mobEntity.canBeLeashedBy(context.player)) {
                     return Crosshair.USE_ITEM;
                 }
                 return null;
             }
         }
-        if (entity instanceof Shearable && handItem == Items.SHEARS) {
-            if (((Shearable) entity).isShearable()) {
+        if (entity instanceof Shearable shearableEntity && handItem == Items.SHEARS) {
+            if (shearableEntity.isShearable()) {
                 return Crosshair.USE_ITEM;
             }
             return null;
@@ -49,14 +53,14 @@ public class VanillaEntityHandler implements IEntityHandler {
             return null;
         } else if (entity.getType() == EntityType.BOAT
                 || entity.getType() == EntityType.MINECART
-                || (entity.getType() == EntityType.FURNACE_MINECART && IFurnaceMinecartEntityMixin.getACCEPTABLE_FUEL().test(itemStack))
+                || (entity.getType() == EntityType.FURNACE_MINECART && IFurnaceMinecartEntityMixin.getACCEPTABLE_FUEL().test(context.getItemStack()))
                 || entity.getType() == EntityType.CHEST_MINECART
                 || entity.getType() == EntityType.HOPPER_MINECART) {
             return Crosshair.INTERACTABLE;
         } else if (entity.getType() == EntityType.CAT
                 || entity.getType() == EntityType.WOLF) {
             TameableEntity pet = (TameableEntity) entity;
-            if (pet.isTamed() && pet.isOwner(player)) {
+            if (pet.isTamed() && pet.isOwner(context.player)) {
                 return Crosshair.INTERACTABLE;
             }
             return null;
@@ -72,7 +76,7 @@ public class VanillaEntityHandler implements IEntityHandler {
             }
             return null;
         } else if (entity.getType() == EntityType.DOLPHIN) {
-            if (itemStack.isIn(ItemTags.FISHES)) {
+            if (context.getItemStack().isIn(ItemTags.FISHES)) {
                 return Crosshair.USE_ITEM;
             }
             return null;
@@ -82,11 +86,11 @@ public class VanillaEntityHandler implements IEntityHandler {
             if (horse.isBaby() || !horse.isTame()) {
                 return null;
             }
-            if (horse.isTame() && player.shouldCancelInteraction()) {
+            if (horse.isTame() && context.player.shouldCancelInteraction()) {
                 return Crosshair.INTERACTABLE;
             }
-            if (entity instanceof AbstractDonkeyEntity) {
-                if (!((AbstractDonkeyEntity) entity).hasChest() && itemStack.isOf(Blocks.CHEST.asItem())) {
+            if (entity instanceof AbstractDonkeyEntity donkey) {
+                if (!donkey.hasChest() && context.getItemStack().isOf(Blocks.CHEST.asItem())) {
                     return Crosshair.USE_ITEM;
                 }
             }
@@ -99,9 +103,9 @@ public class VanillaEntityHandler implements IEntityHandler {
                 return Crosshair.USE_ITEM;
             }
             return null;
-        } else if (entity instanceof ItemFrameEntity) {
-            if (((ItemFrameEntity) entity).getHeldItemStack().isEmpty()) {
-                if (itemStack.isEmpty()) {
+        } else if (entity instanceof ItemFrameEntity itemFrame) {
+            if (itemFrame.getHeldItemStack().isEmpty()) {
+                if (context.getItemStack().isEmpty()) {
                     return null;
                 }
                 return Crosshair.USE_ITEM;
@@ -122,7 +126,7 @@ public class VanillaEntityHandler implements IEntityHandler {
                 // :'(
                 return Crosshair.USE_ITEM;
             }
-            if (!parrot.isInAir() && parrot.isTamed() && parrot.isOwner(player)) {
+            if (!parrot.isInAir() && parrot.isTamed() && parrot.isOwner(context.player)) {
                 return Crosshair.INTERACTABLE;
             }
         } else if (entity instanceof MerchantEntity merchant) {

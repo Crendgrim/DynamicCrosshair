@@ -7,25 +7,19 @@ import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.Style;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
-import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IItemMixin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.RaycastContext;
 
 public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandler, IShieldItemHandler, IMeleeWeaponHandler, IRangedWeaponHandler, IBlockItemHandler {
     @Override
-    public Crosshair checkTool(ClientPlayerEntity player, ItemStack itemStack) {
-        Item handItem = itemStack.getItem();
+    public Crosshair checkTool(CrosshairContext context) {
+        Item handItem = context.getItem();
         if (       handItem instanceof ToolItem
                 || handItem instanceof FlintAndSteelItem
                 || handItem instanceof ShearsItem
@@ -39,13 +33,13 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
     }
 
     @Override
-    public Crosshair checkThrowable(ClientPlayerEntity player, ItemStack itemStack) {
-        Item handItem = itemStack.getItem();
+    public Crosshair checkThrowable(CrosshairContext context) {
+        Item handItem = context.getItem();
         if (       handItem instanceof EggItem
                 || handItem instanceof SnowballItem
                 || handItem instanceof ThrowablePotionItem
                 || handItem instanceof ExperienceBottleItem
-                || (handItem instanceof EnderPearlItem && !player.getItemCooldownManager().isCoolingDown(handItem))
+                || (handItem instanceof EnderPearlItem && !context.player.getItemCooldownManager().isCoolingDown(handItem))
         ) {
             return Crosshair.THROWABLE;
         }
@@ -53,27 +47,23 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
     }
 
     @Override
-    public Crosshair checkShield(ClientPlayerEntity player, ItemStack itemStack) {
-        if (itemStack.getItem().getUseAction(itemStack) == UseAction.BLOCK) {
+    public Crosshair checkShield(CrosshairContext context) {
+        if (context.getItem().getUseAction(context.getItemStack()) == UseAction.BLOCK) {
             return Crosshair.SHIELD;
         }
         return null;
     }
 
     @Override
-    public Crosshair checkMeleeWeapon(ClientPlayerEntity player, ItemStack itemStack, boolean canBeToolCrosshair) {
-        Item handItem = itemStack.getItem();
+    public Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) {
+        Item handItem = context.getItem();
 
         if (handItem instanceof SwordItem) {
-            if (canBeToolCrosshair) {
-                HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
-                if (hitResult.getType() == HitResult.Type.BLOCK) {
-                    BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
-                    BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
-                    if (handItem.getMiningSpeedMultiplier(itemStack, blockState) > 1.0f
-                            && handItem.canMine(blockState, MinecraftClient.getInstance().world, blockPos, player)) {
-                        return null;
-                    }
+            if (canBeToolCrosshair && context.isWithBlock()) {
+                BlockState blockState = context.getBlockState();
+                if (handItem.getMiningSpeedMultiplier(context.getItemStack(), blockState) > 1.0f
+                        && handItem.canMine(blockState, context.world, context.getBlockPos(), context.player)) {
+                    return null;
                 }
             }
             return Crosshair.MELEE_WEAPON;
@@ -92,7 +82,8 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
     }
 
     @Override
-    public Crosshair checkRangedWeapon(ClientPlayerEntity player, ItemStack itemStack) {
+    public Crosshair checkRangedWeapon(CrosshairContext context) {
+        ItemStack itemStack = context.getItemStack();
         Item handItem = itemStack.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == RangedCrosshairPolicy.Always) {
             return switch (handItem.getUseAction(itemStack)) {
@@ -102,8 +93,8 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
         }
         // Policy: IfFullyDrawn
         if (handItem.getUseAction(itemStack) == UseAction.BOW) {
-            if (player.getActiveItem().equals(itemStack)) {
-                float progress = BowItem.getPullProgress(handItem.getMaxUseTime(itemStack) - player.getItemUseTimeLeft());
+            if (context.isActiveItem()) {
+                float progress = BowItem.getPullProgress(handItem.getMaxUseTime(itemStack) - context.player.getItemUseTimeLeft());
                 if (progress == 1.0f) {
                     return Crosshair.RANGED_WEAPON;
                 }
@@ -116,8 +107,8 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
             }
         }
         if (handItem.getUseAction(itemStack) == UseAction.SPEAR) {
-            if (player.getActiveItem().equals(itemStack)) {
-                int i = handItem.getMaxUseTime(itemStack) - player.getItemUseTimeLeft();
+            if (context.isActiveItem()) {
+                int i = handItem.getMaxUseTime(itemStack) - context.player.getItemUseTimeLeft();
                 if (i > 10) {
                     return Crosshair.RANGED_WEAPON;
                 }
@@ -128,38 +119,31 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
     }
 
     @Override
-    public Crosshair checkBlock(ClientPlayerEntity player, ItemStack itemStack) {
-        Item handItem = itemStack.getItem();
-        HitResult hitResult = MinecraftClient.getInstance().crosshairTarget;
+    public Crosshair checkBlock(CrosshairContext context) {
+        Item handItem = context.getItem();
         if (handItem instanceof BlockItem) {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
-                if (hitResult.getType() == HitResult.Type.BLOCK) {
-                    IBlockItemMixin blockItem = (IBlockItemMixin) handItem;
-                    ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, player.getActiveHand(), itemStack, (BlockHitResult) hitResult);
-                    BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
-                    if (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState)) return new Crosshair(Style.HoldingBlock);
-                    return Crosshair.NONE;
+                if (context.isWithBlock()) {
+                    if (context.canPlaceItemAsBlock()) {
+                        return new Crosshair(Style.HoldingBlock);
+                    } else return Crosshair.NONE;
                 }
             } else return Crosshair.HOLDING_BLOCK;
         }
         if (handItem instanceof ArmorStandItem) return Crosshair.HOLDING_BLOCK;
         if (handItem instanceof MinecartItem) {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
-                if (hitResult.getType() == HitResult.Type.BLOCK) {
-                    BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
-                    BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
-                    if (blockState.isIn(BlockTags.RAILS)) return Crosshair.HOLDING_BLOCK;
+                if (context.isWithBlock()) {
+                    if (context.getBlockState().isIn(BlockTags.RAILS)) return Crosshair.HOLDING_BLOCK;
                     return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
                 }
             } else return Crosshair.HOLDING_BLOCK;
         }
         if (handItem instanceof EndCrystalItem) {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
-                if (hitResult.getType() == HitResult.Type.BLOCK) {
-                    BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
-                    BlockState blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
-                    Block block = blockState.getBlock();
-                    if ((block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) && MinecraftClient.getInstance().world.isAir(blockPos.up())) {
+                if (context.isWithBlock()) {
+                    Block block = context.getBlock();
+                    if ((block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) && context.world.isAir(context.getBlockPos().up())) {
                         return Crosshair.HOLDING_BLOCK;
                     }
                     return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
@@ -167,7 +151,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
             } else return Crosshair.HOLDING_BLOCK;
         }
         if (handItem instanceof BoatItem) {
-            BlockHitResult boatHitResult = IItemMixin.invokeRaycast(MinecraftClient.getInstance().world, player, RaycastContext.FluidHandling.ANY);
+            BlockHitResult boatHitResult = context.raycastWithFluid();
             if (boatHitResult.getType() == HitResult.Type.BLOCK) {
                 return Crosshair.HOLDING_BLOCK;
             }
