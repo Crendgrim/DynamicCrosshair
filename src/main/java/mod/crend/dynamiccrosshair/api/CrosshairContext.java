@@ -30,7 +30,7 @@ public class CrosshairContext {
 	@NonNull
 	public final ClientPlayerEntity player;
 	@NonNull
-	public final HitResult hitResult;
+	public HitResult hitResult;
 
 	public CrosshairContext(Hand hand) {
 		assert MinecraftClient.getInstance().world != null;
@@ -40,11 +40,19 @@ public class CrosshairContext {
 		player = MinecraftClient.getInstance().player;
 		hitResult = MinecraftClient.getInstance().crosshairTarget;
 		this.hand = hand;
+		invalidateHitResult();
+	}
+
+	public void invalidateHitResult() {
+		assert MinecraftClient.getInstance().crosshairTarget != null;
+		hitResult = MinecraftClient.getInstance().crosshairTarget;
 		switch (hitResult.getType()) {
 			case BLOCK -> {
 				BlockHitResult blockHitResult = (BlockHitResult) hitResult;
 				withBlock = true;
-				blockPos = (blockHitResult).getBlockPos();
+				blockPos = blockHitResult.getBlockPos();
+				blockState = null;
+				blockEntity = null;
 			}
 			case ENTITY -> {
 				EntityHitResult entityHitResult = (EntityHitResult) hitResult;
@@ -52,6 +60,9 @@ public class CrosshairContext {
 				entity = entityHitResult.getEntity();
 			}
 		}
+	}
+	public void invalidateItem() {
+		itemStack = null;
 	}
 
 	public boolean isTargeting() {
