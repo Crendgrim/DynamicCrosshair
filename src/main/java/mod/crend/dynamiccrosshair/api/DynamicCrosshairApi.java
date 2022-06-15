@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair.api;
 
-import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.item.ItemStack;
 
 public interface DynamicCrosshairApi {
@@ -56,27 +55,31 @@ public interface DynamicCrosshairApi {
     }
 
     default IUsableItemHandler getUsableItemHandler() {
-        return new IUsableItemHandler() {
-            @Override
-            public boolean isUsableItem(ItemStack itemStack) {
-                return false;
-            }
-
-            @Override
-            public Crosshair checkUsableItem(CrosshairContext context) {
-                return null;
-            }
-
-            @Override
-            public Crosshair checkUsableItemOnBlock(CrosshairContext context) {
-                return null;
-            }
-
-            @Override
-            public Crosshair checkUsableItemOnMiss(CrosshairContext context) {
-                return null;
-            }
-        };
+        return (context) -> null;
     }
+
+
+    /**
+     * Checks whether the given item is always usable.
+     *
+     * This method should return true if and only if an item is usable regardless of context.
+     * Anything handled here does not have to be checked in isUsableItem or an IUsableItemHandler implementation.
+     *
+     * @param itemStack The tool in the player's main hand
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default boolean isAlwaysUsableItem(ItemStack itemStack) { return false; }
+
+
+    /**
+     * Checks whether the given item is usable.
+     *
+     * This method is called in a context of "always show crosshair for usable items", so no further
+     * restrictions over "is this item type usable" should take place here.
+     *
+     * @param itemStack The tool in the player's main hand
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default boolean isUsableItem(ItemStack itemStack) { return false; }
 
 }

@@ -31,11 +31,14 @@ import java.util.List;
 
 public class VanillaUsableItemHandler implements IUsableItemHandler {
 
-    @Override
+    public boolean isAlwaysUsableItem(ItemStack handItemStack) {
+        Item handItem = handItemStack.getItem();
+        return handItem.getUseAction(handItemStack) == UseAction.DRINK;
+    }
+
     public boolean isUsableItem(ItemStack handItemStack) {
         Item handItem = handItemStack.getItem();
         return (handItem.isFood()
-                || handItem.getUseAction(handItemStack) == UseAction.DRINK
                 || handItem instanceof ArmorItem
                 || handItem instanceof ElytraItem
                 || handItem instanceof FireworkRocketItem
@@ -74,7 +77,6 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
                 }
             }
         }
-        if (handItem.getUseAction(context.getItemStack()) == UseAction.DRINK) return Crosshair.USE_ITEM;
         if (handItem instanceof ArmorItem armorItem) {
             EquipmentSlot slot = armorItem.getSlotType();
             if (context.player.hasStackEquipped(slot)) {
@@ -122,10 +124,16 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
             if (!context.world.getFluidState(blockHitResult.getBlockPos()).isEmpty())
                 return Crosshair.USE_ITEM;
         }
+
+        if (context.isWithBlock()) {
+            return checkUsableItemOnBlock(context);
+        }
+        if (!context.isTargeting()) {
+            return checkUsableItemOnMiss(context);
+        }
         return null;
     }
 
-    @Override
     public Crosshair checkUsableItemOnBlock(CrosshairContext context) {
         Item handItem = context.getItem();
 
@@ -241,7 +249,6 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         return null;
     }
 
-    @Override
     public Crosshair checkUsableItemOnMiss(CrosshairContext context) {
         Item handItem = context.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
