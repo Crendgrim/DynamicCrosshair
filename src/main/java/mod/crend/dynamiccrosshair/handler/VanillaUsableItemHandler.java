@@ -162,7 +162,7 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
 
         if (handItem instanceof FlintAndSteelItem) return Crosshair.USE_ITEM;
         if (handItem instanceof FireChargeItem) return Crosshair.USE_ITEM;
-        if (handItem instanceof MusicDiscItem && block.equals(Blocks.JUKEBOX)) return Crosshair.USE_ITEM;
+        if (handItem instanceof MusicDiscItem && block instanceof JukeboxBlock) return Crosshair.USE_ITEM;
         if (handItem instanceof HoneycombItem && HoneycombItem.UNWAXED_TO_WAXED_BLOCKS.get().get(block) != null)
             return Crosshair.USE_ITEM;
         if (handItem instanceof EnderEyeItem) {
@@ -219,7 +219,11 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
                 }
                 return Crosshair.USE_ITEM;
             }
-            else if (block.equals(Blocks.POWDER_SNOW)) return Crosshair.USE_ITEM;
+            else {
+                if (block instanceof Waterloggable) {
+                    if (blockState.get(Properties.WATERLOGGED)) return Crosshair.USE_ITEM;
+                } else if (block instanceof FluidDrainable) return Crosshair.USE_ITEM;
+            }
         }
         if (handItem instanceof BoneMealItem) {
             if (block instanceof Fertilizable fertilizable && fertilizable.isFertilizable(context.world, context.getBlockPos(), blockState, true)) {

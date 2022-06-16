@@ -7,6 +7,13 @@ public interface DynamicCrosshairApi {
     String getNamespace();
 
     /**
+     * Only overwrite this if it differs from the namespace
+     */
+    default String getModId() {
+        return getNamespace();
+    };
+
+    /**
      * Usually, APIs are only checked if any of (held item, targeted entity, targeted block) are under the namespace
      * this API is registered under. This is to massively reduce unnecessary checks. However, this can pose a problem
      * if a mod overwrites vanilla behaviour.
