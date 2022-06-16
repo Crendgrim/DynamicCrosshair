@@ -6,7 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -120,28 +120,36 @@ public class State {
 	}
 
 	private static class HitStateFluid {
+		int x;
+		int y;
+		int z;
+		int level;
 		Fluid fluid;
 
 		public HitStateFluid(BlockHitResult fluidHitResult) {
-			fluid = MinecraftClient.getInstance().world.getFluidState(fluidHitResult.getBlockPos()).getFluid();
-		}
-
-		public HitStateFluid(Fluid fluid) {
-			this.fluid = fluid;
-		}
-
-		public void reset() {
-			fluid = Fluids.EMPTY;
+			FluidState fluidState = MinecraftClient.getInstance().world.getFluidState(fluidHitResult.getBlockPos());
+			fluid = fluidState.getFluid();
+			level = fluid.getLevel(fluidState);
+			BlockPos pos = fluidHitResult.getBlockPos();
+			x = pos.getX();
+			y = pos.getY();
+			z = pos.getZ();
 		}
 
 		public boolean isChanged(HitStateFluid other) {
-			return fluid != other.fluid;
+			return (other == null
+					|| fluid != other.fluid
+					|| level != other.level
+					|| x != other.x
+					|| y != other.y
+					|| z != other.z
+			);
 		}
 
 	}
 
 	HitState previousState;
-	HitStateFluid previousFluidState = new HitStateFluid(Fluids.EMPTY);
+	HitStateFluid previousFluidState = null;
 	public final CrosshairContext mainHandContext;
 	public final CrosshairContext offHandContext;
 
@@ -164,7 +172,7 @@ public class State {
 
 		if (newState.isChanged(previousState)) {
 			previousState = newState;
-			previousFluidState.reset();
+			previousFluidState = null;
 			return true;
 		}
 
@@ -177,6 +185,8 @@ public class State {
 			HitStateFluid newFluidState = new HitStateFluid(fluidHitResult);
 			if (newFluidState.isChanged(previousFluidState)) {
 				previousFluidState = newFluidState;
+				mainHandContext.invalidateHitResult();
+				offHandContext.invalidateHitResult();
 				return true;
 			}
 		}
