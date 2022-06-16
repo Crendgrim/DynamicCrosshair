@@ -23,7 +23,7 @@ public class DynamicCrosshair implements ClientModInitializer {
 
     public static void registerApi(DynamicCrosshairApi apiImpl) {
         final String identifier = apiImpl.getNamespace();
-        if (identifier.equals(Identifier.DEFAULT_NAMESPACE) || FabricLoader.getInstance().isModLoaded(identifier)) {
+        if (identifier.equals(Identifier.DEFAULT_NAMESPACE) || FabricLoader.getInstance().isModLoaded(apiImpl.getModId())) {
             apis.put(identifier, apiImpl);
             if (apiImpl.forceCheck()) {
                 alwaysCheckedApis.add(identifier);

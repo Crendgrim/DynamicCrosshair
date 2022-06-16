@@ -45,6 +45,10 @@ public class VanillaEntityHandler implements IEntityHandler {
             }
             return null;
         }
+        if (entity == null) {
+            // Not entirely sure why this happens, but let's make sure it doesn't crash
+            return null;
+        }
         if (entity.getType() == EntityType.ARMOR_STAND) return Crosshair.USE_ITEM;
         else if (entity instanceof Bucketable) {
             if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() == Fluids.WATER) {

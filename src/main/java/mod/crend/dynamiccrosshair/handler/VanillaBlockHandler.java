@@ -69,7 +69,7 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
                 ||  block instanceof BedBlock
                 || (block instanceof TrapdoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
                 || (block instanceof DoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
-                ||  block instanceof FenceGateBlock
+                || (block instanceof FenceGateBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
                 ||  block instanceof AbstractButtonBlock
                 ||  block instanceof NoteBlock
                 ||  block instanceof LeverBlock
