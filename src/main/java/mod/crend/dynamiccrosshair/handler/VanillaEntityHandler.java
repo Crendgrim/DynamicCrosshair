@@ -1,7 +1,6 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.IEntityHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
@@ -19,9 +18,8 @@ import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.tag.ItemTags;
 
-public class VanillaEntityHandler implements IEntityHandler {
-    @Override
-    public Crosshair checkEntity(CrosshairContext context) {
+public class VanillaEntityHandler {
+    public static Crosshair checkEntity(CrosshairContext context) {
         Item handItem = context.getItem();
         Entity entity = context.getEntity();
         if (entity instanceof AnimalEntity) {

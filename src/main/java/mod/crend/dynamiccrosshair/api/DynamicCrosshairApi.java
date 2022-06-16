@@ -1,23 +1,35 @@
 package mod.crend.dynamiccrosshair.api;
 
+import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.item.ItemStack;
 
 public interface DynamicCrosshairApi {
 
+    /**
+     * The key the mod's items, blocks, entities,... are registered under. Usually equals the mod's ID.
+     * It can be worth defining a second API implementation for forced checks, if your API is rather large and
+     * you would like to reduce unnecessary checks. In this case, make sure getModId() still returns the ID of
+     * the mod, and getNamespace() returns a unique string for the forced check. As no objects are registered to
+     * this namespace, it will only get called at the end of other checks if forceCheck() returns true.
+     *
+     * @return The mod's namespace
+     */
     String getNamespace();
 
     /**
-     * Only overwrite this if it differs from the namespace
+     * Only overwrite this if it differs from the namespace.
+     * @return The mod's ID (as defined in its fabric.mod.json) if it differs from the namespace it uses.
      */
     default String getModId() {
         return getNamespace();
-    };
+    }
 
     /**
      * Usually, APIs are only checked if any of (held item, targeted entity, targeted block) are under the namespace
      * this API is registered under. This is to massively reduce unnecessary checks. However, this can pose a problem
      * if a mod overwrites vanilla behaviour.
-     * Override this method if this API should always be checked.
+     * Override this method if this API should always be checked. This might for example be because the mod overwrites
+     * vanilla behaviour, or because it provides items for other mods to inherit from.
      *
      * @return true if this API should always be checked.
      */
@@ -25,52 +37,85 @@ public interface DynamicCrosshairApi {
         return false;
     }
 
-    default IBlockBreakHandler getBlockBreakHandler() {
-        return (context) -> null;
-    }
+    /**
+     * Set the crosshair based on whether the targeted block can be broken.
+     *
+     * @param context A context that is guaranteed to contain an item and a targeted block
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkBlockBreaking(CrosshairContext context) { return null; }
 
-    default IBlockInteractHandler getBlockInteractHandler() {
-        return (context) -> null;
-    }
+    /**
+     * Set the crosshair based on whether the targeted block can be interacted with.
+     *
+     * @param context A context that is guaranteed to contain an item and a targeted block
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkBlockInteractable(CrosshairContext context) { return null; }
 
-    default IBlockItemHandler getBlockItemHandler() {
-        return (context) -> null;
-    }
+    /**
+     * Set the crosshair based on the targeted entity.
+     *
+     * @param context A context that is guaranteed to contain an item and a targeted entity
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkEntity(CrosshairContext context) { return null; }
 
-    default IEntityHandler getEntityHandler() {
-        return (context) -> null;
-    }
+    /**
+     * Set the crosshair based on whether the player has a block equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkBlockItem(CrosshairContext context) { return null; }
 
-    default IMeleeWeaponHandler getMeleeWeaponHandler() {
-        return (context, canBeToolCrosshair) -> null;
-    }
+    /**
+     * Set the crosshair based on whether the player has a melee weapon equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @param canBeToolCrosshair If "true", delegate some decisions to the tool crosshair.
+     *                           For example, an axe will return "null" if targeting a block.
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) { return null; }
 
-    default IRangedWeaponHandler getRangedWeaponHandler() {
-        return (context) -> null;
-    }
+    /**
+     * Set the crosshair based on whether the player has a ranged weapon equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkRangedWeapon(CrosshairContext context) { return null; }
 
-    default IThrowableItemHandler getThrowableItemHandler() {
-        return (context) -> null;
-    }
+    /**
+     * Set the crosshair based on whether the player has a shield equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkShield(CrosshairContext context) { return null; }
 
-    default IShieldItemHandler getShieldItemHandler() {
-        return (context) -> null;
-    }
+    /**
+     * Set the crosshair based on whether the player has a throwable item equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkThrowable(CrosshairContext context) { return null; }
 
-    default IToolItemHandler getToolItemHandler() {
-        return (context) -> null;
-    }
-
-    default IUsableItemHandler getUsableItemHandler() {
-        return (context) -> null;
-    }
-
+    /**
+     * Set the crosshair based on whether the player has a tool equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkTool(CrosshairContext context) { return null; }
 
     /**
      * Checks whether the given item is always usable.
      *
      * This method should return true if and only if an item is usable regardless of context.
-     * Anything handled here does not have to be checked in isUsableItem or an IUsableItemHandler implementation.
+     * Anything handled here does not have to be checked in isUsableItem() or checkUsableItem().
      *
      * @param itemStack The tool in the player's main hand
      * @return a Crosshair object overwriting the crosshair settings
@@ -88,5 +133,17 @@ public interface DynamicCrosshairApi {
      * @return a Crosshair object overwriting the crosshair settings
      */
     default boolean isUsableItem(ItemStack itemStack) { return false; }
+
+    /**
+     * Set the crosshair based on whether the given item is usable.
+     *
+     * This method is called regardless of crosshair target (entity, block, miss), and should be used to check for
+     * always usable items such as food.
+     *
+     * @param context A context that is guaranteed to contain an item.
+     *                If `context.withBlock()` return true, it also contains a targeted block.
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkUsableItem(CrosshairContext context) { return null; }
 
 }

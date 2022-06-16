@@ -38,7 +38,7 @@ public class CrosshairHandler {
             if (crosshair != null) break;
         }
         for (DynamicCrosshairApi api : context.apis()) {
-            crosshair = Crosshair.combine(crosshair, api.getEntityHandler().checkEntity(context));
+            crosshair = Crosshair.combine(crosshair, api.checkEntity(context));
         }
         return crosshair;
     }
@@ -74,7 +74,7 @@ public class CrosshairHandler {
                 if (api.isAlwaysUsableItem(context.getItemStack())) {
                     return Crosshair.USE_ITEM;
                 }
-                Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(context);
+                Crosshair crosshair = api.checkUsableItem(context);
                 if (crosshair != null) return crosshair;
             }
             case IfTargeting -> {
@@ -82,7 +82,7 @@ public class CrosshairHandler {
                     if (api.isAlwaysUsableItem(context.getItemStack())) {
                         return Crosshair.USE_ITEM;
                     }
-                    Crosshair crosshair = api.getUsableItemHandler().checkUsableItem(context);
+                    Crosshair crosshair = api.checkUsableItem(context);
                     if (crosshair != null) return crosshair;
                 }
             }
@@ -94,26 +94,26 @@ public class CrosshairHandler {
         if (crosshair != null) return crosshair;
 
         if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() != RangedCrosshairPolicy.Disabled) {
-            crosshair = api.getRangedWeaponHandler().checkRangedWeapon(context);
+            crosshair = api.checkRangedWeapon(context);
             if (crosshair != null) return crosshair;
         }
 
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingThrowable(), context.isTargeting())) {
-            crosshair = api.getThrowableItemHandler().checkThrowable(context);
+            crosshair = api.checkThrowable(context);
             if (crosshair != null) return crosshair;
         }
 
         if (DynamicCrosshair.config.dynamicCrosshairHoldingMeleeWeapon()) {
-            crosshair = api.getMeleeWeaponHandler().checkMeleeWeapon(context, context.isTargeting() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled);
+            crosshair = api.checkMeleeWeapon(context, context.isTargeting() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled);
             if (crosshair != null) return crosshair;
         }
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingTool(), context.isTargeting())) {
-            crosshair = api.getToolItemHandler().checkTool(context);
+            crosshair = api.checkTool(context);
             if (crosshair != null) return crosshair;
         }
 
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingBlock(), context.isTargeting())) {
-            crosshair = api.getBlockItemHandler().checkBlock(context);
+            crosshair = api.checkBlockItem(context);
             if (crosshair != null) return crosshair;
         }
 
@@ -123,7 +123,7 @@ public class CrosshairHandler {
         Crosshair crosshair = checkHandCommonCrosshair(api, context);
 
         if (DynamicCrosshair.config.dynamicCrosshairHoldingShield()) {
-            crosshair = Crosshair.combine(crosshair, api.getShieldItemHandler().checkShield(context));
+            crosshair = Crosshair.combine(crosshair, api.checkShield(context));
         }
 
         return crosshair;
@@ -134,7 +134,7 @@ public class CrosshairHandler {
         if (DynamicCrosshair.config.dynamicCrosshairHoldingTool() == CrosshairPolicy.Disabled) return;
 
         for (DynamicCrosshairApi api : context.apis()) {
-            activeCrosshair.updateFrom(api.getBlockBreakHandler().checkBlockBreaking(context));
+            activeCrosshair.updateFrom(api.checkBlockBreaking(context));
         }
     }
 
@@ -143,7 +143,7 @@ public class CrosshairHandler {
         // interactable blocks if not sneaking
         if (DynamicCrosshair.config.dynamicCrosshairOnBlock() != InteractableCrosshairPolicy.Disabled && context.isWithBlock() && context.shouldInteract()) {
             for (DynamicCrosshairApi api : context.apis()) {
-                if (activeCrosshair.updateFrom(api.getBlockInteractHandler().checkBlockInteractable(context))) {
+                if (activeCrosshair.updateFrom(api.checkBlockInteractable(context))) {
                     return true;
                 }
             }
