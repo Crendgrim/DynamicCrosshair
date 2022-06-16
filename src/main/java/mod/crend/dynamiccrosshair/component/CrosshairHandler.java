@@ -14,7 +14,7 @@ import net.minecraft.util.hit.HitResult;
 
 public class CrosshairHandler {
 
-    public static final Identifier crosshairTexture = new Identifier("dynamiccrosshair", "textures/gui/crosshairs.png");
+    public static final Identifier crosshairTexture = new Identifier(DynamicCrosshair.MOD_ID, "textures/gui/crosshairs.png");
 
     private static Crosshair activeCrosshair = new Crosshair();
     private static boolean shouldShowCrosshair = true;

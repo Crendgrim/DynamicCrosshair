@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DynamicCrosshair implements ClientModInitializer {
+    public static final String MOD_ID = "dynamiccrosshair";
 
     public static Config config;
     public static final Map<String, DynamicCrosshairApi> apis = new HashMap<>();
@@ -35,7 +36,7 @@ public class DynamicCrosshair implements ClientModInitializer {
         ConfigHandler.init();
         config = ConfigHandler.getConfig();
 
-        FabricLoader.getInstance().getEntrypointContainers("dynamiccrosshair", DynamicCrosshairApi.class).forEach(entrypoint -> {
+        FabricLoader.getInstance().getEntrypointContainers(MOD_ID, DynamicCrosshairApi.class).forEach(entrypoint -> {
             registerApi(entrypoint.getEntrypoint());
         });
     }

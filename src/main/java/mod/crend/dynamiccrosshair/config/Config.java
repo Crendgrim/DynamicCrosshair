@@ -2,8 +2,9 @@ package mod.crend.dynamiccrosshair.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import mod.crend.dynamiccrosshair.DynamicCrosshair;
 
-@me.shedaniel.autoconfig.annotation.Config(name = "dynamiccrosshair")
+@me.shedaniel.autoconfig.annotation.Config(name = DynamicCrosshair.MOD_ID)
 public class Config implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     boolean dynamicCrosshair = true;
