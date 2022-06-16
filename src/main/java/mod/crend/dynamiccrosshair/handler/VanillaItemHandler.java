@@ -16,9 +16,8 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 
-public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandler, IShieldItemHandler, IMeleeWeaponHandler, IRangedWeaponHandler, IBlockItemHandler {
-    @Override
-    public Crosshair checkTool(CrosshairContext context) {
+public class VanillaItemHandler {
+    public static Crosshair checkTool(CrosshairContext context) {
         Item handItem = context.getItem();
         if (       handItem instanceof ToolItem
                 || handItem instanceof FlintAndSteelItem
@@ -32,8 +31,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
         return null;
     }
 
-    @Override
-    public Crosshair checkThrowable(CrosshairContext context) {
+    public static Crosshair checkThrowable(CrosshairContext context) {
         Item handItem = context.getItem();
         if (       handItem instanceof EggItem
                 || handItem instanceof SnowballItem
@@ -46,16 +44,14 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
         return null;
     }
 
-    @Override
-    public Crosshair checkShield(CrosshairContext context) {
+    public static Crosshair checkShield(CrosshairContext context) {
         if (context.getItem().getUseAction(context.getItemStack()) == UseAction.BLOCK) {
             return Crosshair.SHIELD;
         }
         return null;
     }
 
-    @Override
-    public Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) {
+    public static Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) {
         Item handItem = context.getItem();
 
         if (handItem instanceof SwordItem) {
@@ -81,8 +77,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
         return null;
     }
 
-    @Override
-    public Crosshair checkRangedWeapon(CrosshairContext context) {
+    public static Crosshair checkRangedWeapon(CrosshairContext context) {
         ItemStack itemStack = context.getItemStack();
         Item handItem = itemStack.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == RangedCrosshairPolicy.Always) {
@@ -118,8 +113,7 @@ public class VanillaItemHandler implements IToolItemHandler, IThrowableItemHandl
         return null;
     }
 
-    @Override
-    public Crosshair checkBlock(CrosshairContext context) {
+    public static Crosshair checkBlockItem(CrosshairContext context) {
         Item handItem = context.getItem();
         if (handItem instanceof BlockItem) {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {

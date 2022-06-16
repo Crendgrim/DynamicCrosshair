@@ -2,7 +2,6 @@ package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.IUsableItemHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.Style;
@@ -29,14 +28,14 @@ import net.minecraft.world.RaycastContext;
 
 import java.util.List;
 
-public class VanillaUsableItemHandler implements IUsableItemHandler {
+public class VanillaUsableItemHandler {
 
-    public boolean isAlwaysUsableItem(ItemStack handItemStack) {
+    public static boolean isAlwaysUsableItem(ItemStack handItemStack) {
         Item handItem = handItemStack.getItem();
         return handItem.getUseAction(handItemStack) == UseAction.DRINK;
     }
 
-    public boolean isUsableItem(ItemStack handItemStack) {
+    public static boolean isUsableItem(ItemStack handItemStack) {
         Item handItem = handItemStack.getItem();
         return (handItem.isFood()
                 || handItem instanceof ArmorItem
@@ -55,8 +54,7 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
                 || handItem instanceof WrittenBookItem);
     }
 
-    @Override
-    public Crosshair checkUsableItem(CrosshairContext context) {
+    public static Crosshair checkUsableItem(CrosshairContext context) {
         Item handItem = context.getItem();
         // Enable crosshair on food and drinks also when not targeting if "when interactable" is chosen
         if (handItem.isFood()) {
@@ -125,7 +123,7 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         return null;
     }
 
-    public Crosshair checkUsableItemOnBlock(CrosshairContext context) {
+    public static Crosshair checkUsableItemOnBlock(CrosshairContext context) {
         Item handItem = context.getItem();
 
         if (handItem instanceof SpawnEggItem) return Crosshair.USE_ITEM;
@@ -244,7 +242,7 @@ public class VanillaUsableItemHandler implements IUsableItemHandler {
         return null;
     }
 
-    public Crosshair checkUsableItemOnMiss(CrosshairContext context) {
+    public static Crosshair checkUsableItemOnMiss(CrosshairContext context) {
         Item handItem = context.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
             if (handItem instanceof EntityBucketItem) {

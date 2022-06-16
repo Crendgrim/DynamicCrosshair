@@ -2,8 +2,6 @@ package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.IBlockBreakHandler;
-import mod.crend.dynamiccrosshair.api.IBlockInteractHandler;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.mixin.IAbstractBlockMixin;
@@ -18,9 +16,8 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 
-public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHandler {
-    @Override
-    public Crosshair checkBlockBreaking(CrosshairContext context) {
+public class VanillaBlockHandler {
+    public static Crosshair checkBlockBreaking(CrosshairContext context) {
         Item handItem = context.getItem();
         BlockPos blockPos = context.getBlockPos();
         BlockState blockState = context.getBlockState();
@@ -43,8 +40,7 @@ public class VanillaBlockHandler implements IBlockBreakHandler, IBlockInteractHa
         return null;
     }
 
-    @Override
-    public Crosshair checkBlockInteractable(CrosshairContext context) {
+    public static Crosshair checkBlockInteractable(CrosshairContext context) {
         BlockState blockState = context.getBlockState();
         Block block = blockState.getBlock();
         if (block instanceof BlockWithEntity) {

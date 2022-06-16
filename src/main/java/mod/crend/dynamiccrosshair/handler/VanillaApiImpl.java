@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.*;
+import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -17,68 +18,63 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         return true;
     }
 
-    VanillaBlockHandler blockHandler = new VanillaBlockHandler();
-    VanillaEntityHandler entityHandler = new VanillaEntityHandler();
-    VanillaItemHandler itemHandler = new VanillaItemHandler();
-    VanillaUsableItemHandler usableItemHandler = new VanillaUsableItemHandler();
-
     @Override
-    public IBlockBreakHandler getBlockBreakHandler() {
-        return blockHandler;
+    public Crosshair checkBlockBreaking(CrosshairContext context) {
+        return VanillaBlockHandler.checkBlockBreaking(context);
     }
 
     @Override
-    public IBlockInteractHandler getBlockInteractHandler() {
-        return blockHandler;
+    public Crosshair checkBlockInteractable(CrosshairContext context) {
+        return VanillaBlockHandler.checkBlockInteractable(context);
     }
 
     @Override
-    public IBlockItemHandler getBlockItemHandler() {
-        return itemHandler;
+    public Crosshair checkEntity(CrosshairContext context) {
+        return VanillaEntityHandler.checkEntity(context);
     }
 
     @Override
-    public IEntityHandler getEntityHandler() {
-        return entityHandler;
+    public Crosshair checkBlockItem(CrosshairContext context) {
+        return VanillaItemHandler.checkBlockItem(context);
     }
 
     @Override
-    public IMeleeWeaponHandler getMeleeWeaponHandler() {
-        return itemHandler;
+    public Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) {
+        return VanillaItemHandler.checkMeleeWeapon(context, canBeToolCrosshair);
     }
 
     @Override
-    public IRangedWeaponHandler getRangedWeaponHandler() {
-        return itemHandler;
+    public Crosshair checkRangedWeapon(CrosshairContext context) {
+        return VanillaItemHandler.checkRangedWeapon(context);
     }
 
     @Override
-    public IThrowableItemHandler getThrowableItemHandler() {
-        return itemHandler;
+    public Crosshair checkShield(CrosshairContext context) {
+        return VanillaItemHandler.checkShield(context);
     }
 
     @Override
-    public IShieldItemHandler getShieldItemHandler() {
-        return itemHandler;
+    public Crosshair checkThrowable(CrosshairContext context) {
+        return VanillaItemHandler.checkThrowable(context);
     }
 
     @Override
-    public IToolItemHandler getToolItemHandler() {
-        return itemHandler;
-    }
-
-    @Override
-    public IUsableItemHandler getUsableItemHandler() {
-        return usableItemHandler;
+    public Crosshair checkTool(CrosshairContext context) {
+        return VanillaItemHandler.checkTool(context);
     }
 
     @Override
     public boolean isAlwaysUsableItem(ItemStack itemStack) {
-        return usableItemHandler.isAlwaysUsableItem(itemStack);
+        return VanillaUsableItemHandler.isAlwaysUsableItem(itemStack);
     }
 
     @Override
     public boolean isUsableItem(ItemStack itemStack) {
-        return usableItemHandler.isUsableItem(itemStack);
+        return VanillaUsableItemHandler.isUsableItem(itemStack);
+    }
+
+    @Override
+    public Crosshair checkUsableItem(CrosshairContext context) {
+        return VanillaUsableItemHandler.checkUsableItem(context);
     }
 }
