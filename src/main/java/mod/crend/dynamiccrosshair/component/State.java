@@ -62,19 +62,16 @@ public class State {
 
 		@Override
 		public boolean isChanged(HitState other) {
-			if (super.isChanged(other)) {
-				mainHandContext.invalidateHitResult();
-				offHandContext.invalidateHitResult();
-				return true;
-			}
-			if (other instanceof HitStateBlock otherBlock) {
-				if (x != otherBlock.x || y != otherBlock.y || z != otherBlock.z || side != otherBlock.side || blockState != otherBlock.blockState) {
-					mainHandContext.invalidateHitResult();
-					offHandContext.invalidateHitResult();
-					return true;
-				}
+			if (!super.isChanged(other) && other instanceof HitStateBlock otherBlock
+					&& x == otherBlock.x
+					&& y == otherBlock.y
+					&& z == otherBlock.z
+					&& side == otherBlock.side
+					&& blockState == otherBlock.blockState
+			) {
 				return false;
 			}
+
 			mainHandContext.invalidateHitResult();
 			offHandContext.invalidateHitResult();
 			return true;
@@ -91,15 +88,10 @@ public class State {
 
 		@Override
 		public boolean isChanged(HitState other) {
-			if (super.isChanged(other)) return true;
-			if (other instanceof HitStateEntity otherEntity) {
-				if (entity != otherEntity.entity) {
-					mainHandContext.invalidateHitResult();
-					offHandContext.invalidateHitResult();
-					return true;
-				}
+			if (!super.isChanged(other) && other instanceof HitStateEntity otherEntity && entity == otherEntity.entity) {
 				return false;
 			}
+
 			mainHandContext.invalidateHitResult();
 			offHandContext.invalidateHitResult();
 			return true;
