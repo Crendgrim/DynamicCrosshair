@@ -32,49 +32,85 @@ public class Config implements ConfigData {
 
     static class CrosshairColorSettings {
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairColor crosshairColor = CrosshairColor.Unchanged;
+        CrosshairConfigColor crosshairColor = CrosshairConfigColor.Unchanged;
         @ConfigEntry.ColorPicker(allowAlpha = true)
         int customColor = 0xFFAABBCC;
         @ConfigEntry.Gui.Tooltip
         boolean forceColor = false;
     }
-    @ConfigEntry.Gui.CollapsibleObject
+    static class CrosshairStyleSettings {
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        CrosshairConfigStyle style = CrosshairConfigStyle.Cross;
+        @ConfigEntry.Gui.TransitiveObject
+        CrosshairColorSettings color = new CrosshairColorSettings();
+    }
+    static class CrosshairModifierSettings {
+        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+        CrosshairConfigModifier style;
+        @ConfigEntry.Gui.TransitiveObject
+        CrosshairColorSettings color = new CrosshairColorSettings();
+    }
+
+    @ConfigEntry.Category("style")
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     CrosshairColorSettings color = new CrosshairColorSettings();
 
+    @ConfigEntry.Category("style")
     boolean dynamicCrosshairStyle = true;
-    @ConfigEntry.Gui.CollapsibleObject
+    @ConfigEntry.Category("style")
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     CrosshairStyles crosshairStyle = new CrosshairStyles();
-    @ConfigEntry.Gui.CollapsibleObject
+    @ConfigEntry.Category("style")
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     CrosshairModifiers crosshairModifiers = new CrosshairModifiers();
     static class CrosshairStyles {
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle regular = CrosshairStyle.CROSS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle onBlock = CrosshairStyle.CROSS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle onEntity = CrosshairStyle.DIAGONAL_CROSS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle holdingTool = CrosshairStyle.SQUARE;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle holdingMeleeWeapon = CrosshairStyle.CROSS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle holdingRangedWeapon = CrosshairStyle.DIAGONAL_CROSS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle holdingThrowable = CrosshairStyle.CIRCLE;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairStyle holdingBlock = CrosshairStyle.DIAMOND;
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings regular = new CrosshairStyleSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings onBlock = new CrosshairStyleSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings onEntity = new CrosshairStyleSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings holdingTool = new CrosshairStyleSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings holdingMeleeWeapon = new CrosshairStyleSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings holdingRangedWeapon = new CrosshairStyleSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings holdingThrowable = new CrosshairStyleSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairStyleSettings holdingBlock = new CrosshairStyleSettings();
+
+        CrosshairStyles() {
+            regular.style = CrosshairConfigStyle.Cross;
+            onBlock.style = CrosshairConfigStyle.Cross;
+            onEntity.style = CrosshairConfigStyle.DiagonalCross;
+            holdingTool.style = CrosshairConfigStyle.Square;
+            holdingMeleeWeapon.style = CrosshairConfigStyle.Cross;
+            holdingRangedWeapon.style = CrosshairConfigStyle.DiagonalCross;
+            holdingThrowable.style = CrosshairConfigStyle.Circle;
+            holdingBlock.style = CrosshairConfigStyle.Diamond;
+        }
     }
     static class CrosshairModifiers {
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairModifier modInteractable = CrosshairModifier.BRACKETS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairModifier modCorrectTool = CrosshairModifier.DOT;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairModifier modIncorrectTool = CrosshairModifier.DIAGONAL_CROSS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairModifier modUsableItem = CrosshairModifier.ROUND_BRACKETS;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairModifier modShield = CrosshairModifier.BRACKETS_BOTTOM;
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairModifierSettings modInteractable = new CrosshairModifierSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairModifierSettings modUsableItem = new CrosshairModifierSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairModifierSettings modShield = new CrosshairModifierSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairModifierSettings modCorrectTool = new CrosshairModifierSettings();
+        @ConfigEntry.Gui.CollapsibleObject
+        CrosshairModifierSettings modIncorrectTool = new CrosshairModifierSettings();
+
+        CrosshairModifiers() {
+            modInteractable.style = CrosshairConfigModifier.Brackets;
+            modCorrectTool.style = CrosshairConfigModifier.Dot;
+            modIncorrectTool.style = CrosshairConfigModifier.DiagonalCross;
+            modUsableItem.style = CrosshairConfigModifier.RoundBrackets;
+            modShield.style = CrosshairConfigModifier.BracketsBottom;
+        }
     }
 
 }

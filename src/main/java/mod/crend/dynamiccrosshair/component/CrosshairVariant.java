@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.component;
 
-public enum Style {
+public enum CrosshairVariant {
     NONE,
     Regular,
     OnBlock,

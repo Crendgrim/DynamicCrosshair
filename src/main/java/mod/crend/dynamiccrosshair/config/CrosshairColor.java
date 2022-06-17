@@ -1,23 +1,11 @@
 package mod.crend.dynamiccrosshair.config;
 
-public enum CrosshairColor {
-	Unchanged(0),
-	Red(0xFFFF0000),
-	Yellow(0xFFAAAA00),
-	Green(0xFF00FF00),
-	Cyan(0xFF00AAAA),
-	Blue(0xFF0000FF),
-	Purple(0xFFAA00AA),
-	Custom(1);
-
-	public final int color;
-
-	CrosshairColor(int color) {
-		this.color = color;
+public record CrosshairColor(CrosshairConfigColor color, int customColor, boolean forced) {
+	public boolean isChanged() {
+		return color != CrosshairConfigColor.Unchanged;
 	}
 
-	@Override
-	public String toString() {
-		return "text.dynamiccrosshair.color." + name();
+	public int getColor() {
+		return (color == CrosshairConfigColor.Custom ? customColor : color.color);
 	}
 }

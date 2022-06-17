@@ -23,31 +23,42 @@ public class InGameHudMixin {
         if (!CrosshairHandler.shouldShowCrosshair()) ci.cancel();
     }
 
-    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0), require = 0)
-    private void dynamiccrosshair$drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
-        CrosshairColor color = DynamicCrosshair.config.getCrosshairColor();
-        if (color != CrosshairColor.Unchanged) {
-            int argb = (color == CrosshairColor.Custom ? DynamicCrosshair.config.getCustomColor() : color.color);
+    private void dynamiccrosshair$setColor(final CrosshairColor color) {
+        if (color.isChanged()) {
+            int argb = color.getColor();
             // convert ARGB hex to r, g, b, a floats
             RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, ((argb >> 24) & 0xFF) / 255.0f);
-        }
-        if (DynamicCrosshair.config.isForceColor()) {
+            if (color.forced()) {
+                RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+            } else {
+                RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+            }
+        } else if (color.forced()) {
             RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
         }
+    }
+
+    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0), require = 0)
+    private void dynamiccrosshair$drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+        dynamiccrosshair$setColor(DynamicCrosshair.config.getColor());
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
             RenderSystem.setShaderTexture(0, CrosshairHandler.crosshairTexture);
             if (crosshair.hasStyle()) {
                 CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
-                instance.drawTexture(matrixStack, x, y, crosshairStyle.getX(), crosshairStyle.getY(), 15, 15);
+                dynamiccrosshair$setColor(crosshairStyle.getColor());
+                instance.drawTexture(matrixStack, x, y, crosshairStyle.getStyle().getX(), crosshairStyle.getStyle().getY(), 15, 15);
             }
             for (CrosshairModifier modifier : crosshair.getModifiers()) {
-                instance.drawTexture(matrixStack, x, y, modifier.getX(), modifier.getY(), 15, 15);
+                dynamiccrosshair$setColor(modifier.getColor());
+                instance.drawTexture(matrixStack, x, y, modifier.getStyle().getX(), modifier.getStyle().getY(), 15, 15);
             }
             RenderSystem.setShaderTexture(0, InGameHud.GUI_ICONS_TEXTURE);
         } else {
             instance.drawTexture(matrixStack, x, y, u, v, width, height);
         }
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
     }
 
     @Inject(method = "tick()V", at = @At(value = "TAIL"))

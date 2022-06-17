@@ -188,7 +188,7 @@ public class CrosshairHandler {
         activeCrosshair = new Crosshair();
 
         if (!DynamicCrosshair.config.isDynamicCrosshairStyle()) {
-            activeCrosshair.setStyle(Style.Regular);
+            activeCrosshair.setVariant(CrosshairVariant.Regular);
             if (!DynamicCrosshair.config.isDynamicCrosshair()) {
                 return true;
             }
@@ -208,7 +208,7 @@ public class CrosshairHandler {
         switch (hitResult.getType()) {
             case ENTITY -> {
                 if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
-                    activeCrosshair.setStyle(Style.OnEntity);
+                    activeCrosshair.setVariant(CrosshairVariant.OnEntity);
                 }
                 if (activeCrosshair.updateFrom(checkHandsOnEntity(state.mainHandContext, state.offHandContext))) {
                     return true;
@@ -217,10 +217,10 @@ public class CrosshairHandler {
             case BLOCK -> {
                 boolean isInteractable = isBlockInteractable(state.mainHandContext);
                 switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
-                    case IfTargeting -> activeCrosshair.setStyle(Style.OnBlock);
+                    case IfTargeting -> activeCrosshair.setVariant(CrosshairVariant.OnBlock);
                     case IfInteractable -> {
                         if (isInteractable) {
-                            activeCrosshair.setStyle(Style.OnBlock);
+                            activeCrosshair.setVariant(CrosshairVariant.OnBlock);
                         }
                     }
                 }
@@ -243,7 +243,7 @@ public class CrosshairHandler {
             return false;
         }
         // Dynamic crosshair disabled, no other crosshair computed: make sure to show a crosshair
-        activeCrosshair.setStyle(Style.Regular);
+        activeCrosshair.setVariant(CrosshairVariant.Regular);
         return true;
     }
 
