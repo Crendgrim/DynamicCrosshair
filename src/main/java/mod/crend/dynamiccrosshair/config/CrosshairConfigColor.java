@@ -1,7 +1,7 @@
 package mod.crend.dynamiccrosshair.config;
 
 public enum CrosshairConfigColor {
-	Unchanged(0),
+	Unchanged(0xFFFFFFFF),
 	Red(0xFFFF0000),
 	Yellow(0xFFAAAA00),
 	Green(0xFF00FF00),
