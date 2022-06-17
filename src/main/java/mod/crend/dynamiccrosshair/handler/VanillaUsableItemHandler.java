@@ -112,8 +112,18 @@ public class VanillaUsableItemHandler {
         }
         if (handItem == Items.BUCKET) {
             BlockHitResult blockHitResult = context.raycastWithFluid(RaycastContext.FluidHandling.SOURCE_ONLY);
-            if (!context.world.getFluidState(blockHitResult.getBlockPos()).isEmpty())
-                return Crosshair.USE_ITEM;
+            if (blockHitResult.getType() == HitResult.Type.BLOCK) {
+                FluidState bucketFluidState = context.world.getFluidState(blockHitResult.getBlockPos());
+                if (!bucketFluidState.isEmpty() && bucketFluidState.isStill()) {
+                    return Crosshair.USE_ITEM;
+                }
+                Block bucketBlock = context.world.getBlockState(blockHitResult.getBlockPos()).getBlock();
+                if (bucketBlock instanceof FluidDrainable) {
+                    if (!(bucketBlock instanceof Waterloggable || bucketBlock instanceof FluidBlock)) {
+                        return Crosshair.USE_ITEM;
+                    }
+                }
+            }
         }
 
         if (context.isWithBlock()) {
