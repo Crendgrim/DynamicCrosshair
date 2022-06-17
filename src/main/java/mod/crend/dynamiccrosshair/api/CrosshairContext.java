@@ -48,13 +48,18 @@ public class CrosshairContext {
 	public void invalidateHitResult() {
 		assert MinecraftClient.getInstance().crosshairTarget != null;
 		hitResult = MinecraftClient.getInstance().crosshairTarget;
+		withBlock = false;
+		blockPos = null;
+		blockState = null;
+		blockEntity = null;
+		withEntity = false;
+		entity = null;
+		apiList = null;
 		switch (hitResult.getType()) {
 			case BLOCK -> {
 				BlockHitResult blockHitResult = (BlockHitResult) hitResult;
 				withBlock = true;
 				blockPos = blockHitResult.getBlockPos();
-				blockState = null;
-				blockEntity = null;
 			}
 			case ENTITY -> {
 				EntityHitResult entityHitResult = (EntityHitResult) hitResult;
