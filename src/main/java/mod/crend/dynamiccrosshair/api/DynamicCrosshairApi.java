@@ -71,13 +71,14 @@ public interface DynamicCrosshairApi {
 
     /**
      * Set the crosshair based on whether the player has a melee weapon equipped.
+     * If a melee weapon doubles as a tool (such as axes), context.canUseWeaponAsTool() will
+     * return true if a block is targeted and tool crosshair is enabled. API implementations
+     * may use this to defer crosshair computation (return "null" from this handler).
      *
      * @param context A context that is guaranteed to contain an item
-     * @param canBeToolCrosshair If "true", delegate some decisions to the tool crosshair.
-     *                           For example, an axe will return "null" if targeting a block.
      * @return a Crosshair object overwriting the crosshair settings
      */
-    default Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) { return null; }
+    default Crosshair checkMeleeWeapon(CrosshairContext context) { return null; }
 
     /**
      * Set the crosshair based on whether the player has a ranged weapon equipped.

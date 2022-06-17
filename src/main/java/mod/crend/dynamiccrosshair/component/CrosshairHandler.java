@@ -104,7 +104,7 @@ public class CrosshairHandler {
         }
 
         if (DynamicCrosshair.config.dynamicCrosshairHoldingMeleeWeapon()) {
-            crosshair = api.checkMeleeWeapon(context, context.isTargeting() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled);
+            crosshair = api.checkMeleeWeapon(context);
             if (crosshair != null) return crosshair;
         }
         if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingTool(), context.isTargeting())) {

@@ -39,8 +39,8 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     }
 
     @Override
-    public Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) {
-        return VanillaItemHandler.checkMeleeWeapon(context, canBeToolCrosshair);
+    public Crosshair checkMeleeWeapon(CrosshairContext context) {
+        return VanillaItemHandler.checkMeleeWeapon(context);
     }
 
     @Override

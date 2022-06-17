@@ -51,11 +51,11 @@ public class VanillaItemHandler {
         return null;
     }
 
-    public static Crosshair checkMeleeWeapon(CrosshairContext context, boolean canBeToolCrosshair) {
+    public static Crosshair checkMeleeWeapon(CrosshairContext context) {
         Item handItem = context.getItem();
 
         if (handItem instanceof SwordItem) {
-            if (canBeToolCrosshair && context.isWithBlock()) {
+            if (context.canUseWeaponAsTool()) {
                 BlockState blockState = context.getBlockState();
                 if (handItem.getMiningSpeedMultiplier(context.getItemStack(), blockState) > 1.0f
                         && handItem.canMine(blockState, context.world, context.getBlockPos(), context.player)) {
@@ -68,7 +68,7 @@ public class VanillaItemHandler {
             return Crosshair.MELEE_WEAPON;
         }
         if (handItem instanceof AxeItem) {
-            if (canBeToolCrosshair) {
+            if (context.canUseWeaponAsTool()) {
                 return null;
             }
             return Crosshair.MELEE_WEAPON;
