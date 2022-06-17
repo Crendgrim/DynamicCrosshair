@@ -1,5 +1,7 @@
 package mod.crend.dynamiccrosshair.api;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IItemMixin;
 import net.minecraft.block.Block;
@@ -162,6 +164,10 @@ public class CrosshairContext {
 		ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, hand, getItemStack(), (BlockHitResult) hitResult);
 		BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
 		return (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState));
+	}
+
+	public boolean canUseWeaponAsTool() {
+		return isWithBlock() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
 	}
 
 
