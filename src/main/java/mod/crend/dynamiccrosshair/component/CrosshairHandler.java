@@ -9,6 +9,7 @@ import mod.crend.dynamiccrosshair.config.InteractableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 
@@ -42,10 +43,12 @@ public class CrosshairHandler {
         }
         return crosshair;
     }
-    private static Crosshair checkHandsOnEntity(CrosshairContext mainHandContext, CrosshairContext offHandContext) {
-        Crosshair crosshair = checkHandOnEntity(mainHandContext);
+    private static Crosshair checkHandsOnEntity(CrosshairContext context) {
+        Crosshair crosshair = checkHandOnEntity(context);
         if (crosshair == null) {
-            crosshair = checkHandOnEntity(offHandContext);
+            context.setHand(Hand.OFF_HAND);
+            crosshair = checkHandOnEntity(context);
+            context.setHand(Hand.MAIN_HAND);
         }
         return crosshair;
     }
@@ -57,9 +60,11 @@ public class CrosshairHandler {
         }
         return crosshair;
     }
-    private static Crosshair checkHandsOnBlockOrMiss(CrosshairContext mainHandContext, CrosshairContext offHandContext) {
-        Crosshair crosshair = checkHandOnBlockOrMiss(mainHandContext);
-        crosshair = Crosshair.combine(crosshair, checkHandOnBlockOrMiss(offHandContext));
+    private static Crosshair checkHandsOnBlockOrMiss(CrosshairContext context) {
+        Crosshair crosshair = checkHandOnBlockOrMiss(context);
+        context.setHand(Hand.OFF_HAND);
+        crosshair = Crosshair.combine(crosshair, checkHandOnBlockOrMiss(context));
+        context.setHand(Hand.MAIN_HAND);
         return crosshair;
     }
 
@@ -197,7 +202,7 @@ public class CrosshairHandler {
                 case ENTITY -> DynamicCrosshair.config.dynamicCrosshairOnEntity();
                 case BLOCK -> switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
                     case IfTargeting -> true;
-                    case IfInteractable -> isBlockInteractable(state.mainHandContext);
+                    case IfInteractable -> isBlockInteractable(state.context);
                     case Disabled -> false;
                 };
                 case MISS -> false;
@@ -210,12 +215,12 @@ public class CrosshairHandler {
                 if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
                     activeCrosshair.setVariant(CrosshairVariant.OnEntity);
                 }
-                if (activeCrosshair.updateFrom(checkHandsOnEntity(state.mainHandContext, state.offHandContext))) {
+                if (activeCrosshair.updateFrom(checkHandsOnEntity(state.context))) {
                     return true;
                 }
             }
             case BLOCK -> {
-                boolean isInteractable = isBlockInteractable(state.mainHandContext);
+                boolean isInteractable = isBlockInteractable(state.context);
                 switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
                     case IfTargeting -> activeCrosshair.setVariant(CrosshairVariant.OnBlock);
                     case IfInteractable -> {
@@ -224,13 +229,13 @@ public class CrosshairHandler {
                         }
                     }
                 }
-                checkBreakable(state.mainHandContext);
-                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.mainHandContext, state.offHandContext))) {
+                checkBreakable(state.context);
+                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.context))) {
                     return true;
                 }
             }
             case MISS -> {
-                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.mainHandContext, state.offHandContext))) {
+                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.context))) {
                     return true;
                 }
             }

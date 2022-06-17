@@ -32,11 +32,11 @@ public class State {
 		public boolean isChanged(HitState other) {
 			boolean invalidated = false;
 			if (mainHandStack != other.mainHandStack) {
-				mainHandContext.invalidateItem();
+				context.invalidateItem(Hand.MAIN_HAND);
 				invalidated = true;
 			}
 			if (offHandStack != other.offHandStack) {
-				offHandContext.invalidateItem();
+				context.invalidateItem(Hand.OFF_HAND);
 				invalidated = true;
 			}
 			return (invalidated || cancelInteraction != other.cancelInteraction || isCoolingDown != other.isCoolingDown);
@@ -72,8 +72,7 @@ public class State {
 				return false;
 			}
 
-			mainHandContext.invalidateHitResult();
-			offHandContext.invalidateHitResult();
+			context.invalidateHitResult();
 			return true;
 		}
 	}
@@ -92,8 +91,7 @@ public class State {
 				return false;
 			}
 
-			mainHandContext.invalidateHitResult();
-			offHandContext.invalidateHitResult();
+			context.invalidateHitResult();
 			return true;
 		}
 	}
@@ -109,8 +107,8 @@ public class State {
 			if (other instanceof HitStateMiss) {
 				return false;
 			}
-			mainHandContext.invalidateHitResult();
-			offHandContext.invalidateHitResult();
+
+			context.invalidateHitResult();
 			return true;
 		}
 	}
@@ -136,12 +134,10 @@ public class State {
 
 	HitState previousState;
 	HitStateFluid previousFluidState = null;
-	public final CrosshairContext mainHandContext;
-	public final CrosshairContext offHandContext;
+	public final CrosshairContext context;
 
 	public State() {
-		mainHandContext = new CrosshairContext(Hand.MAIN_HAND);
-		offHandContext = new CrosshairContext(Hand.OFF_HAND);
+		context = new CrosshairContext();
 	}
 
 	public boolean changed(HitResult hitResult, ClientPlayerEntity player) {
@@ -160,8 +156,7 @@ public class State {
 			previousState = newState;
 			if (previousFluidState != null) {
 				previousFluidState = null;
-				mainHandContext.invalidateHitResult();
-				offHandContext.invalidateHitResult();
+				context.invalidateHitResult();
 			}
 			return true;
 		}
@@ -170,19 +165,17 @@ public class State {
 			return true;
 		}
 
-		BlockHitResult fluidHitResult = mainHandContext.raycastWithFluid();
+		BlockHitResult fluidHitResult = context.raycastWithFluid();
 		if (fluidHitResult.getType() == HitResult.Type.BLOCK) {
 			HitStateFluid newFluidState = new HitStateFluid(fluidHitResult);
 			if (newFluidState.isChanged(previousFluidState)) {
 				previousFluidState = newFluidState;
-				mainHandContext.invalidateHitResult();
-				offHandContext.invalidateHitResult();
+				context.invalidateHitResult();
 				return true;
 			}
 		} else if (previousFluidState != null) {
 			previousFluidState = null;
-			mainHandContext.invalidateHitResult();
-			offHandContext.invalidateHitResult();
+			context.invalidateHitResult();
 			return true;
 		}
 		return false;

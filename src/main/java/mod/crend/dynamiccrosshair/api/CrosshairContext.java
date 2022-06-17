@@ -34,14 +34,14 @@ public class CrosshairContext {
 	@NonNull
 	public HitResult hitResult;
 
-	public CrosshairContext(Hand hand) {
+	public CrosshairContext() {
 		assert MinecraftClient.getInstance().world != null;
 		assert MinecraftClient.getInstance().player != null;
 		assert MinecraftClient.getInstance().crosshairTarget != null;
 		world = MinecraftClient.getInstance().world;
 		player = MinecraftClient.getInstance().player;
 		hitResult = MinecraftClient.getInstance().crosshairTarget;
-		this.hand = hand;
+		this.hand = Hand.MAIN_HAND;
 		invalidateHitResult();
 	}
 
@@ -68,8 +68,11 @@ public class CrosshairContext {
 			}
 		}
 	}
-	public void invalidateItem() {
-		itemStack = null;
+	public void invalidateItem(Hand hand) {
+		switch (hand) {
+			case MAIN_HAND -> itemStackMainHand = null;
+			case OFF_HAND -> itemStackOffHand = null;
+		}
 	}
 
 	public boolean isTargeting() {
@@ -145,16 +148,34 @@ public class CrosshairContext {
 	}
 
 
-	private final Hand hand;
-	private ItemStack itemStack = null;
+	private Hand hand;
+	private ItemStack itemStackMainHand = null;
+	private ItemStack itemStackOffHand = null;
 
 	public Hand getHand() {
 		return hand;
 	}
+	public void setHand(Hand hand) {
+		this.hand = hand;
+	}
+	public boolean isMainHand() {
+		return hand == Hand.MAIN_HAND;
+	}
+	public boolean isOffHand() {
+		return hand == Hand.OFF_HAND;
+	}
 
 	public ItemStack getItemStack() {
+		ItemStack itemStack = switch (hand) {
+			case MAIN_HAND -> itemStackMainHand;
+			case OFF_HAND -> itemStackOffHand;
+		};
 		if (itemStack == null) {
 			itemStack = player.getStackInHand(hand);
+			switch (hand) {
+				case MAIN_HAND -> itemStackMainHand = itemStack;
+				case OFF_HAND -> itemStackOffHand = itemStack;
+			}
 		}
 		return itemStack;
 	}
@@ -164,7 +185,7 @@ public class CrosshairContext {
 	}
 
 	public boolean isActiveItem() {
-		return player.getActiveItem().equals(itemStack);
+		return player.getActiveItem().equals(getItemStack());
 	}
 
 	public boolean canPlaceItemAsBlock() {
