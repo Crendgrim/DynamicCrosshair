@@ -120,9 +120,6 @@ public class State {
 	}
 
 	private static class HitStateFluid {
-		int x;
-		int y;
-		int z;
 		int level;
 		Fluid fluid;
 
@@ -130,19 +127,12 @@ public class State {
 			FluidState fluidState = MinecraftClient.getInstance().world.getFluidState(fluidHitResult.getBlockPos());
 			fluid = fluidState.getFluid();
 			level = fluid.getLevel(fluidState);
-			BlockPos pos = fluidHitResult.getBlockPos();
-			x = pos.getX();
-			y = pos.getY();
-			z = pos.getZ();
 		}
 
 		public boolean isChanged(HitStateFluid other) {
 			return (other == null
 					|| fluid != other.fluid
 					|| level != other.level
-					|| x != other.x
-					|| y != other.y
-					|| z != other.z
 			);
 		}
 
@@ -172,7 +162,11 @@ public class State {
 
 		if (newState.isChanged(previousState)) {
 			previousState = newState;
-			previousFluidState = null;
+			if (previousFluidState != null) {
+				previousFluidState = null;
+				mainHandContext.invalidateHitResult();
+				offHandContext.invalidateHitResult();
+			}
 			return true;
 		}
 
@@ -189,6 +183,11 @@ public class State {
 				offHandContext.invalidateHitResult();
 				return true;
 			}
+		} else if (previousFluidState != null) {
+			previousFluidState = null;
+			mainHandContext.invalidateHitResult();
+			offHandContext.invalidateHitResult();
+			return true;
 		}
 		return false;
 	}
