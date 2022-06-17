@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.component.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IItemMixin;
@@ -105,7 +106,8 @@ public class CrosshairContext {
 	}
 
 	public BlockState getBlockState() {
-		assert(withBlock);
+		if (!withBlock) throw new InvalidContextState("Called getBlockState() without a targeted block!");
+		if (blockPos == null) throw new InvalidContextState("In getBlockState(): blockPos is null despite targeted block!");
 		if (blockState == null) {
 			blockState = world.getBlockState(blockPos);
 		}
@@ -117,7 +119,8 @@ public class CrosshairContext {
 	}
 
 	public BlockEntity getBlockEntity() {
-		assert(withBlock);
+		if (!withBlock) throw new InvalidContextState("Called getBlockEntity() without a targeted block!");
+		if (blockPos == null) throw new InvalidContextState("In getBlockEntity(): blockPos is null despite targeted block!");
 		if (blockEntity == null) {
 			blockEntity = world.getBlockEntity(blockPos);
 		}
@@ -125,7 +128,8 @@ public class CrosshairContext {
 	}
 
 	public FluidState getFluidState() {
-		if (blockPos == null) return null;
+		if (!withBlock) throw new InvalidContextState("Called getFluidState() without a targeted block!");
+		if (blockPos == null) throw new InvalidContextState("In getFluidState(): blockPos is null despite targeted block!");
 		return world.getFluidState(blockPos);
 	}
 
@@ -144,6 +148,8 @@ public class CrosshairContext {
 		return withEntity;
 	}
 	public Entity getEntity() {
+		if (!withEntity) throw new InvalidContextState("Called getEntity() without a targeted entity!");
+		if (entity == null) throw new InvalidContextState("In getEntity(): entity is null despite targeted entity!");
 		return entity;
 	}
 
@@ -189,6 +195,7 @@ public class CrosshairContext {
 	}
 
 	public boolean canPlaceItemAsBlock() {
+		if (!withBlock) throw new InvalidContextState("Called canPlaceItemAsBlock() without a targeted block!");
 		IBlockItemMixin blockItem = (IBlockItemMixin) getItem();
 		ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, hand, getItemStack(), (BlockHitResult) hitResult);
 		BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
