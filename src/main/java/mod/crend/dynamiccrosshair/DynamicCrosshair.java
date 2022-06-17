@@ -6,7 +6,6 @@ import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import mod.crend.dynamiccrosshair.handler.VanillaApiImpl;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,8 +21,8 @@ public class DynamicCrosshair implements ClientModInitializer {
     public static final DynamicCrosshairApi vanillaApi = new VanillaApiImpl();
 
     public static void registerApi(DynamicCrosshairApi apiImpl) {
-        final String identifier = apiImpl.getNamespace();
-        if (identifier.equals(Identifier.DEFAULT_NAMESPACE) || FabricLoader.getInstance().isModLoaded(apiImpl.getModId())) {
+        if (FabricLoader.getInstance().isModLoaded(apiImpl.getModId())) {
+            final String identifier = apiImpl.getNamespace();
             apis.put(identifier, apiImpl);
             if (apiImpl.forceCheck()) {
                 alwaysCheckedApis.add(identifier);
