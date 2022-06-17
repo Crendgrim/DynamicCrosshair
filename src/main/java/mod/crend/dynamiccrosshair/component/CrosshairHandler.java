@@ -12,10 +12,13 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CrosshairHandler {
 
     public static final Identifier crosshairTexture = new Identifier(DynamicCrosshair.MOD_ID, "textures/gui/crosshairs.png");
+    public static final Logger LOGGER = LoggerFactory.getLogger(DynamicCrosshair.MOD_ID);
 
     private static Crosshair activeCrosshair = new Crosshair();
     private static boolean shouldShowCrosshair = true;
@@ -192,53 +195,58 @@ public class CrosshairHandler {
         // State changed, build new crosshair
         activeCrosshair = new Crosshair();
 
-        if (!DynamicCrosshair.config.isDynamicCrosshairStyle()) {
-            activeCrosshair.setVariant(CrosshairVariant.Regular);
-            if (!DynamicCrosshair.config.isDynamicCrosshair()) {
-                return true;
-            }
+        try {
 
-            return switch (hitResult.getType()) {
-                case ENTITY -> DynamicCrosshair.config.dynamicCrosshairOnEntity();
-                case BLOCK -> switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
-                    case IfTargeting -> true;
-                    case IfInteractable -> isBlockInteractable(state.context);
-                    case Disabled -> false;
-                };
-                case MISS -> false;
-            };
-        }
-
-        // Dynamic crosshair style is active
-        switch (hitResult.getType()) {
-            case ENTITY -> {
-                if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
-                    activeCrosshair.setVariant(CrosshairVariant.OnEntity);
-                }
-                if (activeCrosshair.updateFrom(checkHandsOnEntity(state.context))) {
+            if (!DynamicCrosshair.config.isDynamicCrosshairStyle()) {
+                activeCrosshair.setVariant(CrosshairVariant.Regular);
+                if (!DynamicCrosshair.config.isDynamicCrosshair()) {
                     return true;
                 }
+
+                return switch (hitResult.getType()) {
+                    case ENTITY -> DynamicCrosshair.config.dynamicCrosshairOnEntity();
+                    case BLOCK -> switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
+                        case IfTargeting -> true;
+                        case IfInteractable -> isBlockInteractable(state.context);
+                        case Disabled -> false;
+                    };
+                    case MISS -> false;
+                };
             }
-            case BLOCK -> {
-                boolean isInteractable = isBlockInteractable(state.context);
-                switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
-                    case IfTargeting -> activeCrosshair.setVariant(CrosshairVariant.OnBlock);
-                    case IfInteractable -> {
-                        if (isInteractable) {
-                            activeCrosshair.setVariant(CrosshairVariant.OnBlock);
-                        }
+
+            // Dynamic crosshair style is active
+            switch (hitResult.getType()) {
+                case ENTITY -> {
+                    if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
+                        activeCrosshair.setVariant(CrosshairVariant.OnEntity);
+                    }
+                    if (activeCrosshair.updateFrom(checkHandsOnEntity(state.context))) {
+                        return true;
                     }
                 }
-                checkBreakable(state.context);
-                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.context))) {
-                    return true;
+                case BLOCK -> {
+                    boolean isInteractable = isBlockInteractable(state.context);
+                    switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
+                        case IfTargeting -> activeCrosshair.setVariant(CrosshairVariant.OnBlock);
+                        case IfInteractable -> {
+                            if (isInteractable) {
+                                activeCrosshair.setVariant(CrosshairVariant.OnBlock);
+                            }
+                        }
+                    }
+                    checkBreakable(state.context);
+                    if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.context))) {
+                        return true;
+                    }
+                }
+                case MISS -> {
+                    if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.context))) {
+                        return true;
+                    }
                 }
             }
-            case MISS -> {
-                if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.context))) {
-                    return true;
-                }
-            }
+        } catch(InvalidContextState invalidContextState) {
+            LOGGER.error("Encountered invalid context state: ", invalidContextState);
         }
 
         if (activeCrosshair.isChanged()) {
