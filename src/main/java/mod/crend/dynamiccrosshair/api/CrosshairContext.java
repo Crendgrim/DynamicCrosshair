@@ -102,7 +102,8 @@ public class CrosshairContext {
 	}
 
 	public BlockState getBlockState() {
-		if (withBlock && blockState == null) {
+		assert(withBlock);
+		if (blockState == null) {
 			blockState = world.getBlockState(blockPos);
 		}
 		return blockState;
@@ -113,13 +114,15 @@ public class CrosshairContext {
 	}
 
 	public BlockEntity getBlockEntity() {
-		if (withBlock && blockEntity == null) {
+		assert(withBlock);
+		if (blockEntity == null) {
 			blockEntity = world.getBlockEntity(blockPos);
 		}
 		return blockEntity;
 	}
 
 	public FluidState getFluidState() {
+		if (blockPos == null) return null;
 		return world.getFluidState(blockPos);
 	}
 
