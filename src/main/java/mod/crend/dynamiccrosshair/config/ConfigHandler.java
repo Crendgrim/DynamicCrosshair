@@ -17,6 +17,7 @@ public class ConfigHandler {
     }
 
     public boolean isDynamicCrosshair() { return config.dynamicCrosshair; }
+    public boolean isDisableDebugCrosshair() { return config.disableDebugCrosshair; }
     public boolean isHideWithScreen() { return config.hideWithScreen; }
     public InteractableCrosshairPolicy dynamicCrosshairOnBlock() { return config.crosshairConfig.onBlock; }
     public boolean dynamicCrosshairOnEntity() { return config.crosshairConfig.onEntity; }

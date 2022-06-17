@@ -6,6 +6,7 @@
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "Динамически прятать прицел",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность",
+  "text.autoconfig.dynamiccrosshair.option.disableDebugCrosshair": "Disable debug (F3) crosshair",
   "text.autoconfig.dynamiccrosshair.option.hideWithScreen": "Прятать прицел когда меню открыто",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud": "Прицел при отображении интерфейса",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshairEnableWithHud.@Tooltip": "При выключении данной настройки прицел прячется при отключения интерфейса",
