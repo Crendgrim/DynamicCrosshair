@@ -62,7 +62,11 @@ public class State {
 
 		@Override
 		public boolean isChanged(HitState other) {
-			if (super.isChanged(other)) return true;
+			if (super.isChanged(other)) {
+				mainHandContext.invalidateHitResult();
+				offHandContext.invalidateHitResult();
+				return true;
+			}
 			if (other instanceof HitStateBlock otherBlock) {
 				if (x != otherBlock.x || y != otherBlock.y || z != otherBlock.z || side != otherBlock.side || blockState != otherBlock.blockState) {
 					mainHandContext.invalidateHitResult();

@@ -21,6 +21,9 @@ public class VanillaBlockHandler {
         Item handItem = context.getItem();
         BlockPos blockPos = context.getBlockPos();
         BlockState blockState = context.getBlockState();
+        if (blockState == null) {
+            return null;
+        }
         if (handItem instanceof MiningToolItem) {
             if (handItem.isSuitableFor(blockState)
                     && handItem.canMine(blockState, context.world, blockPos, context.player)) {

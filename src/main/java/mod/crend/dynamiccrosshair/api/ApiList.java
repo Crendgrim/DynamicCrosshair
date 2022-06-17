@@ -17,15 +17,24 @@ public class ApiList {
 	ApiList() { }
 
 	public ApiList add(ItemStack itemStack) {
-		return add(getNamespace(itemStack));
+		if (itemStack != null) {
+			add(getNamespace(itemStack));
+		}
+		return this;
 	}
 
 	public ApiList add(BlockState blockState) {
-		return add(getNamespace(blockState));
+		if (blockState != null) {
+			add(getNamespace(blockState));
+		}
+		return this;
 	}
 
 	public ApiList add(Entity entity) {
-		return add(getNamespace(entity));
+		if (entity != null) {
+			add(getNamespace(entity));
+		}
+		return this;
 	}
 
 	public ApiList add(String namespace) {
