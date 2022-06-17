@@ -4,7 +4,7 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.*;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
-import mod.crend.dynamiccrosshair.component.Style;
+import mod.crend.dynamiccrosshair.component.CrosshairVariant;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
 import net.minecraft.block.Block;
@@ -26,7 +26,7 @@ public class VanillaItemHandler {
             return Crosshair.TOOL;
         }
         if (handItem instanceof FishingRodItem) {
-            return new Crosshair(Style.HoldingTool, ModifierUse.USE_ITEM).withFlag(Crosshair.Flag.FixedAll);
+            return new Crosshair(CrosshairVariant.HoldingTool, ModifierUse.USE_ITEM).withFlag(Crosshair.Flag.FixedAll);
         }
         return null;
     }
@@ -119,7 +119,7 @@ public class VanillaItemHandler {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
                 if (context.isWithBlock()) {
                     if (context.canPlaceItemAsBlock()) {
-                        return new Crosshair(Style.HoldingBlock);
+                        return new Crosshair(CrosshairVariant.HoldingBlock);
                     } else return Crosshair.NONE;
                 }
             } else return Crosshair.HOLDING_BLOCK;

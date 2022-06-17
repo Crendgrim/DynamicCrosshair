@@ -29,24 +29,22 @@ public class ConfigHandler {
     public BlockCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return config.crosshairConfig.holdingUsableItem; }
 
 
-    public CrosshairColor getCrosshairColor() { return config.color.crosshairColor; }
-    public int getCustomColor() { return config.color.customColor; }
-    public boolean isForceColor() { return config.color.forceColor; }
+    public CrosshairColor getColor() { return new CrosshairColor(config.color.crosshairColor, config.color.customColor, config.color.forceColor); }
 
     public boolean isDynamicCrosshairStyle() { return config.dynamicCrosshairStyle; }
 
-    public CrosshairStyle getCrosshairStyleRegular() { return config.crosshairStyle.regular; }
-    public CrosshairStyle getCrosshairStyleOnBlock() { return config.crosshairStyle.onBlock; }
-    public CrosshairStyle getCrosshairStyleOnEntity() { return config.crosshairStyle.onEntity; }
-    public CrosshairStyle getCrosshairStyleHoldingTool() { return config.crosshairStyle.holdingTool; }
-    public CrosshairStyle getCrosshairStyleHoldingMeleeWeapon() { return config.crosshairStyle.holdingMeleeWeapon; }
-    public CrosshairStyle getCrosshairStyleHoldingRangedWeapon() { return config.crosshairStyle.holdingRangedWeapon; }
-    public CrosshairStyle getCrosshairStyleHoldingThrowable() { return config.crosshairStyle.holdingThrowable; }
-    public CrosshairStyle getCrosshairStyleHoldingBlock() { return config.crosshairStyle.holdingBlock; }
-    public CrosshairModifier getCrosshairModifierInteractable() { return config.crosshairModifiers.modInteractable; }
-    public CrosshairModifier getCrosshairModifierCorrectTool() { return config.crosshairModifiers.modCorrectTool; }
-    public CrosshairModifier getCrosshairModifierIncorrectTool() { return config.crosshairModifiers.modIncorrectTool; }
-    public CrosshairModifier getCrosshairModifierUsableItem() { return config.crosshairModifiers.modUsableItem; }
-    public CrosshairModifier getCrosshairModifierShield() { return config.crosshairModifiers.modShield; }
+    public CrosshairStyle getCrosshairStyleRegular() { return new CrosshairStyle(config.crosshairStyle.regular); }
+    public CrosshairStyle getCrosshairStyleOnBlock() { return new CrosshairStyle(config.crosshairStyle.onBlock); }
+    public CrosshairStyle getCrosshairStyleOnEntity() { return new CrosshairStyle(config.crosshairStyle.onEntity); }
+    public CrosshairStyle getCrosshairStyleHoldingTool() { return new CrosshairStyle(config.crosshairStyle.holdingTool); }
+    public CrosshairStyle getCrosshairStyleHoldingMeleeWeapon() { return new CrosshairStyle(config.crosshairStyle.holdingMeleeWeapon); }
+    public CrosshairStyle getCrosshairStyleHoldingRangedWeapon() { return new CrosshairStyle(config.crosshairStyle.holdingRangedWeapon); }
+    public CrosshairStyle getCrosshairStyleHoldingThrowable() { return new CrosshairStyle(config.crosshairStyle.holdingThrowable); }
+    public CrosshairStyle getCrosshairStyleHoldingBlock() { return new CrosshairStyle(config.crosshairStyle.holdingBlock); }
+    public CrosshairModifier getCrosshairModifierInteractable() { return new CrosshairModifier(config.crosshairModifiers.modInteractable); }
+    public CrosshairModifier getCrosshairModifierCorrectTool() { return new CrosshairModifier(config.crosshairModifiers.modCorrectTool); }
+    public CrosshairModifier getCrosshairModifierIncorrectTool() { return new CrosshairModifier(config.crosshairModifiers.modIncorrectTool); }
+    public CrosshairModifier getCrosshairModifierUsableItem() { return new CrosshairModifier(config.crosshairModifiers.modUsableItem); }
+    public CrosshairModifier getCrosshairModifierShield() { return new CrosshairModifier(config.crosshairModifiers.modShield); }
 
 }

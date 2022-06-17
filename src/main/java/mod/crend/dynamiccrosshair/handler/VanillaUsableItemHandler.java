@@ -4,7 +4,7 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
-import mod.crend.dynamiccrosshair.component.Style;
+import mod.crend.dynamiccrosshair.component.CrosshairVariant;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IAxeItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
@@ -182,7 +182,7 @@ public class VanillaUsableItemHandler {
         }
         if (handItem instanceof EntityBucketItem) {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
-                return new Crosshair(Style.HoldingBlock, ModifierUse.USE_ITEM);
+                return new Crosshair(CrosshairVariant.HoldingBlock, ModifierUse.USE_ITEM);
             }
             return Crosshair.USE_ITEM;
         }
@@ -258,7 +258,7 @@ public class VanillaUsableItemHandler {
         Item handItem = context.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
             if (handItem instanceof EntityBucketItem) {
-                return new Crosshair(Style.HoldingBlock, ModifierUse.USE_ITEM);
+                return new Crosshair(CrosshairVariant.HoldingBlock, ModifierUse.USE_ITEM);
             }
             if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() != Fluids.EMPTY) {
                 return Crosshair.HOLDING_BLOCK;
