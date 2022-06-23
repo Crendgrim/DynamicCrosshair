@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
@@ -25,6 +26,9 @@ import net.minecraft.world.RaycastContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class CrosshairContext {
 
@@ -162,6 +166,7 @@ public class CrosshairContext {
 		return hand;
 	}
 	public void setHand(Hand hand) {
+		invalidateItem(this.hand);
 		this.hand = hand;
 	}
 	public boolean isMainHand() {
@@ -204,6 +209,35 @@ public class CrosshairContext {
 
 	public boolean canUseWeaponAsTool() {
 		return isWithBlock() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
+	}
+
+	public Crosshair withItem(Function<ItemStack, Crosshair> itemStackConsumer) {
+		return itemStackConsumer.apply(getItemStack());
+	}
+
+	public Crosshair withBlock(BiFunction<ItemStack, BlockState, Crosshair> blockConsumer) {
+		if (withBlock) {
+			return blockConsumer.apply(getItemStack(), getBlockState());
+		}
+		return null;
+	}
+	public Crosshair withBlock(Function<CrosshairContext, Crosshair> consumer) {
+		if (withBlock) {
+			return consumer.apply(this);
+		}
+		return null;
+	}
+	public void withBlock(Consumer<CrosshairContext> consumer) {
+		if (withBlock) {
+			consumer.accept(this);
+		}
+	}
+
+	public Crosshair withEntity(BiFunction<ItemStack, Entity, Crosshair> entityConsumer) {
+		if (withEntity) {
+			return entityConsumer.apply(getItemStack(), getEntity());
+		}
+		return null;
 	}
 
 

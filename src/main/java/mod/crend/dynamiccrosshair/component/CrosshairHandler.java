@@ -234,8 +234,8 @@ public class CrosshairHandler {
                             }
                         }
                     }
-                    checkBreakable(state.context);
-                    if (activeCrosshair.updateFrom(checkHandsOnBlockOrMiss(state.context))) {
+                    state.context.withBlock(CrosshairHandler::checkBreakable);
+                    if (activeCrosshair.updateFrom(state.context.withBlock(CrosshairHandler::checkHandsOnBlockOrMiss))) {
                         return true;
                     }
                 }
