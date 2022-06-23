@@ -23,19 +23,19 @@ public class State {
 		boolean isCoolingDown;
 
 		public HitState(ClientPlayerEntity player) {
-			mainHandStack = player.getMainHandStack();
-			offHandStack = player.getOffHandStack();
+			mainHandStack = player.getMainHandStack().copy();
+			offHandStack = player.getOffHandStack().copy();
 			cancelInteraction = player.shouldCancelInteraction();
 			isCoolingDown = (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem()) || player.getItemCooldownManager().isCoolingDown(offHandStack.getItem()));
 		}
 
 		public boolean isChanged(HitState other) {
 			boolean invalidated = false;
-			if (mainHandStack != other.mainHandStack) {
+			if (!ItemStack.areEqual(mainHandStack, other.mainHandStack)) {
 				context.invalidateItem(Hand.MAIN_HAND);
 				invalidated = true;
 			}
-			if (offHandStack != other.offHandStack) {
+			if (!ItemStack.areEqual(offHandStack, other.offHandStack)) {
 				context.invalidateItem(Hand.OFF_HAND);
 				invalidated = true;
 			}
