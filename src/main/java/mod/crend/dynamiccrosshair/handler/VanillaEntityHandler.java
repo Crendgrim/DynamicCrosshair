@@ -12,11 +12,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.SpawnEggItem;
+import net.minecraft.item.*;
 import net.minecraft.tag.ItemTags;
+import net.minecraft.util.Hand;
 
 public class VanillaEntityHandler {
     public static Crosshair checkEntity(CrosshairContext context) {
@@ -141,6 +139,15 @@ public class VanillaEntityHandler {
                 return Crosshair.INTERACTABLE;
             }
             return null;
+        } else if (entity instanceof AllayEntity allay) {
+            ItemStack allayItemStack = allay.getStackInHand(Hand.MAIN_HAND);
+            ItemStack handItemStack = context.getItemStack();
+            if (allayItemStack.isEmpty() && !handItemStack.isEmpty()) {
+                return Crosshair.USE_ITEM;
+            }
+            if (!allayItemStack.isEmpty() && context.isMainHand() && handItemStack.isEmpty()) {
+                return Crosshair.INTERACTABLE;
+            }
         }
         return null;
     }
