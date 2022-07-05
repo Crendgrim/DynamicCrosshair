@@ -1,17 +1,17 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.api.*;
+import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.CrosshairVariant;
+import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
+import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.*;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -128,7 +128,7 @@ public class VanillaItemHandler {
         if (handItem instanceof MinecartItem) {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
                 if (context.isWithBlock()) {
-                    if (context.getBlockState().isIn(BlockTags.RAILS)) return Crosshair.HOLDING_BLOCK;
+                    if (context.getBlock() instanceof AbstractRailBlock) return Crosshair.HOLDING_BLOCK;
                     return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
                 }
             } else return Crosshair.HOLDING_BLOCK;
