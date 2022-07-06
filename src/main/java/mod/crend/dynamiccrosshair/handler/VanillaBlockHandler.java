@@ -6,6 +6,7 @@ import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.mixin.IAbstractBlockMixin;
 import mod.crend.dynamiccrosshair.mixin.IFlowerPotBlockMixin;
+import mod.crend.dynamiccrosshair.mixin.IRedstoneWireBlockMixin;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.CampfireBlockEntity;
@@ -162,6 +163,12 @@ public class VanillaBlockHandler {
         if (block instanceof CampfireBlock) {
             if (context.getBlockEntity() instanceof CampfireBlockEntity campfire && campfire.getRecipeFor(context.getItemStack()).isPresent())
                 return Crosshair.USE_ITEM;
+        }
+
+        if (block instanceof RedstoneWireBlock) {
+            if (IRedstoneWireBlockMixin.invokeIsFullyConnected(blockState) || IRedstoneWireBlockMixin.invokeIsNotConnected(blockState)) {
+                return Crosshair.INTERACTABLE;
+            }
         }
 
         return null;
