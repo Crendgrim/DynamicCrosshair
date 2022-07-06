@@ -199,6 +199,10 @@ public class CrosshairContext {
 		return player.getActiveItem().equals(getItemStack());
 	}
 
+	public boolean isCoolingDown() {
+		return player.getItemCooldownManager().isCoolingDown(getItem());
+	}
+
 	public boolean canPlaceItemAsBlock() {
 		if (!withBlock) throw new InvalidContextState("Called canPlaceItemAsBlock() without a targeted block!");
 		IBlockItemMixin blockItem = (IBlockItemMixin) getItem();

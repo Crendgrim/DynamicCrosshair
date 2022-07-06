@@ -37,7 +37,7 @@ public class VanillaItemHandler {
                 || handItem instanceof SnowballItem
                 || handItem instanceof ThrowablePotionItem
                 || handItem instanceof ExperienceBottleItem
-                || (handItem instanceof EnderPearlItem && !context.player.getItemCooldownManager().isCoolingDown(handItem))
+                || handItem instanceof EnderPearlItem
         ) {
             return Crosshair.THROWABLE;
         }

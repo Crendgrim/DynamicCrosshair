@@ -60,19 +60,15 @@ public class VanillaUsableItemHandler {
         Item handItem = context.getItem();
         // Enable crosshair on food and drinks also when not targeting if "when interactable" is chosen
         if (handItem.isFood()) {
-            if (handItem instanceof ChorusFruitItem) {
-                if (!context.player.getItemCooldownManager().isCoolingDown(handItem)) return Crosshair.USE_ITEM;
-            } else {
-                // Special case: sweet and glow berries can sometimes be placed
-                if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled
-                        && (handItem == Items.SWEET_BERRIES || handItem == Items.GLOW_BERRIES)) {
-                    if (context.isWithBlock()) {
-                        if (context.canPlaceItemAsBlock()) return Crosshair.HOLDING_BLOCK;
-                    }
+            // Special case: sweet and glow berries can sometimes be placed
+            if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled
+                    && (handItem == Items.SWEET_BERRIES || handItem == Items.GLOW_BERRIES)) {
+                if (context.isWithBlock()) {
+                    if (context.canPlaceItemAsBlock()) return Crosshair.HOLDING_BLOCK;
                 }
-                if (context.player.canConsume(false) || handItem.getFoodComponent().isAlwaysEdible()) {
-                    return Crosshair.USE_ITEM;
-                }
+            }
+            if (context.player.canConsume(false) || handItem.getFoodComponent().isAlwaysEdible()) {
+                return Crosshair.USE_ITEM;
             }
         }
         if (handItem instanceof ArmorItem armorItem) {

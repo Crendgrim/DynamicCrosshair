@@ -79,6 +79,7 @@ public class CrosshairHandler {
                 }
             }
             case IfInteractable -> {
+                if (context.isCoolingDown()) return null;
                 if (api.isAlwaysUsableItem(context.getItemStack())) {
                     return Crosshair.USE_ITEM;
                 }
@@ -106,7 +107,7 @@ public class CrosshairHandler {
             if (crosshair != null) return crosshair;
         }
 
-        if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingThrowable(), context.isTargeting())) {
+        if (policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingThrowable(), context.isTargeting()) && !context.isCoolingDown()) {
             crosshair = api.checkThrowable(context);
             if (crosshair != null) return crosshair;
         }
