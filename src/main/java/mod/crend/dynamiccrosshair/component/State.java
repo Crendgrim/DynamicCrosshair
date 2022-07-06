@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.component;
 
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
+import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -21,12 +22,16 @@ public class State {
 		ItemStack offHandStack;
 		boolean cancelInteraction;
 		boolean isCoolingDown;
+		boolean isOnGround;
+		boolean isFallFlying;
 
 		public HitState(ClientPlayerEntity player) {
 			mainHandStack = player.getMainHandStack().copy();
 			offHandStack = player.getOffHandStack().copy();
 			cancelInteraction = player.shouldCancelInteraction();
 			isCoolingDown = (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem()) || player.getItemCooldownManager().isCoolingDown(offHandStack.getItem()));
+			isOnGround = player.isOnGround();
+			isFallFlying = player.isFallFlying();
 		}
 
 		public boolean isChanged(HitState other) {
@@ -39,7 +44,7 @@ public class State {
 				context.invalidateItem(Hand.OFF_HAND);
 				invalidated = true;
 			}
-			return (invalidated || cancelInteraction != other.cancelInteraction || isCoolingDown != other.isCoolingDown);
+			return (invalidated || cancelInteraction != other.cancelInteraction || isCoolingDown != other.isCoolingDown || isOnGround != other.isOnGround || isFallFlying != other.isFallFlying);
 		}
 	}
 
@@ -103,8 +108,7 @@ public class State {
 
 		@Override
 		public boolean isChanged(HitState other) {
-			if (super.isChanged(other)) return true;
-			if (other instanceof HitStateMiss) {
+			if (!super.isChanged(other) && other instanceof HitStateMiss) {
 				return false;
 			}
 
@@ -150,6 +154,13 @@ public class State {
 		if (previousState == null) {
 			previousState = newState;
 			return true;
+		}
+
+		for (DynamicCrosshairApi api : context.apis()) {
+			if (api.forceInvalidate(context)) {
+				context.invalidateHitResult();
+				return true;
+			}
 		}
 
 		if (newState.isChanged(previousState)) {
