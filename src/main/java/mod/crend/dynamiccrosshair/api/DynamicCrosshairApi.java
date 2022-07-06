@@ -38,6 +38,17 @@ public interface DynamicCrosshairApi {
     }
 
     /**
+     * The crosshair is only recalculated when something changes, such as targeted block, held item, or similar.
+     * This method may be used to forcefully invalidate the status every tick. Such behaviour may be necessary for
+     * blocks which have different interaction rules based on where on the block the cursor is, for example.
+     * Implementations of this method should check isWithBlock() and isWithEntity() before accessing these fields.
+     *
+     * @param context A context that will hold the held items, and targeted block or entity if any.
+     * @return true if the crosshair should be recalculated every tick.
+     */
+    default boolean forceInvalidate(CrosshairContext context) { return false; }
+
+    /**
      * Set the crosshair based on whether the targeted block can be broken.
      *
      * @param context A context that is guaranteed to contain an item and a targeted block
