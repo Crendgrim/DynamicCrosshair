@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair.handler;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
@@ -12,10 +11,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.item.*;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 
 public class VanillaBlockHandler {
     public static Crosshair checkBlockBreaking(CrosshairContext context) {
@@ -47,22 +44,21 @@ public class VanillaBlockHandler {
     public static Crosshair checkBlockInteractable(CrosshairContext context) {
         BlockState blockState = context.getBlockState();
         Block block = blockState.getBlock();
-        if (block instanceof BlockWithEntity) {
-            // Skip the following...
-            String ns = Registry.BLOCK.getId(block).getNamespace();
-            if (!(     block instanceof BeehiveBlock
-                    || block instanceof AbstractSignBlock
-                    || (blockState.isOf(Blocks.LECTERN) && !blockState.get(LecternBlock.HAS_BOOK))
-                    || block instanceof CampfireBlock
-                    || block instanceof BannerBlock
-                    || block instanceof EndPortalBlock
-                    // Skip blocks from mods that have a compatibility handler registered
-                    || (!(ns.equals(Identifier.DEFAULT_NAMESPACE)) && DynamicCrosshair.apis.containsKey(ns))
-            )) {
-                return Crosshair.INTERACTABLE;
-            }
-        }
-        if (        block instanceof StonecutterBlock
+        if (        block instanceof AbstractChestBlock
+                ||  block instanceof AbstractFurnaceBlock
+                ||  block instanceof BarrelBlock
+                ||  block instanceof BeaconBlock
+                ||  block instanceof BellBlock
+                ||  block instanceof BrewingStandBlock
+                || (block instanceof CommandBlock && context.player.isCreative())
+                ||  block instanceof DaylightDetectorBlock
+                ||  block instanceof DispenserBlock
+                ||  block instanceof EnchantingTableBlock
+                ||  block instanceof HopperBlock
+                || (block instanceof JukeboxBlock && blockState.get(JukeboxBlock.HAS_RECORD))
+                || (block instanceof LecternBlock && blockState.get(LecternBlock.HAS_BOOK))
+                ||  block instanceof ShulkerBoxBlock
+                ||  block instanceof StonecutterBlock
                 ||  block instanceof GrindstoneBlock
                 ||  block instanceof CartographyTableBlock
                 ||  block instanceof LoomBlock
