@@ -3,8 +3,8 @@ package mod.crend.dynamiccrosshair.handler;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.component.CrosshairVariant;
+import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IAxeItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
@@ -17,12 +17,12 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.WaterFluid;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.state.property.Properties;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -103,7 +103,7 @@ public class VanillaUsableItemHandler {
             }
 
             BlockHitResult blockHitResult = context.raycastWithFluid(RaycastContext.FluidHandling.ANY);
-            if (context.world.getFluidState(blockHitResult.getBlockPos()).isIn(FluidTags.WATER))
+            if (context.world.getFluidState(blockHitResult.getBlockPos()).getFluid() instanceof WaterFluid)
                 return Crosshair.USE_ITEM;
         }
         if (handItem == Items.BUCKET) {

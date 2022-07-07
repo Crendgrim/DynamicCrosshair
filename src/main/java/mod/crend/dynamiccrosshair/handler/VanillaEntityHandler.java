@@ -5,6 +5,7 @@ import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
+import net.minecraft.SharedConstants;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -78,8 +79,17 @@ public class VanillaEntityHandler {
             }
             return null;
         } else if (entity.getType() == EntityType.DOLPHIN) {
-            if (context.getItemStack().isIn(ItemTags.FISHES)) {
-                return Crosshair.USE_ITEM;
+            // Hack: since tags got changed, we'd have to recompile for 1.18/1.18.1 to not crash on accessing ItemTags.FISHES.
+            // Instead, we will simply check for non-modded fishes only... I do not want to maintain a whole separate upload just because of this.
+            if (SharedConstants.getGameVersion().getId().equals("1.18.2")) {
+                if (context.getItemStack().isIn(ItemTags.FISHES)) {
+                    return Crosshair.USE_ITEM;
+                }
+            } else {
+                Item item = context.getItem();
+                if (item == Items.COD || item == Items.COOKED_COD || item == Items.SALMON || item == Items.COOKED_SALMON || item == Items.PUFFERFISH || item == Items.TROPICAL_FISH) {
+                    return Crosshair.USE_ITEM;
+                }
             }
             return null;
         } else if (entity instanceof AbstractDonkeyEntity
