@@ -26,6 +26,7 @@ import net.minecraft.tag.FluidTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.RaycastContext;
 
 import java.util.List;
@@ -175,8 +176,18 @@ public class VanillaUsableItemHandler {
             return null;
         }
 
-        if (handItem instanceof FlintAndSteelItem) return Crosshair.USE_ITEM;
-        if (handItem instanceof FireChargeItem) return Crosshair.USE_ITEM;
+        if (handItem instanceof FlintAndSteelItem || handItem instanceof FireChargeItem) {
+            if (CampfireBlock.canBeLit(blockState) || CandleBlock.canBeLit(blockState) || CandleCakeBlock.canBeLit(blockState)) {
+                return Crosshair.USE_ITEM;
+            }
+            BlockPos firePos = context.getBlockPos().offset(((BlockHitResult) context.hitResult).getSide());
+            if (AbstractFireBlock.canPlaceAt(context.world, firePos, context.player.getHorizontalFacing())) {
+                if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
+                    return Crosshair.HOLDING_BLOCK;
+                }
+                return Crosshair.USE_ITEM;
+            }
+        }
         if (handItem instanceof MusicDiscItem && block instanceof JukeboxBlock) return Crosshair.USE_ITEM;
         if (handItem instanceof HoneycombItem && HoneycombItem.UNWAXED_TO_WAXED_BLOCKS.get().get(block) != null)
             return Crosshair.USE_ITEM;
