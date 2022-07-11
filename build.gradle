@@ -43,6 +43,7 @@ dependencies {
 	}
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
+	modCompileOnly("curse.maven:mythic-mounts-${project.mythicmounts_version}") { transitive = false }
 }
 
 processResources {
