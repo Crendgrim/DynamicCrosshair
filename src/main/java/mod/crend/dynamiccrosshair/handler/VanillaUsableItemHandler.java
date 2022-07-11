@@ -104,7 +104,8 @@ public class VanillaUsableItemHandler {
             }
 
             BlockHitResult blockHitResult = context.raycastWithFluid(RaycastContext.FluidHandling.ANY);
-            if (context.world.getFluidState(blockHitResult.getBlockPos()).getFluid() instanceof WaterFluid)
+            FluidState fluidState = context.world.getFluidState(blockHitResult.getBlockPos());
+            if (fluidState.getFluid() instanceof WaterFluid && fluidState.isStill())
                 return Crosshair.USE_ITEM;
         }
         if (handItem == Items.BUCKET) {
