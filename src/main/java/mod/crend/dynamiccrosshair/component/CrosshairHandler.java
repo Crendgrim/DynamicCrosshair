@@ -167,7 +167,7 @@ public class CrosshairHandler {
     private static boolean checkShowCrosshair() {
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) {
+        if (player == null || (state != null && state.context.player != player)) {
             state = null;
             return false;
         }
