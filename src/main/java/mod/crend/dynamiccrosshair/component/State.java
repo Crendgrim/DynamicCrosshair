@@ -20,6 +20,8 @@ public class State {
 	private class HitState {
 		ItemStack mainHandStack;
 		ItemStack offHandStack;
+		ItemStack activeStack;
+		Hand activeHand;
 		boolean cancelInteraction;
 		boolean isCoolingDown;
 		boolean isOnGround;
@@ -28,6 +30,8 @@ public class State {
 		public HitState(ClientPlayerEntity player) {
 			mainHandStack = player.getMainHandStack().copy();
 			offHandStack = player.getOffHandStack().copy();
+			activeStack = player.getActiveItem().copy();
+			activeHand = player.getActiveHand();
 			cancelInteraction = player.shouldCancelInteraction();
 			isCoolingDown = (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem()) || player.getItemCooldownManager().isCoolingDown(offHandStack.getItem()));
 			isOnGround = player.isOnGround();
@@ -42,6 +46,10 @@ public class State {
 			}
 			if (!ItemStack.areEqual(offHandStack, other.offHandStack)) {
 				context.invalidateItem(Hand.OFF_HAND);
+				invalidated = true;
+			}
+			if (!ItemStack.areEqual(activeStack, other.activeStack)) {
+				context.invalidateItem(activeHand);
 				invalidated = true;
 			}
 			return (invalidated || cancelInteraction != other.cancelInteraction || isCoolingDown != other.isCoolingDown || isOnGround != other.isOnGround || isFallFlying != other.isFallFlying);
