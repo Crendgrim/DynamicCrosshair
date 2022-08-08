@@ -100,6 +100,7 @@ public class VanillaItemHandler {
             if (CrossbowItem.isCharged(itemStack)) {
                 return Crosshair.RANGED_WEAPON;
             }
+            return Crosshair.REGULAR;
         }
         if (handItem.getUseAction(itemStack) == UseAction.SPEAR) {
             if (context.isActiveItem()) {
