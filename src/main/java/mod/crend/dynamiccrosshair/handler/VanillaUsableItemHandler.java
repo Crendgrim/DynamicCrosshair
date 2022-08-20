@@ -247,7 +247,7 @@ public class VanillaUsableItemHandler {
             }
             else {
                 if (block instanceof Waterloggable) {
-                    if (blockState.get(Properties.WATERLOGGED)) return Crosshair.USE_ITEM;
+                    if (blockState.contains(Properties.WATERLOGGED) && blockState.get(Properties.WATERLOGGED)) return Crosshair.USE_ITEM;
                 } else if (block instanceof FluidDrainable) return Crosshair.USE_ITEM;
             }
         }
