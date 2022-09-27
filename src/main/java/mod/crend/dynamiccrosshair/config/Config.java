@@ -9,6 +9,7 @@ public class Config implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     boolean dynamicCrosshair = true;
     boolean disableDebugCrosshair = false;
+    boolean thirdPersonCrosshair = false;
     boolean hideWithScreen = true;
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     CrosshairConfig crosshairConfig = new CrosshairConfig();
