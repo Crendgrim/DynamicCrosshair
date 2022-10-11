@@ -45,14 +45,14 @@ public class CrosshairContext {
 		assert MinecraftClient.getInstance().crosshairTarget != null;
 		world = MinecraftClient.getInstance().world;
 		player = MinecraftClient.getInstance().player;
+		hand = Hand.MAIN_HAND;
 		hitResult = MinecraftClient.getInstance().crosshairTarget;
-		this.hand = Hand.MAIN_HAND;
-		invalidateHitResult();
+		invalidateHitResult(hitResult);
 	}
 
-	public void invalidateHitResult() {
-		assert MinecraftClient.getInstance().crosshairTarget != null;
-		hitResult = MinecraftClient.getInstance().crosshairTarget;
+	public void invalidateHitResult(HitResult newHitResult) {
+		assert newHitResult != null;
+		hitResult = newHitResult;
 		withBlock = false;
 		blockPos = null;
 		blockState = null;
@@ -73,6 +73,7 @@ public class CrosshairContext {
 			}
 		}
 	}
+
 	public void invalidateItem(Hand hand) {
 		switch (hand) {
 			case MAIN_HAND -> itemStackMainHand = null;
@@ -207,8 +208,12 @@ public class CrosshairContext {
 		if (!withBlock) throw new InvalidContextState("Called canPlaceItemAsBlock() without a targeted block!");
 		IBlockItemMixin blockItem = (IBlockItemMixin) getItem();
 		ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, hand, getItemStack(), (BlockHitResult) hitResult);
-		BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
-		return (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState));
+		try {
+			BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
+			return (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState));
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
 	}
 
 	public boolean canUseWeaponAsTool() {

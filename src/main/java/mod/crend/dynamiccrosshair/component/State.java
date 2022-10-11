@@ -18,6 +18,7 @@ import net.minecraft.util.math.Direction;
 
 public class State {
 	private class HitState {
+		HitResult hitResult;
 		ItemStack mainHandStack;
 		ItemStack offHandStack;
 		ItemStack activeStack;
@@ -27,7 +28,8 @@ public class State {
 		boolean isOnGround;
 		boolean isFallFlying;
 
-		public HitState(ClientPlayerEntity player) {
+		public HitState(ClientPlayerEntity player, HitResult hitResult) {
+			this.hitResult = hitResult;
 			mainHandStack = player.getMainHandStack().copy();
 			offHandStack = player.getOffHandStack().copy();
 			activeStack = player.getActiveItem().copy();
@@ -64,7 +66,7 @@ public class State {
 		BlockState blockState;
 
 		public HitStateBlock(ClientPlayerEntity player, BlockHitResult blockHitResult) {
-			super(player);
+			super(player, blockHitResult);
 			BlockPos blockPos = blockHitResult.getBlockPos();
 			x = blockPos.getX();
 			y = blockPos.getY();
@@ -85,7 +87,7 @@ public class State {
 				return false;
 			}
 
-			context.invalidateHitResult();
+			context.invalidateHitResult(hitResult);
 			return true;
 		}
 	}
@@ -94,7 +96,7 @@ public class State {
 		Entity entity;
 
 		public HitStateEntity(ClientPlayerEntity player, EntityHitResult entityHitResult) {
-			super(player);
+			super(player, entityHitResult);
 			entity = entityHitResult.getEntity();
 		}
 
@@ -104,14 +106,14 @@ public class State {
 				return false;
 			}
 
-			context.invalidateHitResult();
+			context.invalidateHitResult(hitResult);
 			return true;
 		}
 	}
 
 	private class HitStateMiss extends HitState {
-		public HitStateMiss(ClientPlayerEntity player) {
-			super(player);
+		public HitStateMiss(ClientPlayerEntity player, HitResult hitResult) {
+			super(player, hitResult);
 		}
 
 		@Override
@@ -120,7 +122,7 @@ public class State {
 				return false;
 			}
 
-			context.invalidateHitResult();
+			context.invalidateHitResult(hitResult);
 			return true;
 		}
 	}
@@ -156,7 +158,7 @@ public class State {
 		HitState newState = switch(hitResult.getType()) {
 			case BLOCK -> new HitStateBlock(player, (BlockHitResult) hitResult);
 			case ENTITY -> new HitStateEntity(player, (EntityHitResult) hitResult);
-			case MISS -> new HitStateMiss(player);
+			case MISS -> new HitStateMiss(player, hitResult);
 		};
 
 		if (previousState == null) {
@@ -166,7 +168,7 @@ public class State {
 
 		for (DynamicCrosshairApi api : context.apis()) {
 			if (api.forceInvalidate(context)) {
-				context.invalidateHitResult();
+				context.invalidateHitResult(hitResult);
 				return true;
 			}
 		}
@@ -175,7 +177,7 @@ public class State {
 			previousState = newState;
 			if (previousFluidState != null) {
 				previousFluidState = null;
-				context.invalidateHitResult();
+				context.invalidateHitResult(hitResult);
 			}
 			return true;
 		}
@@ -189,12 +191,12 @@ public class State {
 			HitStateFluid newFluidState = new HitStateFluid(fluidHitResult);
 			if (newFluidState.isChanged(previousFluidState)) {
 				previousFluidState = newFluidState;
-				context.invalidateHitResult();
+				context.invalidateHitResult(hitResult);
 				return true;
 			}
 		} else if (previousFluidState != null) {
 			previousFluidState = null;
-			context.invalidateHitResult();
+			context.invalidateHitResult(hitResult);
 			return true;
 		}
 		return false;
