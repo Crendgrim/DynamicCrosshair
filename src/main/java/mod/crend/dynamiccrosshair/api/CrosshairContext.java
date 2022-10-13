@@ -13,6 +13,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
@@ -22,6 +23,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -145,6 +148,14 @@ public class CrosshairContext {
 		return raycastWithFluid(RaycastContext.FluidHandling.ANY);
 	}
 
+	public EntityHitResult raycastForEntity(double d) {
+		Vec3d vCamPos = player.getCameraPosVec(1.0f);
+		Vec3d vRotation = player.getRotationVec(1.0f);
+		Vec3d vRaycast = vCamPos.add(vRotation.x * d, vRotation.y * d, vRotation.z * d);
+		Box box = player.getBoundingBox().stretch(vRotation.multiply(d)).expand(1.0, 1.0, 1.0);
+		EntityHitResult entityHitResult = ProjectileUtil.raycast(player, vCamPos, vRaycast, box, entity -> !entity.isSpectator() && entity.collides(), d * d);
+		return entityHitResult;
+	}
 
 	private boolean withEntity = false;
 	private Entity entity = null;
