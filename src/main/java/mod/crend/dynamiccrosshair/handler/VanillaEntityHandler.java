@@ -7,6 +7,7 @@ import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
@@ -45,7 +46,11 @@ public class VanillaEntityHandler {
             // Not entirely sure why this happens, but let's make sure it doesn't crash
             return null;
         }
-        if (entity.getType() == EntityType.ARMOR_STAND) return Crosshair.USE_ITEM;
+        if (entity instanceof ArmorStandEntity armorStand) {
+            if (armorStand.canEquip(context.getItemStack())) {
+                return Crosshair.USE_ITEM;
+            }
+        }
         else if (entity instanceof Bucketable) {
             if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() == Fluids.WATER) {
                 return Crosshair.USE_ITEM;
