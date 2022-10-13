@@ -164,15 +164,17 @@ public class CrosshairHandler {
     static State state = null;
 
     private static TriState buildCrosshair(HitResult hitResult, ClientPlayerEntity player) {
-
-        if (!state.changed(hitResult, player)) {
-            return TriState.of(shouldShowCrosshair);
-        }
-
-        // State changed, build new crosshair
-        activeCrosshair = new Crosshair();
-
         try {
+            for (DynamicCrosshairApi api : state.context.apis()) {
+                hitResult = api.overrideHitResult(state.context, hitResult);
+            }
+
+            if (!state.changed(hitResult, player)) {
+                return TriState.of(shouldShowCrosshair);
+            }
+
+            // State changed, build new crosshair
+            activeCrosshair = new Crosshair();
 
             if (!DynamicCrosshair.config.isDynamicCrosshairStyle()) {
                 activeCrosshair.setVariant(CrosshairVariant.Regular);

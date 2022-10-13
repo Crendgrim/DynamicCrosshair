@@ -2,6 +2,7 @@ package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.hit.HitResult;
 
 public interface DynamicCrosshairApi {
 
@@ -47,6 +48,17 @@ public interface DynamicCrosshairApi {
      * @return true if the crosshair should be recalculated every tick.
      */
     default boolean forceInvalidate(CrosshairContext context) { return false; }
+
+    /**
+     * Allows an API implementation to override the hit result, by default vanilla's crosshair target.
+     * The order in which APIs are called (after vanilla) is not guaranteed.
+     *
+     * @param context A context that will hold the held items, and targeted block or entity if any. Note that this is
+     *                the state before the new hit result has been evaluated.
+     * @param hitResult the currently active hit result. May have come from another API.
+     * @return the parameter if nothing should change, or a replacement hit result.
+     */
+    default HitResult overrideHitResult(CrosshairContext context, HitResult hitResult) { return hitResult; }
 
     /**
      * Set the crosshair based on whether the targeted block can be broken.
