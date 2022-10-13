@@ -63,6 +63,8 @@ public class CrosshairContext {
 		withEntity = false;
 		entity = null;
 		apiList = null;
+		itemStackMainHand = null;
+		itemStackOffHand = null;
 		switch (hitResult.getType()) {
 			case BLOCK -> {
 				BlockHitResult blockHitResult = (BlockHitResult) hitResult;
@@ -188,7 +190,7 @@ public class CrosshairContext {
 		return hand == Hand.OFF_HAND;
 	}
 
-	public ItemStack getItemStack() {
+	public ItemStack getItemStack(Hand hand) {
 		ItemStack itemStack = switch (hand) {
 			case MAIN_HAND -> itemStackMainHand;
 			case OFF_HAND -> itemStackOffHand;
@@ -201,6 +203,9 @@ public class CrosshairContext {
 			}
 		}
 		return itemStack;
+	}
+	public ItemStack getItemStack() {
+		return getItemStack(hand);
 	}
 
 	public Item getItem() {

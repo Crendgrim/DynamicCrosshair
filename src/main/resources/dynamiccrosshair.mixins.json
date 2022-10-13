@@ -6,6 +6,7 @@
   "client": [
     "InGameHudMixin",
     "IAbstractBlockMixin",
+    "IArmorStandEntityMixin",
     "IAxeItemMixin",
     "IBlockItemMixin",
     "IBucketItemMixin",

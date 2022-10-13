@@ -2,6 +2,7 @@ package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
+import mod.crend.dynamiccrosshair.mixin.IArmorStandEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
@@ -16,6 +17,7 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.tag.ItemTags;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
 
 public class VanillaEntityHandler {
     public static Crosshair checkEntity(CrosshairContext context) {
@@ -47,8 +49,27 @@ public class VanillaEntityHandler {
             return null;
         }
         if (entity instanceof ArmorStandEntity armorStand) {
-            if (armorStand.canEquip(context.getItemStack())) {
-                return Crosshair.USE_ITEM;
+            if (context.isMainHand() || context.getItemStack(Hand.MAIN_HAND).isOf(Items.NAME_TAG)) {
+                ItemStack itemStack = context.getItemStack();
+                if (itemStack.isEmpty()) {
+                    Vec3d hitPos = context.hitResult.getPos().subtract(armorStand.getPos());
+                    EquipmentSlot slot = ((IArmorStandEntityMixin) armorStand).invokeGetSlotFromPosition(hitPos);
+                    if (armorStand.hasStackEquipped(slot)) {
+                        return Crosshair.INTERACTABLE;
+                    }
+                } else if (itemStack.isOf(Items.NAME_TAG)) {
+                    if (itemStack.hasCustomName()) {
+                        // rename armor stand
+                        return Crosshair.USE_ITEM;
+                    }
+                } else {
+                    EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(itemStack);
+                    if (!((IArmorStandEntityMixin) armorStand).invokeIsSlotDisabled(slot) && (slot.getType() != EquipmentSlot.Type.HAND || armorStand.shouldShowArms())) {
+                        if (!armorStand.hasStackEquipped(slot) || itemStack.getCount() == 1) {
+                            return Crosshair.USE_ITEM;
+                        }
+                    }
+                }
             }
         }
         else if (entity instanceof Bucketable) {

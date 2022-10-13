@@ -168,6 +168,7 @@ public class State {
 
 		for (DynamicCrosshairApi api : context.apis()) {
 			if (api.forceInvalidate(context)) {
+				previousState = newState;
 				context.invalidateHitResult(hitResult);
 				return true;
 			}

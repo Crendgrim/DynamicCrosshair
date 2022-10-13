@@ -2,6 +2,7 @@ package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.*;
 import mod.crend.dynamiccrosshair.component.Crosshair;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -16,6 +17,14 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     public boolean forceCheck() {
         // Vanilla behaviour should always be checked, so mods inheriting from vanilla items/blocks/entities just work.
         return true;
+    }
+
+    @Override
+    public boolean forceInvalidate(CrosshairContext context) {
+        if (context.isWithEntity() && context.getEntity().getType() == EntityType.ARMOR_STAND) {
+            return true;
+        }
+        return false;
     }
 
     @Override
