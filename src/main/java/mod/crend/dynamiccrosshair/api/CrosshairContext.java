@@ -180,7 +180,6 @@ public class CrosshairContext {
 		return hand;
 	}
 	public void setHand(Hand hand) {
-		invalidateItem(this.hand);
 		this.hand = hand;
 	}
 	public boolean isMainHand() {
