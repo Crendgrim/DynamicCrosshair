@@ -270,7 +270,8 @@ public class CrosshairContext {
 	public List<DynamicCrosshairApi> apis() {
 		if (apiList == null) {
 			apiList = new ApiList();
-			apiList.add(getItemStack());
+			apiList.add(getItemStack(Hand.MAIN_HAND));
+			apiList.add(getItemStack(Hand.OFF_HAND));
 			if (isWithBlock()) {
 				apiList.add(getBlockState());
 			}
