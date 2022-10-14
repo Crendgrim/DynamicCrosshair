@@ -2,10 +2,7 @@ package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.mixin.IArmorStandEntityMixin;
-import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
-import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
+import mod.crend.dynamiccrosshair.mixin.*;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -13,6 +10,10 @@ import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.*;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.entity.vehicle.StorageMinecartEntity;
+import net.minecraft.entity.vehicle.VehicleInventory;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.tag.ItemTags;
@@ -77,12 +78,20 @@ public class VanillaEntityHandler {
                 return Crosshair.USE_ITEM;
             }
             return null;
-        } else if (entity.getType() == EntityType.BOAT
-                || entity.getType() == EntityType.MINECART
-                || (entity.getType() == EntityType.FURNACE_MINECART && IFurnaceMinecartEntityMixin.getACCEPTABLE_FUEL().test(context.getItemStack()))
-                || entity.getType() == EntityType.CHEST_MINECART
-                || entity.getType() == EntityType.HOPPER_MINECART) {
-            return Crosshair.INTERACTABLE;
+        } else if (entity instanceof BoatEntity boatEntity) {
+            if (entity instanceof VehicleInventory) {
+                return Crosshair.INTERACTABLE;
+            }
+            if (!context.player.shouldCancelInteraction() && ((IBoatEntityMixin) boatEntity).invokeCanAddPassenger(context.player)) {
+                return Crosshair.INTERACTABLE;
+            }
+        } else if (entity instanceof AbstractMinecartEntity minecartEntity) {
+            if ((entity.getType() == EntityType.MINECART && !minecartEntity.hasPassengers())
+                    || entity instanceof StorageMinecartEntity
+                    || (entity.getType() == EntityType.FURNACE_MINECART && IFurnaceMinecartEntityMixin.getACCEPTABLE_FUEL().test(context.getItemStack()))
+            ) {
+                return Crosshair.INTERACTABLE;
+            }
         } else if (entity.getType() == EntityType.CAT
                 || entity.getType() == EntityType.WOLF) {
             TameableEntity pet = (TameableEntity) entity;
