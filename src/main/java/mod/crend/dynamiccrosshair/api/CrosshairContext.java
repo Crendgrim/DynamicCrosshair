@@ -6,6 +6,12 @@ import mod.crend.dynamiccrosshair.component.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IItemMixin;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -158,6 +164,18 @@ public class CrosshairContext {
 		EntityHitResult entityHitResult = ProjectileUtil.raycast(player, vCamPos, vRaycast, box, entity -> !entity.isSpectator() && entity.isCollidable(), d * d);
 		return entityHitResult;
 	}
+
+	@SuppressWarnings("UnstableApiUsage")
+	public boolean canInteractWithFluidStorage(Storage<FluidVariant> storage) {
+		Storage<FluidVariant> handStorage = ContainerItemContext.forPlayerInteraction(player, hand).find(FluidStorage.ITEM);
+		if (handStorage == null) return false;
+
+		try (var tx = Transaction.openOuter()) {
+			return StorageUtil.move(storage, handStorage, fv -> true, Long.MAX_VALUE, tx) > 0 || StorageUtil.move(handStorage, storage, fv -> true, Long.MAX_VALUE, tx) > 0;
+		}
+	}
+
+
 
 	private boolean withEntity = false;
 	private Entity entity = null;

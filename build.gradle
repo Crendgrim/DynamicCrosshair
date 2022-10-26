@@ -37,6 +37,7 @@ dependencies {
 
 	modImplementation include(fabricApi.module("fabric-api-base", project.fabric_api_version))
 	modImplementation include(fabricApi.module("fabric-key-binding-api-v1", project.fabric_api_version))
+	modCompileOnly include(fabricApi.module("fabric-transfer-api-v1", project.fabric_api_version))
 
 	modApi("me.shedaniel.cloth:cloth-config-fabric:${project.clothconfig_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
