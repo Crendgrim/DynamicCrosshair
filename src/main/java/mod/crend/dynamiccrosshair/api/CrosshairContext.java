@@ -30,6 +30,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -149,6 +150,15 @@ public class CrosshairContext {
 		return world.getFluidState(blockPos);
 	}
 
+	public BlockHitResult getBlockHitResult() {
+		if (!withBlock) throw new InvalidContextState("Called getFluidState() without a targeted block!");
+		return (BlockHitResult) hitResult;
+	}
+
+	public Direction getBlockHitSide() {
+		return getBlockHitResult().getSide();
+	}
+
 	public BlockHitResult raycastWithFluid(RaycastContext.FluidHandling fluidHandling) {
 		return IItemMixin.invokeRaycast(world, player, fluidHandling);
 	}
@@ -252,6 +262,12 @@ public class CrosshairContext {
 	public boolean canUseWeaponAsTool() {
 		return isWithBlock() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
 	}
+
+	public boolean isRangedWeaponCharged(int bound) {
+		return (isActiveItem() && getItem().getMaxUseTime(getItemStack()) - player.getItemUseTimeLeft() >= bound);
+	}
+
+
 
 	public Crosshair withItem(Function<ItemStack, Crosshair> itemStackConsumer) {
 		return itemStackConsumer.apply(getItemStack());
