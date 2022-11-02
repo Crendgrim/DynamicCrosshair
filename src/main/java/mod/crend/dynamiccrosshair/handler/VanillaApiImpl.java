@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.handler;
 import mod.crend.dynamiccrosshair.api.*;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
@@ -19,10 +20,19 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         return true;
     }
 
+    private boolean fishHookStatus;
+
     @Override
     public boolean forceInvalidate(CrosshairContext context) {
         if (context.isWithEntity() && context.getEntity().getType() == EntityType.ARMOR_STAND) {
             return true;
+        }
+        if (context.getItem() instanceof FishingRodItem) {
+            boolean newFishHookStatus = (context.player.fishHook != null);
+            if (newFishHookStatus != fishHookStatus) {
+                fishHookStatus = newFishHookStatus;
+                return true;
+            }
         }
         return false;
     }
