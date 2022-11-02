@@ -26,6 +26,12 @@ public interface DynamicCrosshairApi {
     }
 
     /**
+     * Overwrite this to initialize some logic for the API.
+     * This method will only be called if the mod is present and the API will be checked.
+     */
+    default void init() { }
+
+    /**
      * Usually, APIs are only checked if any of (held item, targeted entity, targeted block) are under the namespace
      * this API is registered under. This is to massively reduce unnecessary checks. However, this can pose a problem
      * if a mod overwrites vanilla behaviour.

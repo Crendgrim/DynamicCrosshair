@@ -21,6 +21,7 @@ public class DynamicCrosshair implements ClientModInitializer {
 
     public static void registerApi(DynamicCrosshairApi apiImpl) {
         if (FabricLoader.getInstance().isModLoaded(apiImpl.getModId())) {
+            apiImpl.init();
             final String identifier = apiImpl.getNamespace();
             apis.put(identifier, apiImpl);
             if (apiImpl.forceCheck()) {
