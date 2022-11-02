@@ -10,9 +10,14 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+
+import java.util.List;
 
 public class VanillaBlockHandler {
     public static Crosshair checkBlockBreaking(CrosshairContext context) {
@@ -164,6 +169,19 @@ public class VanillaBlockHandler {
         if (block instanceof RedstoneWireBlock) {
             if (IRedstoneWireBlockMixin.invokeIsFullyConnected(blockState) || IRedstoneWireBlockMixin.invokeIsNotConnected(blockState)) {
                 return Crosshair.INTERACTABLE;
+            }
+        }
+
+        if (blockState.isIn(BlockTags.FENCES)) {
+            BlockPos pos = context.getBlockPos();
+            List<MobEntity> list = context.world.getNonSpectatingEntities(MobEntity.class,
+                    new Box((double) pos.getX() - 7.0, (double) pos.getY() - 7.0, (double) pos.getZ() - 7.0,
+                            (double) pos.getX() + 7.0, (double) pos.getY() + 7.0, (double) pos.getZ() + 7.0));
+
+            for (MobEntity mob : list) {
+                if (mob.getHoldingEntity() == context.player) {
+                    return Crosshair.USE_ITEM;
+                }
             }
         }
 
