@@ -126,7 +126,7 @@ public class VanillaBlockHandler {
             boolean potItemIsAir = ((FlowerPotBlock) block).getContent() == Blocks.AIR;
             boolean handItemIsPottable = handItem instanceof BlockItem && IFlowerPotBlockMixin.getCONTENT_TO_POTTED().containsKey(((BlockItem) handItem).getBlock());
             if (potItemIsAir && handItemIsPottable) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             if (!potItemIsAir && !handItemIsPottable) {
                 return Crosshair.INTERACTABLE.withFlag(Crosshair.Flag.FixedStyle);
@@ -141,11 +141,11 @@ public class VanillaBlockHandler {
                 BlockEntity blockEntity = context.getBlockEntity();
                 if (blockEntity instanceof SignBlockEntity signBlockEntity) {
                     if (handItem.equals(Items.GLOW_INK_SAC) && !signBlockEntity.isGlowingText())
-                        return Crosshair.USE_ITEM;
+                        return Crosshair.USABLE;
                     if (handItem.equals(Items.INK_SAC) && signBlockEntity.isGlowingText())
-                        return Crosshair.USE_ITEM;
+                        return Crosshair.USABLE;
                     if (handItem instanceof DyeItem && signBlockEntity.getTextColor() != ((DyeItem) handItem).getColor())
-                        return Crosshair.USE_ITEM;
+                        return Crosshair.USABLE;
                 }
             }
             return Crosshair.NONE.withFlag(Crosshair.Flag.FixedStyle, Crosshair.Flag.FixedModifierUse);
@@ -154,16 +154,16 @@ public class VanillaBlockHandler {
         // Special case: Cake gets eaten (modified), so "use" makes more sense to me
         if (block instanceof CakeBlock) {
             if (context.player.canConsume(false) && context.shouldInteract()) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
         }
         // Special case: Sweet berries get harvested
         if (block instanceof SweetBerryBushBlock && blockState.get(SweetBerryBushBlock.AGE) > 1) {
-            return Crosshair.USE_ITEM;
+            return Crosshair.USABLE;
         }
         // Special case: Glow berries get harvested
         if (block instanceof CaveVines && CaveVines.hasBerries(blockState)) {
-            return Crosshair.USE_ITEM;
+            return Crosshair.USABLE;
         }
         // Special case: Redstone ore: can be placed against, but still activates
         if (block instanceof RedstoneOreBlock) {
@@ -196,13 +196,13 @@ public class VanillaBlockHandler {
             if (handItem.equals(Items.WRITTEN_BOOK)
                     || handItem.equals(Items.WRITABLE_BOOK)
                     || (!context.player.shouldCancelInteraction() && blockState.get(LecternBlock.HAS_BOOK)))
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
         }
 
         if (block instanceof CampfireBlock) {
             if (context.getBlockEntity() instanceof CampfireBlockEntity campfire && campfire.getRecipeFor(context.getItemStack()).isPresent())
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
         }
 
         if (block instanceof RedstoneWireBlock) {
@@ -219,7 +219,7 @@ public class VanillaBlockHandler {
 
             for (MobEntity mob : list) {
                 if (mob.getHoldingEntity() == context.player) {
-                    return Crosshair.USE_ITEM;
+                    return Crosshair.USABLE;
                 }
             }
         }

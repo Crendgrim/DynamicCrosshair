@@ -73,7 +73,7 @@ public class VanillaItemHandler {
             if (context.player.fishHook == null) {
                 return Crosshair.RANGED_WEAPON;
             } else {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
         }
         return null;

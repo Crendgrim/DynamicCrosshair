@@ -48,10 +48,10 @@ public class CrosshairHandler {
             if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
                 ItemStack itemStack = context.getItemStack();
                 if (api.isAlwaysUsableItem(itemStack)) {
-                    return Crosshair.USE_ITEM;
+                    return Crosshair.USABLE;
                 }
                 if (usableItemPolicy == UsableCrosshairPolicy.Always && api.isUsableItem(itemStack)) {
-                    return Crosshair.USE_ITEM;
+                    return Crosshair.USABLE;
                 }
             }
             Crosshair crosshair = api.computeFromItem(context);
@@ -108,7 +108,7 @@ public class CrosshairHandler {
                 case THROWABLE -> Crosshair.THROWABLE;
                 case BLOCK -> Crosshair.HOLDING_BLOCK;
                 case SHIELD -> Crosshair.SHIELD;
-                case USABLE -> Crosshair.USE_ITEM;
+                case USABLE -> Crosshair.USABLE;
                 default -> null;
             };
             if (crosshair != null) break;
@@ -122,7 +122,7 @@ public class CrosshairHandler {
                     case THROWABLE -> Crosshair.THROWABLE;
                     case BLOCK -> Crosshair.HOLDING_BLOCK;
                     case SHIELD -> Crosshair.SHIELD;
-                    case USABLE -> Crosshair.USE_ITEM;
+                    case USABLE -> Crosshair.USABLE;
                     default -> null;
                 };
                 if (crosshair != null) break;

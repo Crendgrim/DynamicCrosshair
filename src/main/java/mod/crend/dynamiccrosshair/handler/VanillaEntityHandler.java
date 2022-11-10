@@ -40,22 +40,22 @@ public class VanillaEntityHandler {
         Entity entity = context.getEntity();
         if (entity instanceof AnimalEntity) {
             if (((AnimalEntity) entity).isBreedingItem(context.getItemStack())) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
         }
         if (entity instanceof MobEntity mobEntity) {
-            if (handItem instanceof SpawnEggItem) return Crosshair.USE_ITEM;
+            if (handItem instanceof SpawnEggItem) return Crosshair.USABLE;
 
             if (handItem == Items.LEAD) {
                 if (mobEntity.canBeLeashedBy(context.player)) {
-                    return Crosshair.USE_ITEM;
+                    return Crosshair.USABLE;
                 }
                 return null;
             }
         }
         if (entity instanceof Shearable shearableEntity && handItem == Items.SHEARS) {
             if (shearableEntity.isShearable()) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return null;
         }
@@ -75,13 +75,13 @@ public class VanillaEntityHandler {
                 } else if (itemStack.isOf(Items.NAME_TAG)) {
                     if (itemStack.hasCustomName()) {
                         // rename armor stand
-                        return Crosshair.USE_ITEM;
+                        return Crosshair.USABLE;
                     }
                 } else {
                     EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(itemStack);
                     if (!((IArmorStandEntityMixin) armorStand).invokeIsSlotDisabled(slot) && (slot.getType() != EquipmentSlot.Type.HAND || armorStand.shouldShowArms())) {
                         if (!armorStand.hasStackEquipped(slot) || itemStack.getCount() == 1) {
-                            return Crosshair.USE_ITEM;
+                            return Crosshair.USABLE;
                         }
                     }
                 }
@@ -89,7 +89,7 @@ public class VanillaEntityHandler {
         }
         else if (entity instanceof Bucketable) {
             if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() == Fluids.WATER) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return null;
         } else if (entity instanceof BoatEntity boatEntity) {
@@ -116,17 +116,17 @@ public class VanillaEntityHandler {
         } else if (entity.getType() == EntityType.COW
                 || entity.getType() == EntityType.GOAT) {
             if (handItem == Items.BUCKET && !((AnimalEntity)entity).isBaby()) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return null;
         } else if (entity.getType() == EntityType.CREEPER) {
             if (handItem == Items.FLINT_AND_STEEL) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return null;
         } else if (entity.getType() == EntityType.DOLPHIN) {
             if (context.getItemStack().isIn(ItemTags.FISHES)) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return null;
         } else if (entity instanceof AbstractDonkeyEntity
@@ -140,16 +140,16 @@ public class VanillaEntityHandler {
             }
             if (entity instanceof AbstractDonkeyEntity donkey) {
                 if (!donkey.hasChest() && context.getItemStack().isOf(Blocks.CHEST.asItem())) {
-                    return Crosshair.USE_ITEM;
+                    return Crosshair.USABLE;
                 }
             }
             if (horse.canBeSaddled() && !horse.isSaddled() && handItem == Items.SADDLE) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return Crosshair.INTERACTABLE;
         } else if (entity.getType() == EntityType.IRON_GOLEM) {
             if (handItem == Items.IRON_INGOT && (((LivingEntity) entity).getHealth() < ((LivingEntity) entity).getMaxHealth())) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return null;
         } else if (entity instanceof ItemFrameEntity itemFrame) {
@@ -157,11 +157,11 @@ public class VanillaEntityHandler {
                 if (context.getItemStack().isEmpty()) {
                     return null;
                 }
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return Crosshair.INTERACTABLE;
         } else if (entity.getType() == EntityType.LEASH_KNOT) {
-            return Crosshair.USE_ITEM;
+            return Crosshair.USABLE;
         } else if (entity.getType() == EntityType.PANDA) {
             if (((PandaEntity) entity).isLyingOnBack()) {
                 return Crosshair.INTERACTABLE;
@@ -169,11 +169,11 @@ public class VanillaEntityHandler {
             return null;
         } else if (entity instanceof ParrotEntity parrot) {
             if (!parrot.isTamed() && IParrotEntityMixin.getTAMING_INGREDIENTS().contains(handItem)) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             if (handItem == Items.COOKIE) {
                 // :'(
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             if (!parrot.isInAir() && parrot.isTamed() && parrot.isOwner(context.player)) {
                 return Crosshair.INTERACTABLE;
@@ -185,14 +185,14 @@ public class VanillaEntityHandler {
             return null;
         } else if (entity.getType() == EntityType.ZOMBIE_VILLAGER) {
             if (handItem == Items.GOLDEN_APPLE && ((LivingEntity) entity).hasStatusEffect(StatusEffects.WEAKNESS)) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             return null;
         } else if (entity instanceof AllayEntity allay) {
             ItemStack allayItemStack = allay.getStackInHand(Hand.MAIN_HAND);
             ItemStack handItemStack = context.getItemStack();
             if (allayItemStack.isEmpty() && !handItemStack.isEmpty()) {
-                return Crosshair.USE_ITEM;
+                return Crosshair.USABLE;
             }
             if (!allayItemStack.isEmpty() && context.isMainHand() && handItemStack.isEmpty()) {
                 return Crosshair.INTERACTABLE;

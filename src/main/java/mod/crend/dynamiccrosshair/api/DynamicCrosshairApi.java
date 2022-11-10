@@ -19,7 +19,7 @@ import net.minecraft.util.hit.HitResult;
  * - if targeted entity: computeFromEntity()
  * - if targeted block: computeFromBlock()
  * Phase 2: Hand item
- * - if isAlwaysUsableItem(), use USE_ITEM crosshair
+ * - if isAlwaysUsableItem(), use USABLE crosshair
  * - otherwise: computeFromItem()
  * Phase 3: Off hand
  * - if the crosshair after main hand evaluation still allows for either a style or a use modifier,
