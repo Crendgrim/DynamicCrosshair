@@ -1,7 +1,6 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.component.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;

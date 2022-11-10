@@ -1,4 +1,4 @@
-package mod.crend.dynamiccrosshair.component;
+package mod.crend.dynamiccrosshair.api;
 
 public class InvalidContextState extends RuntimeException {
 	public InvalidContextState(String message) {
