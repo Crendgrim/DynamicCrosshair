@@ -2,6 +2,7 @@ package mod.crend.dynamiccrosshair.component;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
+import mod.crend.dynamiccrosshair.api.CrosshairContextChange;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.config.InteractableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
