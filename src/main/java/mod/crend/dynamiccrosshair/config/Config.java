@@ -22,14 +22,14 @@ public class Config implements ConfigData {
         CrosshairPolicy holdingTool = CrosshairPolicy.Always;
         boolean holdingMeleeWeapon = true;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        RangedCrosshairPolicy holdingRangedWeapon = RangedCrosshairPolicy.IfRangedWeaponFullyDrawn;
+        UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.IfInteractable;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairPolicy holdingThrowable = CrosshairPolicy.Always;
+        UsableCrosshairPolicy holdingThrowable = UsableCrosshairPolicy.IfInteractable;
         boolean holdingShield = true;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        BlockCrosshairPolicy holdingUsableItem = BlockCrosshairPolicy.IfInteractable;
+        UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
     }
 
     static class CrosshairColorSettings {

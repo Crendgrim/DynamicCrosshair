@@ -20,7 +20,7 @@ import net.minecraft.util.math.Box;
 import java.util.List;
 
 public class VanillaBlockHandler {
-    public static Crosshair checkBlockBreaking(CrosshairContext context) {
+    public static Crosshair checkToolWithBlock(CrosshairContext context) {
         Item handItem = context.getItem();
         BlockPos blockPos = context.getBlockPos();
         BlockState blockState = context.getBlockState();
@@ -44,6 +44,45 @@ public class VanillaBlockHandler {
             return Crosshair.INCORRECT_TOOL;
         }
         return null;
+    }
+
+    public static boolean isBlockInteractable(BlockState blockState) {
+        Block block = blockState.getBlock();
+        return (    block instanceof AbstractChestBlock
+                ||  block instanceof AbstractFurnaceBlock
+                ||  block instanceof BarrelBlock
+                ||  block instanceof BeaconBlock
+                ||  block instanceof BellBlock
+                ||  block instanceof BrewingStandBlock
+                ||  block instanceof CommandBlock
+                ||  block instanceof DaylightDetectorBlock
+                ||  block instanceof DispenserBlock
+                ||  block instanceof EnchantingTableBlock
+                ||  block instanceof HopperBlock
+                ||  block instanceof JukeboxBlock
+                ||  block instanceof LecternBlock
+                ||  block instanceof ShulkerBoxBlock
+                ||  block instanceof StonecutterBlock
+                ||  block instanceof GrindstoneBlock
+                ||  block instanceof CartographyTableBlock
+                ||  block instanceof LoomBlock
+                ||  block instanceof BedBlock
+                || (block instanceof TrapdoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
+                || (block instanceof DoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
+                || (block instanceof FenceGateBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
+                ||  block instanceof AbstractButtonBlock
+                ||  block instanceof NoteBlock
+                ||  block instanceof LeverBlock
+                ||  block instanceof AbstractRedstoneGateBlock
+                ||  block instanceof AnvilBlock
+                || (block instanceof CraftingTableBlock && !(block instanceof FletchingTableBlock))
+                ||  block instanceof ComposterBlock
+                ||  block instanceof FlowerPotBlock
+                ||  block instanceof CakeBlock
+                ||  block instanceof SweetBerryBushBlock
+                ||  block instanceof AbstractCandleBlock
+                ||  block instanceof CampfireBlock
+        );
     }
 
     public static Crosshair checkBlockInteractable(CrosshairContext context) {

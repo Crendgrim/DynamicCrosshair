@@ -3,9 +3,8 @@ package mod.crend.dynamiccrosshair.handler;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.component.CrosshairVariant;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
-import mod.crend.dynamiccrosshair.config.RangedCrosshairPolicy;
+import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -16,6 +15,52 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 
 public class VanillaItemHandler {
+
+    public static boolean isTool(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        return (item instanceof ToolItem || item instanceof FlintAndSteelItem || item instanceof ShearsItem);
+    }
+
+    public static boolean isThrowable(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        return (   item instanceof EggItem
+                || item instanceof SnowballItem
+                || item instanceof ThrowablePotionItem
+                || item instanceof ExperienceBottleItem
+                || item instanceof EnderPearlItem
+        );
+    }
+
+    public static boolean isShield(ItemStack itemStack) {
+        return (itemStack.getItem().getUseAction(itemStack) == UseAction.BLOCK);
+    }
+
+    public static boolean isMeleeWeapon(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        return item instanceof SwordItem;
+    }
+
+    public static boolean isRangedWeapon(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        if (item instanceof FishingRodItem) {
+            return true;
+        }
+        return switch (item.getUseAction(itemStack)) {
+            case BOW, CROSSBOW, SPEAR -> true;
+            default -> false;
+        };
+    }
+
+    public static boolean isBlockItem(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        return (   item instanceof BlockItem
+                || item instanceof ArmorStandItem
+                || item instanceof MinecartItem
+                || item instanceof BoatItem
+                || item instanceof EndCrystalItem
+        );
+    }
+
     public static Crosshair checkTool(CrosshairContext context) {
         Item handItem = context.getItem();
         if (       handItem instanceof ToolItem
@@ -83,7 +128,7 @@ public class VanillaItemHandler {
     public static Crosshair checkRangedWeapon(CrosshairContext context) {
         ItemStack itemStack = context.getItemStack();
         Item handItem = itemStack.getItem();
-        if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == RangedCrosshairPolicy.Always) {
+        if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.Always) {
             return switch (handItem.getUseAction(itemStack)) {
                 case BOW, CROSSBOW, SPEAR -> Crosshair.RANGED_WEAPON;
                 default -> null;
@@ -97,13 +142,13 @@ public class VanillaItemHandler {
                     return Crosshair.RANGED_WEAPON;
                 }
             }
-            return Crosshair.REGULAR;
+            return Crosshair.REGULAR.withFlag(Crosshair.Flag.FixedModifierUse);
         }
         if (handItem.getUseAction(itemStack) == UseAction.CROSSBOW) {
             if (CrossbowItem.isCharged(itemStack)) {
                 return Crosshair.RANGED_WEAPON;
             }
-            return Crosshair.REGULAR;
+            return Crosshair.REGULAR.withFlag(Crosshair.Flag.FixedModifierUse);
         }
         if (handItem.getUseAction(itemStack) == UseAction.SPEAR) {
             if (context.isActiveItem()) {
@@ -123,8 +168,8 @@ public class VanillaItemHandler {
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
                 if (context.isWithBlock()) {
                     if (context.canPlaceItemAsBlock()) {
-                        return new Crosshair(CrosshairVariant.HoldingBlock);
-                    } else return Crosshair.NONE;
+                        return Crosshair.HOLDING_BLOCK;
+                    } else return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
                 }
             } else return Crosshair.HOLDING_BLOCK;
         }

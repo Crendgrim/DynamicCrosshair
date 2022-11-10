@@ -21,6 +21,20 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 
 public class VanillaEntityHandler {
+
+    public static boolean isEntityInteractable(Entity entity) {
+        return (   entity instanceof ItemFrameEntity
+                || entity instanceof BoatEntity
+                || entity instanceof AbstractMinecartEntity
+                || entity.getType() == EntityType.CAT
+                || entity.getType() == EntityType.WOLF
+                || entity instanceof ParrotEntity
+                || entity instanceof AbstractHorseEntity
+                || entity instanceof MerchantEntity
+                || entity instanceof AllayEntity
+        );
+    }
+
     public static Crosshair checkEntity(CrosshairContext context) {
         Item handItem = context.getItem();
         Entity entity = context.getEntity();
@@ -171,7 +185,7 @@ public class VanillaEntityHandler {
             return null;
         } else if (entity.getType() == EntityType.ZOMBIE_VILLAGER) {
             if (handItem == Items.GOLDEN_APPLE && ((LivingEntity) entity).hasStatusEffect(StatusEffects.WEAKNESS)) {
-                return Crosshair.INTERACTABLE;
+                return Crosshair.USE_ITEM;
             }
             return null;
         } else if (entity instanceof AllayEntity allay) {

@@ -17,6 +17,7 @@ public class ConfigHandler {
     }
 
     public boolean isDynamicCrosshair() { return config.dynamicCrosshair; }
+    public boolean isDynamicCrosshairSimple() { return false; }
     public boolean isDisableDebugCrosshair() { return config.disableDebugCrosshair; }
     public boolean isThirdPersonCrosshair() { return config.thirdPersonCrosshair; }
     public boolean isHideWithScreen() { return config.hideWithScreen; }
@@ -24,11 +25,11 @@ public class ConfigHandler {
     public boolean dynamicCrosshairOnEntity() { return config.crosshairConfig.onEntity; }
     public CrosshairPolicy dynamicCrosshairHoldingTool() { return config.crosshairConfig.holdingTool; }
     public boolean dynamicCrosshairHoldingMeleeWeapon() { return config.crosshairConfig.holdingMeleeWeapon; }
-    public RangedCrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return config.crosshairConfig.holdingRangedWeapon; }
-    public CrosshairPolicy dynamicCrosshairHoldingThrowable() { return config.crosshairConfig.holdingThrowable; }
+    public UsableCrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return config.crosshairConfig.holdingRangedWeapon; }
+    public UsableCrosshairPolicy dynamicCrosshairHoldingThrowable() { return config.crosshairConfig.holdingThrowable; }
     public boolean dynamicCrosshairHoldingShield() { return config.crosshairConfig.holdingShield; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingBlock() { return config.crosshairConfig.holdingBlock; }
-    public BlockCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return config.crosshairConfig.holdingUsableItem; }
+    public UsableCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return config.crosshairConfig.holdingUsableItem; }
 
 
     public CrosshairColor getColor() { return new CrosshairColor(config.color.crosshairColor, config.color.customColor, config.color.forceColor); }

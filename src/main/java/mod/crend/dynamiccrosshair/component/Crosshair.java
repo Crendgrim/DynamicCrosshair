@@ -60,6 +60,16 @@ public class Crosshair implements Cloneable {
     public boolean hasStyle() {
         return variant != CrosshairVariant.NONE;
     }
+    public boolean isLockedStyle() {
+        return lockStyle;
+    }
+    public boolean hasModifierUse() {
+        return modifierUse != ModifierUse.NONE;
+    }
+    public boolean isLockedModifierUse() {
+        return lockModifierUse;
+    }
+
     public CrosshairStyle getCrosshairStyle() {
         return switch (variant) {
             case Regular, NONE -> DynamicCrosshair.config.getCrosshairStyleRegular();
