@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.api;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.component.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
+import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IItemMixin;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
@@ -261,6 +262,45 @@ public class CrosshairContext {
 
 	public boolean isRangedWeaponCharged(int bound) {
 		return (isActiveItem() && getItem().getMaxUseTime(getItemStack()) - player.getItemUseTimeLeft() >= bound);
+	}
+
+
+	public boolean includeUsableItem() {
+		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
+			case Always -> true;
+			case IfInteractable -> !isCoolingDown();
+			case Disabled -> false;
+		};
+	}
+	public boolean includeThrowable() {
+		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingThrowable()) {
+			case Always -> true;
+			case IfInteractable -> !isCoolingDown();
+			case Disabled -> false;
+		};
+	}
+	public boolean includeRangedWeapon() {
+		return DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() != UsableCrosshairPolicy.Disabled;
+	}
+	public boolean includeMeleeWeapon() {
+		return isMainHand() && DynamicCrosshair.config.dynamicCrosshairHoldingMeleeWeapon();
+	}
+	public boolean includeTool() {
+		return isMainHand() && switch (DynamicCrosshair.config.dynamicCrosshairHoldingTool()) {
+			case Always -> true;
+			case IfTargeting -> isTargeting();
+			case Disabled -> false;
+		};
+	}
+	public boolean includeShield() {
+		return DynamicCrosshair.config.dynamicCrosshairHoldingShield();
+	}
+	public boolean includeHoldingBlock() {
+		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingBlock()) {
+			case Always, IfInteractable -> true;
+			case IfTargeting -> isTargeting();
+			case Disabled -> false;
+		};
 	}
 
 

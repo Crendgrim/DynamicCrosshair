@@ -1,13 +1,9 @@
 package mod.crend.dynamiccrosshair.handler;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.ItemCategory;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
-import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
-import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -53,11 +49,6 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     @Override
     public boolean isUsableItem(ItemStack itemStack) {
         return VanillaUsableItemHandler.isUsableItem(itemStack);
-    }
-
-    @Override
-    public Crosshair checkUsableItem(CrosshairContext context) {
-        return VanillaUsableItemHandler.checkUsableItem(context);
     }
 
     @Override
@@ -110,21 +101,19 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     public Crosshair computeFromItem(CrosshairContext context) {
         Crosshair crosshair = null;
 
-        if (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem() != UsableCrosshairPolicy.Disabled) {
+        if (context.includeUsableItem()) {
             crosshair = VanillaUsableItemHandler.checkUsableItem(context);
         }
 
-        if (crosshair == null && DynamicCrosshair.config.dynamicCrosshairHoldingThrowable() != UsableCrosshairPolicy.Disabled) {
-            if (DynamicCrosshair.config.dynamicCrosshairHoldingThrowable() == UsableCrosshairPolicy.Always || !context.isCoolingDown()) {
-                crosshair = VanillaItemHandler.checkThrowable(context);
-            }
+        if (crosshair == null && context.includeThrowable()) {
+            crosshair = VanillaItemHandler.checkThrowable(context);
         }
 
-        if (crosshair == null && DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() != UsableCrosshairPolicy.Disabled) {
+        if (crosshair == null && context.includeRangedWeapon()) {
             crosshair = VanillaItemHandler.checkRangedWeapon(context);
         }
 
-        if (context.isMainHand() && DynamicCrosshair.config.dynamicCrosshairHoldingMeleeWeapon()) {
+        if (context.includeMeleeWeapon()) {
             if (crosshair == null) {
                 crosshair = VanillaItemHandler.checkMeleeWeapon(context);
             } else {
@@ -132,7 +121,7 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             }
         }
 
-        if (context.isMainHand() && policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingTool(), context.isTargeting())) {
+        if (context.includeTool()) {
             Crosshair toolCrosshair = VanillaItemHandler.checkTool(context);
             if (toolCrosshair != null) {
                 if (context.isWithBlock()) {
@@ -142,21 +131,14 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             }
         }
 
-        if (crosshair == null && DynamicCrosshair.config.dynamicCrosshairHoldingShield()) {
+        if (crosshair == null && context.includeShield()) {
             crosshair = VanillaItemHandler.checkShield(context);
         }
 
-        if (crosshair == null && policyMatches(DynamicCrosshair.config.dynamicCrosshairHoldingBlock(), context.isTargeting())) {
+        if (crosshair == null && context.includeHoldingBlock()) {
             crosshair = VanillaItemHandler.checkBlockItem(context);
         }
 
         return crosshair;
-    }
-
-    private static boolean policyMatches(CrosshairPolicy policy, boolean isTargeting) {
-        return (policy == CrosshairPolicy.Always || (policy == CrosshairPolicy.IfTargeting && isTargeting));
-    }
-    private static boolean policyMatches(BlockCrosshairPolicy policy, boolean isTargeting) {
-        return (policy != BlockCrosshairPolicy.Disabled && (policy != BlockCrosshairPolicy.IfTargeting || isTargeting));
     }
 }
