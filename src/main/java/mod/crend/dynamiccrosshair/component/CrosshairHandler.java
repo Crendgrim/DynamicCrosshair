@@ -27,6 +27,8 @@ public class CrosshairHandler {
         return activeCrosshair;
     }
 
+    private static Throwable lastError = new Throwable("");
+
     private static boolean policyMatches(CrosshairPolicy policy, boolean isTargeting) {
         return (policy == CrosshairPolicy.Always || (policy == CrosshairPolicy.IfTargeting && isTargeting));
     }
@@ -151,9 +153,16 @@ public class CrosshairHandler {
     private static boolean isBlockInteractable(CrosshairContext context) {
         // interactable blocks if not sneaking
         if (DynamicCrosshair.config.dynamicCrosshairOnBlock() != InteractableCrosshairPolicy.Disabled && context.isWithBlock() && context.shouldInteract()) {
-            for (DynamicCrosshairApi api : context.apis()) {
-                if (activeCrosshair.updateFrom(api.checkBlockInteractable(context))) {
-                    return true;
+            try {
+                for (DynamicCrosshairApi api : context.apis()) {
+                    if (activeCrosshair.updateFrom(api.checkBlockInteractable(context))) {
+                        return true;
+                    }
+                }
+            }catch(NoClassDefFoundError e) {
+                if(!e.getMessage().equals(lastError.getMessage())) {
+                    LOGGER.error(e.fillInStackTrace().toString());
+                    lastError = e; //Remember the last error thrown, so that we don't log every tick
                 }
             }
         }
