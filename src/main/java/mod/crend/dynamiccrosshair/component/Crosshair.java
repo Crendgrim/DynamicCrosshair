@@ -137,6 +137,12 @@ public class Crosshair implements Cloneable {
         return clone().setFlag(flags);
     }
 
+    public Crosshair withModifier(ModifierUse modifier) {
+        Crosshair crosshair = clone();
+        crosshair.setModifierUse(modifier);
+        return crosshair;
+    }
+
     boolean updateFrom(Crosshair other) {
         if (other == null) return false;
         boolean ret = false;

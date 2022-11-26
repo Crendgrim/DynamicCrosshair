@@ -141,6 +141,42 @@ public class VanillaUsableItemHandler {
         return null;
     }
 
+    public static Crosshair checkUsableTool(CrosshairContext context) {
+        Item handItem = context.getItem();
+        BlockState blockState = context.getBlockState();
+        Block block = blockState.getBlock();
+        if (context.isWithBlock()) {
+            if (handItem instanceof ToolItem) {
+                if (handItem instanceof AxeItem) {
+                    if (IAxeItemMixin.getSTRIPPED_BLOCKS().get(block) != null
+                            || Oxidizable.getDecreasedOxidationBlock(block).isPresent()
+                            || HoneycombItem.WAXED_TO_UNWAXED_BLOCKS.get().get(block) != null) {
+                        return Crosshair.USABLE;
+                    }
+                } else if (handItem instanceof ShovelItem) {
+                    if (IShovelItemMixin.getPATH_STATES().get(block) != null) {
+                        return Crosshair.USABLE;
+                    }
+                } else if (handItem instanceof HoeItem) {
+                    if (IHoeItemMixin.getTILLING_ACTIONS().get(block) != null) {
+                        return Crosshair.USABLE;
+                    }
+                }
+                return null;
+            }
+            if (handItem instanceof ShearsItem) {
+                if (block instanceof AbstractPlantStemBlock plantStemBlock && !plantStemBlock.hasMaxAge(blockState)) {
+                    return Crosshair.USABLE;
+                }
+                if (!context.player.shouldCancelInteraction() && block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5) {
+                    return Crosshair.USABLE;
+                }
+                return null;
+            }
+        }
+        return null;
+    }
+
     public static Crosshair checkUsableItemOnBlock(CrosshairContext context) {
         Item handItem = context.getItem();
 
@@ -148,33 +184,8 @@ public class VanillaUsableItemHandler {
 
         BlockState blockState = context.getBlockState();
         Block block = blockState.getBlock();
-        if (handItem instanceof ToolItem) {
-            if (handItem instanceof AxeItem) {
-                if (IAxeItemMixin.getSTRIPPED_BLOCKS().get(block) != null
-                        || Oxidizable.getDecreasedOxidationBlock(block).isPresent()
-                        || HoneycombItem.WAXED_TO_UNWAXED_BLOCKS.get().get(block) != null) {
-                    return Crosshair.USABLE;
-                }
-            } else if (handItem instanceof ShovelItem) {
-                if (IShovelItemMixin.getPATH_STATES().get(block) != null) {
-                    return Crosshair.USABLE;
-                }
-            } else if (handItem instanceof HoeItem) {
-                if (IHoeItemMixin.getTILLING_ACTIONS().get(block) != null) {
-                    return Crosshair.USABLE;
-                }
-            }
-            return null;
-        }
-        if (handItem instanceof ShearsItem) {
-            if (block instanceof AbstractPlantStemBlock plantStemBlock && !plantStemBlock.hasMaxAge(blockState)) {
-                return Crosshair.USABLE;
-            }
-            if (!context.player.shouldCancelInteraction() && block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5) {
-                return Crosshair.USABLE;
-            }
-            return null;
-        }
+        Crosshair crosshair = checkUsableTool(context);
+        if (crosshair != null) return crosshair;
 
         if (handItem instanceof FlintAndSteelItem || handItem instanceof FireChargeItem) {
             if (CampfireBlock.canBeLit(blockState) || CandleBlock.canBeLit(blockState) || CandleCakeBlock.canBeLit(blockState)) {

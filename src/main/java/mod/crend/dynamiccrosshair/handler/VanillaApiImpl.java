@@ -83,8 +83,13 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     }
 
     @Override
+    public boolean isAlwaysInteractableBlock(BlockState blockState) {
+        return VanillaBlockHandler.isAlwaysInteractableBlock(blockState);
+    }
+
+    @Override
     public boolean isInteractableBlock(BlockState blockState) {
-        return VanillaBlockHandler.isBlockInteractable(blockState);
+        return VanillaBlockHandler.isInteractableBlock(blockState);
     }
 
     @Override

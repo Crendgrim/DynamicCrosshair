@@ -123,10 +123,19 @@ public interface DynamicCrosshairApi {
      * Looks up the item's category.
      * This is used for the simple crosshair computation. No (or little) conditions should be checked.
      *
+     * The default implementation checks for usable items using isAlwaysUsableItem() and isUsableItem().
+     *
      * @param itemStack The item in the player's currently evaluated hand.
      * @return The item category of the item, or ItemCategory.NONE if this handler does not know the item.
      */
-    default ItemCategory getItemCategory(ItemStack itemStack) { return ItemCategory.NONE; }
+    default ItemCategory getItemCategory(ItemStack itemStack) {
+        if (isAlwaysUsableItem(itemStack) || isUsableItem(itemStack)) {
+            return ItemCategory.USABLE;
+        }
+        return ItemCategory.NONE;
+    }
+
+    default boolean isAlwaysInteractableEntity(Entity entity) { return false; }
 
     /**
      * Checks whether the currently targeted entity can be interacted with.
@@ -136,6 +145,8 @@ public interface DynamicCrosshairApi {
      * @return true if the entity can be interacted with, false otherwise or if unknown.
      */
     default boolean isInteractableEntity(Entity entity) { return false; }
+
+    default boolean isAlwaysInteractableBlock(BlockState blockState) { return false; }
 
     /**
      * Checks whether the currently targeted block can be interacted with.

@@ -46,7 +46,7 @@ public class VanillaBlockHandler {
         return null;
     }
 
-    public static boolean isBlockInteractable(BlockState blockState) {
+    public static boolean isAlwaysInteractableBlock(BlockState blockState) {
         Block block = blockState.getBlock();
         return (    block instanceof AbstractChestBlock
                 ||  block instanceof AbstractFurnaceBlock
@@ -54,13 +54,10 @@ public class VanillaBlockHandler {
                 ||  block instanceof BeaconBlock
                 ||  block instanceof BellBlock
                 ||  block instanceof BrewingStandBlock
-                ||  block instanceof CommandBlock
                 ||  block instanceof DaylightDetectorBlock
                 ||  block instanceof DispenserBlock
                 ||  block instanceof EnchantingTableBlock
                 ||  block instanceof HopperBlock
-                ||  block instanceof JukeboxBlock
-                ||  block instanceof LecternBlock
                 ||  block instanceof ShulkerBoxBlock
                 ||  block instanceof StonecutterBlock
                 ||  block instanceof GrindstoneBlock
@@ -76,6 +73,14 @@ public class VanillaBlockHandler {
                 ||  block instanceof AbstractRedstoneGateBlock
                 ||  block instanceof AnvilBlock
                 || (block instanceof CraftingTableBlock && !(block instanceof FletchingTableBlock))
+        );
+    }
+
+    public static boolean isInteractableBlock(BlockState blockState) {
+        Block block = blockState.getBlock();
+        return (    block instanceof CommandBlock
+                ||  block instanceof JukeboxBlock
+                ||  block instanceof LecternBlock
                 ||  block instanceof ComposterBlock
                 ||  block instanceof FlowerPotBlock
                 ||  block instanceof CakeBlock
@@ -88,34 +93,9 @@ public class VanillaBlockHandler {
     public static Crosshair checkBlockInteractable(CrosshairContext context) {
         BlockState blockState = context.getBlockState();
         Block block = blockState.getBlock();
-        if (        block instanceof AbstractChestBlock
-                ||  block instanceof AbstractFurnaceBlock
-                ||  block instanceof BarrelBlock
-                ||  block instanceof BeaconBlock
-                ||  block instanceof BellBlock
-                ||  block instanceof BrewingStandBlock
-                || (block instanceof CommandBlock && context.player.isCreative())
-                ||  block instanceof DaylightDetectorBlock
-                ||  block instanceof DispenserBlock
-                ||  block instanceof EnchantingTableBlock
-                ||  block instanceof HopperBlock
+        if (       (block instanceof CommandBlock && context.player.isCreative())
                 || (block instanceof JukeboxBlock && blockState.get(JukeboxBlock.HAS_RECORD))
                 || (block instanceof LecternBlock && blockState.get(LecternBlock.HAS_BOOK))
-                ||  block instanceof ShulkerBoxBlock
-                ||  block instanceof StonecutterBlock
-                ||  block instanceof GrindstoneBlock
-                ||  block instanceof CartographyTableBlock
-                ||  block instanceof LoomBlock
-                ||  block instanceof BedBlock
-                || (block instanceof TrapdoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
-                || (block instanceof DoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
-                || (block instanceof FenceGateBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
-                ||  block instanceof AbstractButtonBlock
-                ||  block instanceof NoteBlock
-                ||  block instanceof LeverBlock
-                ||  block instanceof AbstractRedstoneGateBlock
-                ||  block instanceof AnvilBlock
-                || (block instanceof CraftingTableBlock && !(block instanceof FletchingTableBlock))
                 || (block instanceof ComposterBlock && ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(context.getItem()))
         ) {
             return Crosshair.INTERACTABLE;

@@ -67,12 +67,20 @@ public class CrosshairHandler {
         // Targeted block / entity
         if (context.isWithEntity()) {
             for (DynamicCrosshairApi api : context.apis()) {
-                crosshair = api.computeFromEntity(context);
+                if (api.isAlwaysInteractableEntity(context.getEntity())) {
+                    crosshair = Crosshair.INTERACTABLE;
+                } else {
+                    crosshair = api.computeFromEntity(context);
+                }
                 if (crosshair != null) break;
             }
         } else if (context.isWithBlock() && context.shouldInteract()) {
             for (DynamicCrosshairApi api : context.apis()) {
-                crosshair = api.computeFromBlock(context);
+                if (api.isAlwaysInteractableBlock(context.getBlockState())) {
+                    crosshair = Crosshair.INTERACTABLE;
+                } else {
+                    crosshair = api.computeFromBlock(context);
+                }
                 if (crosshair != null) break;
             }
         }
@@ -136,7 +144,7 @@ public class CrosshairHandler {
         if (context.isWithEntity()) {
             Entity entity = context.getEntity();
             for (DynamicCrosshairApi api : context.apis()) {
-                if (api.isInteractableEntity(entity)) {
+                if (api.isAlwaysInteractableEntity(entity) || api.isInteractableEntity(entity)) {
                     return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
                 }
             }
@@ -144,7 +152,7 @@ public class CrosshairHandler {
         } else if (context.isWithBlock()) {
             BlockState blockState = context.getBlockState();
             for (DynamicCrosshairApi api : context.apis()) {
-                if (api.isInteractableBlock(blockState)) {
+                if (api.isAlwaysInteractableBlock(blockState) || api.isInteractableBlock(blockState)) {
                     return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
                 }
             }
