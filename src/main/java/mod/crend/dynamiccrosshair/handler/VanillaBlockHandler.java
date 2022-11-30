@@ -20,6 +20,7 @@ import net.minecraft.util.math.Box;
 import java.util.List;
 
 public class VanillaBlockHandler {
+
     public static Crosshair checkToolWithBlock(CrosshairContext context) {
         Item handItem = context.getItem();
         BlockPos blockPos = context.getBlockPos();

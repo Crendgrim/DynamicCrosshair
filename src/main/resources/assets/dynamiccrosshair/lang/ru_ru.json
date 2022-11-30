@@ -5,7 +5,8 @@
   "text.autoconfig.dynamiccrosshair.category.style": "Стили",
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "Динамически прятать прицел",
-  "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность",
+  "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[0]": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность",
+  "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[1]": "Simple mode is less accurate, but more performant.",
   "text.autoconfig.dynamiccrosshair.option.disableDebugCrosshair": "Отключить осевой прицел в режиме отладки (F3)",
   "text.autoconfig.dynamiccrosshair.option.thirdPersonCrosshair": "Show crosshair in third person view",
   "text.autoconfig.dynamiccrosshair.option.hideWithScreen": "Прятать прицел когда меню открыто",
@@ -114,6 +115,8 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor.@Tooltip": "Отключает инверсию цвета прицела при нацеливании на светлые участки",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor": "Отключить инверсию цвета",
 
+  "text.dynamiccrosshair.option.mode.Simple": "Simple",
+  "text.dynamiccrosshair.option.mode.Advanced": "Advanced",
   "text.dynamiccrosshair.option.mode.Always": "Всегда",
   "text.dynamiccrosshair.option.mode.IfTargeting": "Если нацелен",
   "text.dynamiccrosshair.option.mode.IfInteractable": "Если блок интеракт.",

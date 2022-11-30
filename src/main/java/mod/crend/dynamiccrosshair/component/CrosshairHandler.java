@@ -206,9 +206,6 @@ public class CrosshairHandler {
                     if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
                         activeCrosshair.setVariant(CrosshairVariant.OnEntity);
                     }
-                    if (activeCrosshair.updateFrom(buildCrosshairDynamic(state.context))) {
-                        return TriState.TRUE;
-                    }
                 }
                 case BLOCK -> {
                     switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
@@ -219,21 +216,18 @@ public class CrosshairHandler {
                             }
                         }
                     }
-                    if (activeCrosshair.updateFrom(buildCrosshairDynamic(state.context))) {
-                        return TriState.TRUE;
-                    }
                 }
-                case MISS -> {
-                    if (activeCrosshair.updateFrom(buildCrosshairDynamic(state.context))) {
-                        return TriState.TRUE;
-                    }
-                }
+            }
+            if (activeCrosshair.updateFrom(buildCrosshairDynamic(state.context))) {
+                return TriState.TRUE;
             }
         } catch (CrosshairContextChange crosshairContextChange) {
             // For some reason, we are being asked to re-evaluate the context.
             return buildCrosshair(crosshairContextChange.newHitResult, player);
         } catch (InvalidContextState invalidContextState) {
             LOGGER.error("Encountered invalid context state: ", invalidContextState);
+        } catch (NoSuchMethodError | NoClassDefFoundError e) {
+            LOGGER.error("Encountered an unexpected error. This usually is due to outdated mod support." + e);
         }
         return TriState.DEFAULT;
     }

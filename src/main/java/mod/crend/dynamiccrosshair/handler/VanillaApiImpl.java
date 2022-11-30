@@ -56,11 +56,11 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         if (VanillaUsableItemHandler.isAlwaysUsableItem(itemStack) || VanillaUsableItemHandler.isUsableItem(itemStack)) {
             return ItemCategory.USABLE;
         }
-        if (VanillaItemHandler.isTool(itemStack)) {
-            return ItemCategory.TOOL;
-        }
         if (VanillaItemHandler.isMeleeWeapon(itemStack)) {
             return ItemCategory.MELEE_WEAPON;
+        }
+        if (VanillaItemHandler.isTool(itemStack)) {
+            return ItemCategory.TOOL;
         }
         if (VanillaItemHandler.isRangedWeapon(itemStack)) {
             return ItemCategory.RANGED_WEAPON;
@@ -108,39 +108,40 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
         if (context.includeUsableItem()) {
             crosshair = VanillaUsableItemHandler.checkUsableItem(context);
+            if (crosshair != null) return crosshair;
         }
 
-        if (crosshair == null && context.includeThrowable()) {
+        if (context.includeThrowable()) {
             crosshair = VanillaItemHandler.checkThrowable(context);
+            if (crosshair != null) return crosshair;
         }
 
-        if (crosshair == null && context.includeRangedWeapon()) {
+        if (context.includeRangedWeapon()) {
             crosshair = VanillaItemHandler.checkRangedWeapon(context);
+            if (crosshair != null) return crosshair;
         }
 
         if (context.includeMeleeWeapon()) {
-            if (crosshair == null) {
-                crosshair = VanillaItemHandler.checkMeleeWeapon(context);
-            } else {
-                crosshair = Crosshair.combine(crosshair, VanillaItemHandler.checkMeleeWeapon(context));
-            }
+            crosshair = VanillaItemHandler.checkMeleeWeapon(context);
+            if (crosshair != null) return crosshair;
         }
 
         if (context.includeTool()) {
-            Crosshair toolCrosshair = VanillaItemHandler.checkTool(context);
-            if (toolCrosshair != null) {
+            crosshair = VanillaItemHandler.checkTool(context);
+            if (crosshair != null) {
                 if (context.isWithBlock()) {
-                    toolCrosshair = Crosshair.combine(toolCrosshair, VanillaBlockHandler.checkToolWithBlock(context));
+                    crosshair = Crosshair.combine(crosshair, VanillaBlockHandler.checkToolWithBlock(context));
                 }
-                crosshair = Crosshair.combine(crosshair, toolCrosshair);
+                return crosshair;
             }
         }
 
-        if (crosshair == null && context.includeShield()) {
+        if (context.includeShield()) {
             crosshair = VanillaItemHandler.checkShield(context);
+            if (crosshair != null) return crosshair;
         }
 
-        if (crosshair == null && context.includeHoldingBlock()) {
+        if (context.includeHoldingBlock()) {
             crosshair = VanillaItemHandler.checkBlockItem(context);
         }
 

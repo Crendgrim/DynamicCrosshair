@@ -6,8 +6,9 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 
 @me.shedaniel.autoconfig.annotation.Config(name = DynamicCrosshair.MOD_ID)
 public class Config implements ConfigData {
-    @ConfigEntry.Gui.Tooltip
-    boolean dynamicCrosshair = true;
+    @ConfigEntry.Gui.Tooltip(count = 2)
+    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+    CrosshairMode dynamicCrosshair = CrosshairMode.Advanced;
     boolean disableDebugCrosshair = false;
     boolean thirdPersonCrosshair = false;
     boolean hideWithScreen = true;

@@ -6,6 +6,8 @@
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "动态地隐藏准星",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip": "除非手持工具、武器或瞄准实体，否则隐藏准星",
+  "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[0]": "除非手持工具、武器或瞄准实体，否则隐藏准星",
+  "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[1]": "Simple mode is less accurate, but more performant.",
   "text.autoconfig.dynamiccrosshair.option.disableDebugCrosshair": "关闭调试准星（即 F3 模式准星）",
   "text.autoconfig.dynamiccrosshair.option.thirdPersonCrosshair": "在第三人称视角中显示十字准星",
   "text.autoconfig.dynamiccrosshair.option.hideWithScreen": "当打开界面时隐藏准星",
@@ -114,6 +116,8 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor.@Tooltip": "此选项将禁用准星在某些纹理上反转颜色",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor": "强制使用单色准星",
 
+  "text.dynamiccrosshair.option.mode.Simple": "Simple",
+  "text.dynamiccrosshair.option.mode.Advanced": "Advanced",
   "text.dynamiccrosshair.option.mode.Always": "总是",
   "text.dynamiccrosshair.option.mode.IfTargeting": "若瞄准",
   "text.dynamiccrosshair.option.mode.IfInteractable": "若可交互",

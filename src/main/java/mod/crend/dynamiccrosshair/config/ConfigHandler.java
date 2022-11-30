@@ -16,8 +16,8 @@ public class ConfigHandler {
         config = AutoConfig.getConfigHolder(Config.class).getConfig();
     }
 
-    public boolean isDynamicCrosshair() { return config.dynamicCrosshair; }
-    public boolean isDynamicCrosshairSimple() { return false; }
+    public boolean isDynamicCrosshair() { return config.dynamicCrosshair != CrosshairMode.Disabled; }
+    public boolean isDynamicCrosshairSimple() { return config.dynamicCrosshair == CrosshairMode.Simple; }
     public boolean isDisableDebugCrosshair() { return config.disableDebugCrosshair; }
     public boolean isThirdPersonCrosshair() { return config.thirdPersonCrosshair; }
     public boolean isHideWithScreen() { return config.hideWithScreen; }
