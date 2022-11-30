@@ -108,7 +108,28 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
         if (context.includeUsableItem()) {
             crosshair = VanillaUsableItemHandler.checkUsableItem(context);
+            // Fall through to tool check, because this returns ModifierUse.USE_ITEM for e.g. strippable blocks
+        }
+
+        if (context.includeMeleeWeapon() && crosshair == null) {
+            // Swords will return "null" here if the block in front of them can be broken like a tool, fallthrough
+            // to tool section as well.
+            crosshair = VanillaItemHandler.checkMeleeWeapon(context);
             if (crosshair != null) return crosshair;
+        }
+
+        if (context.includeTool()) {
+            Crosshair toolCrosshair = VanillaItemHandler.checkTool(context);
+            if (toolCrosshair != null) {
+                if (context.isWithBlock()) {
+                    toolCrosshair = Crosshair.combine(toolCrosshair, VanillaBlockHandler.checkToolWithBlock(context));
+                }
+                crosshair = Crosshair.combine(crosshair, toolCrosshair);
+            }
+        }
+        // End fallthrough section.
+        if (crosshair != null) {
+            return crosshair;
         }
 
         if (context.includeThrowable()) {
@@ -121,20 +142,6 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             if (crosshair != null) return crosshair;
         }
 
-        if (context.includeMeleeWeapon()) {
-            crosshair = VanillaItemHandler.checkMeleeWeapon(context);
-            if (crosshair != null) return crosshair;
-        }
-
-        if (context.includeTool()) {
-            crosshair = VanillaItemHandler.checkTool(context);
-            if (crosshair != null) {
-                if (context.isWithBlock()) {
-                    crosshair = Crosshair.combine(crosshair, VanillaBlockHandler.checkToolWithBlock(context));
-                }
-                return crosshair;
-            }
-        }
 
         if (context.includeShield()) {
             crosshair = VanillaItemHandler.checkShield(context);
