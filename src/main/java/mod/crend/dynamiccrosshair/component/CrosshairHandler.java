@@ -49,7 +49,7 @@ public class CrosshairHandler {
         for (DynamicCrosshairApi api : context.apis()) {
             if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
                 ItemStack itemStack = context.getItemStack();
-                if (api.isAlwaysUsableItem(itemStack)) {
+                if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && api.isAlwaysUsableItem(itemStack)) {
                     return Crosshair.USABLE;
                 }
                 if (usableItemPolicy == UsableCrosshairPolicy.Always && api.isUsableItem(itemStack)) {
