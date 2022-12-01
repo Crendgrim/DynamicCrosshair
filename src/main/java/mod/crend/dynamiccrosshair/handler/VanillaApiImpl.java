@@ -111,6 +111,10 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             // Fall through to tool check, because this returns ModifierUse.USE_ITEM for e.g. strippable blocks
         }
 
+        if (context.includeRangedWeapon() && crosshair == null) {
+            crosshair = VanillaItemHandler.checkRangedWeapon(context);
+            if (crosshair != null) return crosshair;
+        }
         if (context.includeMeleeWeapon() && crosshair == null) {
             // Swords will return "null" here if the block in front of them can be broken like a tool, fallthrough
             // to tool section as well.
@@ -136,12 +140,6 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             crosshair = VanillaItemHandler.checkThrowable(context);
             if (crosshair != null) return crosshair;
         }
-
-        if (context.includeRangedWeapon()) {
-            crosshair = VanillaItemHandler.checkRangedWeapon(context);
-            if (crosshair != null) return crosshair;
-        }
-
 
         if (context.includeShield()) {
             crosshair = VanillaItemHandler.checkShield(context);
