@@ -4,8 +4,8 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -73,7 +73,7 @@ public class ConfigHandler {
                 .filter(s -> !s.isBlank())
                 .map(Identifier::tryParse)
                 .filter(Objects::nonNull)
-                .map(Registry.ITEM::get)
+                .map(Registries.ITEM::get)
                 .collect(Collectors.toList());
     }
     public List<Item> getAdditionalTools() {

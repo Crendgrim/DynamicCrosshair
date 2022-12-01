@@ -16,7 +16,7 @@ import net.minecraft.entity.vehicle.StorageMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleInventory;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
-import net.minecraft.tag.ItemTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 

@@ -5,6 +5,7 @@ import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.ItemCategory;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ChiseledBookshelfBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.FishingRodItem;
@@ -29,6 +30,9 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     @Override
     public boolean forceInvalidate(CrosshairContext context) {
         if (context.isWithEntity() && context.getEntity().getType() == EntityType.ARMOR_STAND) {
+            return true;
+        }
+        if (context.isWithBlock() && context.getBlock() instanceof ChiseledBookshelfBlock) {
             return true;
         }
         if (context.getItem() instanceof FishingRodItem) {

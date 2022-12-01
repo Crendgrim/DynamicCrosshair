@@ -21,8 +21,8 @@ import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.state.property.Properties;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -57,6 +57,7 @@ public class VanillaUsableItemHandler {
                 || handItem instanceof WritableBookItem
                 || handItem instanceof WrittenBookItem
                 || handItem instanceof GoatHornItem
+                || handItem instanceof BundleItem
         );
     }
 
@@ -100,6 +101,11 @@ public class VanillaUsableItemHandler {
                 return null;
             }
             return Crosshair.USABLE;
+        }
+        if (handItem instanceof BundleItem) {
+            if (context.getItemStack().getOrCreateNbt().contains("Items")) {
+                return Crosshair.USABLE;
+            }
         }
 
         // Liquid interactions ignore block hit, cast extra rays

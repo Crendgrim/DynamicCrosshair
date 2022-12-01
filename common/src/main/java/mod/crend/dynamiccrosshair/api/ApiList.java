@@ -4,8 +4,8 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -58,13 +58,13 @@ public class ApiList {
 	}
 
 	private static String getNamespace(ItemStack itemStack) {
-		return Registry.ITEM.getId(itemStack.getItem()).getNamespace();
+		return Registries.ITEM.getId(itemStack.getItem()).getNamespace();
 	}
 	private static String getNamespace(BlockState blockState) {
-		return Registry.BLOCK.getId(blockState.getBlock()).getNamespace();
+		return Registries.BLOCK.getId(blockState.getBlock()).getNamespace();
 	}
 	private static String getNamespace(Entity entity) {
-		return Registry.ENTITY_TYPE.getId(entity.getType()).getNamespace();
+		return Registries.ENTITY_TYPE.getId(entity.getType()).getNamespace();
 	}
 
 }

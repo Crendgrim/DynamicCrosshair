@@ -4,6 +4,7 @@ import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.mixin.IAbstractBlockMixin;
+import mod.crend.dynamiccrosshair.mixin.IChiseledBookshelfBlockMixin;
 import mod.crend.dynamiccrosshair.mixin.IFlowerPotBlockMixin;
 import mod.crend.dynamiccrosshair.mixin.IRedstoneWireBlockMixin;
 import net.minecraft.block.*;
@@ -12,12 +13,15 @@ import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
-import net.minecraft.tag.BlockTags;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec2f;
 
 import java.util.List;
+import java.util.Optional;
 
 public class VanillaBlockHandler {
 
@@ -68,7 +72,7 @@ public class VanillaBlockHandler {
                 || (block instanceof TrapdoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
                 || (block instanceof DoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
                 || (block instanceof FenceGateBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
-                ||  block instanceof AbstractButtonBlock
+                ||  block instanceof ButtonBlock
                 ||  block instanceof NoteBlock
                 ||  block instanceof LeverBlock
                 ||  block instanceof AbstractRedstoneGateBlock
@@ -88,6 +92,7 @@ public class VanillaBlockHandler {
                 ||  block instanceof SweetBerryBushBlock
                 ||  block instanceof AbstractCandleBlock
                 ||  block instanceof CampfireBlock
+                ||  block instanceof ChiseledBookshelfBlock
         );
     }
 
@@ -127,6 +132,9 @@ public class VanillaBlockHandler {
                         return Crosshair.USABLE;
                     if (handItem instanceof DyeItem && signBlockEntity.getTextColor() != ((DyeItem) handItem).getColor())
                         return Crosshair.USABLE;
+                    if (signBlockEntity.shouldRunCommand(context.player)) {
+                        return Crosshair.INTERACTABLE;
+                    }
                 }
             }
             return Crosshair.NONE.withFlag(Crosshair.Flag.FixedStyle, Crosshair.Flag.FixedModifierUse);
@@ -189,6 +197,18 @@ public class VanillaBlockHandler {
         if (block instanceof RedstoneWireBlock) {
             if (IRedstoneWireBlockMixin.invokeIsFullyConnected(blockState) || IRedstoneWireBlockMixin.invokeIsNotConnected(blockState)) {
                 return Crosshair.INTERACTABLE;
+            }
+        }
+
+        if (block instanceof ChiseledBookshelfBlock) {
+            Optional<Vec2f> hitPos = IChiseledBookshelfBlockMixin.invokeGetHitPos(context.getBlockHitResult(), blockState.get(HorizontalFacingBlock.FACING));
+            if (hitPos.isPresent()) {
+                int i = IChiseledBookshelfBlockMixin.invokeGetSlotForHitPos(hitPos.get());
+                if (blockState.get(ChiseledBookshelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i))) {
+                    return Crosshair.INTERACTABLE;
+                } else if (context.getItemStack().isIn(ItemTags.BOOKSHELF_BOOKS)) {
+                    return Crosshair.USABLE;
+                }
             }
         }
 
