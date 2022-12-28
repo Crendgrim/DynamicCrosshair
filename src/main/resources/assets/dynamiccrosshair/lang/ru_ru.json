@@ -3,6 +3,7 @@
 
   "text.autoconfig.dynamiccrosshair.category.default": "Поведение",
   "text.autoconfig.dynamiccrosshair.category.style": "Стили",
+  "text.autoconfig.dynamiccrosshair.category.tweaks": "Tweaks",
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "Динамически прятать прицел",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[0]": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность",
@@ -114,6 +115,14 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.customColor": "Свой цвет (формат #ARGB)",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor.@Tooltip": "Отключает инверсию цвета прицела при нацеливании на светлые участки",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor": "Отключить инверсию цвета",
+  "text.autoconfig.dynamiccrosshair.option.enableTweaks.@PrefixText": "The tweaks on this page can be used to configure crosshair behaviour on servers where behaviour changes cannot be detected. You can use this toggle to turn them off when playing single player or on other servers.",
+  "text.autoconfig.dynamiccrosshair.option.enableTweaks": "Enable the tweaks on this page",
+  "text.autoconfig.dynamiccrosshair.option.additionalTools.@PrefixText": "Semicolon-separated lists of item names, such as \"minecraft:fire_charge\". These items will then show their category's crosshair.",
+  "text.autoconfig.dynamiccrosshair.option.additionalTools": "Additional Tools",
+  "text.autoconfig.dynamiccrosshair.option.additionalMeleeWeapons": "Additional Melee Weapons",
+  "text.autoconfig.dynamiccrosshair.option.additionalRangedWeapons": "Additional Ranged Weapons",
+  "text.autoconfig.dynamiccrosshair.option.additionalThrowables": "Additional Throwable Items",
+  "text.autoconfig.dynamiccrosshair.option.additionalUsableItems": "Additional Usable Items",
 
   "text.dynamiccrosshair.option.mode.Simple": "Simple",
   "text.dynamiccrosshair.option.mode.Advanced": "Advanced",

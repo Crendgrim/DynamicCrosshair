@@ -3,6 +3,7 @@
 
   "text.autoconfig.dynamiccrosshair.category.default": "Behavior",
   "text.autoconfig.dynamiccrosshair.category.style": "Style",
+  "text.autoconfig.dynamiccrosshair.category.tweaks": "Tweaks",
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "Dynamically hide the crosshair",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[0]": "Hides the crosshair unless holding a tool, weapon, or targeting an entity.",
@@ -114,6 +115,14 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.customColor": "Custom color (#ARGB format)",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor.@Tooltip": "This disables the crosshair from inverting colors when over certain textures",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor": "Force single color crosshair",
+  "text.autoconfig.dynamiccrosshair.option.enableTweaks.@PrefixText": "The tweaks on this page can be used to configure crosshair behaviour on servers where behaviour changes cannot be detected. You can use this toggle to turn them off when playing single player or on other servers.",
+  "text.autoconfig.dynamiccrosshair.option.enableTweaks": "Enable the tweaks on this page",
+  "text.autoconfig.dynamiccrosshair.option.additionalTools.@PrefixText": "Semicolon-separated lists of item names, such as \"minecraft:fire_charge\". These items will then show their category's crosshair.",
+  "text.autoconfig.dynamiccrosshair.option.additionalTools": "Additional Tools",
+  "text.autoconfig.dynamiccrosshair.option.additionalMeleeWeapons": "Additional Melee Weapons",
+  "text.autoconfig.dynamiccrosshair.option.additionalRangedWeapons": "Additional Ranged Weapons",
+  "text.autoconfig.dynamiccrosshair.option.additionalThrowables": "Additional Throwable Items",
+  "text.autoconfig.dynamiccrosshair.option.additionalUsableItems": "Additional Usable Items",
 
   "text.dynamiccrosshair.option.mode.Simple": "Simple",
   "text.dynamiccrosshair.option.mode.Advanced": "Advanced",

@@ -116,4 +116,24 @@ public class Config implements ConfigData {
         }
     }
 
+    @ConfigEntry.Category("tweaks")
+    @ConfigEntry.Gui.PrefixText
+    boolean enableTweaks = false;
+
+    @ConfigEntry.Category("tweaks")
+    @ConfigEntry.Gui.PrefixText
+    @ConfigEntry.Gui.RequiresRestart
+    String additionalTools;
+    @ConfigEntry.Category("tweaks")
+    @ConfigEntry.Gui.RequiresRestart
+    String additionalMeleeWeapons;
+    @ConfigEntry.Category("tweaks")
+    @ConfigEntry.Gui.RequiresRestart
+    String additionalRangedWeapons;
+    @ConfigEntry.Category("tweaks")
+    @ConfigEntry.Gui.RequiresRestart
+    String additionalThrowables;
+    @ConfigEntry.Category("tweaks")
+    @ConfigEntry.Gui.RequiresRestart
+    String additionalUsableItems;
 }

@@ -35,7 +35,8 @@ public class VanillaUsableItemHandler {
 
     public static boolean isAlwaysUsableItem(ItemStack handItemStack) {
         Item handItem = handItemStack.getItem();
-        return handItem.getUseAction(handItemStack) == UseAction.DRINK;
+        return handItem.getUseAction(handItemStack) == UseAction.DRINK
+                || DynamicCrosshair.config.getAdditionalUsableItems().contains(handItem);
     }
 
     public static boolean isUsableItem(ItemStack handItemStack) {

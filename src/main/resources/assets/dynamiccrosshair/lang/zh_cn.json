@@ -3,9 +3,9 @@
 
   "text.autoconfig.dynamiccrosshair.category.default": "运行方式",
   "text.autoconfig.dynamiccrosshair.category.style": "准星样式",
+  "text.autoconfig.dynamiccrosshair.category.tweaks": "Tweaks",
 
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair": "动态地隐藏准星",
-  "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip": "除非手持工具、武器或瞄准实体，否则隐藏准星",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[0]": "除非手持工具、武器或瞄准实体，否则隐藏准星",
   "text.autoconfig.dynamiccrosshair.option.dynamicCrosshair.@Tooltip[1]": "Simple mode is less accurate, but more performant.",
   "text.autoconfig.dynamiccrosshair.option.disableDebugCrosshair": "关闭调试准星（即 F3 模式准星）",
@@ -115,6 +115,14 @@
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.customColor": "自定义颜色（#ARGB 格式）",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor.@Tooltip": "此选项将禁用准星在某些纹理上反转颜色",
   "text.autoconfig.dynamiccrosshair.option.crosshairModifiers.modShield.color.forceColor": "强制使用单色准星",
+  "text.autoconfig.dynamiccrosshair.option.enableTweaks.@PrefixText": "The tweaks on this page can be used to configure crosshair behaviour on servers where behaviour changes cannot be detected. You can use this toggle to turn them off when playing single player or on other servers.",
+  "text.autoconfig.dynamiccrosshair.option.enableTweaks": "Enable the tweaks on this page",
+  "text.autoconfig.dynamiccrosshair.option.additionalTools.@PrefixText": "Semicolon-separated lists of item names, such as \"minecraft:fire_charge\". These items will then show their category's crosshair.",
+  "text.autoconfig.dynamiccrosshair.option.additionalTools": "Additional Tools",
+  "text.autoconfig.dynamiccrosshair.option.additionalMeleeWeapons": "Additional Melee Weapons",
+  "text.autoconfig.dynamiccrosshair.option.additionalRangedWeapons": "Additional Ranged Weapons",
+  "text.autoconfig.dynamiccrosshair.option.additionalThrowables": "Additional Throwable Items",
+  "text.autoconfig.dynamiccrosshair.option.additionalUsableItems": "Additional Usable Items",
 
   "text.dynamiccrosshair.option.mode.Simple": "Simple",
   "text.dynamiccrosshair.option.mode.Advanced": "Advanced",

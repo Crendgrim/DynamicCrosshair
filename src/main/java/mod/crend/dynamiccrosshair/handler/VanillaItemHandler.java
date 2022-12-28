@@ -18,7 +18,11 @@ public class VanillaItemHandler {
 
     public static boolean isTool(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return (item instanceof ToolItem || item instanceof FlintAndSteelItem || item instanceof ShearsItem);
+        return (   item instanceof ToolItem
+                || item instanceof FlintAndSteelItem
+                || item instanceof ShearsItem
+                || DynamicCrosshair.config.getAdditionalTools().contains(item)
+        );
     }
 
     public static boolean isThrowable(ItemStack itemStack) {
@@ -28,6 +32,7 @@ public class VanillaItemHandler {
                 || item instanceof ThrowablePotionItem
                 || item instanceof ExperienceBottleItem
                 || item instanceof EnderPearlItem
+                || DynamicCrosshair.config.getAdditionalThrowables().contains(item)
         );
     }
 
@@ -37,12 +42,15 @@ public class VanillaItemHandler {
 
     public static boolean isMeleeWeapon(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return item instanceof SwordItem;
+        return item instanceof SwordItem || DynamicCrosshair.config.getAdditionalMeleeWeapons().contains(item);
     }
 
     public static boolean isRangedWeapon(ItemStack itemStack) {
         Item item = itemStack.getItem();
         if (item instanceof FishingRodItem) {
+            return true;
+        }
+        if (DynamicCrosshair.config.getAdditionalRangedWeapons().contains(item)) {
             return true;
         }
         return switch (item.getUseAction(itemStack)) {
@@ -66,6 +74,7 @@ public class VanillaItemHandler {
         if (       handItem instanceof ToolItem
                 || handItem instanceof FlintAndSteelItem
                 || handItem instanceof ShearsItem
+                || DynamicCrosshair.config.getAdditionalTools().contains(handItem)
         ) {
             return Crosshair.TOOL;
         }
@@ -86,6 +95,7 @@ public class VanillaItemHandler {
                 || handItem instanceof ThrowablePotionItem
                 || handItem instanceof ExperienceBottleItem
                 || handItem instanceof EnderPearlItem
+                || DynamicCrosshair.config.getAdditionalThrowables().contains(handItem)
         ) {
             return Crosshair.THROWABLE;
         }
@@ -121,6 +131,9 @@ public class VanillaItemHandler {
             }
             return Crosshair.MELEE_WEAPON;
         }
+        if (DynamicCrosshair.config.getAdditionalMeleeWeapons().contains(handItem)) {
+            return Crosshair.MELEE_WEAPON;
+        }
 
         return null;
     }
@@ -129,6 +142,9 @@ public class VanillaItemHandler {
         ItemStack itemStack = context.getItemStack();
         Item handItem = itemStack.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.Always) {
+            if (DynamicCrosshair.config.getAdditionalRangedWeapons().contains(handItem)) {
+                return Crosshair.RANGED_WEAPON;
+            }
             return switch (handItem.getUseAction(itemStack)) {
                 case BOW, CROSSBOW, SPEAR -> Crosshair.RANGED_WEAPON;
                 default -> null;
@@ -158,6 +174,9 @@ public class VanillaItemHandler {
                 }
             }
             return null;
+        }
+        if (DynamicCrosshair.config.getAdditionalRangedWeapons().contains(handItem)) {
+            return Crosshair.RANGED_WEAPON;
         }
         return null;
     }
