@@ -17,14 +17,15 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "mod.crend.dynamiccrosshair.DynamicCrosshair"
+      "mod.crend.dynamiccrosshair.fabric.DynamicCrosshairFabric"
     ],
     "modmenu": [
-      "mod.crend.dynamiccrosshair.config.ModMenuIntegration"
+      "mod.crend.dynamiccrosshair.fabric.DynamicCrosshairModMenuIntegration"
     ]
   },
   "mixins": [
     "dynamiccrosshair.mixins.json",
+    "dynamiccrosshair-common.mixins.json",
     "dynamiccrosshair.compat.mixins.json"
   ],
 

@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class DynamicCrosshair implements ClientModInitializer {
+public class DynamicCrosshair {
     public static final String MOD_ID = "dynamiccrosshair";
 
     public static ConfigHandler config;
@@ -20,22 +20,16 @@ public class DynamicCrosshair implements ClientModInitializer {
     public static final DynamicCrosshairApi vanillaApi = new VanillaApiImpl();
 
     public static void registerApi(DynamicCrosshairApi apiImpl) {
-        if (FabricLoader.getInstance().isModLoaded(apiImpl.getModId())) {
-            apiImpl.init();
-            final String identifier = apiImpl.getNamespace();
-            apis.put(identifier, apiImpl);
-            if (apiImpl.forceCheck()) {
-                alwaysCheckedApis.add(identifier);
-            }
+        apiImpl.init();
+        final String identifier = apiImpl.getNamespace();
+        DynamicCrosshair.apis.put(identifier, apiImpl);
+        if (apiImpl.forceCheck()) {
+            DynamicCrosshair.alwaysCheckedApis.add(identifier);
         }
     }
 
-    @Override
-    public void onInitializeClient() {
+    public static void init() {
         config = new ConfigHandler();
 
-        FabricLoader.getInstance().getEntrypointContainers(MOD_ID, DynamicCrosshairApi.class).forEach(entrypoint -> {
-            registerApi(entrypoint.getEntrypoint());
-        });
     }
 }

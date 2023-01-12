@@ -19,6 +19,8 @@
     "IRedstoneWireBlockMixin",
     "IShovelItemMixin"
   ],
+  "mixins": [
+  ],
   "injectors": {
     "defaultRequire": 1
   }

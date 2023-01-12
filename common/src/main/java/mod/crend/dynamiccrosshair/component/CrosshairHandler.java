@@ -7,7 +7,6 @@ import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.InteractableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -18,6 +17,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 public class CrosshairHandler {
 
@@ -170,14 +171,14 @@ public class CrosshairHandler {
 
     static State state = null;
 
-    private static TriState buildCrosshair(HitResult hitResult, ClientPlayerEntity player) {
+    private static Optional<Boolean> buildCrosshair(HitResult hitResult, ClientPlayerEntity player) {
         try {
             for (DynamicCrosshairApi api : state.context.apis()) {
                 hitResult = api.overrideHitResult(state.context, hitResult);
             }
 
             if (!state.changed(hitResult, player)) {
-                return TriState.of(shouldShowCrosshair);
+                return Optional.of(shouldShowCrosshair);
             }
 
             // State changed, build new crosshair
@@ -186,17 +187,17 @@ public class CrosshairHandler {
             if (!DynamicCrosshair.config.isDynamicCrosshairStyle()) {
                 activeCrosshair.setVariant(CrosshairVariant.Regular);
                 if (!DynamicCrosshair.config.isDynamicCrosshair()) {
-                    return TriState.TRUE;
+                    return Optional.of(true);
                 }
 
                 return switch (hitResult.getType()) {
-                    case ENTITY -> TriState.of(DynamicCrosshair.config.dynamicCrosshairOnEntity());
+                    case ENTITY -> Optional.of(DynamicCrosshair.config.dynamicCrosshairOnEntity());
                     case BLOCK -> switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
-                        case IfTargeting -> TriState.TRUE;
-                        case IfInteractable -> TriState.of(isBlockInteractable(state.context));
-                        case Disabled -> TriState.FALSE;
+                        case IfTargeting -> Optional.of(true);
+                        case IfInteractable -> Optional.of(isBlockInteractable(state.context));
+                        case Disabled -> Optional.of(false);
                     };
-                    case MISS -> TriState.FALSE;
+                    case MISS -> Optional.of(false);
                 };
             }
 
@@ -219,7 +220,7 @@ public class CrosshairHandler {
                 }
             }
             if (activeCrosshair.updateFrom(buildCrosshairDynamic(state.context))) {
-                return TriState.TRUE;
+                return Optional.of(true);
             }
         } catch (CrosshairContextChange crosshairContextChange) {
             // For some reason, we are being asked to re-evaluate the context.
@@ -229,7 +230,7 @@ public class CrosshairHandler {
         } catch (NoSuchMethodError | NoClassDefFoundError e) {
             LOGGER.error("Encountered an unexpected error. This usually is due to outdated mod support." + e);
         }
-        return TriState.DEFAULT;
+        return Optional.empty();
     }
 
     // TODO
@@ -258,8 +259,8 @@ public class CrosshairHandler {
             state = new State();
         }
 
-        TriState result = buildCrosshair(hitResult, player);
-        if (result != TriState.DEFAULT) {
+        Optional<Boolean> result = buildCrosshair(hitResult, player);
+        if (result.isPresent()) {
             return result.get();
         }
 
