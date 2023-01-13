@@ -1,13 +1,13 @@
 package mod.crend.dynamiccrosshair.handler;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.PlatformUtils;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.CrosshairVariant;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IAxeItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IHoeItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IShovelItemMixin;
 import net.minecraft.block.*;
@@ -216,7 +216,7 @@ public class VanillaUsableItemHandler {
         }
         if (block instanceof AbstractCauldronBlock cauldron && !context.player.shouldCancelInteraction()) {
             if (handItem instanceof BucketItem bucketItem) {
-                Fluid fluid = ((IBucketItemMixin) bucketItem).getFluid();
+                Fluid fluid = PlatformUtils.getFluidFromBucket(bucketItem);
                 if (fluid == Fluids.WATER || fluid == Fluids.LAVA) {
                     return Crosshair.USABLE;
                 }
@@ -250,7 +250,7 @@ public class VanillaUsableItemHandler {
             return null;
         }
         if (handItem instanceof BucketItem bucketItem) {
-            Fluid fluid = ((IBucketItemMixin) bucketItem).getFluid();
+            Fluid fluid = PlatformUtils.getFluidFromBucket(bucketItem);
             if (fluid != Fluids.EMPTY) {
                 if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
                     return Crosshair.HOLDING_BLOCK;
@@ -288,7 +288,7 @@ public class VanillaUsableItemHandler {
             if (handItem instanceof EntityBucketItem) {
                 return new Crosshair(CrosshairVariant.HoldingBlock, ModifierUse.USE_ITEM);
             }
-            if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() != Fluids.EMPTY) {
+            if (handItem instanceof BucketItem bucketItem && PlatformUtils.getFluidFromBucket(bucketItem) != Fluids.EMPTY) {
                 return Crosshair.HOLDING_BLOCK;
             }
         }
