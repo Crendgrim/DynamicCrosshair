@@ -1,8 +1,9 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.component.Crosshair;
+import mod.crend.dynamiccrosshair.component.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
-import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IItemMixin;
 import net.minecraft.block.Block;
@@ -12,7 +13,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
@@ -22,15 +22,14 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-@SuppressWarnings("unused")
 public class CrosshairContext {
 
 	@NonNull
@@ -46,14 +45,14 @@ public class CrosshairContext {
 		assert MinecraftClient.getInstance().crosshairTarget != null;
 		world = MinecraftClient.getInstance().world;
 		player = MinecraftClient.getInstance().player;
-		hand = Hand.MAIN_HAND;
 		hitResult = MinecraftClient.getInstance().crosshairTarget;
-		invalidateHitResult(hitResult);
+		this.hand = Hand.MAIN_HAND;
+		invalidateHitResult();
 	}
 
-	public void invalidateHitResult(HitResult newHitResult) {
-		assert newHitResult != null;
-		hitResult = newHitResult;
+	public void invalidateHitResult() {
+		assert MinecraftClient.getInstance().crosshairTarget != null;
+		hitResult = MinecraftClient.getInstance().crosshairTarget;
 		withBlock = false;
 		blockPos = null;
 		blockState = null;
@@ -61,8 +60,6 @@ public class CrosshairContext {
 		withEntity = false;
 		entity = null;
 		apiList = null;
-		itemStackMainHand = null;
-		itemStackOffHand = null;
 		switch (hitResult.getType()) {
 			case BLOCK -> {
 				BlockHitResult blockHitResult = (BlockHitResult) hitResult;
@@ -76,7 +73,6 @@ public class CrosshairContext {
 			}
 		}
 	}
-
 	public void invalidateItem(Hand hand) {
 		switch (hand) {
 			case MAIN_HAND -> itemStackMainHand = null;
@@ -141,15 +137,6 @@ public class CrosshairContext {
 		return world.getFluidState(blockPos);
 	}
 
-	public BlockHitResult getBlockHitResult() {
-		if (!withBlock) throw new InvalidContextState("Called getFluidState() without a targeted block!");
-		return (BlockHitResult) hitResult;
-	}
-
-	public Direction getBlockHitSide() {
-		return getBlockHitResult().getSide();
-	}
-
 	public BlockHitResult raycastWithFluid(RaycastContext.FluidHandling fluidHandling) {
 		return IItemMixin.invokeRaycast(world, player, fluidHandling);
 	}
@@ -157,14 +144,6 @@ public class CrosshairContext {
 		return raycastWithFluid(RaycastContext.FluidHandling.ANY);
 	}
 
-	public EntityHitResult raycastForEntity(double d) {
-		Vec3d vCamPos = player.getCameraPosVec(1.0f);
-		Vec3d vRotation = player.getRotationVec(1.0f);
-		Vec3d vRaycast = vCamPos.add(vRotation.x * d, vRotation.y * d, vRotation.z * d);
-		Box box = player.getBoundingBox().stretch(vRotation.multiply(d)).expand(1.0, 1.0, 1.0);
-		EntityHitResult entityHitResult = ProjectileUtil.raycast(player, vCamPos, vRaycast, box, entity -> !entity.isSpectator() && entity.isCollidable(), d * d);
-		return entityHitResult;
-	}
 
 	private boolean withEntity = false;
 	private Entity entity = null;
@@ -187,6 +166,7 @@ public class CrosshairContext {
 		return hand;
 	}
 	public void setHand(Hand hand) {
+		invalidateItem(this.hand);
 		this.hand = hand;
 	}
 	public boolean isMainHand() {
@@ -196,7 +176,7 @@ public class CrosshairContext {
 		return hand == Hand.OFF_HAND;
 	}
 
-	public ItemStack getItemStack(Hand hand) {
+	public ItemStack getItemStack() {
 		ItemStack itemStack = switch (hand) {
 			case MAIN_HAND -> itemStackMainHand;
 			case OFF_HAND -> itemStackOffHand;
@@ -209,9 +189,6 @@ public class CrosshairContext {
 			}
 		}
 		return itemStack;
-	}
-	public ItemStack getItemStack() {
-		return getItemStack(hand);
 	}
 
 	public Item getItem() {
@@ -230,59 +207,41 @@ public class CrosshairContext {
 		if (!withBlock) throw new InvalidContextState("Called canPlaceItemAsBlock() without a targeted block!");
 		IBlockItemMixin blockItem = (IBlockItemMixin) getItem();
 		ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, hand, getItemStack(), (BlockHitResult) hitResult);
-		try {
-			BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
-			return (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState));
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
+		BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);
+		return (blockState != null && blockItem.invokeCanPlace(itemPlacementContext, blockState));
 	}
 
 	public boolean canUseWeaponAsTool() {
 		return isWithBlock() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
 	}
 
-	public boolean isRangedWeaponCharged(int bound) {
-		return (isActiveItem() && getItem().getMaxUseTime(getItemStack()) - player.getItemUseTimeLeft() >= bound);
+	public Crosshair withItem(Function<ItemStack, Crosshair> itemStackConsumer) {
+		return itemStackConsumer.apply(getItemStack());
 	}
 
+	public Crosshair withBlock(BiFunction<ItemStack, BlockState, Crosshair> blockConsumer) {
+		if (withBlock) {
+			return blockConsumer.apply(getItemStack(), getBlockState());
+		}
+		return null;
+	}
+	public Crosshair withBlock(Function<CrosshairContext, Crosshair> consumer) {
+		if (withBlock) {
+			return consumer.apply(this);
+		}
+		return null;
+	}
+	public void withBlock(Consumer<CrosshairContext> consumer) {
+		if (withBlock) {
+			consumer.accept(this);
+		}
+	}
 
-	public boolean includeUsableItem() {
-		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
-			case Always -> true;
-			case IfInteractable -> !isCoolingDown();
-			case Disabled -> false;
-		};
-	}
-	public boolean includeThrowable() {
-		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingThrowable()) {
-			case Always -> true;
-			case IfInteractable -> !isCoolingDown();
-			case Disabled -> false;
-		};
-	}
-	public boolean includeRangedWeapon() {
-		return DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() != UsableCrosshairPolicy.Disabled;
-	}
-	public boolean includeMeleeWeapon() {
-		return isMainHand() && DynamicCrosshair.config.dynamicCrosshairHoldingMeleeWeapon();
-	}
-	public boolean includeTool() {
-		return isMainHand() && switch (DynamicCrosshair.config.dynamicCrosshairHoldingTool()) {
-			case Always -> true;
-			case IfTargeting -> isTargeting();
-			case Disabled -> false;
-		};
-	}
-	public boolean includeShield() {
-		return DynamicCrosshair.config.dynamicCrosshairHoldingShield();
-	}
-	public boolean includeHoldingBlock() {
-		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingBlock()) {
-			case Always, IfInteractable -> true;
-			case IfTargeting -> isTargeting();
-			case Disabled -> false;
-		};
+	public Crosshair withEntity(BiFunction<ItemStack, Entity, Crosshair> entityConsumer) {
+		if (withEntity) {
+			return entityConsumer.apply(getItemStack(), getEntity());
+		}
+		return null;
 	}
 
 
@@ -291,8 +250,7 @@ public class CrosshairContext {
 	public List<DynamicCrosshairApi> apis() {
 		if (apiList == null) {
 			apiList = new ApiList();
-			apiList.add(getItemStack(Hand.MAIN_HAND));
-			apiList.add(getItemStack(Hand.OFF_HAND));
+			apiList.add(getItemStack());
 			if (isWithBlock()) {
 				apiList.add(getBlockState());
 			}

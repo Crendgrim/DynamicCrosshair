@@ -6,11 +6,9 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 
 @me.shedaniel.autoconfig.annotation.Config(name = DynamicCrosshair.MOD_ID)
 public class Config implements ConfigData {
-    @ConfigEntry.Gui.Tooltip(count = 2)
-    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    CrosshairMode dynamicCrosshair = CrosshairMode.Advanced;
+    @ConfigEntry.Gui.Tooltip
+    boolean dynamicCrosshair = true;
     boolean disableDebugCrosshair = false;
-    boolean thirdPersonCrosshair = false;
     boolean hideWithScreen = true;
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     CrosshairConfig crosshairConfig = new CrosshairConfig();
@@ -23,14 +21,14 @@ public class Config implements ConfigData {
         CrosshairPolicy holdingTool = CrosshairPolicy.Always;
         boolean holdingMeleeWeapon = true;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.IfInteractable;
+        RangedCrosshairPolicy holdingRangedWeapon = RangedCrosshairPolicy.IfRangedWeaponFullyDrawn;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        UsableCrosshairPolicy holdingThrowable = UsableCrosshairPolicy.IfInteractable;
+        CrosshairPolicy holdingThrowable = CrosshairPolicy.Always;
         boolean holdingShield = true;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
         BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
         @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
+        BlockCrosshairPolicy holdingUsableItem = BlockCrosshairPolicy.IfInteractable;
     }
 
     static class CrosshairColorSettings {

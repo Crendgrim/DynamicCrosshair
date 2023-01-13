@@ -10,7 +10,6 @@ import mod.crend.dynamiccrosshair.config.CrosshairModifier;
 import mod.crend.dynamiccrosshair.config.CrosshairStyle;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.Perspective;
 import net.minecraft.client.util.math.MatrixStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value=InGameHud.class, priority=1010)
+@Mixin(value=InGameHud.class, priority=900)
 public class InGameHudMixin {
     @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private void dynamiccrosshair$preCrosshair(final MatrixStack matrixStack, final CallbackInfo ci) {
@@ -64,15 +63,6 @@ public class InGameHudMixin {
         }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-    }
-
-    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target="Lnet/minecraft/client/option/GameOptions;getPerspective()Lnet/minecraft/client/option/Perspective;"), require = 0)
-    private Perspective dynamiccrosshair$thirdPersonCrosshair(GameOptions gameOptions) {
-        Perspective originalPerspective = gameOptions.getPerspective();
-        if (originalPerspective == Perspective.THIRD_PERSON_BACK && DynamicCrosshair.config.isThirdPersonCrosshair()) {
-            return Perspective.FIRST_PERSON;
-        }
-        return originalPerspective;
     }
 
     @Inject(method = "tick()V", at = @At(value = "TAIL"))

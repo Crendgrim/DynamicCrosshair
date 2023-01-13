@@ -25,20 +25,18 @@ public class ConfigHandler {
         config = AutoConfig.getConfigHolder(Config.class).getConfig();
     }
 
-    public boolean isDynamicCrosshair() { return config.dynamicCrosshair != CrosshairMode.Disabled; }
-    public boolean isDynamicCrosshairSimple() { return config.dynamicCrosshair == CrosshairMode.Simple; }
+    public boolean isDynamicCrosshair() { return config.dynamicCrosshair; }
     public boolean isDisableDebugCrosshair() { return config.disableDebugCrosshair; }
-    public boolean isThirdPersonCrosshair() { return config.thirdPersonCrosshair; }
     public boolean isHideWithScreen() { return config.hideWithScreen; }
     public InteractableCrosshairPolicy dynamicCrosshairOnBlock() { return config.crosshairConfig.onBlock; }
     public boolean dynamicCrosshairOnEntity() { return config.crosshairConfig.onEntity; }
     public CrosshairPolicy dynamicCrosshairHoldingTool() { return config.crosshairConfig.holdingTool; }
     public boolean dynamicCrosshairHoldingMeleeWeapon() { return config.crosshairConfig.holdingMeleeWeapon; }
-    public UsableCrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return config.crosshairConfig.holdingRangedWeapon; }
-    public UsableCrosshairPolicy dynamicCrosshairHoldingThrowable() { return config.crosshairConfig.holdingThrowable; }
+    public RangedCrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return config.crosshairConfig.holdingRangedWeapon; }
+    public CrosshairPolicy dynamicCrosshairHoldingThrowable() { return config.crosshairConfig.holdingThrowable; }
     public boolean dynamicCrosshairHoldingShield() { return config.crosshairConfig.holdingShield; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingBlock() { return config.crosshairConfig.holdingBlock; }
-    public UsableCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return config.crosshairConfig.holdingUsableItem; }
+    public BlockCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return config.crosshairConfig.holdingUsableItem; }
 
 
     public CrosshairColor getColor() { return new CrosshairColor(config.color.crosshairColor, config.color.customColor, config.color.forceColor); }

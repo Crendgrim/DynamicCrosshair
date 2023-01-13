@@ -1,8 +1,8 @@
 package mod.crend.dynamiccrosshair.config;
 
-public enum UsableCrosshairPolicy {
+public enum RangedCrosshairPolicy {
     Always,
-    IfInteractable,
+    IfRangedWeaponFullyDrawn,
     Disabled;
 
     @Override

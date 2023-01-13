@@ -18,11 +18,10 @@ public class DynamicCrosshair {
     public static final DynamicCrosshairApi vanillaApi = new VanillaApiImpl();
 
     public static void registerApi(DynamicCrosshairApi apiImpl) {
-        apiImpl.init();
         final String identifier = apiImpl.getNamespace();
-        DynamicCrosshair.apis.put(identifier, apiImpl);
+        apis.put(identifier, apiImpl);
         if (apiImpl.forceCheck()) {
-            DynamicCrosshair.alwaysCheckedApis.add(identifier);
+            alwaysCheckedApis.add(identifier);
         }
     }
 

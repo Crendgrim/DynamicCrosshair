@@ -1,40 +1,8 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.hit.HitResult;
 
-/**
- * Defines a handler for a given mod that can influence the crosshair.
- *
- * There are two calculation modes, simple and advanced.
- *
- * In simple mode, it is checked only for the type of the targeted block/entity and the used item.
- *
- * In advanced mode, conditions should be as detailed as possible.
- * The computation order is as follows:
- * Phase 1: Target
- * - if targeted entity: computeFromEntity()
- * - if targeted block: computeFromBlock()
- * Phase 2: Hand item
- * - if isAlwaysUsableItem(), use USABLE crosshair
- * - otherwise: computeFromItem()
- * Phase 3: Off hand
- * - if the crosshair after main hand evaluation still allows for either a style or a use modifier,
- *   repeat phases 1 & 2 for the off hand.
- * The result of each phase is combined into the final crosshair.
- *
- * Each phase is evaluated by calling all relevant handlers for the phase, before proceeding to the
- * next phase. A handler is considered relevant iff. any of the following conditions holds true:
- * - The targeted block or entity is in the same namespace as the handler.
- * - An item held in either hand is in the same namespace as the handler.
- * - The handler overrides forceCheck() to return true.
- *
- * Note that the vanilla handler will always be checked last in each phase. This allows for mods to
- * override vanilla behaviour.
- */
 public interface DynamicCrosshairApi {
 
     /**
@@ -55,12 +23,6 @@ public interface DynamicCrosshairApi {
     default String getModId() {
         return getNamespace();
     }
-
-    /**
-     * Overwrite this to initialize some logic for the API.
-     * This method will only be called if the mod is present and the API will be checked.
-     */
-    default void init() { }
 
     /**
      * Usually, APIs are only checked if any of (held item, targeted entity, targeted block) are under the namespace
@@ -87,26 +49,91 @@ public interface DynamicCrosshairApi {
     default boolean forceInvalidate(CrosshairContext context) { return false; }
 
     /**
-     * Allows an API implementation to override the hit result, by default vanilla's crosshair target.
-     * The order in which APIs are called (after vanilla) is not guaranteed.
+     * Set the crosshair based on whether the targeted block can be broken.
      *
-     * @param context A context that will hold the held items, and targeted block or entity if any. Note that this is
-     *                the state before the new hit result has been evaluated.
-     * @param hitResult the currently active hit result. May have come from another API.
-     * @return the parameter if nothing should change, or a replacement hit result.
+     * @param context A context that is guaranteed to contain an item and a targeted block
+     * @return a Crosshair object overwriting the crosshair settings
      */
-    default HitResult overrideHitResult(CrosshairContext context, HitResult hitResult) { return hitResult; }
+    default Crosshair checkBlockBreaking(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on whether the targeted block can be interacted with.
+     *
+     * @param context A context that is guaranteed to contain an item and a targeted block
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkBlockInteractable(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on the targeted entity.
+     *
+     * @param context A context that is guaranteed to contain an item and a targeted entity
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkEntity(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on whether the player has a block equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkBlockItem(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on whether the player has a melee weapon equipped.
+     * If a melee weapon doubles as a tool (such as axes), context.canUseWeaponAsTool() will
+     * return true if a block is targeted and tool crosshair is enabled. API implementations
+     * may use this to defer crosshair computation (return "null" from this handler).
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkMeleeWeapon(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on whether the player has a ranged weapon equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkRangedWeapon(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on whether the player has a shield equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkShield(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on whether the player has a throwable item equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkThrowable(CrosshairContext context) { return null; }
+
+    /**
+     * Set the crosshair based on whether the player has a tool equipped.
+     *
+     * @param context A context that is guaranteed to contain an item
+     * @return a Crosshair object overwriting the crosshair settings
+     */
+    default Crosshair checkTool(CrosshairContext context) { return null; }
 
     /**
      * Checks whether the given item is always usable.
      *
      * This method should return true if and only if an item is usable regardless of context.
-     * Anything handled here does not have to be checked in isUsableItem() or computeFromItem().
+     * Anything handled here does not have to be checked in isUsableItem() or checkUsableItem().
      *
      * @param itemStack The tool in the player's main hand
      * @return a Crosshair object overwriting the crosshair settings
      */
     default boolean isAlwaysUsableItem(ItemStack itemStack) { return false; }
+
 
     /**
      * Checks whether the given item is usable.
@@ -120,88 +147,15 @@ public interface DynamicCrosshairApi {
     default boolean isUsableItem(ItemStack itemStack) { return false; }
 
     /**
-     * Looks up the item's category.
-     * This is used for the simple crosshair computation. No (or little) conditions should be checked.
+     * Set the crosshair based on whether the given item is usable.
      *
-     * The default implementation checks for usable items using isAlwaysUsableItem() and isUsableItem().
+     * This method is called regardless of crosshair target (entity, block, miss), and should be used to check for
+     * always usable items such as food.
      *
-     * @param itemStack The item in the player's currently evaluated hand.
-     * @return The item category of the item, or ItemCategory.NONE if this handler does not know the item.
+     * @param context A context that is guaranteed to contain an item.
+     *                If `context.withBlock()` return true, it also contains a targeted block.
+     * @return a Crosshair object overwriting the crosshair settings
      */
-    default ItemCategory getItemCategory(ItemStack itemStack) {
-        if (isAlwaysUsableItem(itemStack) || isUsableItem(itemStack)) {
-            return ItemCategory.USABLE;
-        }
-        return ItemCategory.NONE;
-    }
-
-    default boolean isAlwaysInteractableEntity(Entity entity) { return false; }
-
-    /**
-     * Checks whether the currently targeted entity can be interacted with.
-     * This is used for the simple crosshair computation. No (or little) conditions should be checked.
-     *
-     * @param entity The currently targeted entity.
-     * @return true if the entity can be interacted with, false otherwise or if unknown.
-     */
-    default boolean isInteractableEntity(Entity entity) { return false; }
-
-    default boolean isAlwaysInteractableBlock(BlockState blockState) { return false; }
-
-    /**
-     * Checks whether the currently targeted block can be interacted with.
-     * This is used for the simple crosshair computation. No (or little) conditions should be checked.
-     *
-     * @param blockState The currently targeted block.
-     * @return true if the block can be interacted with, false otherwise or if unknown.
-     */
-    default boolean isInteractableBlock(BlockState blockState) { return false; }
-
-    /**
-     * Computes a crosshair for the targeted entity.
-     * This is used for the advanced crosshair computation. As many conditions as possible
-     * should be checked to ensure an accurate crosshair.
-     *
-     * This method will only be called if an entity is targeted, i.e. context.isWithEntity()
-     * is true. The targeted entity may be accessed by calling context.getEntity().
-     *
-     * @param context A context describing the current state.
-     * @return a Crosshair object overwriting the crosshair settings, or null.
-     */
-    default Crosshair computeFromEntity(CrosshairContext context) { return null; }
-
-    /**
-     * Computes a crosshair for the targeted block.
-     * This is used for the advanced crosshair computation. As many conditions as possible
-     * should be checked to ensure an accurate crosshair.
-     *
-     * This method will only be called if a block is targeted, i.e. context.isWithBlock() is
-     * true. The targeted block state may be accessed by calling context.getBlockState(). Its
-     * associated block entity (if any) is easily queryable through context.getBlockEntity().
-     *
-     * @param context A context describing the current state.
-     * @return a Crosshair object overwriting the crosshair settings, or null.
-     */
-    default Crosshair computeFromBlock(CrosshairContext context) { return null; }
-
-    /**
-     * Computes a crosshair for the given held item.
-     * This is used for the advanced crosshair computation. As many conditions as possible
-     * should be checked to ensure an accurate crosshair.
-     *
-     * This method is not called if isAlwaysUsableItem() already returned true for the given
-     * evaluated hand item.
-     *
-     * Commonly used helper functions are context.isWithBlock(), context.isWithEntity(), and
-     * context.isMainHand(). See CrosshairContext for further helpers.
-     *
-     * If a melee weapon doubles as a tool (such as axes), context.canUseWeaponAsTool() will
-     * return true if a block is targeted and tool crosshair is enabled. API implementations
-     * may use this to defer crosshair computation (return "null" from this handler).
-     *
-     * @param context A context describing the current state.
-     * @return a Crosshair object overwriting the crosshair settings, or null.
-     */
-    default Crosshair computeFromItem(CrosshairContext context) { return null; }
+    default Crosshair checkUsableItem(CrosshairContext context) { return null; }
 
 }

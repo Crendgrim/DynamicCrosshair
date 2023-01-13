@@ -10,18 +10,12 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-
-import java.util.List;
 
 public class VanillaBlockHandler {
-
-    public static Crosshair checkToolWithBlock(CrosshairContext context) {
+    public static Crosshair checkBlockBreaking(CrosshairContext context) {
         Item handItem = context.getItem();
         BlockPos blockPos = context.getBlockPos();
         BlockState blockState = context.getBlockState();
@@ -47,18 +41,22 @@ public class VanillaBlockHandler {
         return null;
     }
 
-    public static boolean isAlwaysInteractableBlock(BlockState blockState) {
+    public static Crosshair checkBlockInteractable(CrosshairContext context) {
+        BlockState blockState = context.getBlockState();
         Block block = blockState.getBlock();
-        return (    block instanceof AbstractChestBlock
+        if (        block instanceof AbstractChestBlock
                 ||  block instanceof AbstractFurnaceBlock
                 ||  block instanceof BarrelBlock
                 ||  block instanceof BeaconBlock
                 ||  block instanceof BellBlock
                 ||  block instanceof BrewingStandBlock
+                || (block instanceof CommandBlock && context.player.isCreative())
                 ||  block instanceof DaylightDetectorBlock
                 ||  block instanceof DispenserBlock
                 ||  block instanceof EnchantingTableBlock
                 ||  block instanceof HopperBlock
+                || (block instanceof JukeboxBlock && blockState.get(JukeboxBlock.HAS_RECORD))
+                || (block instanceof LecternBlock && blockState.get(LecternBlock.HAS_BOOK))
                 ||  block instanceof ShulkerBoxBlock
                 ||  block instanceof StonecutterBlock
                 ||  block instanceof GrindstoneBlock
@@ -74,29 +72,6 @@ public class VanillaBlockHandler {
                 ||  block instanceof AbstractRedstoneGateBlock
                 ||  block instanceof AnvilBlock
                 || (block instanceof CraftingTableBlock && !(block instanceof FletchingTableBlock))
-        );
-    }
-
-    public static boolean isInteractableBlock(BlockState blockState) {
-        Block block = blockState.getBlock();
-        return (    block instanceof CommandBlock
-                ||  block instanceof JukeboxBlock
-                ||  block instanceof LecternBlock
-                ||  block instanceof ComposterBlock
-                ||  block instanceof FlowerPotBlock
-                ||  block instanceof CakeBlock
-                ||  block instanceof SweetBerryBushBlock
-                ||  block instanceof AbstractCandleBlock
-                ||  block instanceof CampfireBlock
-        );
-    }
-
-    public static Crosshair checkBlockInteractable(CrosshairContext context) {
-        BlockState blockState = context.getBlockState();
-        Block block = blockState.getBlock();
-        if (       (block instanceof CommandBlock && context.player.isCreative())
-                || (block instanceof JukeboxBlock && blockState.get(JukeboxBlock.HAS_RECORD))
-                || (block instanceof LecternBlock && blockState.get(LecternBlock.HAS_BOOK))
                 || (block instanceof ComposterBlock && ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.containsKey(context.getItem()))
         ) {
             return Crosshair.INTERACTABLE;
@@ -107,7 +82,7 @@ public class VanillaBlockHandler {
             boolean potItemIsAir = ((FlowerPotBlock) block).getContent() == Blocks.AIR;
             boolean handItemIsPottable = handItem instanceof BlockItem && IFlowerPotBlockMixin.getCONTENT_TO_POTTED().containsKey(((BlockItem) handItem).getBlock());
             if (potItemIsAir && handItemIsPottable) {
-                return Crosshair.USABLE;
+                return Crosshair.USE_ITEM;
             }
             if (!potItemIsAir && !handItemIsPottable) {
                 return Crosshair.INTERACTABLE.withFlag(Crosshair.Flag.FixedStyle);
@@ -122,11 +97,11 @@ public class VanillaBlockHandler {
                 BlockEntity blockEntity = context.getBlockEntity();
                 if (blockEntity instanceof SignBlockEntity signBlockEntity) {
                     if (handItem.equals(Items.GLOW_INK_SAC) && !signBlockEntity.isGlowingText())
-                        return Crosshair.USABLE;
+                        return Crosshair.USE_ITEM;
                     if (handItem.equals(Items.INK_SAC) && signBlockEntity.isGlowingText())
-                        return Crosshair.USABLE;
+                        return Crosshair.USE_ITEM;
                     if (handItem instanceof DyeItem && signBlockEntity.getTextColor() != ((DyeItem) handItem).getColor())
-                        return Crosshair.USABLE;
+                        return Crosshair.USE_ITEM;
                 }
             }
             return Crosshair.NONE.withFlag(Crosshair.Flag.FixedStyle, Crosshair.Flag.FixedModifierUse);
@@ -135,16 +110,16 @@ public class VanillaBlockHandler {
         // Special case: Cake gets eaten (modified), so "use" makes more sense to me
         if (block instanceof CakeBlock) {
             if (context.player.canConsume(false) && context.shouldInteract()) {
-                return Crosshair.USABLE;
+                return Crosshair.USE_ITEM;
             }
         }
         // Special case: Sweet berries get harvested
         if (block instanceof SweetBerryBushBlock && blockState.get(SweetBerryBushBlock.AGE) > 1) {
-            return Crosshair.USABLE;
+            return Crosshair.USE_ITEM;
         }
         // Special case: Glow berries get harvested
         if (block instanceof CaveVines && CaveVines.hasBerries(blockState)) {
-            return Crosshair.USABLE;
+            return Crosshair.USE_ITEM;
         }
         // Special case: Redstone ore: can be placed against, but still activates
         if (block instanceof RedstoneOreBlock) {
@@ -177,31 +152,18 @@ public class VanillaBlockHandler {
             if (handItem.equals(Items.WRITTEN_BOOK)
                     || handItem.equals(Items.WRITABLE_BOOK)
                     || (!context.player.shouldCancelInteraction() && blockState.get(LecternBlock.HAS_BOOK)))
-                return Crosshair.USABLE;
+                return Crosshair.USE_ITEM;
             return Crosshair.NONE.withFlag(Crosshair.Flag.FixedModifierUse);
         }
 
         if (block instanceof CampfireBlock) {
             if (context.getBlockEntity() instanceof CampfireBlockEntity campfire && campfire.getRecipeFor(context.getItemStack()).isPresent())
-                return Crosshair.USABLE;
+                return Crosshair.USE_ITEM;
         }
 
         if (block instanceof RedstoneWireBlock) {
             if (IRedstoneWireBlockMixin.invokeIsFullyConnected(blockState) || IRedstoneWireBlockMixin.invokeIsNotConnected(blockState)) {
                 return Crosshair.INTERACTABLE;
-            }
-        }
-
-        if (blockState.isIn(BlockTags.FENCES)) {
-            BlockPos pos = context.getBlockPos();
-            List<MobEntity> list = context.world.getNonSpectatingEntities(MobEntity.class,
-                    new Box((double) pos.getX() - 7.0, (double) pos.getY() - 7.0, (double) pos.getZ() - 7.0,
-                            (double) pos.getX() + 7.0, (double) pos.getY() + 7.0, (double) pos.getZ() + 7.0));
-
-            for (MobEntity mob : list) {
-                if (mob.getHoldingEntity() == context.player) {
-                    return Crosshair.USABLE;
-                }
             }
         }
 
