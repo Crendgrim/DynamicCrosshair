@@ -1,5 +1,6 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
 architectury {
@@ -83,3 +84,51 @@ components.java {
         skip()
     }
 }
+
+unifiedPublishing {
+    project {
+        displayName = "[Fabric ${rootProject.supported_versions_string}] ${rootProject.mod_name} ${rootProject.mod_version}"
+        version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
+        changelog = "${rootProject.changelog}"
+        releaseType = "${rootProject.release_type}"
+        gameVersions = List.of(project.supported_versions.split(';'))
+        gameLoaders = ["fabric"]
+
+        mainPublication tasks.remapJar
+
+        relations {
+            depends {
+                curseforge = "fabric-api"
+                modrinth = "fabric-api"
+            }
+            depends {
+                curseforge = "cloth-config"
+                modrinth = "cloth-config"
+            }
+            optional {
+                curseforge = "modmenu"
+                modrinth = "modmenu"
+            }
+            optional {
+                curseforge = "dynamic-crosshair-compat"
+                modrinth = "dynamiccrosshaircompat"
+            }
+        }
+
+        if (System.getenv("CURSEFORGE_TOKEN")) {
+            curseforge {
+                token = System.getenv("CURSEFORGE_TOKEN")
+                id = rootProject.curseforge_id
+            }
+        }
+
+        if (System.getenv("MODRINTH_TOKEN")) {
+            modrinth {
+                token = System.getenv("MODRINTH_TOKEN")
+                id = rootProject.modrinth_id
+            }
+        }
+    }
+}
+
+rootProject.tasks.getByName("publishMod").dependsOn tasks.getByName("publishUnified")
