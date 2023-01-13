@@ -3,8 +3,6 @@ package mod.crend.dynamiccrosshair;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import mod.crend.dynamiccrosshair.handler.VanillaApiImpl;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +28,5 @@ public class DynamicCrosshair {
 
     public static void init() {
         config = new ConfigHandler();
-
     }
 }

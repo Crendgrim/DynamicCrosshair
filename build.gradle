@@ -17,7 +17,7 @@ subprojects {
 
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        mappings "net.fabricmc:yarn:1.19.2+build.3:v2"
+        mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
     }
 }
 
@@ -27,7 +27,7 @@ allprojects {
     apply plugin: "maven-publish"
 
     archivesBaseName = rootProject.archives_base_name
-    version = rootProject.mod_version
+    version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
     group = rootProject.maven_group
 
     repositories {
@@ -50,6 +50,6 @@ allprojects {
 
 forgix {
     group = "${project.maven_group}"
-    mergedJarName = "${project.archives_base_name}-${project.mod_version}.jar"
+    mergedJarName = "${project.archives_base_name}-${project.mod_version}+${project.minecraft_version}.jar"
     outputDir = "build/merged"
 }

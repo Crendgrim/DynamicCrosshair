@@ -12,6 +12,7 @@ description = '''
 Dynamic Crosshair that changes shape based on what is targeted
 '''
 logoFile = "icon.png"
+displayTest = "IGNORE_ALL_VERSION"
 
 [[dependencies.dynamiccrosshair]]
 modId = "forge"

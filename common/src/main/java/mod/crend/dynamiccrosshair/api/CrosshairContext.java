@@ -30,6 +30,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class CrosshairContext {
 
 	@NonNull

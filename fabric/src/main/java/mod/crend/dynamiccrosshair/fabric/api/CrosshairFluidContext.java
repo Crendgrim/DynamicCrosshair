@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
+@SuppressWarnings("unused")
 public class CrosshairFluidContext {
 
 	@SuppressWarnings("UnstableApiUsage")
