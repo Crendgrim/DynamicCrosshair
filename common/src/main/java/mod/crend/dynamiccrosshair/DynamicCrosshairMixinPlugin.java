@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair;
 
-import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -15,7 +14,7 @@ public class DynamicCrosshairMixinPlugin implements IMixinConfigPlugin {
         String[] split = mixinClassName.split("\\.compat\\.mixin\\.");
         if (split.length == 2) {
             String modid = split[1].split("\\.")[0];
-            return FabricLoader.getInstance().isModLoaded(modid);
+            return PlatformUtils.isModLoaded(modid);
         }
         return true;
     }
