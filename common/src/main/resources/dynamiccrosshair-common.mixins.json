@@ -10,7 +10,6 @@
     "IAxeItemMixin",
     "IBlockItemMixin",
     "IBoatEntityMixin",
-    "IBucketItemMixin",
     "IChiseledBookshelfBlockMixin",
     "IFlowerPotBlockMixin",
     "IFurnaceMinecartEntityMixin",
