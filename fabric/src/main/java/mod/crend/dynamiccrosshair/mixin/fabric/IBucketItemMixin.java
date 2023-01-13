@@ -1,4 +1,4 @@
-package mod.crend.dynamiccrosshair.mixin;
+package mod.crend.dynamiccrosshair.mixin.fabric;
 
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;

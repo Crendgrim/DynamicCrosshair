@@ -1,8 +1,8 @@
 package mod.crend.dynamiccrosshair.handler;
 
+import mod.crend.dynamiccrosshair.PlatformUtils;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.mixin.IBucketItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
 import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
 import net.minecraft.SharedConstants;
@@ -50,7 +50,7 @@ public class VanillaEntityHandler {
         }
         if (entity.getType() == EntityType.ARMOR_STAND) return Crosshair.USE_ITEM;
         else if (entity instanceof Bucketable) {
-            if (handItem instanceof BucketItem bucketItem && ((IBucketItemMixin) bucketItem).getFluid() == Fluids.WATER) {
+            if (handItem instanceof BucketItem bucketItem && PlatformUtils.getFluidFromBucket(bucketItem) == Fluids.WATER) {
                 return Crosshair.USE_ITEM;
             }
             return null;

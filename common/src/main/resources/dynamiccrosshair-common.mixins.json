@@ -8,7 +8,6 @@
     "IAbstractBlockMixin",
     "IAxeItemMixin",
     "IBlockItemMixin",
-    "IBucketItemMixin",
     "IFlowerPotBlockMixin",
     "IFurnaceMinecartEntityMixin",
     "IHoeItemMixin",
