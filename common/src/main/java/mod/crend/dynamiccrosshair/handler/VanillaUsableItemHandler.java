@@ -12,8 +12,10 @@ import mod.crend.dynamiccrosshair.mixin.IHoeItemMixin;
 import mod.crend.dynamiccrosshair.mixin.IShovelItemMixin;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BannerBlockEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
@@ -76,15 +78,9 @@ public class VanillaUsableItemHandler {
                 return Crosshair.USABLE;
             }
         }
-        if (handItem instanceof ArmorItem armorItem) {
-            EquipmentSlot slot = armorItem.getSlotType();
-            if (context.player.hasStackEquipped(slot)) {
-                return null;
-            }
-            return Crosshair.USABLE;
-        }
-        if (handItem instanceof ElytraItem) {
-            if (context.player.hasStackEquipped(EquipmentSlot.CHEST)) {
+        if (handItem instanceof ArmorItem || handItem instanceof ElytraItem) {
+            EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(context.getItemStack());
+            if (EnchantmentHelper.hasBindingCurse(context.player.getEquippedStack(slot))) {
                 return null;
             }
             return Crosshair.USABLE;
