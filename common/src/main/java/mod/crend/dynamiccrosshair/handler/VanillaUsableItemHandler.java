@@ -60,6 +60,7 @@ public class VanillaUsableItemHandler {
                 || handItem instanceof WrittenBookItem
                 || handItem instanceof GoatHornItem
                 || handItem instanceof BundleItem
+                || handItem instanceof BrushItem
         );
     }
 
@@ -280,6 +281,11 @@ public class VanillaUsableItemHandler {
             }
         }
         if (handItem instanceof WritableBookItem || handItem instanceof WrittenBookItem) return Crosshair.USABLE;
+        if (handItem instanceof BrushItem) {
+            if (block == Blocks.SUSPICIOUS_SAND) {
+                return Crosshair.USABLE;
+            }
+        }
 
         return null;
     }
