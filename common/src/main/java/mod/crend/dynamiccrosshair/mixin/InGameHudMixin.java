@@ -8,6 +8,7 @@ import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairColor;
 import mod.crend.dynamiccrosshair.config.CrosshairModifier;
 import mod.crend.dynamiccrosshair.config.CrosshairStyle;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.Perspective;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value=InGameHud.class, priority=1010)
-public class InGameHudMixin {
+public class InGameHudMixin extends DrawableHelper {
     @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private void dynamiccrosshair$preCrosshair(final MatrixStack matrixStack, final CallbackInfo ci) {
         if (!CrosshairHandler.shouldShowCrosshair()) ci.cancel();
@@ -44,7 +45,7 @@ public class InGameHudMixin {
     }
 
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0), require = 0)
-    private void dynamiccrosshair$drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    private void dynamiccrosshair$drawCrosshair(MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         dynamiccrosshair$setColor(DynamicCrosshair.config.getColor());
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
@@ -52,15 +53,15 @@ public class InGameHudMixin {
             if (crosshair.hasStyle()) {
                 CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
                 dynamiccrosshair$setColor(crosshairStyle.getColor());
-                instance.drawTexture(matrixStack, x, y, crosshairStyle.getStyle().getX(), crosshairStyle.getStyle().getY(), 15, 15);
+                drawTexture(matrixStack, x, y, crosshairStyle.getStyle().getX(), crosshairStyle.getStyle().getY(), 15, 15);
             }
             for (CrosshairModifier modifier : crosshair.getModifiers()) {
                 dynamiccrosshair$setColor(modifier.getColor());
-                instance.drawTexture(matrixStack, x, y, modifier.getStyle().getX(), modifier.getStyle().getY(), 15, 15);
+                drawTexture(matrixStack, x, y, modifier.getStyle().getX(), modifier.getStyle().getY(), 15, 15);
             }
             RenderSystem.setShaderTexture(0, InGameHud.GUI_ICONS_TEXTURE);
         } else {
-            instance.drawTexture(matrixStack, x, y, u, v, width, height);
+            drawTexture(matrixStack, x, y, u, v, width, height);
         }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
