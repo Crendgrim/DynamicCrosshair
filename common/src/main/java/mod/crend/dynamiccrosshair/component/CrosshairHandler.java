@@ -18,7 +18,10 @@ import net.minecraft.util.hit.HitResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CrosshairHandler {
 
@@ -37,8 +40,12 @@ public class CrosshairHandler {
         // interactable blocks if not sneaking
         if (DynamicCrosshair.config.dynamicCrosshairOnBlock() != InteractableCrosshairPolicy.Disabled && context.isWithBlock() && context.shouldInteract()) {
             for (DynamicCrosshairApi api : context.apis()) {
-                if (api.isInteractableBlock(context.getBlockState())) {
-                    return true;
+                try {
+                    if (api.isAlwaysInteractableBlock(context.getBlockState()) || api.isInteractableBlock(context.getBlockState())) {
+                        return true;
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
         }
@@ -48,17 +55,21 @@ public class CrosshairHandler {
     private static Crosshair buildCrosshairAdvancedFromItem(CrosshairContext context) {
         UsableCrosshairPolicy usableItemPolicy = DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem();
         for (DynamicCrosshairApi api : context.apis()) {
-            if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
-                ItemStack itemStack = context.getItemStack();
-                if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && api.isAlwaysUsableItem(itemStack)) {
-                    return Crosshair.USABLE;
+            try {
+                if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
+                    ItemStack itemStack = context.getItemStack();
+                    if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && api.isAlwaysUsableItem(itemStack)) {
+                        return Crosshair.USABLE;
+                    }
+                    if (usableItemPolicy == UsableCrosshairPolicy.Always && api.isUsableItem(itemStack)) {
+                        return Crosshair.USABLE;
+                    }
                 }
-                if (usableItemPolicy == UsableCrosshairPolicy.Always && api.isUsableItem(itemStack)) {
-                    return Crosshair.USABLE;
-                }
+                Crosshair crosshair = api.computeFromItem(context);
+                if (crosshair != null) return crosshair;
+            } catch (RuntimeException e) {
+                LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
             }
-            Crosshair crosshair = api.computeFromItem(context);
-            if (crosshair != null) return crosshair;
         }
         return null;
     }
@@ -68,21 +79,29 @@ public class CrosshairHandler {
         // Targeted block / entity
         if (context.isWithEntity()) {
             for (DynamicCrosshairApi api : context.apis()) {
-                if (api.isAlwaysInteractableEntity(context.getEntity())) {
-                    crosshair = Crosshair.INTERACTABLE;
-                } else {
-                    crosshair = api.computeFromEntity(context);
+                try {
+                    if (api.isAlwaysInteractableEntity(context.getEntity())) {
+                        crosshair = Crosshair.INTERACTABLE;
+                    } else {
+                        crosshair = api.computeFromEntity(context);
+                    }
+                    if (crosshair != null) break;
+                } catch (RuntimeException e) {
+                    LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
-                if (crosshair != null) break;
             }
         } else if (context.isWithBlock() && context.shouldInteract()) {
             for (DynamicCrosshairApi api : context.apis()) {
-                if (api.isAlwaysInteractableBlock(context.getBlockState())) {
-                    crosshair = Crosshair.INTERACTABLE;
-                } else {
-                    crosshair = api.computeFromBlock(context);
+                try {
+                    if (api.isAlwaysInteractableBlock(context.getBlockState())) {
+                        crosshair = Crosshair.INTERACTABLE;
+                    } else {
+                        crosshair = api.computeFromBlock(context);
+                    }
+                    if (crosshair != null) break;
+                } catch (RuntimeException e) {
+                    LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
-                if (crosshair != null) break;
             }
         }
         return Crosshair.combine(crosshair, buildCrosshairAdvancedFromItem(context));
@@ -112,17 +131,21 @@ public class CrosshairHandler {
         Crosshair crosshair = null;
         // Main hand
         for (DynamicCrosshairApi api : context.apis()) {
-            crosshair = switch (api.getItemCategory(context.getItemStack())) {
-                case TOOL -> Crosshair.TOOL;
-                case MELEE_WEAPON -> Crosshair.MELEE_WEAPON;
-                case RANGED_WEAPON -> Crosshair.RANGED_WEAPON;
-                case THROWABLE -> Crosshair.THROWABLE;
-                case BLOCK -> Crosshair.HOLDING_BLOCK;
-                case SHIELD -> Crosshair.SHIELD;
-                case USABLE -> Crosshair.USABLE;
-                default -> null;
-            };
-            if (crosshair != null) break;
+            try {
+                crosshair = switch (api.getItemCategory(context.getItemStack())) {
+                    case TOOL -> Crosshair.TOOL;
+                    case MELEE_WEAPON -> Crosshair.MELEE_WEAPON;
+                    case RANGED_WEAPON -> Crosshair.RANGED_WEAPON;
+                    case THROWABLE -> Crosshair.THROWABLE;
+                    case BLOCK -> Crosshair.HOLDING_BLOCK;
+                    case SHIELD -> Crosshair.SHIELD;
+                    case USABLE -> Crosshair.USABLE;
+                    default -> null;
+                };
+                if (crosshair != null) break;
+            } catch (RuntimeException e) {
+                LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+            }
         }
         // Offhand
         if (crosshair == null) {
@@ -145,8 +168,12 @@ public class CrosshairHandler {
         if (context.isWithEntity()) {
             Entity entity = context.getEntity();
             for (DynamicCrosshairApi api : context.apis()) {
-                if (api.isAlwaysInteractableEntity(entity) || api.isInteractableEntity(entity)) {
-                    return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
+                try {
+                    if (api.isAlwaysInteractableEntity(entity) || api.isInteractableEntity(entity)) {
+                        return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
+                    }
+                } catch (RuntimeException e) {
+                    LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
         // Block
@@ -154,7 +181,11 @@ public class CrosshairHandler {
             BlockState blockState = context.getBlockState();
             for (DynamicCrosshairApi api : context.apis()) {
                 if (api.isAlwaysInteractableBlock(blockState) || api.isInteractableBlock(blockState)) {
-                    return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
+                    try {
+                        return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
+                    } catch (RuntimeException e) {
+                        LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+                    }
                 }
             }
         }
@@ -168,13 +199,82 @@ public class CrosshairHandler {
         return buildCrosshairAdvanced(context);
     }
 
+    private static void debug(List<DynamicCrosshairApi> apis, Function<DynamicCrosshairApi, Object> callback) {
+        for (DynamicCrosshairApi api : apis) {
+            try {
+                LOGGER.info("  {}:{}: {}", api.getNamespace(), api.getModId(), callback.apply(api));
+            } catch (RuntimeException e) {
+                LOGGER.info("  {}:{}: FAILED", api.getNamespace(), api.getModId());
+            }
+        }
+    }
+
+    public static void debug() {
+        CrosshairContext context = state.context;
+        var apis = context.apis();
+        LOGGER.info("Dynamic Crosshair evaluation");
+        LOGGER.info("Context:");
+        LOGGER.info("  Main hand:{}", context.getItemStack(Hand.MAIN_HAND));
+        LOGGER.info("  Offhand:{}", context.getItemStack(Hand.OFF_HAND));
+        LOGGER.info("  Block:{}", context.isWithBlock() ? context.getBlockState() : "null");
+        LOGGER.info("  Entity:{}", context.isWithEntity() ? context.getEntity() : "null");
+        LOGGER.info("Active APIs: " + apis.stream().map(api -> api.getNamespace() + ":" + api.getModId()).toList());
+        LOGGER.info("Forcing invalidation: {}", apis.stream().filter(api -> api.forceInvalidate(context)).collect(Collectors.toList()));
+        LOGGER.info(".getItemCategory(MAIN_HAND)");
+        debug(apis, api -> api.getItemCategory(context.getItemStack()));
+        LOGGER.info(".isAlwaysUsableItem(MAIN_HAND)");
+        debug(apis, api -> api.isAlwaysUsableItem(context.getItemStack()));
+        LOGGER.info(".isUsableItem(MAIN_HAND)");
+        debug(apis, api -> api.isUsableItem(context.getItemStack()));
+        LOGGER.info(".computeFromItem(MAIN_HAND)");
+        debug(apis, api -> api.computeFromItem(context));
+        context.setHand(Hand.OFF_HAND);
+        LOGGER.info(".getItemCategory(OFF_HAND)");
+        debug(apis, api -> api.getItemCategory(context.getItemStack()));
+        LOGGER.info(".isAlwaysUsableItem(OFF_HAND)");
+        debug(apis, api -> api.isAlwaysUsableItem(context.getItemStack()));
+        LOGGER.info(".isUsableItem(OFF_HAND)");
+        debug(apis, api -> api.isUsableItem(context.getItemStack()));
+        LOGGER.info(".computeFromItem(OFF_HAND)");
+        debug(apis, api -> api.computeFromItem(context));
+        context.setHand(Hand.MAIN_HAND);
+        if (context.isWithEntity()) {
+            LOGGER.info(".isAlwaysInteractableEntity()");
+            debug(apis, api -> api.isAlwaysInteractableEntity(context.getEntity()));
+            LOGGER.info(".isInteractableEntity()");
+            debug(apis, api -> api.isInteractableEntity(context.getEntity()));
+            LOGGER.info(".computeFromEntity(MAIN_HAND)");
+            debug(apis, api -> api.computeFromEntity(context));
+            context.setHand(Hand.OFF_HAND);
+            LOGGER.info(".computeFromEntity(OFF_HAND)");
+            debug(apis, api -> api.computeFromEntity(context));
+            context.setHand(Hand.MAIN_HAND);
+        }
+        if (context.isWithBlock()) {
+            LOGGER.info(".isAlwaysInteractableBlock()");
+            debug(apis, api -> api.isAlwaysInteractableBlock(context.getBlockState()));
+            LOGGER.info(".isInteractableBlock()");
+            debug(apis, api -> api.isInteractableBlock(context.getBlockState()));
+            LOGGER.info(".computeFromBlock(MAIN_HAND)");
+            debug(apis, api -> api.computeFromBlock(context));
+            context.setHand(Hand.OFF_HAND);
+            LOGGER.info(".computeFromBlock(OFF_HAND)");
+            debug(apis, api -> api.computeFromBlock(context));
+            context.setHand(Hand.MAIN_HAND);
+        }
+    }
+
 
     static State state = null;
 
     private static Optional<Boolean> buildCrosshair(HitResult hitResult, ClientPlayerEntity player) {
         try {
             for (DynamicCrosshairApi api : state.context.apis()) {
-                hitResult = api.overrideHitResult(state.context, hitResult);
+                try {
+                    hitResult = api.overrideHitResult(state.context, hitResult);
+                } catch (RuntimeException e) {
+                    LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+                }
             }
 
             if (!state.changed(hitResult, player)) {
