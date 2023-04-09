@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair.component;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import net.minecraft.block.BlockState;
@@ -15,8 +16,12 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class State {
+	public static final Logger LOGGER = LoggerFactory.getLogger(DynamicCrosshair.MOD_ID);
+
 	private class HitState {
 		HitResult hitResult;
 		ItemStack mainHandStack;
@@ -167,10 +172,14 @@ public class State {
 		}
 
 		for (DynamicCrosshairApi api : context.apis()) {
-			if (api.forceInvalidate(context)) {
-				previousState = newState;
-				context.invalidateHitResult(hitResult);
-				return true;
+			try {
+				if (api.forceInvalidate(context)) {
+					previousState = newState;
+					context.invalidateHitResult(hitResult);
+					return true;
+				}
+			} catch (RuntimeException e) {
+				LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
 			}
 		}
 
