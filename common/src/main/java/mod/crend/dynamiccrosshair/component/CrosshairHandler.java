@@ -44,7 +44,7 @@ public class CrosshairHandler {
                     if (api.isAlwaysInteractableBlock(context.getBlockState()) || api.isInteractableBlock(context.getBlockState())) {
                         return true;
                     }
-                } catch (RuntimeException e) {
+                } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -67,7 +67,7 @@ public class CrosshairHandler {
                 }
                 Crosshair crosshair = api.computeFromItem(context);
                 if (crosshair != null) return crosshair;
-            } catch (RuntimeException e) {
+            } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                 LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
             }
         }
@@ -86,7 +86,7 @@ public class CrosshairHandler {
                         crosshair = api.computeFromEntity(context);
                     }
                     if (crosshair != null) break;
-                } catch (RuntimeException e) {
+                } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -99,7 +99,7 @@ public class CrosshairHandler {
                         crosshair = api.computeFromBlock(context);
                     }
                     if (crosshair != null) break;
-                } catch (RuntimeException e) {
+                } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -143,7 +143,7 @@ public class CrosshairHandler {
                     default -> null;
                 };
                 if (crosshair != null) break;
-            } catch (RuntimeException e) {
+            } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                 LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
             }
         }
@@ -172,7 +172,7 @@ public class CrosshairHandler {
                     if (api.isAlwaysInteractableEntity(entity) || api.isInteractableEntity(entity)) {
                         return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
                     }
-                } catch (RuntimeException e) {
+                } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -183,7 +183,7 @@ public class CrosshairHandler {
                 if (api.isAlwaysInteractableBlock(blockState) || api.isInteractableBlock(blockState)) {
                     try {
                         return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
-                    } catch (RuntimeException e) {
+                    } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                         LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                     }
                 }
@@ -203,7 +203,7 @@ public class CrosshairHandler {
         for (DynamicCrosshairApi api : apis) {
             try {
                 LOGGER.info("  {}:{}: {}", api.getNamespace(), api.getModId(), callback.apply(api));
-            } catch (RuntimeException e) {
+            } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                 LOGGER.info("  {}:{}: FAILED", api.getNamespace(), api.getModId());
             }
         }
@@ -272,7 +272,7 @@ public class CrosshairHandler {
             for (DynamicCrosshairApi api : state.context.apis()) {
                 try {
                     hitResult = api.overrideHitResult(state.context, hitResult);
-                } catch (RuntimeException e) {
+                } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -327,7 +327,7 @@ public class CrosshairHandler {
             return buildCrosshair(crosshairContextChange.newHitResult, player);
         } catch (InvalidContextState invalidContextState) {
             LOGGER.error("Encountered invalid context state: ", invalidContextState);
-        } catch (NoSuchMethodError | NoClassDefFoundError e) {
+        } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
             LOGGER.error("Encountered an unexpected error. This usually is due to outdated mod support." + e);
         }
         return Optional.empty();
