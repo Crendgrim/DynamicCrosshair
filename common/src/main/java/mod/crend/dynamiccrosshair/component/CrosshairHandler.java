@@ -284,24 +284,6 @@ public class CrosshairHandler {
             // State changed, build new crosshair
             activeCrosshair = new Crosshair();
 
-            if (!DynamicCrosshair.config.isDynamicCrosshairStyle()) {
-                activeCrosshair.setVariant(CrosshairVariant.Regular);
-                if (!DynamicCrosshair.config.isDynamicCrosshair()) {
-                    return Optional.of(true);
-                }
-
-                return switch (hitResult.getType()) {
-                    case ENTITY -> Optional.of(DynamicCrosshair.config.dynamicCrosshairOnEntity());
-                    case BLOCK -> switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
-                        case IfTargeting -> Optional.of(true);
-                        case IfInteractable -> Optional.of(isBlockInteractable(state.context));
-                        case Disabled -> Optional.of(false);
-                    };
-                    case MISS -> Optional.of(false);
-                };
-            }
-
-            // Dynamic crosshair style is active
             switch (hitResult.getType()) {
                 case ENTITY -> {
                     if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
