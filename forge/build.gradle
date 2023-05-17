@@ -88,9 +88,9 @@ unifiedPublishing {
         mainPublication tasks.remapJar
 
         relations {
-            depends {
-                curseforge = "cloth-config"
-                modrinth = "cloth-config"
+            optional {
+                curseforge = "yacl"
+                modrinth = "yacl"
             }
         }
 
