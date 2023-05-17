@@ -48,32 +48,30 @@ public class ConfigValidator {
 	}
 
 	private static <U> boolean validate(Field field, U defaults, U config) throws IllegalAccessException {
-		if (field.isAnnotationPresent(ConfigEntry.class)) {
-			if (!Objects.equals(field.get(config), field.get(defaults))) {
-				IntegerRange intRange = field.getAnnotation(IntegerRange.class);
-				if (intRange != null) {
-					return validateRange(config, field, intRange.min(), intRange.max());
-				}
-				LongRange longRange = field.getAnnotation(LongRange.class);
-				if (longRange != null) {
-					return validateRange(config, field, longRange.min(), longRange.max());
-				}
-				DoubleRange doubleRange = field.getAnnotation(DoubleRange.class);
-				if (doubleRange != null) {
-					return validateRange(config, field, doubleRange.min(), doubleRange.max());
-				}
-				FloatRange floatRange = field.getAnnotation(FloatRange.class);
-				if (floatRange != null) {
-					return validateRange(config, field, floatRange.min(), floatRange.max());
-				}
-				boolean configValid = true;
-				for (Field innerField : field.getType().getFields()) {
-					if (!validate(innerField, field.get(defaults), field.get(config))) {
-						configValid = false;
-					}
-				}
-				return configValid;
+		if (!Objects.equals(field.get(config), field.get(defaults))) {
+			IntegerRange intRange = field.getAnnotation(IntegerRange.class);
+			if (intRange != null) {
+				return validateRange(config, field, intRange.min(), intRange.max());
 			}
+			LongRange longRange = field.getAnnotation(LongRange.class);
+			if (longRange != null) {
+				return validateRange(config, field, longRange.min(), longRange.max());
+			}
+			DoubleRange doubleRange = field.getAnnotation(DoubleRange.class);
+			if (doubleRange != null) {
+				return validateRange(config, field, doubleRange.min(), doubleRange.max());
+			}
+			FloatRange floatRange = field.getAnnotation(FloatRange.class);
+			if (floatRange != null) {
+				return validateRange(config, field, floatRange.min(), floatRange.max());
+			}
+			boolean configValid = true;
+			for (Field innerField : field.getType().getFields()) {
+				if (!validate(innerField, field.get(defaults), field.get(config))) {
+					configValid = false;
+				}
+			}
+			return configValid;
 		}
 		return true;
 	}
