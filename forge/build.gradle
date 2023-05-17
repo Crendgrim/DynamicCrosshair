@@ -30,6 +30,7 @@ repositories {
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
     //modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+    implementation(include("com.github.llamalad7.mixinextras:mixinextras-forge:${project.mixin_extras_version}"))
 
     modApi("me.shedaniel.cloth:cloth-config-forge:${project.clothconfig_version}")
 
