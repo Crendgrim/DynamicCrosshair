@@ -20,7 +20,7 @@
       "mod.crend.dynamiccrosshair.fabric.DynamicCrosshairFabric"
     ],
     "modmenu": [
-      "mod.crend.dynamiccrosshair.fabric.DynamicCrosshairModMenuIntegration"
+      "mod.crend.dynamiccrosshair.fabric.screen.ModMenuIntegration"
     ]
   },
   "mixins": [

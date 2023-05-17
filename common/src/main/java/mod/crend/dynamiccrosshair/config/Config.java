@@ -1,90 +1,109 @@
 package mod.crend.dynamiccrosshair.config;
 
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import dev.isxander.yacl.config.ConfigEntry;
+import mod.crend.autoyacl.annotation.*;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 
-@me.shedaniel.autoconfig.annotation.Config(name = DynamicCrosshair.MOD_ID)
-public class Config implements ConfigData {
-    @ConfigEntry.Gui.Tooltip(count = 2)
-    @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-    CrosshairMode dynamicCrosshair = CrosshairMode.Advanced;
-    boolean disableDebugCrosshair = false;
-    boolean thirdPersonCrosshair = false;
-    boolean hideWithScreen = true;
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    CrosshairConfig crosshairConfig = new CrosshairConfig();
+import java.awt.Color;
 
-    static class CrosshairConfig {
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        InteractableCrosshairPolicy onBlock = InteractableCrosshairPolicy.IfTargeting;
-        boolean onEntity = true;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairPolicy holdingTool = CrosshairPolicy.Always;
-        boolean holdingMeleeWeapon = true;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.IfInteractable;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        UsableCrosshairPolicy holdingThrowable = UsableCrosshairPolicy.IfInteractable;
-        boolean holdingShield = true;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
+@AutoYaclConfig(modid=DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
+public class Config {
+    @ConfigEntry
+    @Tooltip
+    public CrosshairMode dynamicCrosshair = CrosshairMode.Advanced;
+    @ConfigEntry
+    public boolean disableDebugCrosshair = false;
+    @ConfigEntry
+    public boolean thirdPersonCrosshair = false;
+    @ConfigEntry
+    public boolean hideWithScreen = true;
+    @ConfigEntry
+    public CrosshairConfig crosshairConfig = new CrosshairConfig();
+
+    public static class CrosshairConfig {
+        @ConfigEntry
+        public InteractableCrosshairPolicy onBlock = InteractableCrosshairPolicy.IfTargeting;
+        @ConfigEntry
+        public boolean onEntity = true;
+        @ConfigEntry
+        public CrosshairPolicy holdingTool = CrosshairPolicy.Always;
+        @ConfigEntry
+        public boolean holdingMeleeWeapon = true;
+        @ConfigEntry
+        public UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.IfInteractable;
+        @ConfigEntry
+        public UsableCrosshairPolicy holdingThrowable = UsableCrosshairPolicy.IfInteractable;
+        @ConfigEntry
+        public boolean holdingShield = true;
+        @ConfigEntry
+        public BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
+        @ConfigEntry
+        public UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
     }
 
-    static class CrosshairColorSettings {
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairConfigColor crosshairColor = CrosshairConfigColor.Unchanged;
-        @ConfigEntry.ColorPicker(allowAlpha = true)
-        int customColor = 0xFFAABBCC;
-        @ConfigEntry.Gui.Tooltip
-        boolean forceColor = false;
+    public static class CrosshairColorSettings {
+        @ConfigEntry
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.color.crosshairColor")
+        public CrosshairConfigColor crosshairColor = CrosshairConfigColor.Unchanged;
+        @ConfigEntry
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.color.customColor")
+        public Color customColor = new Color(0xFFAABBCC, true);
+        @ConfigEntry
+        @Tooltip
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.color.forceColor")
+        public boolean forceColor = false;
     }
-    static class CrosshairStyleSettings {
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairConfigStyle style = CrosshairConfigStyle.Cross;
-        @ConfigEntry.Gui.TransitiveObject
-        CrosshairColorSettings color = new CrosshairColorSettings();
+    public static class CrosshairStyleSettings {
+        @ConfigEntry
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
+        public CrosshairConfigStyle style = CrosshairConfigStyle.Cross;
+        @ConfigEntry
+        @TransitiveObject
+        public CrosshairColorSettings color = new CrosshairColorSettings();
     }
-    static class CrosshairModifierSettings {
-        @ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
-        CrosshairConfigModifier style;
-        @ConfigEntry.Gui.TransitiveObject
-        CrosshairColorSettings color = new CrosshairColorSettings();
+    public static class CrosshairModifierSettings {
+        @ConfigEntry
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
+        public CrosshairConfigModifier style;
+        @ConfigEntry
+        @TransitiveObject
+        public CrosshairColorSettings color = new CrosshairColorSettings();
     }
 
-    @ConfigEntry.Category("style")
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    CrosshairColorSettings color = new CrosshairColorSettings();
+    @ConfigEntry
+    @TransitiveObject
+    @Category(name = "style")
+    public CrosshairColorSettings color = new CrosshairColorSettings();
 
-    @ConfigEntry.Category("style")
-    boolean dynamicCrosshairStyle = true;
-    @ConfigEntry.Category("style")
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    CrosshairStyles crosshairStyle = new CrosshairStyles();
-    @ConfigEntry.Category("style")
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    CrosshairModifiers crosshairModifiers = new CrosshairModifiers();
-    static class CrosshairStyles {
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings regular = new CrosshairStyleSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings onBlock = new CrosshairStyleSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings onEntity = new CrosshairStyleSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings holdingTool = new CrosshairStyleSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings holdingMeleeWeapon = new CrosshairStyleSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings holdingRangedWeapon = new CrosshairStyleSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings holdingThrowable = new CrosshairStyleSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairStyleSettings holdingBlock = new CrosshairStyleSettings();
+    @ConfigEntry
+    public boolean dynamicCrosshairStyle = true;
+    @ConfigEntry
+    @TransitiveObject
+    @Category(name = "style")
+    public CrosshairStyles crosshairStyle = new CrosshairStyles();
+    @ConfigEntry
+    @Category(name = "style")
+    @TransitiveObject
+    public CrosshairModifiers crosshairModifiers = new CrosshairModifiers();
+    public static class CrosshairStyles {
+        @ConfigEntry
+        public CrosshairStyleSettings regular = new CrosshairStyleSettings();
+        @ConfigEntry
+        public CrosshairStyleSettings onBlock = new CrosshairStyleSettings();
+        @ConfigEntry
+        public CrosshairStyleSettings onEntity = new CrosshairStyleSettings();
+        @ConfigEntry
+        public CrosshairStyleSettings holdingTool = new CrosshairStyleSettings();
+        @ConfigEntry
+        public CrosshairStyleSettings holdingMeleeWeapon = new CrosshairStyleSettings();
+        @ConfigEntry
+        public CrosshairStyleSettings holdingRangedWeapon = new CrosshairStyleSettings();
+        @ConfigEntry
+        public CrosshairStyleSettings holdingThrowable = new CrosshairStyleSettings();
+        @ConfigEntry
+        public CrosshairStyleSettings holdingBlock = new CrosshairStyleSettings();
 
-        CrosshairStyles() {
+        public CrosshairStyles() {
             regular.style = CrosshairConfigStyle.Cross;
             onBlock.style = CrosshairConfigStyle.Cross;
             onEntity.style = CrosshairConfigStyle.DiagonalCross;
@@ -95,19 +114,19 @@ public class Config implements ConfigData {
             holdingBlock.style = CrosshairConfigStyle.Diamond;
         }
     }
-    static class CrosshairModifiers {
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairModifierSettings modInteractable = new CrosshairModifierSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairModifierSettings modUsableItem = new CrosshairModifierSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairModifierSettings modShield = new CrosshairModifierSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairModifierSettings modCorrectTool = new CrosshairModifierSettings();
-        @ConfigEntry.Gui.CollapsibleObject
-        CrosshairModifierSettings modIncorrectTool = new CrosshairModifierSettings();
+    public static class CrosshairModifiers {
+        @ConfigEntry
+        public CrosshairModifierSettings modInteractable = new CrosshairModifierSettings();
+        @ConfigEntry
+        public CrosshairModifierSettings modUsableItem = new CrosshairModifierSettings();
+        @ConfigEntry
+        public CrosshairModifierSettings modShield = new CrosshairModifierSettings();
+        @ConfigEntry
+        public CrosshairModifierSettings modCorrectTool = new CrosshairModifierSettings();
+        @ConfigEntry
+        public CrosshairModifierSettings modIncorrectTool = new CrosshairModifierSettings();
 
-        CrosshairModifiers() {
+        public CrosshairModifiers() {
             modInteractable.style = CrosshairConfigModifier.Brackets;
             modCorrectTool.style = CrosshairConfigModifier.Dot;
             modIncorrectTool.style = CrosshairConfigModifier.DiagonalCross;
@@ -116,24 +135,30 @@ public class Config implements ConfigData {
         }
     }
 
-    @ConfigEntry.Category("tweaks")
-    @ConfigEntry.Gui.PrefixText
-    boolean enableTweaks = false;
+    @ConfigEntry
+    @Category(name="tweaks")
+    @Label(key = "dynamiccrosshair.option.enableTweaks.@PrefixText")
+    public boolean enableTweaks = false;
 
-    @ConfigEntry.Category("tweaks")
-    @ConfigEntry.Gui.PrefixText
-    @ConfigEntry.Gui.RequiresRestart
-    String additionalTools;
-    @ConfigEntry.Category("tweaks")
-    @ConfigEntry.Gui.RequiresRestart
-    String additionalMeleeWeapons;
-    @ConfigEntry.Category("tweaks")
-    @ConfigEntry.Gui.RequiresRestart
-    String additionalRangedWeapons;
-    @ConfigEntry.Category("tweaks")
-    @ConfigEntry.Gui.RequiresRestart
-    String additionalThrowables;
-    @ConfigEntry.Category("tweaks")
-    @ConfigEntry.Gui.RequiresRestart
-    String additionalUsableItems;
+    @ConfigEntry
+    @Category(name="tweaks")
+    @Label(key = "dynamiccrosshair.option.additionalTools.@PrefixText")
+    @OnSave(gameRestart = true)
+    public String additionalTools = "";
+    @ConfigEntry
+    @Category(name="tweaks")
+    @OnSave(gameRestart = true)
+    public String additionalMeleeWeapons = "";
+    @ConfigEntry
+    @Category(name="tweaks")
+    @OnSave(gameRestart = true)
+    public String additionalRangedWeapons = "";
+    @ConfigEntry
+    @Category(name="tweaks")
+    @OnSave(gameRestart = true)
+    public String additionalThrowables = "";
+    @ConfigEntry
+    @Category(name="tweaks")
+    @OnSave(gameRestart = true)
+    public String additionalUsableItems = "";
 }

@@ -31,7 +31,7 @@ dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
     //modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
 
-    modApi("me.shedaniel.cloth:cloth-config-forge:${project.clothconfig_version}")
+    modImplementation "dev.isxander.yacl:yet-another-config-lib-forge:${project.yacl_version}"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
@@ -50,17 +50,17 @@ shadowJar {
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    classifier "dev-shadow"
+    archiveClassifier.set("dev-shadow")
 }
 
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier "forge"
+    archiveClassifier.set("forge")
 }
 
 jar {
-    classifier "dev"
+    archiveClassifier.set("dev")
 }
 
 sourcesJar {

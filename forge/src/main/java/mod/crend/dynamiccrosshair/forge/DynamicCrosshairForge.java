@@ -1,7 +1,10 @@
 package mod.crend.dynamiccrosshair.forge;
 
+import mod.crend.autoyacl.ConfigScreenFactory;
+import mod.crend.autoyacl.YaclHelper;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshair.config.Config;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModList;
@@ -14,10 +17,12 @@ public class DynamicCrosshairForge {
 
     public static void init() {
         DynamicCrosshair.init();
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory(
-                        (minecraft, screen) -> ConfigHandler.getScreen(screen)
-                ));
+        if (YaclHelper.HAS_YACL) {
+            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
+                    () -> new ConfigScreenHandler.ConfigScreenFactory(
+                            (minecraft, screen) -> ConfigScreenFactory.makeScreen(Config.class, screen)
+                    ));
+        }
     }
 
     public static void registerApi(DynamicCrosshairApi api) {

@@ -1,13 +1,16 @@
 package mod.crend.dynamiccrosshair.config;
 
-public enum UsableCrosshairPolicy {
+import mod.crend.autoyacl.NameableEnum;
+import net.minecraft.text.Text;
+
+public enum UsableCrosshairPolicy implements NameableEnum {
     Always,
     IfInteractable,
     Disabled;
 
     @Override
-    public String toString() {
-        return "text.dynamiccrosshair.option.mode." + name();
+    public Text getDisplayName() {
+        return Text.translatable("dynamiccrosshair.policy." + name());
     }
 }
 

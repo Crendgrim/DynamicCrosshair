@@ -1,6 +1,9 @@
 package mod.crend.dynamiccrosshair.config;
 
-public enum CrosshairConfigStyle {
+import mod.crend.autoyacl.NameableEnum;
+import net.minecraft.text.Text;
+
+public enum CrosshairConfigStyle implements NameableEnum {
     Default(0, 0),
     Cross(15, 0),
     DiagonalCross(30, 0),
@@ -20,7 +23,7 @@ public enum CrosshairConfigStyle {
     public int getY() { return y; }
 
     @Override
-    public String toString() {
-        return "text.dynamiccrosshair.style." + name();
+    public Text getDisplayName() {
+        return Text.translatable("dynamiccrosshair.style." + name());
     }
 }

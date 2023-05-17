@@ -1,12 +1,15 @@
 package mod.crend.dynamiccrosshair.config;
 
-public enum CrosshairMode {
+import mod.crend.autoyacl.NameableEnum;
+import net.minecraft.text.Text;
+
+public enum CrosshairMode implements NameableEnum {
 	Disabled,
 	Simple,
 	Advanced;
 
 	@Override
-	public String toString() {
-		return "text.dynamiccrosshair.option.mode." + name();
+	public Text getDisplayName() {
+		return Text.translatable("dynamiccrosshair.mode." + name());
 	}
 }

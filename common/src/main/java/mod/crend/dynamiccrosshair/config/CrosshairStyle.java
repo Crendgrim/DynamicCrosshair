@@ -6,6 +6,6 @@ public record CrosshairStyle(Config.CrosshairStyleSettings settings) {
 	}
 
 	public CrosshairColor getColor() {
-		return new CrosshairColor(settings.color.crosshairColor, settings.color.customColor, settings.color.forceColor);
+		return new CrosshairColor(settings.color.crosshairColor, settings.color.customColor.getRGB(), settings.color.forceColor);
 	}
 }

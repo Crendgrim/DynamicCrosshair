@@ -1,6 +1,9 @@
 package mod.crend.dynamiccrosshair.config;
 
-public enum CrosshairConfigColor {
+import mod.crend.autoyacl.NameableEnum;
+import net.minecraft.text.Text;
+
+public enum CrosshairConfigColor implements NameableEnum {
 	Unchanged(0xFFFFFFFF),
 	Red(0xFFFF0000),
 	Yellow(0xFFAAAA00),
@@ -17,7 +20,7 @@ public enum CrosshairConfigColor {
 	}
 
 	@Override
-	public String toString() {
-		return "text.dynamiccrosshair.color." + name();
+	public Text getDisplayName() {
+		return Text.translatable("dynamiccrosshair.color." + name());
 	}
 }

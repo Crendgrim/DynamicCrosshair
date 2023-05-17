@@ -1,9 +1,8 @@
-package mod.crend.dynamiccrosshair;
+package mod.crend.autoyacl;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BucketItem;
+
+import java.nio.file.Path;
 
 public class PlatformUtils {
 	@ExpectPlatform
@@ -12,7 +11,8 @@ public class PlatformUtils {
 	}
 
 	@ExpectPlatform
-	public static Fluid getFluidFromBucket(BucketItem bucket) {
+	public static Path resolveConfigFile(String configName) {
 		throw new AssertionError();
 	}
+
 }

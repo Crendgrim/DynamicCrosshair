@@ -29,8 +29,8 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dynamiccrosshair]]
-modId = "cloth_config"
-mandatory = true
-versionRange = "[8,)"
+modId = "yet_another_config_lib"
+mandatory = false
+versionRange = "[2.5,)"
 ordering = "NONE"
 side = "BOTH"

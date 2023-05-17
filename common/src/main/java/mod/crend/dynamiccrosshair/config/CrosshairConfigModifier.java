@@ -1,6 +1,9 @@
 package mod.crend.dynamiccrosshair.config;
 
-public enum CrosshairConfigModifier {
+import mod.crend.autoyacl.NameableEnum;
+import net.minecraft.text.Text;
+
+public enum CrosshairConfigModifier implements NameableEnum {
     Disabled(240, 240),
     Dot(0, 15),
     DiagonalCross(15, 15),
@@ -22,7 +25,7 @@ public enum CrosshairConfigModifier {
     public int getY() { return y; }
 
     @Override
-    public String toString() {
-        return "text.dynamiccrosshair.modifierStyle." + name();
+    public Text getDisplayName() {
+        return Text.translatable("dynamiccrosshair.style." + name());
     }
 }
