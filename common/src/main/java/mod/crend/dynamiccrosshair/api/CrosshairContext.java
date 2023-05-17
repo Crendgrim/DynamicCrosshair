@@ -26,18 +26,18 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class CrosshairContext {
 
-	@NonNull
+	@NotNull
 	public final ClientWorld world;
-	@NonNull
+	@NotNull
 	public final ClientPlayerEntity player;
-	@NonNull
+	@NotNull
 	public HitResult hitResult;
 
 	public CrosshairContext() {
