@@ -34,6 +34,7 @@ dependencies {
     modImplementation fabricApi.module("fabric-key-binding-api-v1", project.fabric_api_version)
     modImplementation fabricApi.module("fabric-transfer-api-v1", project.fabric_api_version)
 
+    include("com.github.LlamaLad7:MixinExtras:${project.mixin_extras_version}")
     //modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
 
     modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
@@ -99,9 +100,9 @@ unifiedPublishing {
                 curseforge = "fabric-api"
                 modrinth = "fabric-api"
             }
-            depends {
-                curseforge = "cloth-config"
-                modrinth = "cloth-config"
+            optional {
+                curseforge = "yacl"
+                modrinth = "yacl"
             }
             optional {
                 curseforge = "modmenu"

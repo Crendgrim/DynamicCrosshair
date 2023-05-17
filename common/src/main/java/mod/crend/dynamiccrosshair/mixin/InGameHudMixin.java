@@ -1,5 +1,8 @@
 package mod.crend.dynamiccrosshair.mixin;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
@@ -21,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value=InGameHud.class, priority=1010)
-public class InGameHudMixin extends DrawableHelper {
+public class InGameHudMixin {
     @Inject(method = "renderCrosshair", at = @At(value = "HEAD"), cancellable = true)
     private void dynamiccrosshair$preCrosshair(final MatrixStack matrixStack, final CallbackInfo ci) {
         if (!CrosshairHandler.shouldShowCrosshair()) ci.cancel();
@@ -38,14 +41,14 @@ public class InGameHudMixin extends DrawableHelper {
         }
     }
 
-    @Redirect(method = "renderCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;debugEnabled:Z", opcode = Opcodes.GETFIELD), require = 0)
-    private boolean dynamiccrosshair$debugCrosshair(GameOptions instance) {
+    @ModifyExpressionValue(method = "renderCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;debugEnabled:Z"))
+    private boolean dynamiccrosshair$debugCrosshair(boolean original) {
         if (DynamicCrosshair.config.isDisableDebugCrosshair()) return false;
-        return instance.debugEnabled;
+        return original;
     }
 
-    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0), require = 0)
-    private void dynamiccrosshair$drawCrosshair(MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    @WrapOperation(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V", ordinal = 0))
+    private void dynamiccrosshair$drawCrosshair(MatrixStack matrixStack, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
         dynamiccrosshair$setColor(DynamicCrosshair.config.getColor());
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
@@ -53,23 +56,22 @@ public class InGameHudMixin extends DrawableHelper {
             if (crosshair.hasStyle()) {
                 CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
                 dynamiccrosshair$setColor(crosshairStyle.getColor());
-                drawTexture(matrixStack, x, y, crosshairStyle.getStyle().getX(), crosshairStyle.getStyle().getY(), 15, 15);
+                original.call(matrixStack, x, y, crosshairStyle.getStyle().getX(), crosshairStyle.getStyle().getY(), 15, 15);
             }
             for (CrosshairModifier modifier : crosshair.getModifiers()) {
                 dynamiccrosshair$setColor(modifier.getColor());
-                drawTexture(matrixStack, x, y, modifier.getStyle().getX(), modifier.getStyle().getY(), 15, 15);
+                original.call(matrixStack, x, y, modifier.getStyle().getX(), modifier.getStyle().getY(), 15, 15);
             }
             RenderSystem.setShaderTexture(0, InGameHud.GUI_ICONS_TEXTURE);
         } else {
-            drawTexture(matrixStack, x, y, u, v, width, height);
+            original.call(matrixStack, x, y, u, v, width, height);
         }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
     }
 
-    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target="Lnet/minecraft/client/option/GameOptions;getPerspective()Lnet/minecraft/client/option/Perspective;"), require = 0)
-    private Perspective dynamiccrosshair$thirdPersonCrosshair(GameOptions gameOptions) {
-        Perspective originalPerspective = gameOptions.getPerspective();
+    @ModifyExpressionValue(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getPerspective()Lnet/minecraft/client/option/Perspective;"), require = 0)
+    private Perspective dynamiccrosshair$thirdPersonCrosshair(Perspective originalPerspective) {
         if (originalPerspective == Perspective.THIRD_PERSON_BACK && DynamicCrosshair.config.isThirdPersonCrosshair()) {
             return Perspective.FIRST_PERSON;
         }
