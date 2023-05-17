@@ -27,6 +27,8 @@ public class ConfigHandler {
     public boolean dynamicCrosshairOnEntity() { return CONFIG_STORE.config().crosshairConfig.onEntity; }
     public CrosshairPolicy dynamicCrosshairHoldingTool() { return CONFIG_STORE.config().crosshairConfig.holdingTool; }
     public boolean dynamicCrosshairHoldingMeleeWeapon() { return CONFIG_STORE.config().crosshairConfig.holdingMeleeWeapon; }
+    public boolean dynamicCrosshairMeleeWeaponOnEntity() { return CONFIG_STORE.config().crosshairConfig.meleeWeaponOnEntity; }
+    public boolean dynamicCrosshairMeleeWeaponOnBreakableBlock() { return CONFIG_STORE.config().crosshairConfig.meleeWeaponOnBreakableBlock; }
     public UsableCrosshairPolicy dynamicCrosshairHoldingRangedWeapon() { return CONFIG_STORE.config().crosshairConfig.holdingRangedWeapon; }
     public UsableCrosshairPolicy dynamicCrosshairHoldingThrowable() { return CONFIG_STORE.config().crosshairConfig.holdingThrowable; }
     public boolean dynamicCrosshairHoldingShield() { return CONFIG_STORE.config().crosshairConfig.holdingShield; }

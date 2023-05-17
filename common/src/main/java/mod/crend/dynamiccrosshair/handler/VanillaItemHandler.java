@@ -76,7 +76,9 @@ public class VanillaItemHandler {
                 || handItem instanceof ShearsItem
                 || DynamicCrosshair.config.getAdditionalTools().contains(handItem)
         ) {
-            return Crosshair.TOOL;
+            if (!context.isWithEntity() || DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnEntity()) {
+                return Crosshair.TOOL;
+            }
         }
         if (handItem instanceof FishingRodItem) {
             if (context.player.fishHook == null) {
@@ -113,12 +115,15 @@ public class VanillaItemHandler {
         Item handItem = context.getItem();
 
         if (handItem instanceof SwordItem) {
-            if (context.canUseWeaponAsTool()) {
+            if (context.canUseWeaponAsTool() && !DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnBreakableBlock()) {
                 BlockState blockState = context.getBlockState();
                 if (handItem.getMiningSpeedMultiplier(context.getItemStack(), blockState) > 1.0f
                         && handItem.canMine(blockState, context.world, context.getBlockPos(), context.player)) {
                     return null;
                 }
+            }
+            if (context.isWithEntity() && !DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnEntity()) {
+                return null;
             }
             return Crosshair.MELEE_WEAPON;
         }
@@ -127,6 +132,9 @@ public class VanillaItemHandler {
         }
         if (handItem instanceof AxeItem) {
             if (context.canUseWeaponAsTool()) {
+                return null;
+            }
+            if (context.isWithEntity() && !DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnEntity()) {
                 return null;
             }
             return Crosshair.MELEE_WEAPON;

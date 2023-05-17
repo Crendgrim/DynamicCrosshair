@@ -30,6 +30,10 @@ public class Config {
         @ConfigEntry
         public boolean holdingMeleeWeapon = true;
         @ConfigEntry
+        public boolean meleeWeaponOnEntity = false;
+        @ConfigEntry
+        public boolean meleeWeaponOnBreakableBlock = false;
+        @ConfigEntry
         public UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.IfInteractable;
         @ConfigEntry
         public UsableCrosshairPolicy holdingThrowable = UsableCrosshairPolicy.IfInteractable;
