@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Item.class)
-public interface IItemMixin {
+public interface ItemAccessor {
     @Invoker("raycast")
     static BlockHitResult invokeRaycast(World world, PlayerEntity player, RaycastContext.FluidHandling fluidHandling) {
         throw new AssertionError();

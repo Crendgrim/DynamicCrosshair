@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @Mixin(HoeItem.class)
-public interface IHoeItemMixin {
+public interface HoeItemAccessor {
     @Accessor
     static Map<Block, Pair<Predicate<ItemUsageContext>, Consumer<ItemUsageContext>>> getTILLING_ACTIONS() {
         throw new AssertionError();

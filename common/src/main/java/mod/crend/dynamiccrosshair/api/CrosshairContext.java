@@ -3,8 +3,8 @@ package mod.crend.dynamiccrosshair.api;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import mod.crend.dynamiccrosshair.mixin.IBlockItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IItemMixin;
+import mod.crend.dynamiccrosshair.mixin.BlockItemAccessor;
+import mod.crend.dynamiccrosshair.mixin.ItemAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -151,7 +151,7 @@ public class CrosshairContext {
 	}
 
 	public BlockHitResult raycastWithFluid(RaycastContext.FluidHandling fluidHandling) {
-		return IItemMixin.invokeRaycast(world, player, fluidHandling);
+		return ItemAccessor.invokeRaycast(world, player, fluidHandling);
 	}
 	public BlockHitResult raycastWithFluid() {
 		return raycastWithFluid(RaycastContext.FluidHandling.ANY);
@@ -228,7 +228,7 @@ public class CrosshairContext {
 
 	public boolean canPlaceItemAsBlock() {
 		if (!withBlock) throw new InvalidContextState("Called canPlaceItemAsBlock() without a targeted block!");
-		IBlockItemMixin blockItem = (IBlockItemMixin) getItem();
+		BlockItemAccessor blockItem = (BlockItemAccessor) getItem();
 		ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, hand, getItemStack(), (BlockHitResult) hitResult);
 		try {
 			BlockState blockState = blockItem.invokeGetPlacementState(itemPlacementContext);

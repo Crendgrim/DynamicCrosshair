@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import java.util.Optional;
 
 @Mixin(ChiseledBookshelfBlock.class)
-public interface IChiseledBookshelfBlockMixin {
+public interface ChiseledBookshelfBlockAccessor {
 	@Invoker
 	static Optional<Vec2f> invokeGetHitPos(BlockHitResult hit, Direction facing) {
 		throw new AssertionError();

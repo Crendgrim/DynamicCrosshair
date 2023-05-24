@@ -3,14 +3,11 @@ package mod.crend.dynamiccrosshair.handler;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
-import mod.crend.dynamiccrosshair.mixin.IAbstractBlockMixin;
-import mod.crend.dynamiccrosshair.mixin.IChiseledBookshelfBlockMixin;
-import mod.crend.dynamiccrosshair.mixin.IFlowerPotBlockMixin;
-import mod.crend.dynamiccrosshair.mixin.IRedstoneWireBlockMixin;
+import mod.crend.dynamiccrosshair.mixin.*;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
+import net.minecraft.block.entity.SignText;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.BlockTags;
@@ -69,9 +66,9 @@ public class VanillaBlockHandler {
                 ||  block instanceof CartographyTableBlock
                 ||  block instanceof LoomBlock
                 ||  block instanceof BedBlock
-                || (block instanceof TrapdoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
-                || (block instanceof DoorBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
-                || (block instanceof FenceGateBlock && ((IAbstractBlockMixin) block).getMaterial() != Material.METAL)
+                || (block instanceof TrapdoorBlock && ((TrapdoorBlockAccessor) block).getBlockSetType().canOpenByHand())
+                || (block instanceof DoorBlock && ((DoorBlockAccessor) block).getBlockSetType().canOpenByHand())
+                ||  block instanceof FenceGateBlock
                 ||  block instanceof ButtonBlock
                 ||  block instanceof NoteBlock
                 ||  block instanceof LeverBlock
@@ -110,7 +107,7 @@ public class VanillaBlockHandler {
         if (block instanceof FlowerPotBlock) {
             Item handItem = context.getItem();
             boolean potItemIsAir = ((FlowerPotBlock) block).getContent() == Blocks.AIR;
-            boolean handItemIsPottable = handItem instanceof BlockItem && IFlowerPotBlockMixin.getCONTENT_TO_POTTED().containsKey(((BlockItem) handItem).getBlock());
+            boolean handItemIsPottable = handItem instanceof BlockItem && FlowerPotBlockAccessor.getCONTENT_TO_POTTED().containsKey(((BlockItem) handItem).getBlock());
             if (potItemIsAir && handItemIsPottable) {
                 return Crosshair.USABLE;
             }
@@ -121,23 +118,34 @@ public class VanillaBlockHandler {
         }
 
         // Special case: Signs eat all inputs
-        if (block instanceof AbstractSignBlock) {
+        if (block instanceof AbstractSignBlock && context.getBlockEntity() instanceof SignBlockEntity signBlockEntity) {
             Item handItem = context.getItem();
-            if (handItem instanceof DyeItem || handItem.equals(Items.GLOW_INK_SAC) || handItem.equals(Items.INK_SAC)) {
-                BlockEntity blockEntity = context.getBlockEntity();
-                if (blockEntity instanceof SignBlockEntity signBlockEntity) {
-                    if (handItem.equals(Items.GLOW_INK_SAC) && !signBlockEntity.isGlowingText())
+            SignText signText = signBlockEntity.getTextFacing(context.player);
+
+            if (signBlockEntity.isWaxed()) {
+                if (signText.hasRunCommandClickEvent(context.player)) {
+                    return Crosshair.INTERACTABLE;
+                }
+                return Crosshair.NONE.withFlag(Crosshair.Flag.FixedStyle, Crosshair.Flag.FixedModifierUse);
+            } else {
+                if (handItem instanceof SignChangingItem) {
+                    if (signText.hasText(context.player)) {
+                        if (handItem.equals(Items.GLOW_INK_SAC) && !signText.isGlowing()) {
+                            return Crosshair.USABLE;
+                        }
+                        if (handItem.equals(Items.INK_SAC) && signText.isGlowing()) {
+                            return Crosshair.USABLE;
+                        }
+                        if (handItem instanceof DyeItem dye && signText.getColor() != dye.getColor()) {
+                            return Crosshair.USABLE;
+                        }
+                    }
+                    if (handItem.equals((Items.HONEYCOMB))) {
                         return Crosshair.USABLE;
-                    if (handItem.equals(Items.INK_SAC) && signBlockEntity.isGlowingText())
-                        return Crosshair.USABLE;
-                    if (handItem instanceof DyeItem && signBlockEntity.getTextColor() != ((DyeItem) handItem).getColor())
-                        return Crosshair.USABLE;
-                    if (signBlockEntity.shouldRunCommand(context.player)) {
-                        return Crosshair.INTERACTABLE;
                     }
                 }
+                return Crosshair.INTERACTABLE;
             }
-            return Crosshair.NONE.withFlag(Crosshair.Flag.FixedStyle, Crosshair.Flag.FixedModifierUse);
         }
 
         // Special case: Cake gets eaten (modified), so "use" makes more sense to me
@@ -195,15 +203,15 @@ public class VanillaBlockHandler {
         }
 
         if (block instanceof RedstoneWireBlock) {
-            if (IRedstoneWireBlockMixin.invokeIsFullyConnected(blockState) || IRedstoneWireBlockMixin.invokeIsNotConnected(blockState)) {
+            if (RedstoneWireBlockAccessor.invokeIsFullyConnected(blockState) || RedstoneWireBlockAccessor.invokeIsNotConnected(blockState)) {
                 return Crosshair.INTERACTABLE;
             }
         }
 
         if (block instanceof ChiseledBookshelfBlock) {
-            Optional<Vec2f> hitPos = IChiseledBookshelfBlockMixin.invokeGetHitPos(context.getBlockHitResult(), blockState.get(HorizontalFacingBlock.FACING));
+            Optional<Vec2f> hitPos = ChiseledBookshelfBlockAccessor.invokeGetHitPos(context.getBlockHitResult(), blockState.get(HorizontalFacingBlock.FACING));
             if (hitPos.isPresent()) {
-                int i = IChiseledBookshelfBlockMixin.invokeGetSlotForHitPos(hitPos.get());
+                int i = ChiseledBookshelfBlockAccessor.invokeGetSlotForHitPos(hitPos.get());
                 if (blockState.get(ChiseledBookshelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i))) {
                     return Crosshair.INTERACTABLE;
                 } else if (context.getItemStack().isIn(ItemTags.BOOKSHELF_BOOKS)) {

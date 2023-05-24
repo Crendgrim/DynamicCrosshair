@@ -1,16 +1,17 @@
 package mod.crend.dynamiccrosshair.mixin;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.FlowerPotBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.ShovelItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(FlowerPotBlock.class)
-public interface IFlowerPotBlockMixin {
+@Mixin(ShovelItem.class)
+public interface ShovelItemAccessor {
     @Accessor
-    static Map<Block, Block> getCONTENT_TO_POTTED() {
+    static Map<Block, BlockState> getPATH_STATES() {
         throw new AssertionError();
     }
 }

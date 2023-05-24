@@ -7,11 +7,12 @@ import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.CrosshairVariant;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
-import mod.crend.dynamiccrosshair.mixin.IAxeItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IHoeItemMixin;
-import mod.crend.dynamiccrosshair.mixin.IShovelItemMixin;
+import mod.crend.dynamiccrosshair.mixin.AxeItemAccessor;
+import mod.crend.dynamiccrosshair.mixin.HoeItemAccessor;
+import mod.crend.dynamiccrosshair.mixin.ShovelItemAccessor;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BannerBlockEntity;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EquipmentSlot;
@@ -152,17 +153,17 @@ public class VanillaUsableItemHandler {
         if (context.isWithBlock()) {
             if (handItem instanceof ToolItem) {
                 if (handItem instanceof AxeItem) {
-                    if (IAxeItemMixin.getSTRIPPED_BLOCKS().get(block) != null
+                    if (AxeItemAccessor.getSTRIPPED_BLOCKS().get(block) != null
                             || Oxidizable.getDecreasedOxidationBlock(block).isPresent()
                             || HoneycombItem.WAXED_TO_UNWAXED_BLOCKS.get().get(block) != null) {
                         return Crosshair.USABLE;
                     }
                 } else if (handItem instanceof ShovelItem) {
-                    if (IShovelItemMixin.getPATH_STATES().get(block) != null) {
+                    if (ShovelItemAccessor.getPATH_STATES().get(block) != null) {
                         return Crosshair.USABLE;
                     }
                 } else if (handItem instanceof HoeItem) {
-                    if (IHoeItemMixin.getTILLING_ACTIONS().get(block) != null) {
+                    if (HoeItemAccessor.getTILLING_ACTIONS().get(block) != null) {
                         return Crosshair.USABLE;
                     }
                 }
@@ -267,8 +268,16 @@ public class VanillaUsableItemHandler {
             }
         }
         if (handItem instanceof BoneMealItem) {
-            if (block instanceof Fertilizable fertilizable && fertilizable.isFertilizable(context.world, context.getBlockPos(), blockState, true)) {
-                return Crosshair.USABLE;
+            if (block instanceof Fertilizable fertilizable) {
+                if (fertilizable.isFertilizable(context.world, context.getBlockPos(), blockState, true)) {
+                    return Crosshair.USABLE;
+                } else if (block instanceof PitcherCropBlock && blockState.get(PitcherCropBlock.AGE) < 4) { // mojang pls (MC-261619)
+                    BlockPos pos = context.getBlockPos();
+                    BlockState pitcherCropState = context.world.getBlockState(blockState.get(PitcherCropBlock.HALF) == DoubleBlockHalf.LOWER ? pos.up() : pos);
+                    if (pitcherCropState.isAir() || pitcherCropState.isOf(Blocks.PITCHER_CROP)) {
+                        return Crosshair.USABLE;
+                    }
+                }
             }
             if (context.getBlockState().isOf(Blocks.WATER) && context.getFluidState().getLevel() == 8) {
                 return Crosshair.USABLE;
@@ -282,7 +291,7 @@ public class VanillaUsableItemHandler {
         }
         if (handItem instanceof WritableBookItem || handItem instanceof WrittenBookItem) return Crosshair.USABLE;
         if (handItem instanceof BrushItem) {
-            if (block == Blocks.SUSPICIOUS_SAND) {
+            if (block instanceof BrushableBlock) {
                 return Crosshair.USABLE;
             }
         }

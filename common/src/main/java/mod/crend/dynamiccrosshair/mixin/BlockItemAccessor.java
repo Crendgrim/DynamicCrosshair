@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(BlockItem.class)
-public interface IBlockItemMixin {
+public interface BlockItemAccessor {
     @Invoker("canPlace")
     boolean invokeCanPlace(ItemPlacementContext itemPlacementContext, BlockState state);
 

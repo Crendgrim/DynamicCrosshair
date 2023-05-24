@@ -1,17 +1,16 @@
 package mod.crend.dynamiccrosshair.mixin;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.ShovelItem;
+import net.minecraft.item.AxeItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.Map;
 
-@Mixin(ShovelItem.class)
-public interface IShovelItemMixin {
+@Mixin(AxeItem.class)
+public interface AxeItemAccessor {
     @Accessor
-    static Map<Block, BlockState> getPATH_STATES() {
+    static Map<Block, Block> getSTRIPPED_BLOCKS() {
         throw new AssertionError();
     }
 }

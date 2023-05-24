@@ -3,10 +3,10 @@ package mod.crend.dynamiccrosshair.handler;
 import mod.crend.dynamiccrosshair.PlatformUtils;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
-import mod.crend.dynamiccrosshair.mixin.IArmorStandEntityMixin;
-import mod.crend.dynamiccrosshair.mixin.IBoatEntityMixin;
-import mod.crend.dynamiccrosshair.mixin.IFurnaceMinecartEntityMixin;
-import mod.crend.dynamiccrosshair.mixin.IParrotEntityMixin;
+import mod.crend.dynamiccrosshair.mixin.ArmorStandEntityAccessor;
+import mod.crend.dynamiccrosshair.mixin.BoatEntityAccessor;
+import mod.crend.dynamiccrosshair.mixin.FurnaceMinecartEntityAccessor;
+import mod.crend.dynamiccrosshair.mixin.ParrotEntityAccessor;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -72,7 +72,7 @@ public class VanillaEntityHandler {
                 ItemStack itemStack = context.getItemStack();
                 if (itemStack.isEmpty()) {
                     Vec3d hitPos = context.hitResult.getPos().subtract(armorStand.getPos());
-                    EquipmentSlot slot = ((IArmorStandEntityMixin) armorStand).invokeGetSlotFromPosition(hitPos);
+                    EquipmentSlot slot = ((ArmorStandEntityAccessor) armorStand).invokeGetSlotFromPosition(hitPos);
                     if (armorStand.hasStackEquipped(slot)) {
                         return Crosshair.INTERACTABLE;
                     }
@@ -83,7 +83,7 @@ public class VanillaEntityHandler {
                     }
                 } else {
                     EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(itemStack);
-                    if (!((IArmorStandEntityMixin) armorStand).invokeIsSlotDisabled(slot) && (slot.getType() != EquipmentSlot.Type.HAND || armorStand.shouldShowArms())) {
+                    if (!((ArmorStandEntityAccessor) armorStand).invokeIsSlotDisabled(slot) && (slot.getType() != EquipmentSlot.Type.HAND || armorStand.shouldShowArms())) {
                         if (!armorStand.hasStackEquipped(slot) || itemStack.getCount() == 1) {
                             return Crosshair.USABLE;
                         }
@@ -100,13 +100,13 @@ public class VanillaEntityHandler {
             if (entity instanceof VehicleInventory) {
                 return Crosshair.INTERACTABLE;
             }
-            if (!context.player.shouldCancelInteraction() && ((IBoatEntityMixin) boatEntity).invokeCanAddPassenger(context.player)) {
+            if (!context.player.shouldCancelInteraction() && ((BoatEntityAccessor) boatEntity).invokeCanAddPassenger(context.player)) {
                 return Crosshair.INTERACTABLE;
             }
         } else if (entity instanceof AbstractMinecartEntity minecartEntity) {
             if ((entity.getType() == EntityType.MINECART && !minecartEntity.hasPassengers())
                     || entity instanceof StorageMinecartEntity
-                    || (entity.getType() == EntityType.FURNACE_MINECART && IFurnaceMinecartEntityMixin.getACCEPTABLE_FUEL().test(context.getItemStack()))
+                    || (entity.getType() == EntityType.FURNACE_MINECART && FurnaceMinecartEntityAccessor.getACCEPTABLE_FUEL().test(context.getItemStack()))
             ) {
                 return Crosshair.INTERACTABLE;
             }
@@ -172,7 +172,7 @@ public class VanillaEntityHandler {
             }
             return null;
         } else if (entity instanceof ParrotEntity parrot) {
-            if (!parrot.isTamed() && IParrotEntityMixin.getTAMING_INGREDIENTS().contains(handItem)) {
+            if (!parrot.isTamed() && ParrotEntityAccessor.getTAMING_INGREDIENTS().contains(handItem)) {
                 return Crosshair.USABLE;
             }
             if (handItem == Items.COOKIE) {
