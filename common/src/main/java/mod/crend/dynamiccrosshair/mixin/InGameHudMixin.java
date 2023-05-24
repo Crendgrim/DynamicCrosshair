@@ -11,16 +11,12 @@ import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairColor;
 import mod.crend.dynamiccrosshair.config.CrosshairModifier;
 import mod.crend.dynamiccrosshair.config.CrosshairStyle;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.client.util.math.MatrixStack;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value=InGameHud.class, priority=1010)
