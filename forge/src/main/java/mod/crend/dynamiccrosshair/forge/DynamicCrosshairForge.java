@@ -1,7 +1,7 @@
 package mod.crend.dynamiccrosshair.forge;
 
-import mod.crend.autoyacl.ConfigScreenFactory;
-import mod.crend.autoyacl.YaclHelper;
+import mod.crend.yaclx.ConfigScreenFactory;
+import mod.crend.yaclx.YaclHelper;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.config.Config;

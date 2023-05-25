@@ -1,7 +1,7 @@
 package mod.crend.dynamiccrosshair.fabric.screen;
 
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import mod.crend.autoyacl.ConfigScreenFactory;
+import mod.crend.yaclx.auto.ConfigScreenFactory;
 import mod.crend.dynamiccrosshair.config.Config;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

@@ -1,4 +1,4 @@
-package mod.crend.autoyacl.annotation;
+package mod.crend.yaclx.auto.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface IntegerRange {
-	int min() default 0;
-	int max() default 100;
-	int interval() default 1;
+public @interface EnableIf {
+	String field();
+	Class<? extends Predicate> value();
+
+	interface Predicate {
+		boolean isEnabled(Object value);
+	}
 }

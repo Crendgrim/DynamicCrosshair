@@ -1,4 +1,4 @@
-package mod.crend.autoyacl.forge;
+package mod.crend.yaclx.forge;
 
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;

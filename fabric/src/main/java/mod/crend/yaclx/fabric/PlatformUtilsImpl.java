@@ -1,4 +1,4 @@
-package mod.crend.autoyacl.fabric;
+package mod.crend.yaclx.fabric;
 
 import net.fabricmc.loader.api.FabricLoader;
 

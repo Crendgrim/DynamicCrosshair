@@ -1,4 +1,4 @@
-package mod.crend.autoyacl.annotation;
+package mod.crend.yaclx.auto.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Translation {
-	String key();
+public @interface OnSave {
+	boolean gameRestart() default false;
+	boolean reloadChunks() default false;
+	boolean worldRenderUpdate() default false;
+	boolean assetReload() default false;
 }

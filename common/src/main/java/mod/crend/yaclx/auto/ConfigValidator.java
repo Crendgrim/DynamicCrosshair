@@ -1,10 +1,9 @@
-package mod.crend.autoyacl;
+package mod.crend.yaclx.auto;
 
-import dev.isxander.yacl.config.ConfigEntry;
-import mod.crend.autoyacl.annotation.DoubleRange;
-import mod.crend.autoyacl.annotation.FloatRange;
-import mod.crend.autoyacl.annotation.IntegerRange;
-import mod.crend.autoyacl.annotation.LongRange;
+import mod.crend.yaclx.auto.annotation.DoubleRange;
+import mod.crend.yaclx.auto.annotation.FloatRange;
+import mod.crend.yaclx.auto.annotation.IntegerRange;
+import mod.crend.yaclx.auto.annotation.LongRange;
 
 import java.lang.reflect.Field;
 import java.util.Objects;

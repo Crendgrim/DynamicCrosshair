@@ -1,7 +1,8 @@
-package mod.crend.autoyacl;
+package mod.crend.yaclx.auto;
 
-import dev.isxander.yacl.api.YetAnotherConfigLib;
-import mod.crend.autoyacl.annotation.AutoYaclConfig;
+import dev.isxander.yacl.api.*;
+import mod.crend.yaclx.YaclxHelper;
+import mod.crend.yaclx.auto.annotation.AutoYaclConfig;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.NoticeScreen;
@@ -9,8 +10,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 public class ConfigScreenFactory {
+
 	public static Screen makeScreen(Class<?> configClass, Screen parent) {
-		if (YaclHelper.HAS_YACL) {
+		if (YaclxHelper.HAS_YACL) {
 			return YetAnotherConfigLib.create(ConfigHandler.CONFIG_STORE.withYacl().instance,
 					(defaults, config, builder) -> AutoYacl.parse(configClass, defaults, config, builder)
 			).generateScreen(parent);

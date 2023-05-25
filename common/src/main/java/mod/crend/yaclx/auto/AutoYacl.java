@@ -1,10 +1,10 @@
-package mod.crend.autoyacl;
+package mod.crend.yaclx.auto;
 
 import dev.isxander.yacl.api.*;
 import dev.isxander.yacl.config.ConfigEntry;
 import dev.isxander.yacl.gui.controllers.ColorController;
 import dev.isxander.yacl.gui.controllers.TickBoxController;
-import dev.isxander.yacl.gui.controllers.cycling.CyclingListController;
+import dev.isxander.yacl.gui.controllers.cycling.EnumController;
 import dev.isxander.yacl.gui.controllers.slider.DoubleSliderController;
 import dev.isxander.yacl.gui.controllers.slider.FloatSliderController;
 import dev.isxander.yacl.gui.controllers.slider.IntegerSliderController;
@@ -14,13 +14,19 @@ import dev.isxander.yacl.gui.controllers.string.number.DoubleFieldController;
 import dev.isxander.yacl.gui.controllers.string.number.FloatFieldController;
 import dev.isxander.yacl.gui.controllers.string.number.IntegerFieldController;
 import dev.isxander.yacl.gui.controllers.string.number.LongFieldController;
-import mod.crend.autoyacl.annotation.*;
+import mod.crend.yaclx.controller.DecoratedEnumController;
+import mod.crend.yaclx.controller.ItemController;
+import mod.crend.yaclx.auto.annotation.*;
+import mod.crend.yaclx.controller.annotation.Decorate;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
-import java.util.function.Supplier;
 
 /**
  * Automagic config UI generation from a config file based on annotations.
@@ -37,6 +43,7 @@ public class AutoYacl <T> {
 		protected final Object bDefaults;
 		protected final Object bParent;
 		protected final Map<String, OptionGroup.Builder> groups;
+		protected final Map<String, Option<?>> options;
 		protected final String modId;
 		
 		protected Wrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent, Map<String, OptionGroup.Builder> groups) {
@@ -45,6 +52,7 @@ public class AutoYacl <T> {
 			this.bParent = bParent;
 			this.groups = groups;
 			this.modId = modId;
+			this.options = new HashMap<>();
 		}
 		
 		OptionAddable getContainingBuilder(Field field) {
@@ -60,14 +68,60 @@ public class AutoYacl <T> {
 
 		protected static String getTranslationKey(String modId, String key, Field field, boolean group) {
 			Translation translationKey = field.getAnnotation(Translation.class);
-			return (translationKey == null ? modId + (group ? ".group." : ".option.") + key : translationKey.key());
+			return (translationKey == null
+					? modId + (group ? ".group." : ".option.") + key
+					: translationKey.key());
 		}
-		protected static void setCommonAttributes(String modId, Option.Builder<?> optionBuilder, String key, Field field) {
+		protected static String getDescriptionTranslationKey(String modId, String key, Field field, boolean group) {
+			Translation translationKey = field.getAnnotation(Translation.class);
+			return (translationKey == null || translationKey.description().isBlank()
+					? getTranslationKey(modId, key, field, group) + ".description"
+					: translationKey.description());
+		}
+		protected static void setCommonAttributes(String modId, Option.Builder<?> optionBuilder, String key, Field field, Map<String, Option<?>> options) {
 			String translationKey = getTranslationKey(modId, key, field, false);
 			optionBuilder.name(Text.translatable(translationKey));
-			if (field.isAnnotationPresent(Tooltip.class)) {
-				optionBuilder.tooltip(Text.translatable(translationKey + ".@Tooltip"));
+			optionBuilder.description(OptionDescription.createBuilder()
+					.name(Text.translatable(translationKey))
+					.description(Text.translatable(getDescriptionTranslationKey(modId, key, field, false)))
+					.build()
+			);
+			EnableIf enableIf = field.getAnnotation(EnableIf.class);
+			if (enableIf != null) {
+				Option<?> depend = options.get(enableIf.field());
+				if (depend != null) {
+					depend.addListener((option, o) -> {
+						try {
+							options.get(field.getName()).setAvailable(enableIf.value().getConstructor().newInstance().isEnabled(o));
+						} catch (ReflectiveOperationException e) {
+							throw new RuntimeException(e);
+						}
+					});
+					try {
+						optionBuilder.available(enableIf.value().getConstructor().newInstance().isEnabled(depend.pendingValue()));
+					} catch (ReflectiveOperationException e) {
+						throw new RuntimeException(e);
+					}
+				} else {
+					throw new RuntimeException("Could not find dependant field " + enableIf.field() + " for field " + key);
+				}
 			}
+			OnSave onSave = field.getAnnotation(OnSave.class);
+			if (onSave != null) {
+				if (onSave.gameRestart()) optionBuilder.flag(OptionFlag.GAME_RESTART);
+				if (onSave.reloadChunks()) optionBuilder.flag(OptionFlag.RELOAD_CHUNKS);
+				if (onSave.worldRenderUpdate()) optionBuilder.flag(OptionFlag.WORLD_RENDER_UPDATE);
+				if (onSave.assetReload()) optionBuilder.flag(OptionFlag.ASSET_RELOAD);
+			}
+		}
+		protected static void setCommonAttributes(String modId, ListOption.Builder<?> optionBuilder, String key, Field field) {
+			String translationKey = getTranslationKey(modId, key, field, false);
+			optionBuilder.name(Text.translatable(translationKey));
+			optionBuilder.description(OptionDescription.createBuilder()
+					.name(Text.translatable(translationKey))
+					.description(Text.translatable(getDescriptionTranslationKey(modId, key, field, false)))
+					.build()
+			);
 			OnSave onSave = field.getAnnotation(OnSave.class);
 			if (onSave != null) {
 				if (onSave.gameRestart()) optionBuilder.flag(OptionFlag.GAME_RESTART);
@@ -79,9 +133,11 @@ public class AutoYacl <T> {
 		protected void setCommonAttributes(OptionGroup.Builder optionGroupBuilder, String key, Field field) {
 			String translationKey = getTranslationKey(modId, key, field, true);
 			optionGroupBuilder.name(Text.translatable(translationKey));
-			if (field.isAnnotationPresent(Tooltip.class)) {
-				optionGroupBuilder.tooltip(Text.translatable(translationKey + ".@Tooltip"));
-			}
+			optionGroupBuilder.description(OptionDescription.createBuilder()
+					.name(Text.translatable(translationKey))
+					.description(Text.translatable(getDescriptionTranslationKey(modId, key, field, true)))
+					.build()
+			);
 		}
 
 		protected void registerMemberFields(Wrapper transitiveWrapper, String key, Field field) {
@@ -126,15 +182,19 @@ public class AutoYacl <T> {
 
 			Option.Builder<?> optionBuilder = fromType(field, bDefaults, bParent);
 			if (optionBuilder != null) {
-				setCommonAttributes(modId, optionBuilder, key, field);
-				containingBuilder.option(optionBuilder.build());
+				setCommonAttributes(modId, optionBuilder, key, field, options);
+				if (options.containsKey(field.getName())) {
+					System.err.println("Option for key " + field.getName() + " already exists!");
+				}
+				options.put(field.getName(), optionBuilder.build());
+				containingBuilder.option(options.get(field.getName()));
 			} else {
 				registerObject(containingBuilder, key, field);
 			}
 		}
 
 		@SuppressWarnings("unchecked")
-		private static <T> Binding<T> makeBinding(Field field, Object defaults, Object parent) {
+		protected static <T> Binding<T> makeBinding(Field field, Object defaults, Object parent) {
 			try {
 				return Binding.generic((T) (field.get(defaults)),
 					() -> {
@@ -154,13 +214,37 @@ public class AutoYacl <T> {
 				throw new RuntimeException(e);
 			}
 		}
+		@SuppressWarnings("unchecked")
+		protected static <T> Binding<T> makeNullableTypeBinding(Class<T> clazz, Field field, Object defaults, Object parent) {
+			try {
+				return Binding.generic((T) field.get(defaults),
+					() -> {
+						try {
+							T obj = (T) field.get(parent);
+							return (obj == null ? clazz.getConstructor().newInstance() : obj);
+						} catch (ReflectiveOperationException e) {
+							throw new RuntimeException(e);
+						}
+					},
+					val -> {
+						try {
+							field.set(parent, val);
+						} catch (IllegalAccessException e) {
+							throw new RuntimeException(e);
+						}
+					}
+				);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}
 
 		public static Option.Builder<?> createOptionBuilder(String modId, String key, Field field, Object defaults, Object parent) {
 			assert(field.getDeclaringClass().isInstance(defaults));
 			assert(field.getDeclaringClass().isInstance(parent));
 			Option.Builder<?> optionBuilder = fromType(field, defaults, parent);
 			if (optionBuilder != null) {
-				setCommonAttributes(modId, optionBuilder, key, field);
+				setCommonAttributes(modId, optionBuilder, key, field, new HashMap<>());
 			}
 			return optionBuilder;
 		}
@@ -226,21 +310,128 @@ public class AutoYacl <T> {
 			} else if (type.equals(String.class)) {
 
 				return Option.createBuilder(String.class)
-						.binding(makeBinding(field, defaults, parent))
+						.binding(makeNullableTypeBinding(String.class, field, defaults, parent))
 						.controller(StringController::new);
 
 			} else if (type.isEnum()) {
 
-				var valid_entries = Arrays.stream(type.getEnumConstants()).toList();
-				return Option.createBuilder(type)
-						.binding(makeBinding(field, defaults, parent))
-						.controller(opt -> new CyclingListController(opt, valid_entries, YaclHelper.getEnumFormatter()));
+				var builder = Option.createBuilder(type)
+						.binding(makeBinding(field, defaults, parent));
+
+				Decorate decorate = field.getAnnotation(Decorate.class);
+				if (decorate != null) {
+					if (!Decorate.Decorator.class.isAssignableFrom(decorate.decorator())) {
+						throw new RuntimeException("Decorator must be of type Decorator<T>!");
+					}
+					try {
+						Decorate.Decorator decorator = (Decorate.Decorator) decorate.decorator().getConstructor().newInstance();
+						builder.controller(opt -> new DecoratedEnumController(opt, decorator));
+					} catch (ReflectiveOperationException e) {
+						throw new RuntimeException(e);
+					}
+				} else {
+					builder.controller(opt -> new EnumController(opt, NameableEnum.getEnumFormatter()));
+				}
+
+				return builder;
 
 			} else if (type.equals(Color.class)) {
 
 				return Option.createBuilder(Color.class)
 						.binding(makeBinding(field, defaults, parent))
 						.controller(opt -> new ColorController(opt, true));
+
+			} else if (type.equals(Item.class)) {
+
+				return Option.createBuilder(Item.class)
+						.binding(makeBinding(field, defaults, parent))
+						.controller(ItemController::new);
+
+			}
+			return null;
+		}
+		protected static ListOption.Builder<?> fromListType(Class<?> type, Field field, Object defaults, Object parent) {
+
+			if (type.equals(boolean.class)) {
+
+				return ListOption.createBuilder(boolean.class)
+						.binding(makeBinding(field, defaults, parent))
+						.controller(TickBoxController::new);
+
+			} else if (type.equals(int.class)) {
+
+				var builder = ListOption.createBuilder(int.class)
+						.binding(makeBinding(field, defaults, parent));
+				IntegerRange range = field.getAnnotation(IntegerRange.class);
+				if (range != null) {
+					builder.controller(opt -> new IntegerSliderController(opt, range.min(), range.max(), range.interval()));
+				} else {
+					builder.controller(IntegerFieldController::new);
+				}
+				return builder;
+
+			} else if (type.equals(long.class)) {
+
+				var builder = ListOption.createBuilder(long.class)
+						.binding(makeBinding(field, defaults, parent));
+				LongRange range = field.getAnnotation(LongRange.class);
+				if (range != null) {
+					builder.controller(opt -> new LongSliderController(opt, range.min(), range.max(), range.interval()));
+				} else {
+					builder.controller(LongFieldController::new);
+				}
+				return builder;
+
+			} else if (type.equals(float.class)) {
+
+				var builder = ListOption.createBuilder(float.class)
+						.binding(makeBinding(field, defaults, parent));
+				FloatRange range = field.getAnnotation(FloatRange.class);
+				if (range != null) {
+					builder.controller(opt -> new FloatSliderController(opt, range.min(), range.max(), range.interval()));
+				} else {
+					builder.controller(FloatFieldController::new);
+				}
+				return builder;
+
+			} else if (type.equals(double.class)) {
+
+				var builder = ListOption.createBuilder(double.class)
+						.binding(makeBinding(field, defaults, parent));
+				DoubleRange range = field.getAnnotation(DoubleRange.class);
+				if (range != null) {
+					builder.controller(opt -> new DoubleSliderController(opt, range.min(), range.max(), range.interval()));
+				} else {
+					builder.controller(DoubleFieldController::new);
+				}
+				return builder;
+
+			} else if (type.equals(String.class)) {
+
+				return ListOption.createBuilder(String.class)
+						.binding(makeBinding(field, defaults, parent))
+						.initial("")
+						.controller(StringController::new);
+
+			} else if (type.isEnum()) {
+
+				return ListOption.createBuilder(type)
+						.binding(makeBinding(field, defaults, parent))
+						.controller(opt -> new EnumController(opt, NameableEnum.getEnumFormatter()));
+
+			} else if (type.equals(Color.class)) {
+
+				return ListOption.createBuilder(Color.class)
+						.binding(makeBinding(field, defaults, parent))
+						.initial(Color.BLACK)
+						.controller(opt -> new ColorController(opt, true));
+
+			} else if (type.equals(Item.class)) {
+
+				return ListOption.createBuilder(Item.class)
+						.binding(makeBinding(field, defaults, parent))
+						.initial(Items.AIR)
+						.controller(ItemController::new);
 
 			}
 			return null;
@@ -253,6 +444,7 @@ public class AutoYacl <T> {
 	 * Use @Category(group=) and @TransitiveObject to fine tune groupings.
 	 */
 	public static class CategoryWrapper extends Wrapper {
+		protected List<ListOption<?>> listOptions = new ArrayList<>();
 		public CategoryWrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent) {
 			super(modId, builder, bDefaults, bParent, new LinkedHashMap<>());
 		}
@@ -280,6 +472,16 @@ public class AutoYacl <T> {
 				super.registerObject(containingBuilder, key, field);
 				return;
 			}
+			if (field.getType().equals(List.class)) {
+				ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+				Type innerType = parameterizedType.getActualTypeArguments()[0];
+				var builder = fromListType((Class<?>) innerType, field, bDefaults, bParent);
+				if (builder != null) {
+					setCommonAttributes(modId, builder, key, field);
+					listOptions.add(builder.build());
+				}
+				return;
+			}
 
 			if (!groups.containsKey(key)) {
 				groups.put(key, OptionGroup.createBuilder());
@@ -299,6 +501,9 @@ public class AutoYacl <T> {
 
 		public ConfigCategory build() {
 			ConfigCategory.Builder categoryBuilder = (ConfigCategory.Builder) builder;
+			for (var list : listOptions) {
+				categoryBuilder.group(list);
+			}
 			for (var group : groups.values()) {
 				categoryBuilder.group(group.build());
 			}

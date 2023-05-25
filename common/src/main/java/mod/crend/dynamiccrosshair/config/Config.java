@@ -1,15 +1,20 @@
 package mod.crend.dynamiccrosshair.config;
 
 import dev.isxander.yacl.config.ConfigEntry;
-import mod.crend.autoyacl.annotation.*;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
+import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
+import mod.crend.yaclx.auto.annotation.*;
+import mod.crend.yaclx.controller.annotation.Decorate;
+import net.minecraft.item.Item;
 
 import java.awt.Color;
+import java.util.Collections;
+import java.util.List;
 
 @AutoYaclConfig(modid=DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
 public class Config {
     @ConfigEntry
-    @Tooltip
     public CrosshairMode dynamicCrosshair = CrosshairMode.Advanced;
     @ConfigEntry
     public boolean disableDebugCrosshair = false;
@@ -45,21 +50,27 @@ public class Config {
         public UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
     }
 
+    public static class CrosshairColorReader implements EnableIf.Predicate {
+        public boolean isEnabled(Object color) {
+            return color == CrosshairConfigColor.Custom;
+        }
+    }
     public static class CrosshairColorSettings {
         @ConfigEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.crosshairColor")
         public CrosshairConfigColor crosshairColor = CrosshairConfigColor.Unchanged;
         @ConfigEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.customColor")
+        @EnableIf(field="crosshairColor", value=CrosshairColorReader.class)
         public Color customColor = new Color(0xFFAABBCC, true);
         @ConfigEntry
-        @Tooltip
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.forceColor")
         public boolean forceColor = false;
     }
     public static class CrosshairStyleSettings {
         @ConfigEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
+        @Decorate(decorator = CrosshairStyleRenderer.class)
         public CrosshairConfigStyle style = CrosshairConfigStyle.Cross;
         @ConfigEntry
         @TransitiveObject
@@ -68,8 +79,8 @@ public class Config {
     public static class CrosshairModifierSettings {
         @ConfigEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
+        @Decorate(decorator = CrosshairModifierRenderer.class)
         public CrosshairConfigModifier style;
-        @ConfigEntry
         @TransitiveObject
         public CrosshairColorSettings color = new CrosshairColorSettings();
     }
@@ -141,28 +152,22 @@ public class Config {
 
     @ConfigEntry
     @Category(name="tweaks")
-    @Label(key = "dynamiccrosshair.option.enableTweaks.@PrefixText")
     public boolean enableTweaks = false;
 
     @ConfigEntry
     @Category(name="tweaks")
-    @Label(key = "dynamiccrosshair.option.additionalTools.@PrefixText")
-    @OnSave(gameRestart = true)
-    public String additionalTools = "";
+    public List<Item> additionalTools = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    @OnSave(gameRestart = true)
-    public String additionalMeleeWeapons = "";
+    public List<Item> additionalMeleeWeapons = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    @OnSave(gameRestart = true)
-    public String additionalRangedWeapons = "";
+    public List<Item> additionalRangedWeapons = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    @OnSave(gameRestart = true)
-    public String additionalThrowables = "";
+    public List<Item> additionalThrowables = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    @OnSave(gameRestart = true)
-    public String additionalUsableItems = "";
+    public List<Item> additionalUsableItems = Collections.emptyList();
+
 }

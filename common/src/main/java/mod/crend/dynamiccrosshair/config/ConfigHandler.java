@@ -1,18 +1,13 @@
 package mod.crend.dynamiccrosshair.config;
 
-import mod.crend.autoyacl.ConfigStore;
+import mod.crend.yaclx.opt.ConfigStore;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ConfigHandler {
-    public static final ConfigStore<Config> CONFIG_STORE = new ConfigStore<>(Config.class);
+    public static final ConfigStore<Config> CONFIG_STORE = new ConfigStore<>(Config.class, new ConfigUpdater());
 
     public ConfigHandler() {
         CONFIG_STORE.config();
@@ -54,57 +49,29 @@ public class ConfigHandler {
     public CrosshairModifier getCrosshairModifierUsableItem() { return new CrosshairModifier(CONFIG_STORE.config().crosshairModifiers.modUsableItem); }
     public CrosshairModifier getCrosshairModifierShield() { return new CrosshairModifier(CONFIG_STORE.config().crosshairModifiers.modShield); }
 
-    List<Item> additionalTools = null;
-    List<Item> additionalMeleeWeapons = null;
-    List<Item> additionalRangedWeapons = null;
-    List<Item> additionalThrowables = null;
-    List<Item> additionalUsableItems = null;
-
     public boolean isTweaksEnabled() {
         return CONFIG_STORE.config().enableTweaks;
     }
-    private List<Item> buildAdditionalItemList(String configString) {
-        return Arrays.stream(configString.split(";"))
-                .filter(s -> !s.isBlank())
-                .map(Identifier::tryParse)
-                .filter(Objects::nonNull)
-                .map(Registries.ITEM::get)
-                .collect(Collectors.toList());
-    }
+
     public List<Item> getAdditionalTools() {
         if (!isTweaksEnabled()) return Collections.emptyList();
-        if (additionalTools == null) {
-            additionalTools = buildAdditionalItemList(CONFIG_STORE.config().additionalTools);
-        }
-        return additionalTools;
+        return CONFIG_STORE.config().additionalTools;
     }
     public List<Item> getAdditionalMeleeWeapons() {
         if (!isTweaksEnabled()) return Collections.emptyList();
-        if (additionalMeleeWeapons == null) {
-            additionalMeleeWeapons = buildAdditionalItemList(CONFIG_STORE.config().additionalMeleeWeapons);
-        }
-        return additionalMeleeWeapons;
+        return CONFIG_STORE.config().additionalMeleeWeapons;
     }
     public List<Item> getAdditionalRangedWeapons() {
         if (!isTweaksEnabled()) return Collections.emptyList();
-        if (additionalRangedWeapons == null) {
-            additionalRangedWeapons = buildAdditionalItemList(CONFIG_STORE.config().additionalRangedWeapons);
-        }
-        return additionalRangedWeapons;
+        return CONFIG_STORE.config().additionalRangedWeapons;
     }
     public List<Item> getAdditionalThrowables() {
         if (!isTweaksEnabled()) return Collections.emptyList();
-        if (additionalThrowables == null) {
-            additionalThrowables = buildAdditionalItemList(CONFIG_STORE.config().additionalThrowables);
-        }
-        return additionalThrowables;
+        return CONFIG_STORE.config().additionalThrowables;
     }
     public List<Item> getAdditionalUsableItems() {
         if (!isTweaksEnabled()) return Collections.emptyList();
-        if (additionalUsableItems == null) {
-            additionalUsableItems = buildAdditionalItemList(CONFIG_STORE.config().additionalUsableItems);
-        }
-        return additionalUsableItems;
+        return CONFIG_STORE.config().additionalUsableItems;
     }
 
 }

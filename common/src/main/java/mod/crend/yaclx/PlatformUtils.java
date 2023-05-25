@@ -1,4 +1,4 @@
-package mod.crend.autoyacl;
+package mod.crend.yaclx;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 
