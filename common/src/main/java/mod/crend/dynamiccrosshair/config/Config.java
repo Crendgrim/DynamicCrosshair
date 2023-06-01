@@ -4,9 +4,11 @@ import dev.isxander.yacl.config.ConfigEntry;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
 import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
+import mod.crend.yaclx.ItemOrTag;
 import mod.crend.yaclx.auto.annotation.*;
-import mod.crend.yaclx.controller.annotation.Decorate;
+import mod.crend.yaclx.auto.annotation.Decorate;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 
 import java.awt.Color;
 import java.util.Collections;
@@ -156,18 +158,18 @@ public class Config {
 
     @ConfigEntry
     @Category(name="tweaks")
-    public List<Item> additionalTools = Collections.emptyList();
+    public List<ItemOrTag> additionalTools = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    public List<Item> additionalMeleeWeapons = Collections.emptyList();
+    public List<ItemOrTag> additionalMeleeWeapons = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    public List<Item> additionalRangedWeapons = Collections.emptyList();
+    public List<ItemOrTag> additionalRangedWeapons = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    public List<Item> additionalThrowables = Collections.emptyList();
+    public List<ItemOrTag> additionalThrowables = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
-    public List<Item> additionalUsableItems = Collections.emptyList();
+    public List<ItemOrTag> additionalUsableItems = Collections.emptyList();
 
 }

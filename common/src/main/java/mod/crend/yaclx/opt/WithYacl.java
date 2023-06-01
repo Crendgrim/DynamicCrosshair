@@ -3,7 +3,9 @@ package mod.crend.yaclx.opt;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import dev.isxander.yacl.config.GsonConfigInstance;
-import mod.crend.yaclx.YaclxHelper;
+import mod.crend.yaclx.ItemOrTag;
+import mod.crend.yaclx.ItemOrTagTypeAdapter;
+import mod.crend.yaclx.ItemTypeAdapter;
 import net.minecraft.item.Item;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -25,7 +27,8 @@ public class WithYacl<T> {
 				.registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
 				.registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
 				.registerTypeHierarchyAdapter(Color.class, new GsonConfigInstance.ColorTypeAdapter())
-				.registerTypeHierarchyAdapter(Item.class, new YaclxHelper.ItemTypeAdapter())
+				.registerTypeHierarchyAdapter(Item.class, new ItemTypeAdapter())
+				.registerTypeHierarchyAdapter(ItemOrTag.class, new ItemOrTagTypeAdapter())
 				.serializeNulls();
 		instance = GsonConfigInstance.createBuilder(configClass)
 				.setPath(path)

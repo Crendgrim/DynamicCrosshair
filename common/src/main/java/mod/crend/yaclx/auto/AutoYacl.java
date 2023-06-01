@@ -1,10 +1,10 @@
 package mod.crend.yaclx.auto;
 
 import dev.isxander.yacl.api.*;
+import dev.isxander.yacl.api.controller.*;
 import dev.isxander.yacl.config.ConfigEntry;
 import dev.isxander.yacl.gui.controllers.ColorController;
 import dev.isxander.yacl.gui.controllers.TickBoxController;
-import dev.isxander.yacl.gui.controllers.cycling.EnumController;
 import dev.isxander.yacl.gui.controllers.slider.DoubleSliderController;
 import dev.isxander.yacl.gui.controllers.slider.FloatSliderController;
 import dev.isxander.yacl.gui.controllers.slider.IntegerSliderController;
@@ -14,10 +14,13 @@ import dev.isxander.yacl.gui.controllers.string.number.DoubleFieldController;
 import dev.isxander.yacl.gui.controllers.string.number.FloatFieldController;
 import dev.isxander.yacl.gui.controllers.string.number.IntegerFieldController;
 import dev.isxander.yacl.gui.controllers.string.number.LongFieldController;
-import mod.crend.yaclx.controller.DecoratedEnumController;
-import mod.crend.yaclx.controller.ItemController;
+import dev.isxander.yacl.impl.controller.DoubleSliderControllerBuilderImpl;
+import mod.crend.yaclx.ItemOrTag;
 import mod.crend.yaclx.auto.annotation.*;
-import mod.crend.yaclx.controller.annotation.Decorate;
+import mod.crend.yaclx.controller.DecoratedEnumController;
+import mod.crend.yaclx.controller.DropdownStringController;
+import mod.crend.yaclx.controller.ItemController;
+import mod.crend.yaclx.controller.ItemOrTagController;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
@@ -82,8 +85,7 @@ public class AutoYacl <T> {
 			String translationKey = getTranslationKey(modId, key, field, false);
 			optionBuilder.name(Text.translatable(translationKey));
 			optionBuilder.description(OptionDescription.createBuilder()
-					.name(Text.translatable(translationKey))
-					.description(Text.translatable(getDescriptionTranslationKey(modId, key, field, false)))
+					.text(Text.translatable(getDescriptionTranslationKey(modId, key, field, false)))
 					.build()
 			);
 			EnableIf enableIf = field.getAnnotation(EnableIf.class);
@@ -118,8 +120,7 @@ public class AutoYacl <T> {
 			String translationKey = getTranslationKey(modId, key, field, false);
 			optionBuilder.name(Text.translatable(translationKey));
 			optionBuilder.description(OptionDescription.createBuilder()
-					.name(Text.translatable(translationKey))
-					.description(Text.translatable(getDescriptionTranslationKey(modId, key, field, false)))
+					.text(Text.translatable(getDescriptionTranslationKey(modId, key, field, false)))
 					.build()
 			);
 			OnSave onSave = field.getAnnotation(OnSave.class);
@@ -134,8 +135,7 @@ public class AutoYacl <T> {
 			String translationKey = getTranslationKey(modId, key, field, true);
 			optionGroupBuilder.name(Text.translatable(translationKey));
 			optionGroupBuilder.description(OptionDescription.createBuilder()
-					.name(Text.translatable(translationKey))
-					.description(Text.translatable(getDescriptionTranslationKey(modId, key, field, true)))
+					.text(Text.translatable(getDescriptionTranslationKey(modId, key, field, true)))
 					.build()
 			);
 		}
@@ -183,9 +183,6 @@ public class AutoYacl <T> {
 			Option.Builder<?> optionBuilder = fromType(field, bDefaults, bParent);
 			if (optionBuilder != null) {
 				setCommonAttributes(modId, optionBuilder, key, field, options);
-				if (options.containsKey(field.getName())) {
-					System.err.println("Option for key " + field.getName() + " already exists!");
-				}
 				options.put(field.getName(), optionBuilder.build());
 				containingBuilder.option(options.get(field.getName()));
 			} else {
@@ -255,112 +252,156 @@ public class AutoYacl <T> {
 
 			if (type.equals(boolean.class)) {
 
-				return Option.createBuilder(boolean.class)
+				return Option.<Boolean>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
-						.controller(TickBoxController::new);
+						.controller(TickBoxControllerBuilder::create);
 
 			} else if (type.equals(int.class)) {
 
-				var builder = Option.createBuilder(int.class)
+				var builder = Option.<Integer>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				IntegerRange range = field.getAnnotation(IntegerRange.class);
 				if (range != null) {
-					builder.controller(opt -> new IntegerSliderController(opt, range.min(), range.max(), range.interval()));
+					builder.controller(opt -> IntegerSliderControllerBuilder.create(opt)
+							.range(range.min(), range.max())
+							.step(range.interval())
+					);
 				} else {
-					builder.controller(IntegerFieldController::new);
+					builder.controller(IntegerFieldControllerBuilder::create);
 				}
 				return builder;
 
 			} else if (type.equals(long.class)) {
 
-				var builder = Option.createBuilder(long.class)
+				var builder = Option.<Long>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				LongRange range = field.getAnnotation(LongRange.class);
 				if (range != null) {
-					builder.controller(opt -> new LongSliderController(opt, range.min(), range.max(), range.interval()));
+					builder.controller(opt -> LongSliderControllerBuilder.create(opt)
+							.range(range.min(), range.max())
+							.step(range.interval())
+					);
 				} else {
-					builder.controller(LongFieldController::new);
+					builder.controller(LongFieldControllerBuilder::create);
 				}
 				return builder;
 
 			} else if (type.equals(float.class)) {
 
-				var builder = Option.createBuilder(float.class)
+				var builder = Option.<Float>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				FloatRange range = field.getAnnotation(FloatRange.class);
 				if (range != null) {
-					builder.controller(opt -> new FloatSliderController(opt, range.min(), range.max(), range.interval()));
+					builder.controller(opt -> FloatSliderControllerBuilder.create(opt)
+							.range(range.min(), range.max())
+							.step(range.interval())
+					);
 				} else {
-					builder.controller(FloatFieldController::new);
+					builder.controller(FloatFieldControllerBuilder::create);
 				}
 				return builder;
 
 			} else if (type.equals(double.class)) {
 
-				var builder = Option.createBuilder(double.class)
+				var builder = Option.<Double>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				DoubleRange range = field.getAnnotation(DoubleRange.class);
 				if (range != null) {
-					builder.controller(opt -> new DoubleSliderController(opt, range.min(), range.max(), range.interval()));
+					/*
+					builder.controller(opt -> DoubleSliderControllerBuilder.create(opt)
+							.range(range.min(), range.max())
+							.step(range.interval())
+					);
+					 */
+					builder.controller(opt -> new DoubleSliderControllerBuilderImpl(opt)
+							.range(range.min(), range.max())
+							.step(range.interval())
+					);
 				} else {
-					builder.controller(DoubleFieldController::new);
+					builder.controller(DoubleFieldControllerBuilder::create);
 				}
 				return builder;
 
 			} else if (type.equals(String.class)) {
 
-				return Option.createBuilder(String.class)
-						.binding(makeNullableTypeBinding(String.class, field, defaults, parent))
-						.controller(StringController::new);
+				var builder = Option.<String>createBuilder()
+						.binding(makeNullableTypeBinding(String.class, field, defaults, parent));
+
+				StringOptions stringOptions = field.getAnnotation(StringOptions.class);
+
+				if (stringOptions != null) {
+					return builder.controller(opt ->
+						DropdownStringController.DropdownControllerBuilder.create(opt)
+								.allowedValues(stringOptions.options())
+					);
+				}
+
+				return builder.controller(StringControllerBuilder::create);
 
 			} else if (type.isEnum()) {
 
-				var builder = Option.createBuilder(type)
+				var builder = Option.<Enum>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 
 				Decorate decorate = field.getAnnotation(Decorate.class);
 				if (decorate != null) {
-					if (!Decorate.Decorator.class.isAssignableFrom(decorate.decorator())) {
+					if (!DecoratedEnumController.Decorator.class.isAssignableFrom(decorate.decorator())) {
 						throw new RuntimeException("Decorator must be of type Decorator<T>!");
 					}
 					try {
-						Decorate.Decorator decorator = (Decorate.Decorator) decorate.decorator().getConstructor().newInstance();
-						builder.controller(opt -> new DecoratedEnumController(opt, decorator));
+						DecoratedEnumController.Decorator decorator = decorate.decorator().getConstructor().newInstance();
+						builder.controller(opt -> DecoratedEnumController.DecoratedEnumControllerBuilder.create(opt)
+								.enumClass((Class<Enum>) type)
+								.valueFormatter(NameableEnum.getEnumFormatter())
+								.decorator(decorator)
+						);
 					} catch (ReflectiveOperationException e) {
 						throw new RuntimeException(e);
 					}
 				} else {
-					builder.controller(opt -> new EnumController(opt, NameableEnum.getEnumFormatter()));
+					builder.controller(opt -> EnumControllerBuilder.create(opt)
+							.enumClass((Class<Enum>) type)
+							.valueFormatter(NameableEnum.getEnumFormatter())
+					);
 				}
 
 				return builder;
 
 			} else if (type.equals(Color.class)) {
 
-				return Option.createBuilder(Color.class)
+				return Option.<Color>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
-						.controller(opt -> new ColorController(opt, true));
+						.controller(opt -> ColorControllerBuilder.create(opt)
+								.allowAlpha(true)
+						);
 
 			} else if (type.equals(Item.class)) {
 
-				return Option.createBuilder(Item.class)
+				return Option.<Item>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
-						.controller(ItemController::new);
+						.controller(ItemController.ItemControllerBuilder::create);
+
+			} else if (type.equals(ItemOrTag.class)) {
+
+				return Option.<ItemOrTag>createBuilder()
+						.binding(makeBinding(field, defaults, parent))
+						.controller(ItemOrTagController.ItemOrTagControllerBuilder::create);
 
 			}
 			return null;
 		}
+
 		protected static ListOption.Builder<?> fromListType(Class<?> type, Field field, Object defaults, Object parent) {
 
 			if (type.equals(boolean.class)) {
 
-				return ListOption.createBuilder(boolean.class)
+				return ListOption.<Boolean>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
 						.controller(TickBoxController::new);
 
 			} else if (type.equals(int.class)) {
 
-				var builder = ListOption.createBuilder(int.class)
+				var builder = ListOption.<Integer>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				IntegerRange range = field.getAnnotation(IntegerRange.class);
 				if (range != null) {
@@ -372,7 +413,7 @@ public class AutoYacl <T> {
 
 			} else if (type.equals(long.class)) {
 
-				var builder = ListOption.createBuilder(long.class)
+				var builder = ListOption.<Long>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				LongRange range = field.getAnnotation(LongRange.class);
 				if (range != null) {
@@ -384,7 +425,7 @@ public class AutoYacl <T> {
 
 			} else if (type.equals(float.class)) {
 
-				var builder = ListOption.createBuilder(float.class)
+				var builder = ListOption.<Float>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				FloatRange range = field.getAnnotation(FloatRange.class);
 				if (range != null) {
@@ -396,7 +437,7 @@ public class AutoYacl <T> {
 
 			} else if (type.equals(double.class)) {
 
-				var builder = ListOption.createBuilder(double.class)
+				var builder = ListOption.<Double>createBuilder()
 						.binding(makeBinding(field, defaults, parent));
 				DoubleRange range = field.getAnnotation(DoubleRange.class);
 				if (range != null) {
@@ -408,30 +449,41 @@ public class AutoYacl <T> {
 
 			} else if (type.equals(String.class)) {
 
-				return ListOption.createBuilder(String.class)
+				return ListOption.<String>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
 						.initial("")
 						.controller(StringController::new);
 
 			} else if (type.isEnum()) {
 
-				return ListOption.createBuilder(type)
+				return ListOption.<Enum>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
-						.controller(opt -> new EnumController(opt, NameableEnum.getEnumFormatter()));
+						.controller(opt -> EnumControllerBuilder.create(opt)
+								.enumClass((Class<Enum>) type)
+								.valueFormatter(NameableEnum.getEnumFormatter())
+								.build()
+						);
 
 			} else if (type.equals(Color.class)) {
 
-				return ListOption.createBuilder(Color.class)
+				return ListOption.<Color>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
 						.initial(Color.BLACK)
 						.controller(opt -> new ColorController(opt, true));
 
 			} else if (type.equals(Item.class)) {
 
-				return ListOption.createBuilder(Item.class)
+				return ListOption.<Item>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
 						.initial(Items.AIR)
 						.controller(ItemController::new);
+
+			} else if (type.equals(ItemOrTag.class)) {
+
+				return ListOption.<ItemOrTag>createBuilder()
+						.binding(makeBinding(field, defaults, parent))
+						.initial(new ItemOrTag(Items.AIR))
+						.controller(ItemOrTagController::new);
 
 			}
 			return null;

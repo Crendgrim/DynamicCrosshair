@@ -1,30 +1,15 @@
 package mod.crend.yaclx;
 
-import com.google.gson.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 
-import java.awt.Color;
-import java.lang.reflect.Type;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-public class YaclxHelper {
-	public static final boolean HAS_YACL = PlatformUtils.isModLoaded("yet_another_config_lib");
-
-	public static class ColorTypeAdapter implements JsonSerializer<Color>, JsonDeserializer<Color> {
-		public ColorTypeAdapter() {
-		}
-
-		public Color deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-			return new Color(jsonElement.getAsInt(), true);
-		}
-
-		public JsonElement serialize(Color color, Type type, JsonSerializationContext jsonSerializationContext) {
-			return new JsonPrimitive(color.getRGB());
-		}
-	}
+public class ItemRegistryHelper {
 
 	public static boolean isRegisteredItem(String value) {
 		String namespace, itemName;
@@ -66,16 +51,34 @@ public class YaclxHelper {
 		return getItemFromName(value, Items.AIR);
 	}
 
-	public static class ItemTypeAdapter implements JsonSerializer<Item>, JsonDeserializer<Item> {
-		public ItemTypeAdapter() {
+	public static Stream<Identifier> getMatchingItemIdentifiers(String value) {
+		int sep = value.indexOf(Identifier.NAMESPACE_SEPARATOR);
+		Predicate<Identifier> filterPredicate;
+		if (sep == -1) {
+			filterPredicate = identifier ->
+					identifier.getPath().contains(value)
+					|| Registries.ITEM.get(identifier).getName().getString().toLowerCase().contains(value.toLowerCase());
+		} else {
+			String namespace = value.substring(0, sep);
+			String path = value.substring(sep + 1);
+			filterPredicate = identifier -> identifier.getNamespace().equals(namespace) && identifier.getPath().startsWith(path);
 		}
-
-		public Item deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-			return getItemFromName(jsonElement.getAsString());
-		}
-
-		public JsonElement serialize(Item item, Type type, JsonSerializationContext jsonSerializationContext) {
-			return new JsonPrimitive(Registries.ITEM.getId(item).toString());
-		}
+		return Registries.ITEM.getIds().stream()
+			.filter(filterPredicate)
+			.sorted((id1, id2) -> {
+				String path = (sep == -1 ? value : value.substring(sep + 1));
+				boolean id1StartsWith = id1.getPath().startsWith(path);
+				boolean id2StartsWith = id2.getPath().startsWith(path);
+				if (id1StartsWith) {
+					if (id2StartsWith) {
+						return id1.compareTo(id2);
+					}
+					return -1;
+				}
+				if (id2StartsWith) {
+					return 1;
+				}
+				return id1.compareTo(id2);
+			});
 	}
 }

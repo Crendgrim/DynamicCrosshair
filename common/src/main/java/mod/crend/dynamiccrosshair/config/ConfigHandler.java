@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair.config;
 
+import mod.crend.yaclx.ItemOrTag;
 import mod.crend.yaclx.opt.ConfigStore;
 import net.minecraft.item.Item;
 
@@ -53,23 +54,23 @@ public class ConfigHandler {
         return CONFIG_STORE.config().enableTweaks;
     }
 
-    public List<Item> getAdditionalTools() {
+    public List<ItemOrTag> getAdditionalTools() {
         if (!isTweaksEnabled()) return Collections.emptyList();
         return CONFIG_STORE.config().additionalTools;
     }
-    public List<Item> getAdditionalMeleeWeapons() {
+    public List<ItemOrTag> getAdditionalMeleeWeapons() {
         if (!isTweaksEnabled()) return Collections.emptyList();
         return CONFIG_STORE.config().additionalMeleeWeapons;
     }
-    public List<Item> getAdditionalRangedWeapons() {
+    public List<ItemOrTag> getAdditionalRangedWeapons() {
         if (!isTweaksEnabled()) return Collections.emptyList();
         return CONFIG_STORE.config().additionalRangedWeapons;
     }
-    public List<Item> getAdditionalThrowables() {
+    public List<ItemOrTag> getAdditionalThrowables() {
         if (!isTweaksEnabled()) return Collections.emptyList();
         return CONFIG_STORE.config().additionalThrowables;
     }
-    public List<Item> getAdditionalUsableItems() {
+    public List<ItemOrTag> getAdditionalUsableItems() {
         if (!isTweaksEnabled()) return Collections.emptyList();
         return CONFIG_STORE.config().additionalUsableItems;
     }

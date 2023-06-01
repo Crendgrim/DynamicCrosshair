@@ -10,6 +10,7 @@ import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.AxeItemAccessor;
 import mod.crend.dynamiccrosshair.mixin.HoeItemAccessor;
 import mod.crend.dynamiccrosshair.mixin.ShovelItemAccessor;
+import mod.crend.yaclx.ItemOrTag;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.enums.DoubleBlockHalf;
@@ -39,7 +40,7 @@ public class VanillaUsableItemHandler {
     public static boolean isAlwaysUsableItem(ItemStack handItemStack) {
         Item handItem = handItemStack.getItem();
         return handItem.getUseAction(handItemStack) == UseAction.DRINK
-                || DynamicCrosshair.config.getAdditionalUsableItems().contains(handItem);
+                || ItemOrTag.isContainedIn(handItem, DynamicCrosshair.config.getAdditionalUsableItems());
     }
 
     public static boolean isUsableItem(ItemStack handItemStack) {

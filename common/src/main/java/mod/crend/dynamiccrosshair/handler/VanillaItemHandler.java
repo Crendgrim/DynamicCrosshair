@@ -5,6 +5,7 @@ import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
+import mod.crend.yaclx.ItemOrTag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -21,7 +22,7 @@ public class VanillaItemHandler {
         return (   item instanceof ToolItem
                 || item instanceof FlintAndSteelItem
                 || item instanceof ShearsItem
-                || DynamicCrosshair.config.getAdditionalTools().contains(item)
+                || ItemOrTag.isContainedIn(item, DynamicCrosshair.config.getAdditionalTools())
         );
     }
 
@@ -32,7 +33,7 @@ public class VanillaItemHandler {
                 || item instanceof ThrowablePotionItem
                 || item instanceof ExperienceBottleItem
                 || item instanceof EnderPearlItem
-                || DynamicCrosshair.config.getAdditionalThrowables().contains(item)
+                || ItemOrTag.isContainedIn(item, DynamicCrosshair.config.getAdditionalThrowables())
         );
     }
 
@@ -42,7 +43,7 @@ public class VanillaItemHandler {
 
     public static boolean isMeleeWeapon(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        return item instanceof SwordItem || DynamicCrosshair.config.getAdditionalMeleeWeapons().contains(item);
+        return item instanceof SwordItem || ItemOrTag.isContainedIn(item, DynamicCrosshair.config.getAdditionalMeleeWeapons());
     }
 
     public static boolean isRangedWeapon(ItemStack itemStack) {
@@ -50,7 +51,7 @@ public class VanillaItemHandler {
         if (item instanceof FishingRodItem) {
             return true;
         }
-        if (DynamicCrosshair.config.getAdditionalRangedWeapons().contains(item)) {
+        if (ItemOrTag.isContainedIn(item, DynamicCrosshair.config.getAdditionalRangedWeapons())) {
             return true;
         }
         return switch (item.getUseAction(itemStack)) {
@@ -74,7 +75,7 @@ public class VanillaItemHandler {
         if (       handItem instanceof ToolItem
                 || handItem instanceof FlintAndSteelItem
                 || handItem instanceof ShearsItem
-                || DynamicCrosshair.config.getAdditionalTools().contains(handItem)
+                || ItemOrTag.isContainedIn(handItem, DynamicCrosshair.config.getAdditionalTools())
         ) {
             if (!context.isWithEntity() || DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnEntity()) {
                 return Crosshair.TOOL;
@@ -97,7 +98,7 @@ public class VanillaItemHandler {
                 || handItem instanceof ThrowablePotionItem
                 || handItem instanceof ExperienceBottleItem
                 || handItem instanceof EnderPearlItem
-                || DynamicCrosshair.config.getAdditionalThrowables().contains(handItem)
+                || ItemOrTag.isContainedIn(handItem, DynamicCrosshair.config.getAdditionalThrowables())
         ) {
             return Crosshair.THROWABLE;
         }
@@ -139,7 +140,7 @@ public class VanillaItemHandler {
             }
             return Crosshair.MELEE_WEAPON;
         }
-        if (DynamicCrosshair.config.getAdditionalMeleeWeapons().contains(handItem)) {
+        if (ItemOrTag.isContainedIn(handItem, DynamicCrosshair.config.getAdditionalMeleeWeapons())) {
             return Crosshair.MELEE_WEAPON;
         }
 
@@ -150,7 +151,7 @@ public class VanillaItemHandler {
         ItemStack itemStack = context.getItemStack();
         Item handItem = itemStack.getItem();
         if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.Always) {
-            if (DynamicCrosshair.config.getAdditionalRangedWeapons().contains(handItem)) {
+            if (ItemOrTag.isContainedIn(handItem, DynamicCrosshair.config.getAdditionalRangedWeapons())) {
                 return Crosshair.RANGED_WEAPON;
             }
             return switch (handItem.getUseAction(itemStack)) {
@@ -183,7 +184,7 @@ public class VanillaItemHandler {
             }
             return null;
         }
-        if (DynamicCrosshair.config.getAdditionalRangedWeapons().contains(handItem)) {
+        if (ItemOrTag.isContainedIn(handItem, DynamicCrosshair.config.getAdditionalRangedWeapons())) {
             return Crosshair.RANGED_WEAPON;
         }
         return null;

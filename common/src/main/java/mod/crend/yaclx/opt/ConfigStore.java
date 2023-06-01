@@ -39,8 +39,9 @@ public class ConfigStore<T> {
 				.setPrettyPrinting()
 				.registerTypeHierarchyAdapter(Text.class, new Text.Serializer())
 				.registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
-				.registerTypeHierarchyAdapter(Color.class, new YaclxHelper.ColorTypeAdapter())
-				.registerTypeHierarchyAdapter(Item.class, new YaclxHelper.ItemTypeAdapter())
+				.registerTypeHierarchyAdapter(Color.class, new ColorTypeAdapter())
+				.registerTypeHierarchyAdapter(Item.class, new ItemTypeAdapter())
+				.registerTypeHierarchyAdapter(ItemOrTag.class, new ItemOrTagTypeAdapter())
 				.serializeNulls();
 	}
 
@@ -121,7 +122,7 @@ public class ConfigStore<T> {
 				createNewConfig(configClass);
 			}
 		}
-		if (YaclxHelper.HAS_YACL) {
+		if (YaclX.HAS_YACL) {
 			yaclWrapper = new WithYacl<>(configClass, path);
 		} else {
 			try {
@@ -137,7 +138,7 @@ public class ConfigStore<T> {
 	 * @return Config class object
 	 */
 	public T config() {
-		if (YaclxHelper.HAS_YACL) {
+		if (YaclX.HAS_YACL) {
 			return yaclWrapper.getConfig();
 		} else {
 			return configInstance;
@@ -148,7 +149,7 @@ public class ConfigStore<T> {
 	 * Saves the current configuration, either through YACL or static variable
 	 */
 	public void save() {
-		if (YaclxHelper.HAS_YACL) {
+		if (YaclX.HAS_YACL) {
 			yaclWrapper.save();
 		} else {
 			try {
@@ -169,7 +170,7 @@ public class ConfigStore<T> {
 	}
 
 	public WithYacl<T> withYacl() {
-		assert(YaclxHelper.HAS_YACL);
+		assert(YaclX.HAS_YACL);
 		return yaclWrapper;
 	}
 }

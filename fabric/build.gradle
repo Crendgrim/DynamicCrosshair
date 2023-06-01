@@ -30,6 +30,8 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
     modImplementation fabricApi.module("fabric-api-base", project.fabric_api_version)
+    modImplementation fabricApi.module("fabric-convention-tags-v1", project.fabric_api_version)
+    modImplementation fabricApi.module("fabric-client-tags-api-v1", project.fabric_api_version)
     modImplementation fabricApi.module("fabric-key-binding-api-v1", project.fabric_api_version)
     modImplementation fabricApi.module("fabric-transfer-api-v1", project.fabric_api_version)
 
