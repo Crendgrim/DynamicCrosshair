@@ -2,10 +2,13 @@ package mod.crend.yaclx.opt;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
+import dev.isxander.yacl.api.YetAnotherConfigLib;
 import dev.isxander.yacl.config.GsonConfigInstance;
 import mod.crend.yaclx.ItemOrTag;
 import mod.crend.yaclx.ItemOrTagTypeAdapter;
 import mod.crend.yaclx.ItemTypeAdapter;
+import mod.crend.yaclx.auto.AutoYacl;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -46,5 +49,11 @@ public class WithYacl<T> {
 
 	public void save() {
 		instance.save();
+	}
+
+	public Screen makeScreen(Class<?> configClass, Screen parent) {
+		return YetAnotherConfigLib.create(instance,
+				(defaults, config, builder) -> AutoYacl.parse(configClass, defaults, config, builder)
+		).generateScreen(parent);
 	}
 }

@@ -3,8 +3,6 @@ package mod.crend.yaclx.auto;
 import mod.crend.yaclx.auto.annotation.*;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public class ConfigValidator {

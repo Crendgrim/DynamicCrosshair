@@ -28,5 +28,4 @@ public class PlatformUtils {
 	public static Set<Identifier> getItemFromTag(TagKey<Item> itemTagKey) {
 		throw new AssertionError();
 	}
-
 }

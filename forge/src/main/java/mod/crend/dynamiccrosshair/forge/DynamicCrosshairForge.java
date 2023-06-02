@@ -20,7 +20,7 @@ public class DynamicCrosshairForge {
         if (YaclHelper.HAS_YACL) {
             ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
                     () -> new ConfigScreenHandler.ConfigScreenFactory(
-                            (minecraft, screen) -> ConfigScreenFactory.makeScreen(Config.class, screen)
+                            (minecraft, screen) -> ConfigHandler.CONFIG_STORE.makeScreen(screen)
                     ));
         }
     }

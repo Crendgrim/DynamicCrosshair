@@ -1,10 +1,8 @@
 package mod.crend.yaclx.auto.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
+@Repeatable(EnableIf.EnableIfList.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface EnableIf {
@@ -14,4 +12,19 @@ public @interface EnableIf {
 	interface Predicate {
 		boolean isEnabled(Object value);
 	}
+
+	class BooleanPredicate implements Predicate {
+		@Override
+		public boolean isEnabled(Object value) {
+			return value == Boolean.valueOf(true);
+		}
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.FIELD)
+	@interface EnableIfList {
+		EnableIf[] value();
+	}
+
 }
+
