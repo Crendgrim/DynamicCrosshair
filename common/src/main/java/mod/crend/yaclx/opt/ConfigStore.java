@@ -192,7 +192,7 @@ public class ConfigStore<T> {
 
 	public Screen makeScreen(Screen parent) {
 		if (YaclX.HAS_YACL) {
-			return withYacl().makeScreen(configClass, parent);
+			return withYacl().makeScreen(parent);
 		} else {
 			AutoYaclConfig ayc = configClass.getAnnotation(AutoYaclConfig.class);
 			String translationKey = modId + ".title";

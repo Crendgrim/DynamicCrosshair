@@ -25,7 +25,7 @@ public class PlatformUtils {
 	}
 
 	@ExpectPlatform
-	public static Set<Identifier> getItemFromTag(TagKey<Item> itemTagKey) {
+	public static Set<Identifier> getItemsFromTag(TagKey<Item> itemTagKey) {
 		throw new AssertionError();
 	}
 }

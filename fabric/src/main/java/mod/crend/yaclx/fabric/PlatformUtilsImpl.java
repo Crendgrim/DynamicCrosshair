@@ -23,7 +23,7 @@ public class PlatformUtilsImpl {
 		return ConventionalItemTags.class;
 	}
 
-	public static Set<Identifier> getItemFromTag(TagKey<Item> itemTagKey) {
+	public static Set<Identifier> getItemsFromTag(TagKey<Item> itemTagKey) {
 		return ClientTags.getOrCreateLocalTag(itemTagKey);
 	}
 }

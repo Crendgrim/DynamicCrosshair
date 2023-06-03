@@ -1,5 +1,6 @@
 package mod.crend.yaclx.auto;
 
+import com.google.common.collect.Lists;
 import dev.isxander.yacl.api.*;
 import dev.isxander.yacl.api.controller.*;
 import dev.isxander.yacl.config.ConfigEntry;
@@ -13,12 +14,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -35,15 +39,17 @@ public class AutoYacl <T> {
 		protected final OptionAddable builder;
 		protected final Object bDefaults;
 		protected final Object bParent;
+		protected final @Nullable Object bDummyConfig;
 		protected final Map<String, OptionGroup.Builder> groups;
 		protected final Map<String, Option<?>> options;
 		protected final Map<String, List<EnableIf>> dependencies;
 		protected final String modId;
 		
-		protected Wrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent, Map<String, OptionGroup.Builder> groups, Map<String, Option<?>> options, Map<String, List<EnableIf>> dependencies) {
+		protected Wrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent, @Nullable Object bDummyConfig, Map<String, OptionGroup.Builder> groups, Map<String, Option<?>> options, Map<String, List<EnableIf>> dependencies) {
 			this.builder = builder;
 			this.bDefaults = bDefaults;
 			this.bParent = bParent;
+			this.bDummyConfig = bDummyConfig;
 			this.groups = groups;
 			this.modId = modId;
 			this.options = options;
@@ -101,19 +107,39 @@ public class AutoYacl <T> {
 				}
 			});
 		}
+		protected static <T> OptionDescription buildDescription(T value, String modId, String key, Field field, boolean group) {
+			var description = OptionDescription.createBuilder()
+					.text(Text.translatable(getDescriptionTranslationKey(modId, key, field, group)));
+			DescriptionImage descriptionImage = field.getAnnotation(DescriptionImage.class);
+			if (descriptionImage != null) {
+				try {
+					DescriptionImage.DescriptionImageRendererFactory<T> factory = (DescriptionImage.DescriptionImageRendererFactory<T>) descriptionImage.value().getConstructor().newInstance();
+					description.customImage(CompletableFuture.completedFuture(Optional.of(factory.create(value))));
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
+			}
+			return description.build();
+		}
 		protected void setCommonAttributes(Option.Builder<?> optionBuilder, String key, Field field) {
 			setCommonAttributes(modId, optionBuilder, key, field, dependencies);
 		}
 		protected static void setCommonAttributes(String modId, Option.Builder<?> optionBuilder, String key, Field field, Map<String, List<EnableIf>> dependencies) {
 			String translationKey = getTranslationKey(modId, key, field, false);
 			optionBuilder.name(Text.translatable(translationKey));
-			optionBuilder.description(OptionDescription.createBuilder()
-					.text(Text.translatable(getDescriptionTranslationKey(modId, key, field, false)))
-					.build()
-			);
+			optionBuilder.description(value -> buildDescription(value, modId, key, field, false));
 			EnableIf[] enableIfList = field.getAnnotationsByType(EnableIf.class);
 			if (enableIfList.length > 0) {
 				dependencies.put(key, Arrays.asList(enableIfList));
+			}
+			Listener[] listeners = field.getAnnotationsByType(Listener.class);
+			for (Listener listener : listeners) {
+				try {
+					Listener.Callback callback = listener.value().getConstructor().newInstance();
+					optionBuilder.listener((opt, value) -> callback.call(key, value));
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
 			}
 			OnSave onSave = field.getAnnotation(OnSave.class);
 			if (onSave != null) {
@@ -172,7 +198,7 @@ public class AutoYacl <T> {
 		protected void registerObject(OptionAddable containingBuilder, String key, Field field) {
 			// register object transitively
 			try {
-				Wrapper transitiveWrapper = new Wrapper(modId, containingBuilder, field.get(bDefaults), field.get(bParent), groups, options, dependencies);
+				Wrapper transitiveWrapper = new Wrapper(modId, containingBuilder, field.get(bDefaults), field.get(bParent), bDummyConfig == null ? null : field.get(bDummyConfig), groups, options, dependencies);
 				registerMemberFields(transitiveWrapper, key, field);
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);
@@ -187,7 +213,7 @@ public class AutoYacl <T> {
 				containingBuilder.option(LabelOption.create(Text.translatable(label.key())));
 			}
 
-			Option.Builder<?> optionBuilder = fromType(field, bDefaults, bParent);
+			Option.Builder<?> optionBuilder = fromType(field, bDefaults, bParent, bDummyConfig);
 			if (optionBuilder != null) {
 				setCommonAttributes(optionBuilder, key, field);
 				options.put(key, optionBuilder.build());
@@ -218,6 +244,28 @@ public class AutoYacl <T> {
 				throw new RuntimeException(e);
 			}
 		}
+		protected static <T> BiConsumer<Option<T>, T> makeListener(Field field, @Nullable Object dummy) {
+			if (dummy == null) return (opt, val) -> {};
+			return (opt, val) -> {
+				try {
+					field.set(dummy, val);
+				} catch (IllegalAccessException e) {
+					throw new RuntimeException(e);
+				}
+			};
+		}
+		protected static <T> BiConsumer<Option<T>, T> makeListener(Field field, @Nullable Object dummy, boolean reversed) {
+			if (dummy == null) return (opt, val) -> {};
+			return (opt, val) -> {
+				try {
+					System.err.println("reverse: " + reversed);
+					if (reversed) field.set(dummy, Lists.reverse((List<?>) val));
+					field.set(dummy, val);
+				} catch (IllegalAccessException e) {
+					throw new RuntimeException(e);
+				}
+			};
+		}
 		// Special method to handle null values for e.g. Strings
 		@SuppressWarnings("unchecked")
 		protected static <T> Binding<T> makeNullableTypeBinding(Class<T> clazz, Field field, Object defaults, Object parent) {
@@ -243,11 +291,54 @@ public class AutoYacl <T> {
 				throw new RuntimeException(e);
 			}
 		}
+		@SuppressWarnings("unchecked")
+		protected static <T> Binding<List<T>> makeListBinding(Field field, Object defaults, Object parent, boolean reverse) {
+			try {
+				if (reverse)
+					return Binding.generic(Lists.reverse((List<T>) field.get(defaults)),
+							() -> {
+								try {
+									List<T> obj = (List<T>) field.get(parent);
+									return Lists.reverse(obj == null ? Collections.emptyList() : obj);
+								} catch (ReflectiveOperationException e) {
+									throw new RuntimeException(e);
+								}
+							},
+							val -> {
+								try {
+									field.set(parent, Lists.reverse(val));
+								} catch (IllegalAccessException e) {
+									throw new RuntimeException(e);
+								}
+							}
+					);
+				else
+					return Binding.generic(((List<T>) field.get(defaults)),
+							() -> {
+								try {
+									List<T> obj = (List<T>) field.get(parent);
+									return (obj == null ? Collections.emptyList() : obj);
+								} catch (ReflectiveOperationException e) {
+									throw new RuntimeException(e);
+								}
+							},
+							val -> {
+								try {
+									field.set(parent, val);
+								} catch (IllegalAccessException e) {
+									throw new RuntimeException(e);
+								}
+							}
+					);
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			}
+		}
 
-		public static Option.Builder<?> createOptionBuilder(String modId, String key, Field field, Object defaults, Object parent) {
+		public static Option.Builder<?> createOptionBuilder(String modId, String key, Field field, Object defaults, Object parent, @Nullable Object dummy) {
 			assert(field.getDeclaringClass().isInstance(defaults));
 			assert(field.getDeclaringClass().isInstance(parent));
-			Option.Builder<?> optionBuilder = fromType(field, defaults, parent);
+			Option.Builder<?> optionBuilder = fromType(field, defaults, parent, dummy);
 			if (optionBuilder != null) {
 				setCommonAttributes(modId, optionBuilder, key, field, new LinkedHashMap<>());
 			}
@@ -310,7 +401,7 @@ public class AutoYacl <T> {
 			return StringControllerBuilder::create;
 		}
 		@SuppressWarnings("unchecked")
-		private static <T extends Enum<T>> Function<Option<T>, ControllerBuilder<T>> getEnumController(Field field) {
+		private static <T extends Enum<T>> Function<Option<T>, ControllerBuilder<T>> getEnumController(Field field, Class<?> clazz) {
 			Decorate decorate = field.getAnnotation(Decorate.class);
 			if (decorate != null) {
 				if (!DecoratedEnumController.Decorator.class.isAssignableFrom(decorate.decorator())) {
@@ -319,7 +410,7 @@ public class AutoYacl <T> {
 				try {
 					DecoratedEnumController.Decorator<T> decorator = (DecoratedEnumController.Decorator<T>) decorate.decorator().getConstructor().newInstance();
 					return (opt -> DecoratedEnumController.DecoratedEnumControllerBuilder.create(opt)
-							.enumClass((Class<T>) field.getType())
+							.enumClass((Class<T>) clazz)
 							.valueFormatter(NameableEnum.getEnumFormatter())
 							.decorator(decorator)
 					);
@@ -328,7 +419,7 @@ public class AutoYacl <T> {
 				}
 			} else {
 				return (opt -> EnumControllerBuilder.create(opt)
-						.enumClass((Class<T>) field.getType())
+						.enumClass((Class<T>) clazz)
 						.valueFormatter(NameableEnum.getEnumFormatter())
 				);
 			}
@@ -346,67 +437,77 @@ public class AutoYacl <T> {
 		}
 
 		@SuppressWarnings("unchecked")
-		private static Option.Builder<?> fromType(Field field, Object defaults, Object parent) {
+		private static Option.Builder<?> fromType(Field field, Object defaults, Object parent, @Nullable Object dummy) {
 			Class<?> type = field.getType();
 
 			if (type.equals(boolean.class)) {
 
 				return Option.<Boolean>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getBooleanController(field));
 
 			} else if (type.equals(int.class)) {
 
 				return Option.<Integer>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getIntegerController(field));
 
 			} else if (type.equals(long.class)) {
 
 				return Option.<Long>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getLongController(field));
 
 			} else if (type.equals(float.class)) {
 
 				return Option.<Float>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getFloatController(field));
 
 			} else if (type.equals(double.class)) {
 
 				return Option.<Double>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getDoubleController(field));
 
 			} else if (type.equals(String.class)) {
 
 				return Option.<String>createBuilder()
 						.binding(makeNullableTypeBinding(String.class, field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getStringController(field));
 
 			} else if (type.isEnum()) {
 
 				return Option.<Enum>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
-						.controller(getEnumController(field));
+						.listener(makeListener(field, dummy))
+						.controller(getEnumController(field, field.getType()));
 
 			} else if (type.equals(Color.class)) {
 
 				return Option.<Color>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getColorController(field));
 
 			} else if (type.equals(Item.class)) {
 
 				return Option.<Item>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getItemController(field));
 
 			} else if (type.equals(ItemOrTag.class)) {
 
 				return Option.<ItemOrTag>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getItemOrTagController(field));
 
 			}
@@ -414,54 +515,63 @@ public class AutoYacl <T> {
 		}
 
 		@SuppressWarnings("unchecked")
-		protected static ListOption.Builder<?> fromListType(Class<?> type, Field field, Object defaults, Object parent) {
+		protected static ListOption.Builder<?> fromListType(Class<?> type, Field field, Object defaults, Object parent, @Nullable Object dummy, boolean reverse) {
 			if (type.equals(boolean.class)) {
 
 				return ListOption.<Boolean>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getBooleanController(field));
 
 			} else if (type.equals(int.class)) {
 
 				return ListOption.<Integer>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getIntegerController(field));
 
 			} else if (type.equals(long.class)) {
 
 				return ListOption.<Long>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getLongController(field));
 
 			} else if (type.equals(float.class)) {
 
 				return ListOption.<Float>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getFloatController(field));
 
 			} else if (type.equals(double.class)) {
 
 				return ListOption.<Double>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.controller(getDoubleController(field));
 
 			} else if (type.equals(String.class)) {
 
 				return ListOption.<String>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.initial("")
 						.controller(getStringController(field));
 
 			} else if (type.isEnum()) {
 
 				return ListOption.<Enum>createBuilder()
-						.binding(makeBinding(field, defaults, parent))
-						.controller(getEnumController(field));
+						.binding(makeListBinding(field, defaults, parent, reverse))
+						.listener(makeListener(field, dummy, reverse))
+						.initial((Enum) type.getEnumConstants()[0])
+						.controller(getEnumController(field, (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]));
 
 			} else if (type.equals(Color.class)) {
 
 				return ListOption.<Color>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.initial(Color.BLACK)
 						.controller(getColorController(field));
 
@@ -469,6 +579,7 @@ public class AutoYacl <T> {
 
 				return ListOption.<Item>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.initial(Items.AIR)
 						.controller(getItemController(field));
 
@@ -476,6 +587,7 @@ public class AutoYacl <T> {
 
 				return ListOption.<ItemOrTag>createBuilder()
 						.binding(makeBinding(field, defaults, parent))
+						.listener(makeListener(field, dummy))
 						.initial(new ItemOrTag(Items.AIR))
 						.controller(getItemOrTagController(field));
 			}
@@ -490,17 +602,17 @@ public class AutoYacl <T> {
 	 */
 	public static class CategoryWrapper extends Wrapper {
 		protected List<ListOption<?>> listOptions = new ArrayList<>();
-		public CategoryWrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent) {
-			super(modId, builder, bDefaults, bParent, new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>());
+		public CategoryWrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent, @Nullable Object bDummyConfig) {
+			super(modId, builder, bDefaults, bParent, bDummyConfig, new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>());
 		}
-		private CategoryWrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent, Map<String, OptionGroup.Builder> groups, Map<String, Option<?>> options, Map<String, List<EnableIf>> dependencies) {
-			super(modId, builder, bDefaults, bParent, groups, options, dependencies);
+		private CategoryWrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent, @Nullable Object bDummyConfig, Map<String, OptionGroup.Builder> groups, Map<String, Option<?>> options, Map<String, List<EnableIf>> dependencies) {
+			super(modId, builder, bDefaults, bParent, bDummyConfig, groups, options, dependencies);
 		}
 
 		protected void registerObjectTransitively(OptionAddable containingBuilder, String key, Field field) {
 			// register object transitively
 			try {
-				Wrapper transitiveWrapper = new CategoryWrapper(modId, containingBuilder, field.get(bDefaults), field.get(bParent), groups, options, dependencies);
+				Wrapper transitiveWrapper = new CategoryWrapper(modId, containingBuilder, field.get(bDefaults), field.get(bParent), bDummyConfig == null ? null : field.get(bDummyConfig), groups, options, dependencies);
 				registerMemberFields(transitiveWrapper, key, field);
 			} catch (IllegalAccessException e) {
 				throw new RuntimeException(e);
@@ -520,7 +632,7 @@ public class AutoYacl <T> {
 			if (field.getType().equals(List.class)) {
 				ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
 				Type innerType = parameterizedType.getActualTypeArguments()[0];
-				var builder = fromListType((Class<?>) innerType, field, bDefaults, bParent);
+				var builder = fromListType((Class<?>) innerType, field, bDefaults, bParent, bDummyConfig, field.isAnnotationPresent(Reverse.class));
 				if (builder != null) {
 					setCommonAttributes(modId, builder, key, field);
 					listOptions.add(builder.build());
@@ -534,7 +646,7 @@ public class AutoYacl <T> {
 			var groupBuilder = groups.get(key);
 			setCommonAttributes(groupBuilder, key, field);
 			try {
-				Wrapper groupWrapper = new Wrapper(modId, groupBuilder, field.get(bDefaults), field.get(bParent), groups, options, dependencies);
+				Wrapper groupWrapper = new Wrapper(modId, groupBuilder, field.get(bDefaults), field.get(bParent), bDummyConfig == null ? null : field.get(bDummyConfig), groups, options, dependencies);
 				for (Field memberField : field.getType().getFields()) {
 					groupWrapper.register(key + "." + memberField.getName(), memberField);
 				}
@@ -557,12 +669,13 @@ public class AutoYacl <T> {
 		}
 	}
 
-	private static <T> CategoryWrapper wrapBuilder(String modId, String categoryName, T defaults, T config) {
+	private static <T> CategoryWrapper wrapBuilder(String modId, String categoryName, T defaults, T config, @Nullable T dummyConfig) {
 		return new CategoryWrapper(
 				modId,
 				ConfigCategory.createBuilder().name(Text.translatable(modId + ".category." + categoryName)),
 				defaults,
-				config);
+				config,
+				dummyConfig);
 	}
 
 	/**
@@ -587,10 +700,45 @@ public class AutoYacl <T> {
 	 * @param <T> config class
 	 */
 	public static <T> YetAnotherConfigLib.Builder parse(Class<?> configClass, T defaults, T config, YetAnotherConfigLib.Builder builder) {
+		return new AutoYacl<T>(configClass, defaults, config).parse(builder);
+	}
+
+	private final Class<T> configClass;
+	private final T defaults;
+	private final T config;
+	private final String modId;
+	private @Nullable T dummyConfig = null;
+
+	/**
+	 * Instance this class to get a dynamic builder from which you may create individual options.
+	 *
+	 * @param configClass the class referring to T
+	 * @param defaults default config, to revert options to default from
+	 * @param config current config
+	 */
+	@SuppressWarnings("unchecked")
+	public AutoYacl(Class<?> configClass, T defaults, T config) {
+		this.configClass = (Class<T>) configClass;
+		this.defaults = defaults;
+		this.config = config;
+		AutoYaclConfig ayc = configClass.getAnnotation(AutoYaclConfig.class);
+		this.modId = ayc.modid();
+	}
+
+	public AutoYacl<T> dummyConfig(T dummyConfig) {
+		this.dummyConfig = dummyConfig;
+		return this;
+	}
+
+	public AutoYacl<T> registerOptionHandler() {
+		return this;
+	}
+
+	public YetAnotherConfigLib.Builder parse(YetAnotherConfigLib.Builder builder) {
 		AutoYaclConfig ayc = configClass.getAnnotation(AutoYaclConfig.class);
 		String modId = ayc.modid();
 		Text modTitle = Text.translatable(ayc.translationKey());
-		CategoryWrapper categoryMain = wrapBuilder(modId, "general", defaults, config);
+		CategoryWrapper categoryMain = wrapBuilder(modId, "general", defaults, config, dummyConfig);
 		Map<String, CategoryWrapper> categories = new LinkedHashMap<>();
 		for (Field field : configClass.getFields()) {
 			if (field.isAnnotationPresent(ConfigEntry.class)) {
@@ -599,7 +747,7 @@ public class AutoYacl <T> {
 					categoryMain.register(field.getName(), field);
 				} else {
 					if (!categories.containsKey(category.name())) {
-						categories.put(category.name(), wrapBuilder(modId, category.name(), defaults, config));
+						categories.put(category.name(), wrapBuilder(modId, category.name(), defaults, config, dummyConfig));
 					}
 					categories.get(category.name()).register(field.getName(), field);
 				}
@@ -610,26 +758,6 @@ public class AutoYacl <T> {
 			builder.category(entry.build());
 		}
 		return builder.title(modTitle);
-	}
-
-	private final Class<T> configClass;
-	private final T defaults;
-	private final T config;
-	private final String modId;
-
-	/**
-	 * Instance this class to get a dynamic builder from which you may create individual options.
-	 *
-	 * @param configClass the class referring to T
-	 * @param defaults default config, to revert options to default from
-	 * @param config current config
-	 */
-	public AutoYacl(Class<T> configClass, T defaults, T config) {
-		this.configClass = configClass;
-		this.defaults = defaults;
-		this.config = config;
-		AutoYaclConfig ayc = configClass.getAnnotation(AutoYaclConfig.class);
-		this.modId = ayc.modid();
 	}
 
 	/**
@@ -643,7 +771,7 @@ public class AutoYacl <T> {
 	@SuppressWarnings("unchecked")
 	public <S> Option.Builder<S> makeOption(String key) {
 		try {
-			return (Option.Builder<S>) Wrapper.createOptionBuilder(modId, key, configClass.getField(key), defaults, config);
+			return (Option.Builder<S>) Wrapper.createOptionBuilder(modId, key, configClass.getField(key), defaults, config, dummyConfig);
 		} catch (NoSuchFieldException e) {
 			throw new RuntimeException(e);
 		}

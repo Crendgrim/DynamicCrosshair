@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.text.Text;
@@ -191,11 +192,23 @@ public class ItemOrTag {
 		if (tagEntries.isPresent()) {
 			return tagEntries.get().get(0).value();
 		}
-		return PlatformUtils.getItemFromTag(itemTag)
+		return PlatformUtils.getItemsFromTag(itemTag)
 				.stream()
 				.findFirst()
 				.map(Registries.ITEM::get)
 				.orElse(Items.AIR);
+	}
+
+	public Collection<Item> getAllItems() {
+		if (isItem) return List.of(item);
+		var tagEntries = Registries.ITEM.getEntryList(itemTag);
+		if (tagEntries.isPresent()) {
+			return tagEntries.get().stream().map(RegistryEntry::value).toList();
+		}
+		return PlatformUtils.getItemsFromTag(itemTag)
+				.stream()
+				.map(Registries.ITEM::get)
+				.toList();
 	}
 
 	/**

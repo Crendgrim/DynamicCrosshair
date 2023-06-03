@@ -19,7 +19,7 @@ public class PlatformUtilsImpl {
 		return Tags.Items.class;
 	}
 
-	public static Set<Identifier> getItemFromTag(TagKey<Item> itemTagKey) {
+	public static Set<Identifier> getItemsFromTag(TagKey<Item> itemTagKey) {
 		return Set.of();
 	}
 }

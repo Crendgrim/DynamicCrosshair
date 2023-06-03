@@ -7,8 +7,6 @@ import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
 import mod.crend.yaclx.ItemOrTag;
 import mod.crend.yaclx.auto.annotation.*;
 import mod.crend.yaclx.auto.annotation.Decorate;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 
 import java.awt.Color;
 import java.util.Collections;
