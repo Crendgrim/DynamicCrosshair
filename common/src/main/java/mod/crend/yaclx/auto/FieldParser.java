@@ -9,25 +9,15 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
-class FieldParser<T> {
-	String modId;
-	String key;
-	Field field;
-	Object defaults;
-	Object parent;
-	Object dummy;
-	boolean isGroup;
-
-	public FieldParser(String modId, String key, Field field, Object defaults, Object parent, Object dummy, boolean isGroup) {
-		this.modId = modId;
-		this.key = key;
-		this.field = field;
-		this.defaults = defaults;
-		this.parent = parent;
-		this.dummy = dummy;
-		this.isGroup = isGroup;
-	}
-
+record FieldParser<T>(
+		String modId,
+		String key,
+		Field field,
+		Object defaults,
+		Object parent,
+		Object dummy,
+		boolean isGroup
+) {
 	@SuppressWarnings("unchecked")
 	public Class<T> getType() {
 		return (Class<T>) field.getType();
@@ -47,7 +37,7 @@ class FieldParser<T> {
 				: translationKey.description());
 	}
 
-	protected OptionDescription buildDescription(T value) {
+	private OptionDescription buildDescription(T value) {
 		var description = OptionDescription.createBuilder()
 				.text(Text.translatable(getDescriptionTranslationKey()));
 		DescriptionImage descriptionImage = field.getAnnotation(DescriptionImage.class);
@@ -134,15 +124,15 @@ class FieldParser<T> {
 		return null;
 	}
 
-	protected BindingHelper<T> getBinding() {
+	private BindingHelper<T> getBinding() {
 		return BindingHelper.create(field);
 	}
 
-	protected BindingHelper<T> getNullableBinding() {
+	private BindingHelper<T> getNullableBinding() {
 		return BindingHelper.create(field, getType());
 	}
 
-	protected BindingHelper<List<T>> getListBinding(boolean reverse) {
+	private BindingHelper<List<T>> getListBinding(boolean reverse) {
 		return BindingHelper.create(field, reverse);
 	}
 

@@ -2,7 +2,6 @@ package mod.crend.dynamiccrosshair.config;
 
 import mod.crend.yaclx.ItemOrTag;
 import mod.crend.yaclx.opt.ConfigStore;
-import net.minecraft.item.Item;
 
 import java.util.Collections;
 import java.util.List;

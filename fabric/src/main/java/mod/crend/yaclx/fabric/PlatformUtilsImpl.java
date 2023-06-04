@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 import java.nio.file.Path;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class PlatformUtilsImpl {
 	public static boolean isModLoaded(String modid) {
 		return FabricLoader.getInstance().isModLoaded(modid);

@@ -146,7 +146,7 @@ public class AutoYacl <T> {
 	 * Use @Category(group=) and @TransitiveObject to fine tune groupings.
 	 */
 	public static class CategoryWrapper extends Wrapper {
-		protected List<ListOption<?>> listOptions = new ArrayList<>();
+		protected final List<ListOption<?>> listOptions = new ArrayList<>();
 		public CategoryWrapper(String modId, OptionAddable builder, Object bDefaults, Object bParent, @Nullable Object bDummyConfig) {
 			super(modId, builder, bDefaults, bParent, bDummyConfig, new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>());
 		}
@@ -246,6 +246,7 @@ public class AutoYacl <T> {
 	 * @return The builder after every field has been added to it.
 	 * @param <T> config class
 	 */
+	@SuppressWarnings("unused")
 	public static <T> YetAnotherConfigLib.Builder parse(Class<?> configClass, T defaults, T config, YetAnotherConfigLib.Builder builder) {
 		return new AutoYacl<T>(configClass, defaults, config).parse(builder);
 	}
@@ -311,6 +312,7 @@ public class AutoYacl <T> {
 	 * @return an option builder that can be built or further configured
 	 * @param <S> the type of the field
 	 */
+	@SuppressWarnings("unused")
 	public <S> Option.Builder<S> makeOption(String key) {
 		try {
 			return Wrapper.createOptionBuilder(modId, key, configClass.getField(key), defaults, config, dummyConfig);

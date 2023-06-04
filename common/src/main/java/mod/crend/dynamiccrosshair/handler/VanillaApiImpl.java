@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair.handler;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.ItemCategory;

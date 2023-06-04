@@ -149,7 +149,7 @@ class TypedController {
 
 	@SuppressWarnings("unchecked")
 	private static Option.Builder<?> internalFromType(FieldParser<?> fieldParser) {
-		Field field = fieldParser.field;
+		Field field = fieldParser.field();
 		Class<?> type = field.getType();
 
 		if (type.equals(boolean.class)) {
@@ -212,7 +212,7 @@ class TypedController {
 	}
 	@SuppressWarnings("unchecked")
 	public static ListOption.Builder<?> internalFromListType(Class<?> type, FieldParser<?> fieldParser, boolean reverse) {
-		Field field = fieldParser.field;
+		Field field = fieldParser.field();
 
 		if (type.equals(boolean.class)) {
 

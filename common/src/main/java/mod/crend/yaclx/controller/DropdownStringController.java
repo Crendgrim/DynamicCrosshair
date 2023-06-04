@@ -19,7 +19,7 @@ public class DropdownStringController extends AbstractDropdownController<String>
 
 	@Override
 	public String getString() {
-		return option().pendingValue().toString();
+		return option().pendingValue();
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class DropdownStringController extends AbstractDropdownController<String>
 	}
 
 	public static class DropdownStringControllerElement extends DropdownControllerElement<String, String> {
-		DropdownStringController controller;
+		private final DropdownStringController controller;
 
 		public DropdownStringControllerElement(DropdownStringController control, YACLScreen screen, Dimension<Integer> dim) {
 			super(control, screen, dim);

@@ -21,9 +21,9 @@ import java.nio.file.Path;
  * loaded, such as your ConfigScreenFactory. Use YaclX.HAS_YACL or ConfigStore to get a safe context.
  */
 public class WithYacl<T> {
-	public GsonConfigInstance<T> instance;
-	public ConfigChangeListener configChangeListener = () -> { };
-	public AutoYacl<T> autoYacl;
+	public final GsonConfigInstance<T> instance;
+	public final ConfigChangeListener configChangeListener = () -> { };
+	public final AutoYacl<T> autoYacl;
 	public T dummyConfig = null;
 
 	public WithYacl(Class<T> configClass, Path path) {

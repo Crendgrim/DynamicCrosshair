@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.config;
 import mod.crend.yaclx.auto.NameableEnum;
 import net.minecraft.text.Text;
 
+@SuppressWarnings("unused")
 public enum CrosshairConfigStyle implements NameableEnum {
     Default(0, 0),
     Cross(15, 0),

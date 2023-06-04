@@ -4,6 +4,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraftforge.fml.ModList;
 
+@SuppressWarnings("unused")
 public class PlatformUtilsImpl {
 	public static boolean isModLoaded(String modid) {
 		return ModList.get().isLoaded(modid);

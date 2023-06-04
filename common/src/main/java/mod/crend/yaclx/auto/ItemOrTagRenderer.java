@@ -7,7 +7,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.ItemStack;
 
 public class ItemOrTagRenderer implements ImageRenderer {
-	ItemOrTag itemOrTag;
+	private final ItemOrTag itemOrTag;
 
 	public ItemOrTagRenderer(ItemOrTag itemOrTag) {
 		this.itemOrTag = itemOrTag;

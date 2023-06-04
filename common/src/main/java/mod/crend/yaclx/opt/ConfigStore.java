@@ -65,7 +65,7 @@ public class ConfigStore<T> {
 	 * @param configClass the class referring to T, with fields marked as @ConfigEntry.
 	 */
 	public ConfigStore(Class<T> configClass) {
-		this(configClass, (ConfigUpdater) null);
+		this(configClass, null);
 	}
 	/**
 	 * Sets up the config parsing, and takes the filename from the @AutoYaclConfig annotation on the specified config
@@ -186,6 +186,7 @@ public class ConfigStore<T> {
 		return yaclWrapper;
 	}
 
+	@SuppressWarnings("unused")
 	public Class<T> getConfigClass() {
 		return configClass;
 	}

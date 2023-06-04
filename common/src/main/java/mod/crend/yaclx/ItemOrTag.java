@@ -201,14 +201,14 @@ public class ItemOrTag {
 
 	public Collection<Item> getAllItems() {
 		if (isItem) return List.of(item);
-		var tagEntries = Registries.ITEM.getEntryList(itemTag);
-		if (tagEntries.isPresent()) {
-			return tagEntries.get().stream().map(RegistryEntry::value).toList();
-		}
-		return PlatformUtils.getItemsFromTag(itemTag)
+		return Registries.ITEM.getEntryList(itemTag)
+				// Extract list of identifiers from loaded tag registry, if present
+				.map(registryEntries -> registryEntries.stream().map(RegistryEntry::value).toList())
+				// Or, if empty, manually force-load from declaration classes
+				.orElseGet(() -> PlatformUtils.getItemsFromTag(itemTag)
 				.stream()
 				.map(Registries.ITEM::get)
-				.toList();
+				.toList());
 	}
 
 	/**

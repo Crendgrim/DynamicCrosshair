@@ -209,6 +209,7 @@ public class CrosshairHandler {
         }
     }
 
+    @SuppressWarnings("unused")
     public static void debug() {
         CrosshairContext context = state.context;
         var apis = context.apis();

@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.config;
 import mod.crend.yaclx.auto.NameableEnum;
 import net.minecraft.text.Text;
 
+@SuppressWarnings("unused")
 public enum CrosshairConfigColor implements NameableEnum {
 	Unchanged(0xFFFFFFFF),
 	Red(0xFFFF0000),

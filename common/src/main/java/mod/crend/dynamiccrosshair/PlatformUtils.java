@@ -1,10 +1,10 @@
 package mod.crend.dynamiccrosshair;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 
+@SuppressWarnings("unused")
 public class PlatformUtils {
 	@ExpectPlatform
 	public static boolean isModLoaded(String modid) {

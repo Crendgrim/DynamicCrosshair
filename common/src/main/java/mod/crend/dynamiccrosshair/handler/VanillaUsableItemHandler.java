@@ -111,9 +111,13 @@ public class VanillaUsableItemHandler {
         // This getting called for entity hits is on purpose, as liquid interactions overwrite entity interactions
         if (handItem instanceof GlassBottleItem) {
             // Dragon's breath
-            List<AreaEffectCloudEntity> list = context.world.getEntitiesByClass(AreaEffectCloudEntity.class, context.player.getBoundingBox().expand(2.0), entity -> {
-                return entity != null && entity.isAlive() && entity.getParticleType().getType() == ParticleTypes.DRAGON_BREATH;
-            });
+            List<AreaEffectCloudEntity> list = context.world.getEntitiesByClass(
+                    AreaEffectCloudEntity.class,
+                    context.player.getBoundingBox().expand(2.0),
+                    entity -> entity != null
+                            && entity.isAlive()
+                            && entity.getParticleType().getType() == ParticleTypes.DRAGON_BREATH
+            );
             if (!list.isEmpty()) {
                 return Crosshair.USABLE;
             }

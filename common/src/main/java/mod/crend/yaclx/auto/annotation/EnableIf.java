@@ -13,6 +13,7 @@ public @interface EnableIf {
 		boolean isEnabled(Object value);
 	}
 
+	@SuppressWarnings("unused")
 	class BooleanPredicate implements Predicate {
 		@Override
 		public boolean isEnabled(Object value) {

@@ -23,15 +23,15 @@ public class State {
 	public static final Logger LOGGER = LoggerFactory.getLogger(DynamicCrosshair.MOD_ID);
 
 	private class HitState {
-		HitResult hitResult;
-		ItemStack mainHandStack;
-		ItemStack offHandStack;
-		ItemStack activeStack;
-		Hand activeHand;
-		boolean cancelInteraction;
-		boolean isCoolingDown;
-		boolean isOnGround;
-		boolean isFallFlying;
+		final HitResult hitResult;
+		final ItemStack mainHandStack;
+		final ItemStack offHandStack;
+		final ItemStack activeStack;
+		final Hand activeHand;
+		final boolean cancelInteraction;
+		final boolean isCoolingDown;
+		final boolean isOnGround;
+		final boolean isFallFlying;
 
 		public HitState(ClientPlayerEntity player, HitResult hitResult) {
 			this.hitResult = hitResult;
@@ -64,11 +64,11 @@ public class State {
 	}
 
 	private class HitStateBlock extends HitState {
-		int x;
-		int y;
-		int z;
-		Direction side;
-		BlockState blockState;
+		final int x;
+		final int y;
+		final int z;
+		final Direction side;
+		final BlockState blockState;
 
 		public HitStateBlock(ClientPlayerEntity player, BlockHitResult blockHitResult) {
 			super(player, blockHitResult);
@@ -98,7 +98,7 @@ public class State {
 	}
 
 	private class HitStateEntity extends HitState {
-		Entity entity;
+		final Entity entity;
 
 		public HitStateEntity(ClientPlayerEntity player, EntityHitResult entityHitResult) {
 			super(player, entityHitResult);
@@ -133,8 +133,8 @@ public class State {
 	}
 
 	private static class HitStateFluid {
-		int level;
-		Fluid fluid;
+		final int level;
+		final Fluid fluid;
 
 		public HitStateFluid(BlockHitResult fluidHitResult) {
 			FluidState fluidState = MinecraftClient.getInstance().world.getFluidState(fluidHitResult.getBlockPos());

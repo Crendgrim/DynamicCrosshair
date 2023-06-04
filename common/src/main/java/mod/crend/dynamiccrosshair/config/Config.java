@@ -6,7 +6,6 @@ import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
 import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
 import mod.crend.yaclx.ItemOrTag;
 import mod.crend.yaclx.auto.annotation.*;
-import mod.crend.yaclx.auto.annotation.Decorate;
 
 import java.awt.Color;
 import java.util.Collections;

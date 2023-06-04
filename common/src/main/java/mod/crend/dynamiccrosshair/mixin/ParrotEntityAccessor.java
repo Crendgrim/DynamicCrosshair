@@ -10,7 +10,7 @@ import java.util.Set;
 @Mixin(ParrotEntity.class)
 public interface ParrotEntityAccessor {
     @Accessor
-    public static Set<Item> getTAMING_INGREDIENTS() {
+    static Set<Item> getTAMING_INGREDIENTS() {
         throw new AssertionError();
     }
 }

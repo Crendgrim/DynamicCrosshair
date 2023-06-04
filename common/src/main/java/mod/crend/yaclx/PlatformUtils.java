@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 import java.nio.file.Path;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class PlatformUtils {
 	@ExpectPlatform
 	public static boolean isModLoaded(String modid) {

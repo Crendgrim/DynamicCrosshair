@@ -15,7 +15,7 @@ import net.minecraft.text.Text;
 import java.util.function.Function;
 
 public class DecoratedEnumController <T extends Enum<T>> extends EnumController<T> {
-	Decorator<T> renderer;
+	protected final Decorator<T> renderer;
 
 	public DecoratedEnumController(Option<T> option, Function<T, Text> valueFormatter, T[] availableValues, Decorator<T> renderer) {
 		super(option, valueFormatter, availableValues);
@@ -37,7 +37,7 @@ public class DecoratedEnumController <T extends Enum<T>> extends EnumController<
 		DecoratedEnumControllerBuilder<T> valueFormatter(Function<T, Text> formatter);
 
 		static <T extends Enum<T>> DecoratedEnumControllerBuilder<T> create(Option<T> option) {
-			return new DecoratedEnumControllerBuilderImpl<T>(option);
+			return new DecoratedEnumControllerBuilderImpl<>(option);
 		}
 	}
 
@@ -74,12 +74,12 @@ public class DecoratedEnumController <T extends Enum<T>> extends EnumController<
 
 		@Override
 		public Controller<T> build() {
-			return new DecoratedEnumController<T>(option, formatter, enumClass.getEnumConstants(), renderer);
+			return new DecoratedEnumController<>(option, formatter, enumClass.getEnumConstants(), renderer);
 		}
 	}
 
 	public static class DecoratedEnumElement extends CyclingControllerElement {
-		DecoratedEnumController<?> decoratedEnumController;
+		private final DecoratedEnumController<?> decoratedEnumController;
 
 		public DecoratedEnumElement(DecoratedEnumController<?> control, YACLScreen screen, Dimension<Integer> dim) {
 			super(control, screen, dim);
