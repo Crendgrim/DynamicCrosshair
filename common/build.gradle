@@ -8,5 +8,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     //modApi "dev.architectury:architectury:${rootProject.architectury_version}"
 
+    modImplementation (name: "yaclx", group: "mod.crend.yaclx", version: "${project.yaclx_version}-fabric")
+
     modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
 }

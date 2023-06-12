@@ -10,7 +10,7 @@ import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.AxeItemAccessor;
 import mod.crend.dynamiccrosshair.mixin.HoeItemAccessor;
 import mod.crend.dynamiccrosshair.mixin.ShovelItemAccessor;
-import mod.crend.yaclx.ItemOrTag;
+import mod.crend.yaclx.type.ItemOrTag;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.enums.DoubleBlockHalf;
@@ -310,6 +310,7 @@ public class VanillaUsableItemHandler {
             if (handItem instanceof EntityBucketItem) {
                 return new Crosshair(CrosshairVariant.HoldingBlock, ModifierUse.USE_ITEM);
             }
+            //noinspection ConstantValue
             if (handItem instanceof BucketItem bucketItem && PlatformUtils.getFluidFromBucket(bucketItem) != Fluids.EMPTY) {
                 return Crosshair.HOLDING_BLOCK;
             }

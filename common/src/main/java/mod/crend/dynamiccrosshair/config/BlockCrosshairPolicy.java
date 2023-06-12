@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.config;
 
-import mod.crend.yaclx.auto.NameableEnum;
+import mod.crend.yaclx.type.NameableEnum;
 import net.minecraft.text.Text;
 
 public enum BlockCrosshairPolicy implements NameableEnum {

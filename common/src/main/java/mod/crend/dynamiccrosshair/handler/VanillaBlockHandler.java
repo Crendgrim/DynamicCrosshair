@@ -107,10 +107,13 @@ public class VanillaBlockHandler {
         if (block instanceof FlowerPotBlock) {
             Item handItem = context.getItem();
             boolean potItemIsAir = ((FlowerPotBlock) block).getContent() == Blocks.AIR;
+            //noinspection ConstantValue
             boolean handItemIsPottable = handItem instanceof BlockItem && FlowerPotBlockAccessor.getCONTENT_TO_POTTED().containsKey(((BlockItem) handItem).getBlock());
+            //noinspection ConstantValue
             if (potItemIsAir && handItemIsPottable) {
                 return Crosshair.USABLE;
             }
+            //noinspection ConstantValue
             if (!potItemIsAir && !handItemIsPottable) {
                 return Crosshair.INTERACTABLE.withFlag(Crosshair.Flag.FixedStyle);
             }

@@ -5,7 +5,7 @@ import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import mod.crend.yaclx.ItemOrTag;
+import mod.crend.yaclx.type.ItemOrTag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

@@ -1,8 +1,6 @@
 package mod.crend.dynamiccrosshair.config;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
@@ -35,9 +33,19 @@ public class ConfigUpdater implements mod.crend.yaclx.opt.ConfigUpdater {
 		return false;
 	}
 
+	private boolean updateBooleanToEnum(JsonObject json) {
+		if (json.has("dynamicCrosshair")) {
+			JsonElement dynamicCrosshair = json.get("dynamicCrosshair");
+			if (!(dynamicCrosshair instanceof JsonPrimitive dynamicCrosshairP) || dynamicCrosshairP.isBoolean()) {
+				json.add("dynamicCrosshair", new JsonPrimitive(CrosshairMode.Advanced.toString()));
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean updateConfigFile(JsonObject json) {
-		//JsonParser.parseString(json).getAsJsonObject();
-		boolean result = false;
+		boolean result = updateBooleanToEnum(json);
 		if (updateAdditionalItems(json, "additionalTools")) {
 			result = true;
 		}

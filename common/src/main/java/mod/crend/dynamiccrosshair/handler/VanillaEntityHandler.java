@@ -92,6 +92,7 @@ public class VanillaEntityHandler {
             }
         }
         else if (entity instanceof Bucketable) {
+            //noinspection ConstantValue
             if (handItem instanceof BucketItem bucketItem && PlatformUtils.getFluidFromBucket(bucketItem) == Fluids.WATER) {
                 return Crosshair.USABLE;
             }
@@ -104,6 +105,7 @@ public class VanillaEntityHandler {
                 return Crosshair.INTERACTABLE;
             }
         } else if (entity instanceof AbstractMinecartEntity minecartEntity) {
+            //noinspection ConstantValue
             if ((entity.getType() == EntityType.MINECART && !minecartEntity.hasPassengers())
                     || entity instanceof StorageMinecartEntity
                     || (entity.getType() == EntityType.FURNACE_MINECART && FurnaceMinecartEntityAccessor.getACCEPTABLE_FUEL().test(context.getItemStack()))
@@ -172,6 +174,7 @@ public class VanillaEntityHandler {
             }
             return null;
         } else if (entity instanceof ParrotEntity parrot) {
+            //noinspection ConstantValue
             if (!parrot.isTamed() && ParrotEntityAccessor.getTAMING_INGREDIENTS().contains(handItem)) {
                 return Crosshair.USABLE;
             }

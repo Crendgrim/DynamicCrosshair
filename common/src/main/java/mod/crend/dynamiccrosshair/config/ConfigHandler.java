@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.config;
 
-import mod.crend.yaclx.ItemOrTag;
+import mod.crend.yaclx.type.ItemOrTag;
 import mod.crend.yaclx.opt.ConfigStore;
 
 import java.util.Collections;

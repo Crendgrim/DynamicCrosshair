@@ -1,10 +1,11 @@
 package mod.crend.dynamiccrosshair.config;
 
-import dev.isxander.yacl.config.ConfigEntry;
+import dev.isxander.yacl3.config.ConfigEntry;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
 import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
-import mod.crend.yaclx.ItemOrTag;
+import mod.crend.yaclx.render.ItemOrTagRenderer;
+import mod.crend.yaclx.type.ItemOrTag;
 import mod.crend.yaclx.auto.annotation.*;
 
 import java.awt.Color;
@@ -50,7 +51,8 @@ public class Config {
     }
 
     public static class CrosshairColorReader implements EnableIf.Predicate {
-        public boolean isEnabled(Object color) {
+        @Override
+        public boolean test(Object color) {
             return color == CrosshairConfigColor.Custom;
         }
     }
@@ -155,18 +157,28 @@ public class Config {
 
     @ConfigEntry
     @Category(name="tweaks")
+    @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
+    @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalTools = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
+    @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
+    @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalMeleeWeapons = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
+    @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
+    @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalRangedWeapons = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
+    @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
+    @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalThrowables = Collections.emptyList();
     @ConfigEntry
     @Category(name="tweaks")
+    @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
+    @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalUsableItems = Collections.emptyList();
 
 }

@@ -9,11 +9,11 @@ import net.minecraft.util.hit.HitResult;
 /**
  * Defines a handler for a given mod that can influence the crosshair.
  *
- * There are two calculation modes, simple and advanced.
+ * <p>There are two calculation modes, simple and advanced.
  *
- * In simple mode, it is checked only for the type of the targeted block/entity and the used item.
+ * <p>In simple mode, it is checked only for the type of the targeted block/entity and the used item.
  *
- * In advanced mode, conditions should be as detailed as possible.
+ * <p>In advanced mode, conditions should be as detailed as possible.
  * The computation order is as follows:
  * Phase 1: Target
  * - if targeted entity: computeFromEntity()
@@ -26,13 +26,13 @@ import net.minecraft.util.hit.HitResult;
  *   repeat phases 1 & 2 for the off hand.
  * The result of each phase is combined into the final crosshair.
  *
- * Each phase is evaluated by calling all relevant handlers for the phase, before proceeding to the
+ * <p>Each phase is evaluated by calling all relevant handlers for the phase, before proceeding to the
  * next phase. A handler is considered relevant iff. any of the following conditions holds true:
  * - The targeted block or entity is in the same namespace as the handler.
  * - An item held in either hand is in the same namespace as the handler.
  * - The handler overrides forceCheck() to return true.
  *
- * Note that the vanilla handler will always be checked last in each phase. This allows for mods to
+ * <p>Note that the vanilla handler will always be checked last in each phase. This allows for mods to
  * override vanilla behaviour.
  */
 public interface DynamicCrosshairApi {
@@ -111,7 +111,7 @@ public interface DynamicCrosshairApi {
     /**
      * Checks whether the given item is usable.
      *
-     * This method is called in a context of "always show crosshair for usable items", so no further
+     * <p>This method is called in a context of "always show crosshair for usable items", so no further
      * restrictions over "is this item type usable" should take place here.
      *
      * @param itemStack The tool in the player's main hand
@@ -123,7 +123,7 @@ public interface DynamicCrosshairApi {
      * Looks up the item's category.
      * This is used for the simple crosshair computation. No (or little) conditions should be checked.
      *
-     * The default implementation checks for usable items using isAlwaysUsableItem() and isUsableItem().
+     * <p>The default implementation checks for usable items using isAlwaysUsableItem() and isUsableItem().
      *
      * @param itemStack The item in the player's currently evaluated hand.
      * @return The item category of the item, or ItemCategory.NONE if this handler does not know the item.
@@ -162,7 +162,7 @@ public interface DynamicCrosshairApi {
      * This is used for the advanced crosshair computation. As many conditions as possible
      * should be checked to ensure an accurate crosshair.
      *
-     * This method will only be called if an entity is targeted, i.e. context.isWithEntity()
+     * <p>This method will only be called if an entity is targeted, i.e. context.isWithEntity()
      * is true. The targeted entity may be accessed by calling context.getEntity().
      *
      * @param context A context describing the current state.
@@ -175,7 +175,7 @@ public interface DynamicCrosshairApi {
      * This is used for the advanced crosshair computation. As many conditions as possible
      * should be checked to ensure an accurate crosshair.
      *
-     * This method will only be called if a block is targeted, i.e. context.isWithBlock() is
+     * <p>This method will only be called if a block is targeted, i.e. context.isWithBlock() is
      * true. The targeted block state may be accessed by calling context.getBlockState(). Its
      * associated block entity (if any) is easily queryable through context.getBlockEntity().
      *
@@ -189,13 +189,13 @@ public interface DynamicCrosshairApi {
      * This is used for the advanced crosshair computation. As many conditions as possible
      * should be checked to ensure an accurate crosshair.
      *
-     * This method is not called if isAlwaysUsableItem() already returned true for the given
+     * <p>This method is not called if isAlwaysUsableItem() already returned true for the given
      * evaluated hand item.
      *
-     * Commonly used helper functions are context.isWithBlock(), context.isWithEntity(), and
+     * <p>Commonly used helper functions are context.isWithBlock(), context.isWithEntity(), and
      * context.isMainHand(). See CrosshairContext for further helpers.
      *
-     * If a melee weapon doubles as a tool (such as axes), context.canUseWeaponAsTool() will
+     * <p>If a melee weapon doubles as a tool (such as axes), context.canUseWeaponAsTool() will
      * return true if a block is targeted and tool crosshair is enabled. API implementations
      * may use this to defer crosshair computation (return "null" from this handler).
      *
