@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.util.function.Function;
 
 public class YaclHelper {
+	public static final String YACL_MOD_ID = "yet_another_config_lib";
 	public static final boolean HAS_YACL = PlatformUtils.isModLoaded("yet_another_config_lib");
 
 	public static <T extends Enum<T>> Function<T, Text> getEnumFormatter() {
