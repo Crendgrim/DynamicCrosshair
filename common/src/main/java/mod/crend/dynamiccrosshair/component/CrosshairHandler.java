@@ -45,6 +45,7 @@ public class CrosshairHandler {
                         return true;
                     }
                 } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                    if (e instanceof CrosshairContextChange) throw e;
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -68,6 +69,7 @@ public class CrosshairHandler {
                 Crosshair crosshair = api.computeFromItem(context);
                 if (crosshair != null) return crosshair;
             } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                if (e instanceof CrosshairContextChange) throw e;
                 LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
             }
         }
@@ -87,6 +89,7 @@ public class CrosshairHandler {
                     }
                     if (crosshair != null) break;
                 } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                    if (e instanceof CrosshairContextChange) throw e;
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -100,6 +103,7 @@ public class CrosshairHandler {
                     }
                     if (crosshair != null) break;
                 } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                    if (e instanceof CrosshairContextChange) throw e;
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -144,6 +148,7 @@ public class CrosshairHandler {
                 };
                 if (crosshair != null) break;
             } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                if (e instanceof CrosshairContextChange) throw e;
                 LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
             }
         }
@@ -173,6 +178,7 @@ public class CrosshairHandler {
                         return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
                     }
                 } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                    if (e instanceof CrosshairContextChange) throw e;
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
@@ -184,6 +190,7 @@ public class CrosshairHandler {
                     try {
                         return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
                     } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                        if (e instanceof CrosshairContextChange) throw e;
                         LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                     }
                 }
@@ -204,6 +211,7 @@ public class CrosshairHandler {
             try {
                 LOGGER.info("  {}:{}: {}", api.getNamespace(), api.getModId(), callback.apply(api));
             } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                if (e instanceof CrosshairContextChange) throw e;
                 LOGGER.info("  {}:{}: FAILED", api.getNamespace(), api.getModId());
             }
         }
@@ -273,6 +281,7 @@ public class CrosshairHandler {
                 try {
                     hitResult = api.overrideHitResult(state.context, hitResult);
                 } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                    if (e instanceof CrosshairContextChange) throw e;
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
