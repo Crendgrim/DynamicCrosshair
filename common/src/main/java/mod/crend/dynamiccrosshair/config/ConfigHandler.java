@@ -29,7 +29,7 @@ public class ConfigHandler {
     public boolean dynamicCrosshairHoldingShield() { return CONFIG_STORE.config().crosshairConfig.holdingShield; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingBlock() { return CONFIG_STORE.config().crosshairConfig.holdingBlock; }
     public UsableCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return CONFIG_STORE.config().crosshairConfig.holdingUsableItem; }
-
+    public boolean dynamicCrosshairForceHoldingSpyglass() { return CONFIG_STORE.config().crosshairConfig.forceHoldingSpyglass; }
 
     public CrosshairColor getColor() { return new CrosshairColor(CONFIG_STORE.config().color.crosshairColor, CONFIG_STORE.config().color.customColor.getRGB(), CONFIG_STORE.config().color.forceColor); }
 

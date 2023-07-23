@@ -48,6 +48,8 @@ public class Config {
         public BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
         @ConfigEntry
         public UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
+        @ConfigEntry
+        public boolean forceHoldingSpyglass = false;
     }
 
     public static class CrosshairColorReader implements EnableIf.Predicate {

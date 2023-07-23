@@ -107,6 +107,12 @@ public class VanillaUsableItemHandler {
             }
         }
 
+        if (handItem instanceof SpyglassItem) {
+            if (DynamicCrosshair.config.dynamicCrosshairForceHoldingSpyglass()) {
+                return Crosshair.REGULAR;
+            }
+        }
+
         // Liquid interactions ignore block hit, cast extra rays
         // This getting called for entity hits is on purpose, as liquid interactions overwrite entity interactions
         if (handItem instanceof GlassBottleItem) {

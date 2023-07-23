@@ -39,6 +39,8 @@
   "dynamiccrosshair.option.crosshairConfig.holdingBlock.description": "Show block crosshair under the following condition:\n§lAlways§r: when a block is being held.\n§lIf Targeting§r: when a block is being held and a block is targeted.\n§lIf Interactable§r: when the held block can be placed at the targeted location.\n§lDisabled§r: do not use held blocks for crosshair computation.",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem": "Holding usable item",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem.description": "Show usable item crosshair under the following condition:\nAlways: when a usable item (such as food) is being held.\nIf Interactable: when the held usable item can be currently used.\nDisabled: do not use held usable items for crosshair computation.",
+  "dynamiccrosshair.option.crosshairConfig.forceHoldingSpyglass": "Force holding spyglass",
+  "dynamiccrosshair.option.crosshairConfig.forceHoldingSpyglass.description": "Force showing a crosshair while holding a spyglass.",
   "dynamiccrosshair.option.crosshairStyle.style": "Crosshair Style",
   "dynamiccrosshair.option.crosshairStyle.style.description": "Sets the style of the crosshair. Different crosshairs can have different styles.",
   "dynamiccrosshair.option.crosshairStyle.color.crosshairColor": "Crosshair Color",
