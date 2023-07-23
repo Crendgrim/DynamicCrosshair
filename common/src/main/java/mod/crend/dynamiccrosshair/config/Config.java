@@ -82,6 +82,7 @@ public class Config {
         @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
         @Decorate(decorator = CrosshairModifierRenderer.class)
         public CrosshairConfigModifier style;
+        @ConfigEntry
         @TransitiveObject
         public CrosshairColorSettings color = new CrosshairColorSettings();
     }
