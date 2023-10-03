@@ -22,20 +22,20 @@ public class InGameHudMixin {
         if (!CrosshairHandler.shouldShowCrosshair()) ci.cancel();
     }
 
-    @ModifyExpressionValue(method = "renderCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;debugEnabled:Z"))
+    @ModifyExpressionValue(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z"))
     private boolean dynamiccrosshair$debugCrosshair(boolean original) {
         if (DynamicCrosshair.config.isDisableDebugCrosshair()) return false;
         return original;
     }
 
-    @WrapOperation(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V", ordinal = 0))
-    private void dynamiccrosshair$drawCrosshair(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+    @WrapOperation(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V", ordinal = 0))
+    private void dynamiccrosshair$drawCrosshair(DrawContext context, Identifier texture, int x, int y, int width, int height, Operation<Void> original) {
         // Set up color first (and clean it up after) so that we can tint the vanilla crosshair even when dynamic style is off
         CrosshairRenderer.preRender();
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             CrosshairRenderer.render(context, x, y);
         } else {
-            original.call(context, texture, x, y, u, v, width, height);
+            original.call(context, texture, x, y, width, height);
         }
         CrosshairRenderer.postRender();
     }

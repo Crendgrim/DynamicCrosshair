@@ -280,7 +280,7 @@ public class VanillaUsableItemHandler {
         }
         if (handItem instanceof BoneMealItem) {
             if (block instanceof Fertilizable fertilizable) {
-                if (fertilizable.isFertilizable(context.world, context.getBlockPos(), blockState, true)) {
+                if (fertilizable.isFertilizable(context.world, context.getBlockPos(), blockState)) {
                     return Crosshair.USABLE;
                 } else if (block instanceof PitcherCropBlock && blockState.get(PitcherCropBlock.AGE) < 4) { // mojang pls (MC-261619)
                     BlockPos pos = context.getBlockPos();

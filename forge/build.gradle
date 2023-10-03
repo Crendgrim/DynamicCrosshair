@@ -76,7 +76,7 @@ components.java {
 unifiedPublishing {
     project {
         displayName = "[Forge ${rootProject.supported_versions_string}] ${rootProject.mod_name} ${rootProject.mod_version}"
-        version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
+        version = "${rootProject.mod_version}+${rootProject.minecraft_version}-forge"
         changelog = "${rootProject.changelog}"
         releaseType = "${rootProject.release_type}"
         gameVersions = List.of(project.supported_versions.split(';'))
