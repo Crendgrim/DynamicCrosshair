@@ -23,6 +23,8 @@ public class Config {
     @SerialEntry
     public boolean hideWithScreen = true;
     @SerialEntry
+    public boolean hideWithMap = true;
+    @SerialEntry
     public CrosshairConfig crosshairConfig = new CrosshairConfig();
 
     public static class CrosshairConfig {
