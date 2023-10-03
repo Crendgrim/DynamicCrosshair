@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -345,6 +346,14 @@ public class CrosshairHandler {
         if (DynamicCrosshair.config.isHideWithScreen() && MinecraftClient.getInstance().currentScreen != null) {
             state = null;
             return false;
+        }
+
+        if (DynamicCrosshair.config.isHideWithMap()) {
+            if (player.getMainHandStack().getItem() instanceof FilledMapItem
+                    && player.getOffHandStack().isEmpty()) {
+                state = null;
+                return false;
+            }
         }
 
         if (state == null) {
