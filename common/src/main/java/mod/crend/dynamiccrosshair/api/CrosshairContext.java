@@ -34,7 +34,7 @@ import java.util.List;
 public class CrosshairContext {
 
 	@NotNull
-	public final ClientWorld world;
+	public ClientWorld world;
 	@NotNull
 	public final ClientPlayerEntity player;
 	@NotNull
@@ -53,6 +53,7 @@ public class CrosshairContext {
 
 	public void invalidateHitResult(HitResult newHitResult) {
 		assert newHitResult != null;
+		assert MinecraftClient.getInstance().world != null;
 		hitResult = newHitResult;
 		withBlock = false;
 		blockPos = null;
@@ -63,6 +64,16 @@ public class CrosshairContext {
 		apiList = null;
 		itemStackMainHand = null;
 		itemStackOffHand = null;
+		world = MinecraftClient.getInstance().world;
+		for (DynamicCrosshairApi api : apis()) {
+			try {
+				ClientWorld useWorld = api.overrideWorld();
+				if (useWorld != null) {
+					world = useWorld;
+					break;
+				}
+			} catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException ignored) { }
+		}
 		switch (hitResult.getType()) {
 			case BLOCK -> {
 				BlockHitResult blockHitResult = (BlockHitResult) hitResult;

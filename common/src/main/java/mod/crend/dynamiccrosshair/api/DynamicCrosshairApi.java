@@ -2,6 +2,8 @@ package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
@@ -96,6 +98,17 @@ public interface DynamicCrosshairApi {
      * @return the parameter if nothing should change, or a replacement hit result.
      */
     default HitResult overrideHitResult(CrosshairContext context, HitResult hitResult) { return hitResult; }
+
+    /**
+     * Allows an API implementation to override the world; by default the client world is used.
+     * The first API to return a non-null value will be respected.
+     * The order in which APIs are called (after vanilla) is not guaranteed.
+     * <p>
+     * Use with care!
+     *
+     * @return null if no specific override is required; ClientWorld instance otherwise.
+     */
+    default ClientWorld overrideWorld() { return null; }
 
     /**
      * Checks whether the given item is always usable.
