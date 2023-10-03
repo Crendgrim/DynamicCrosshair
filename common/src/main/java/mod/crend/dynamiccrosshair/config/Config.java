@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.config;
 
-import dev.isxander.yacl3.config.ConfigEntry;
+import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
 import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
@@ -14,41 +14,41 @@ import java.util.List;
 
 @AutoYaclConfig(modid=DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
 public class Config {
-    @ConfigEntry
+    @SerialEntry
     public CrosshairMode dynamicCrosshair = CrosshairMode.Advanced;
-    @ConfigEntry
+    @SerialEntry
     public boolean disableDebugCrosshair = false;
-    @ConfigEntry
+    @SerialEntry
     public boolean thirdPersonCrosshair = false;
-    @ConfigEntry
+    @SerialEntry
     public boolean hideWithScreen = true;
-    @ConfigEntry
+    @SerialEntry
     public CrosshairConfig crosshairConfig = new CrosshairConfig();
 
     public static class CrosshairConfig {
-        @ConfigEntry
+        @SerialEntry
         public InteractableCrosshairPolicy onBlock = InteractableCrosshairPolicy.IfTargeting;
-        @ConfigEntry
+        @SerialEntry
         public boolean onEntity = true;
-        @ConfigEntry
+        @SerialEntry
         public CrosshairPolicy holdingTool = CrosshairPolicy.Always;
-        @ConfigEntry
+        @SerialEntry
         public boolean holdingMeleeWeapon = true;
-        @ConfigEntry
+        @SerialEntry
         public boolean meleeWeaponOnEntity = false;
-        @ConfigEntry
+        @SerialEntry
         public boolean meleeWeaponOnBreakableBlock = false;
-        @ConfigEntry
+        @SerialEntry
         public UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.IfInteractable;
-        @ConfigEntry
+        @SerialEntry
         public UsableCrosshairPolicy holdingThrowable = UsableCrosshairPolicy.IfInteractable;
-        @ConfigEntry
+        @SerialEntry
         public boolean holdingShield = true;
-        @ConfigEntry
+        @SerialEntry
         public BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
-        @ConfigEntry
+        @SerialEntry
         public UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
-        @ConfigEntry
+        @SerialEntry
         public boolean forceHoldingSpyglass = false;
     }
 
@@ -59,67 +59,67 @@ public class Config {
         }
     }
     public static class CrosshairColorSettings {
-        @ConfigEntry
+        @SerialEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.crosshairColor")
         public CrosshairConfigColor crosshairColor = CrosshairConfigColor.Unchanged;
-        @ConfigEntry
+        @SerialEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.customColor")
         @EnableIf(field="crosshairColor", value=CrosshairColorReader.class)
         public Color customColor = new Color(0xFFAABBCC, true);
-        @ConfigEntry
+        @SerialEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.forceColor")
         public boolean forceColor = false;
     }
     public static class CrosshairStyleSettings {
-        @ConfigEntry
+        @SerialEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
         @Decorate(decorator = CrosshairStyleRenderer.class)
         public CrosshairConfigStyle style = CrosshairConfigStyle.Cross;
-        @ConfigEntry
+        @SerialEntry
         @TransitiveObject
         public CrosshairColorSettings color = new CrosshairColorSettings();
     }
     public static class CrosshairModifierSettings {
-        @ConfigEntry
+        @SerialEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
         @Decorate(decorator = CrosshairModifierRenderer.class)
         public CrosshairConfigModifier style;
-        @ConfigEntry
+        @SerialEntry
         @TransitiveObject
         public CrosshairColorSettings color = new CrosshairColorSettings();
     }
 
-    @ConfigEntry
+    @SerialEntry
     @TransitiveObject
     @Category(name = "style")
     public CrosshairColorSettings color = new CrosshairColorSettings();
 
-    @ConfigEntry
+    @SerialEntry
     public boolean dynamicCrosshairStyle = true;
-    @ConfigEntry
+    @SerialEntry
     @TransitiveObject
     @Category(name = "style")
     public CrosshairStyles crosshairStyle = new CrosshairStyles();
-    @ConfigEntry
+    @SerialEntry
     @Category(name = "style")
     @TransitiveObject
     public CrosshairModifiers crosshairModifiers = new CrosshairModifiers();
     public static class CrosshairStyles {
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings regular = new CrosshairStyleSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings onBlock = new CrosshairStyleSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings onEntity = new CrosshairStyleSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings holdingTool = new CrosshairStyleSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings holdingMeleeWeapon = new CrosshairStyleSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings holdingRangedWeapon = new CrosshairStyleSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings holdingThrowable = new CrosshairStyleSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairStyleSettings holdingBlock = new CrosshairStyleSettings();
 
         public CrosshairStyles() {
@@ -134,15 +134,15 @@ public class Config {
         }
     }
     public static class CrosshairModifiers {
-        @ConfigEntry
+        @SerialEntry
         public CrosshairModifierSettings modInteractable = new CrosshairModifierSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairModifierSettings modUsableItem = new CrosshairModifierSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairModifierSettings modShield = new CrosshairModifierSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairModifierSettings modCorrectTool = new CrosshairModifierSettings();
-        @ConfigEntry
+        @SerialEntry
         public CrosshairModifierSettings modIncorrectTool = new CrosshairModifierSettings();
 
         public CrosshairModifiers() {
@@ -154,31 +154,31 @@ public class Config {
         }
     }
 
-    @ConfigEntry
+    @SerialEntry
     @Category(name="tweaks")
     public boolean enableTweaks = false;
 
-    @ConfigEntry
+    @SerialEntry
     @Category(name="tweaks")
     @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
     @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalTools = Collections.emptyList();
-    @ConfigEntry
+    @SerialEntry
     @Category(name="tweaks")
     @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
     @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalMeleeWeapons = Collections.emptyList();
-    @ConfigEntry
+    @SerialEntry
     @Category(name="tweaks")
     @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
     @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalRangedWeapons = Collections.emptyList();
-    @ConfigEntry
+    @SerialEntry
     @Category(name="tweaks")
     @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
     @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalThrowables = Collections.emptyList();
-    @ConfigEntry
+    @SerialEntry
     @Category(name="tweaks")
     @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
     @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
