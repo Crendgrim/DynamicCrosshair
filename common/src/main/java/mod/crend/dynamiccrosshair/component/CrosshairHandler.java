@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 
 public class CrosshairHandler {
 
-    public static final Identifier crosshairTexture = new Identifier(DynamicCrosshair.MOD_ID, "textures/gui/crosshairs.png");
     public static final Logger LOGGER = LoggerFactory.getLogger(DynamicCrosshair.MOD_ID);
 
     private static Crosshair activeCrosshair = new Crosshair();

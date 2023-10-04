@@ -7,6 +7,6 @@ import net.minecraft.client.gui.DrawContext;
 
 public class CrosshairStyleRenderer implements DecoratedEnumController.Decorator<CrosshairConfigStyle> {
 	public void render(CrosshairConfigStyle style, DrawContext context, int x, int y) {
-		context.drawTexture(CrosshairHandler.crosshairTexture, x, y, style.getX(), style.getY(), 15, 15);
+		context.drawGuiTexture(style.getIdentifier(), x, y, 15, 15);
 	}
 }

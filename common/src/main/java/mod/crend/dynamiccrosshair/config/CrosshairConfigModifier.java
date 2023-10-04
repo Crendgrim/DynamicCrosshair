@@ -2,28 +2,26 @@ package mod.crend.dynamiccrosshair.config;
 
 import mod.crend.yaclx.type.NameableEnum;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 @SuppressWarnings("unused")
 public enum CrosshairConfigModifier implements NameableEnum {
-    Disabled(240, 240),
-    Dot(0, 15),
-    DiagonalCross(15, 15),
-    Brackets(0, 30),
-    BracketsBottom(15, 30),
-    BracketsTop(30, 30),
-    RoundBrackets(0, 45),
-    Lines(0, 60),
-    LineBottom(15, 60);
+    Disabled(CrosshairStyle.EMPTY),
+    Dot(CrosshairStyle.DOT),
+    DiagonalCross(CrosshairStyle.CROSS_DIAGONAL_SMALL),
+    Brackets(CrosshairStyle.BRACKETS),
+    BracketsBottom(CrosshairStyle.BRACKETS_BOTTOM),
+    BracketsTop(CrosshairStyle.BRACKETS_TOP),
+    RoundBrackets(CrosshairStyle.BRACKETS_ROUND),
+    Lines(CrosshairStyle.LINES),
+    LineBottom(CrosshairStyle.LINE_BOTTOM);
 
-    private final int x;
-    private final int y;
-    CrosshairConfigModifier(int x, int y) {
-        this.x = x;
-        this.y = y;
+    private final Identifier style;
+    CrosshairConfigModifier(Identifier style) {
+        this.style = style;
     }
 
-    public int getX() { return x; }
-    public int getY() { return y; }
+    public Identifier getIdentifier() { return style; }
 
     @Override
     public Text getDisplayName() {

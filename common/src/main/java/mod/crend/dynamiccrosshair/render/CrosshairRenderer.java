@@ -31,11 +31,11 @@ public class CrosshairRenderer {
 		if (crosshair.hasStyle()) {
 			CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
 			setColor(crosshairStyle.getColor());
-			context.drawTexture(CrosshairHandler.crosshairTexture, x, y, crosshairStyle.getStyle().getX(), crosshairStyle.getStyle().getY(), 15, 15);
+			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
 		}
 		for (CrosshairModifier modifier : crosshair.getModifiers()) {
 			setColor(modifier.getColor());
-			context.drawTexture(CrosshairHandler.crosshairTexture, x, y, modifier.getStyle().getX(), modifier.getStyle().getY(), 15, 15);
+			context.drawGuiTexture(modifier.getStyle().getIdentifier(), x, y, 15, 15);
 		}
 	}
 
