@@ -159,7 +159,7 @@ public class Config {
 
     @SerialEntry
     @Category(name="tweaks")
-    public boolean enableTweaks = false;
+    public boolean enableTweaks = true;
 
     @SerialEntry
     @Category(name="tweaks")
