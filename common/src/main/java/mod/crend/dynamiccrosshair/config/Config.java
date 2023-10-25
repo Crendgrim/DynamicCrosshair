@@ -142,7 +142,7 @@ public class Config {
     @ConfigEntry
     @Category(name="tweaks")
     @Label(key = "dynamiccrosshair.option.enableTweaks.@PrefixText")
-    public boolean enableTweaks = false;
+    public boolean enableTweaks = true;
 
     @ConfigEntry
     @Category(name="tweaks")
