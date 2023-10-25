@@ -59,6 +59,7 @@
   "dynamiccrosshair.option.additionalRangedWeapons": "Additional Ranged Weapons",
   "dynamiccrosshair.option.additionalThrowables": "Additional Throwable Items",
   "dynamiccrosshair.option.additionalUsableItems": "Additional Usable Items",
+  "dynamiccrosshair.option.additionalInteractableBlocks": "Additional Interactable Blocks",
 
   "dynamiccrosshair.mode.Simple": "Simple",
   "dynamiccrosshair.mode.Advanced": "Advanced",

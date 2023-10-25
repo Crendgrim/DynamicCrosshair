@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair.handler;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
@@ -78,6 +79,7 @@ public class VanillaBlockHandler {
                 ||  block instanceof AbstractRedstoneGateBlock
                 ||  block instanceof AnvilBlock
                 || (block instanceof CraftingTableBlock && !(block instanceof FletchingTableBlock))
+                || DynamicCrosshair.config.getAdditionalInteractableBlocks().contains(block)
         );
     }
 

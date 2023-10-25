@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.config;
 
 import mod.crend.autoyacl.ConfigStore;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
@@ -59,16 +60,26 @@ public class ConfigHandler {
     List<Item> additionalRangedWeapons = null;
     List<Item> additionalThrowables = null;
     List<Item> additionalUsableItems = null;
+    List<Block> additionalInteractableBlocks = null;
 
     public boolean isTweaksEnabled() {
         return CONFIG_STORE.config().enableTweaks;
     }
+
     private List<Item> buildAdditionalItemList(String configString) {
         return Arrays.stream(configString.split(";"))
                 .filter(s -> !s.isBlank())
                 .map(Identifier::tryParse)
                 .filter(Objects::nonNull)
                 .map(Registries.ITEM::get)
+                .collect(Collectors.toList());
+    }
+    private List<Block> buildAdditionalBlockList(String configString) {
+        return Arrays.stream(configString.split(";"))
+                .filter(s -> !s.isBlank())
+                .map(Identifier::tryParse)
+                .filter(Objects::nonNull)
+                .map(Registries.BLOCK::get)
                 .collect(Collectors.toList());
     }
     public List<Item> getAdditionalTools() {
@@ -105,6 +116,13 @@ public class ConfigHandler {
             additionalUsableItems = buildAdditionalItemList(CONFIG_STORE.config().additionalUsableItems);
         }
         return additionalUsableItems;
+    }
+    public List<Block> getAdditionalInteractableBlocks() {
+        if (!isTweaksEnabled()) return Collections.emptyList();
+        if (additionalInteractableBlocks == null) {
+            additionalInteractableBlocks = buildAdditionalBlockList(CONFIG_STORE.config().additionalInteractableBlocks);
+        }
+        return additionalInteractableBlocks;
     }
 
 }

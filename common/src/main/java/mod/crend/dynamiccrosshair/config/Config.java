@@ -165,4 +165,9 @@ public class Config {
     @Category(name="tweaks")
     @OnSave(gameRestart = true)
     public String additionalUsableItems = "";
+
+    @ConfigEntry
+    @Category(name="tweaks")
+    @OnSave(gameRestart = true)
+    public String additionalInteractableBlocks = "";
 }
