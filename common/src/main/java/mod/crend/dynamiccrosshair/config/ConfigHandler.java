@@ -2,6 +2,7 @@ package mod.crend.dynamiccrosshair.config;
 
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
@@ -64,6 +65,7 @@ public class ConfigHandler {
     List<Item> additionalRangedWeapons = null;
     List<Item> additionalThrowables = null;
     List<Item> additionalUsableItems = null;
+    List<Block> additionalInteractableBlocks = null;
 
     public boolean isTweaksEnabled() {
         return config.enableTweaks;
@@ -76,6 +78,15 @@ public class ConfigHandler {
                 .map(Registry.ITEM::get)
                 .collect(Collectors.toList());
     }
+    private List<Block> buildAdditionalBlockList(String configString) {
+        return Arrays.stream(configString.split(";"))
+                .filter(s -> !s.isBlank())
+                .map(Identifier::tryParse)
+                .filter(Objects::nonNull)
+                .map(Registry.BLOCK::get)
+                .collect(Collectors.toList());
+    }
+
     public List<Item> getAdditionalTools() {
         if (!isTweaksEnabled()) return Collections.emptyList();
         if (additionalTools == null) {
@@ -110,6 +121,14 @@ public class ConfigHandler {
             additionalUsableItems = buildAdditionalItemList(config.additionalUsableItems);
         }
         return additionalUsableItems;
+    }
+
+    public List<Block> getAdditionalInteractableBlocks() {
+        if (!isTweaksEnabled()) return Collections.emptyList();
+        if (additionalInteractableBlocks == null) {
+            additionalInteractableBlocks = buildAdditionalBlockList(config.additionalInteractableBlocks);
+        }
+        return additionalInteractableBlocks;
     }
 
 }

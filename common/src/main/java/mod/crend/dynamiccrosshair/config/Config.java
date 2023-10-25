@@ -136,4 +136,7 @@ public class Config implements ConfigData {
     @ConfigEntry.Category("tweaks")
     @ConfigEntry.Gui.RequiresRestart
     String additionalUsableItems;
+    @ConfigEntry.Category("tweaks")
+    @ConfigEntry.Gui.RequiresRestart
+    String additionalInteractableBlocks;
 }
