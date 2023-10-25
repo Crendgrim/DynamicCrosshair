@@ -54,10 +54,4 @@ public class InGameHudMixin {
         }
         return originalPerspective;
     }
-
-    @Inject(method = "tick()V", at = @At(value = "TAIL"))
-    private void dynamiccrosshair$tickDynamicCrosshair(CallbackInfo ci) {
-        CrosshairHandler.tick();
-    }
-
 }
