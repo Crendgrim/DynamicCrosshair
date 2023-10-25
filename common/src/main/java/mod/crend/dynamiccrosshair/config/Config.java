@@ -5,6 +5,7 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
 import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
 import mod.crend.yaclx.render.ItemOrTagRenderer;
+import mod.crend.yaclx.type.BlockOrTag;
 import mod.crend.yaclx.type.ItemOrTag;
 import mod.crend.yaclx.auto.annotation.*;
 
@@ -185,5 +186,11 @@ public class Config {
     @DescriptionImage(ItemOrTagRenderer.OfItemOrTag.class)
     @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<ItemOrTag> additionalUsableItems = Collections.emptyList();
+
+    @SerialEntry
+    @Category(name="tweaks")
+    @DescriptionImage(ItemOrTagRenderer.OfBlockOrTag.class)
+    @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
+    public List<BlockOrTag> additionalInteractableBlocks = Collections.emptyList();
 
 }

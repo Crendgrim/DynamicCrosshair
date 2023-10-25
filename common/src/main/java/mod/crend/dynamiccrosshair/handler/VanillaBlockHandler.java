@@ -1,9 +1,11 @@
 package mod.crend.dynamiccrosshair.handler;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.mixin.*;
+import mod.crend.yaclx.type.BlockOrTag;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
@@ -75,6 +77,7 @@ public class VanillaBlockHandler {
                 ||  block instanceof AbstractRedstoneGateBlock
                 ||  block instanceof AnvilBlock
                 || (block instanceof CraftingTableBlock && !(block instanceof FletchingTableBlock))
+                || BlockOrTag.isContainedIn(block, DynamicCrosshair.config.getAdditionalInteractableBlocks())
         );
     }
 

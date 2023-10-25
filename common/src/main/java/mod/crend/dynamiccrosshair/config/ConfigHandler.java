@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair.config;
 
+import mod.crend.yaclx.type.BlockOrTag;
 import mod.crend.yaclx.type.ItemOrTag;
 import mod.crend.yaclx.opt.ConfigStore;
 
@@ -73,6 +74,10 @@ public class ConfigHandler {
     public List<ItemOrTag> getAdditionalUsableItems() {
         if (!isTweaksEnabled()) return Collections.emptyList();
         return CONFIG_STORE.config().additionalUsableItems;
+    }
+    public List<BlockOrTag> getAdditionalInteractableBlocks() {
+        if (!isTweaksEnabled()) return Collections.emptyList();
+        return CONFIG_STORE.config().additionalInteractableBlocks;
     }
 
 }
