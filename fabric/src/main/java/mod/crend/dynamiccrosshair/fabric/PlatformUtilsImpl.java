@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.fabric;
 
-import mod.crend.dynamiccrosshair.mixin.fabric.IBucketItemMixin;
+import mod.crend.dynamiccrosshair.mixin.fabric.BucketItemAccessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
@@ -12,6 +12,6 @@ public class PlatformUtilsImpl {
 	}
 
 	public static Fluid getFluidFromBucket(BucketItem bucket) {
-		return ((IBucketItemMixin) bucket).getFluid();
+		return ((BucketItemAccessor) bucket).getFluid();
 	}
 }
