@@ -123,6 +123,7 @@
   "text.autoconfig.dynamiccrosshair.option.additionalRangedWeapons": "Additional Ranged Weapons",
   "text.autoconfig.dynamiccrosshair.option.additionalThrowables": "Additional Throwable Items",
   "text.autoconfig.dynamiccrosshair.option.additionalUsableItems": "Additional Usable Items",
+  "text.autoconfig.dynamiccrosshair.option.additionalInteractableBlocks": "Additional Interactable Blocks",
 
   "text.dynamiccrosshair.option.mode.Simple": "Simple",
   "text.dynamiccrosshair.option.mode.Advanced": "Advanced",
