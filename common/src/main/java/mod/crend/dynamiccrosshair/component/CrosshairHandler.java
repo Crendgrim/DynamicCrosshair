@@ -186,13 +186,13 @@ public class CrosshairHandler {
         } else if (context.isWithBlock()) {
             BlockState blockState = context.getBlockState();
             for (DynamicCrosshairApi api : context.apis()) {
-                if (api.isAlwaysInteractableBlock(blockState) || api.isInteractableBlock(blockState)) {
-                    try {
-                        return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
-                    } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
-                        if (e instanceof CrosshairContextChange) throw e;
-                        LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+                try {
+                    if (api.isAlwaysInteractableBlock(blockState) || api.isInteractableBlock(blockState)) {
+                            return Crosshair.combine(Crosshair.INTERACTABLE, crosshair);
                     }
+                } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+                    if (e instanceof CrosshairContextChange) throw e;
+                    LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
         }
