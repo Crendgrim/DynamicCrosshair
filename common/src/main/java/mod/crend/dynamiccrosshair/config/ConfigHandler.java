@@ -20,6 +20,7 @@ public class ConfigHandler {
     public boolean isThirdPersonCrosshair() { return CONFIG_STORE.config().thirdPersonCrosshair; }
     public boolean isHideWithScreen() { return CONFIG_STORE.config().hideWithScreen; }
     public boolean isHideWithMap() { return CONFIG_STORE.config().hideWithMap; }
+    public boolean isFixCenteredCrosshair() { return CONFIG_STORE.config().fixCenteredCrosshair; }
     public InteractableCrosshairPolicy dynamicCrosshairOnBlock() { return CONFIG_STORE.config().crosshairConfig.onBlock; }
     public boolean dynamicCrosshairOnEntity() { return CONFIG_STORE.config().crosshairConfig.onEntity; }
     public CrosshairPolicy dynamicCrosshairHoldingTool() { return CONFIG_STORE.config().crosshairConfig.holdingTool; }

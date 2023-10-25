@@ -32,10 +32,17 @@ public class InGameHudMixin {
     private void dynamiccrosshair$drawCrosshair(DrawContext context, Identifier texture, int x, int y, int width, int height, Operation<Void> original) {
         // Set up color first (and clean it up after) so that we can tint the vanilla crosshair even when dynamic style is off
         CrosshairRenderer.preRender();
+
+        if (DynamicCrosshair.config.isFixCenteredCrosshair()) {
+            CrosshairRenderer.fixCenteredCrosshairPre(context, x, y);
+        }
         if (DynamicCrosshair.config.isDynamicCrosshairStyle()) {
             CrosshairRenderer.render(context, x, y);
         } else {
             original.call(context, texture, x, y, width, height);
+        }
+        if (DynamicCrosshair.config.isFixCenteredCrosshair()) {
+            CrosshairRenderer.fixCenteredCrosshairPost(context);
         }
         CrosshairRenderer.postRender();
     }

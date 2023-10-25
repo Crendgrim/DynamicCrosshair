@@ -8,7 +8,9 @@ import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairColor;
 import mod.crend.dynamiccrosshair.config.CrosshairModifier;
 import mod.crend.dynamiccrosshair.config.CrosshairStyle;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.Window;
 
 public class CrosshairRenderer {
 	private static void setColor(final CrosshairColor color) {
@@ -24,6 +26,26 @@ public class CrosshairRenderer {
 
 	public static void preRender() {
 		setColor(DynamicCrosshair.config.getColor());
+	}
+
+	public static void fixCenteredCrosshairPre(DrawContext context, int x, int y) {
+		/*
+		   The vanilla crosshair is centered using integer coordinates. Since it is 15x15 pixels wide, this very
+		   often means that the crosshair is not properly centered.
+		   Calculate the actual center of the screen, and offset the rendering by the delta to the integer "center"
+		   the game is trying to draw the crosshair at.
+		 */
+		Window window = MinecraftClient.getInstance().getWindow();
+		double scale = window.getScaleFactor();
+		double i = (window.getFramebufferWidth()) / scale;
+		double j = (window.getFramebufferHeight()) / scale;
+		double dx = (i - 15) / 2.0 - x;
+		double dy = (j - 15) / 2.0 - y;
+		context.getMatrices().push();
+		context.getMatrices().translate(dx, dy, 0);
+	}
+	public static void fixCenteredCrosshairPost(DrawContext context) {
+		context.getMatrices().pop();
 	}
 
 	public static void render(DrawContext context, int x, int y) {

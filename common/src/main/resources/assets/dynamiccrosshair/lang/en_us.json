@@ -15,6 +15,8 @@
   "dynamiccrosshair.option.hideWithScreen.description": "Hide whenever a screen is open",
   "dynamiccrosshair.option.hideWithMap": "Hide when holding a map",
   "dynamiccrosshair.option.hideWithMap.description": "Hide whenever a map is being held in both hands, so it does not get obstructed by the crosshair",
+  "dynamiccrosshair.option.fixCenteredCrosshair": "Fix centered crosshair",
+  "dynamiccrosshair.option.fixCenteredCrosshair.description": "In vanilla, the crosshair is not perfectly centered (MC-157252). This ensures that it always is. You may want to disable this option for compatibility with other mods.",
   "dynamiccrosshair.option.dynamicCrosshairStyle": "Use dynamic crosshair style",
   "dynamiccrosshair.option.dynamicCrosshairStyle.description": "When enabled, use context dependent styles.\nWhen disabled, the crosshair will always be the vanilla one, but can still be hidden based on the settings below.",
   "dynamiccrosshair.group.crosshairConfig": "Show the crosshair when:",
