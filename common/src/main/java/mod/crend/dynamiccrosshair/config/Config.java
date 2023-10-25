@@ -118,7 +118,7 @@ public class Config implements ConfigData {
 
     @ConfigEntry.Category("tweaks")
     @ConfigEntry.Gui.PrefixText
-    boolean enableTweaks = false;
+    boolean enableTweaks = true;
 
     @ConfigEntry.Category("tweaks")
     @ConfigEntry.Gui.PrefixText
