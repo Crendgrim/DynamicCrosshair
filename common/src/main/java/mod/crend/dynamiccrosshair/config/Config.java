@@ -32,11 +32,15 @@ public class Config {
 
     public static class CrosshairConfig {
         @SerialEntry
-        public InteractableCrosshairPolicy onBlock = InteractableCrosshairPolicy.IfTargeting;
+        public boolean onBlock = true;
+        @SerialEntry
+        public boolean onInteractableBlock = true;
         @SerialEntry
         public boolean onEntity = true;
         @SerialEntry
         public CrosshairPolicy holdingTool = CrosshairPolicy.Always;
+        @SerialEntry
+        public boolean displayCorrectTool = true;
         @SerialEntry
         public boolean holdingMeleeWeapon = true;
         @SerialEntry

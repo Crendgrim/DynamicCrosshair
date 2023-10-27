@@ -192,9 +192,11 @@ public class Crosshair implements Cloneable {
 
     public List<CrosshairModifier> getModifiers() {
         List<CrosshairModifier> modifiers = new LinkedList<>();
-        switch (modifierHit) {
-            case CORRECT_TOOL -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierCorrectTool());
-            case INCORRECT_TOOL -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierIncorrectTool());
+        if (DynamicCrosshair.config.dynamicCrosshairDisplayCorrectTool()) {
+            switch (modifierHit) {
+                case CORRECT_TOOL -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierCorrectTool());
+                case INCORRECT_TOOL -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierIncorrectTool());
+            }
         }
         switch (modifierUse) {
             case USE_ITEM -> modifiers.add(DynamicCrosshair.config.getCrosshairModifierUsableItem());

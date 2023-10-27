@@ -4,7 +4,6 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import net.minecraft.util.Identifier;
 
 public record CrosshairStyle(Config.CrosshairStyleSettings settings) {
-	public static final Identifier EMPTY = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/empty");
 	public static final Identifier DEFAULT = new Identifier("hud/crosshair");
 	public static final Identifier CROSS_OPEN = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/cross-open");
 	public static final Identifier CROSS_OPEN_DIAGONAL = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/cross-open-diagonal");

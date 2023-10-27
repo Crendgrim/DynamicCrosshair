@@ -21,9 +21,11 @@ public class ConfigHandler {
     public boolean isHideWithScreen() { return CONFIG_STORE.config().hideWithScreen; }
     public boolean isHideWithMap() { return CONFIG_STORE.config().hideWithMap; }
     public boolean isFixCenteredCrosshair() { return CONFIG_STORE.config().fixCenteredCrosshair; }
-    public InteractableCrosshairPolicy dynamicCrosshairOnBlock() { return CONFIG_STORE.config().crosshairConfig.onBlock; }
+    public boolean dynamicCrosshairOnBlock() { return CONFIG_STORE.config().crosshairConfig.onBlock; }
+    public boolean dynamicCrosshairOnInteractableBlock() { return CONFIG_STORE.config().crosshairConfig.onInteractableBlock; }
     public boolean dynamicCrosshairOnEntity() { return CONFIG_STORE.config().crosshairConfig.onEntity; }
     public CrosshairPolicy dynamicCrosshairHoldingTool() { return CONFIG_STORE.config().crosshairConfig.holdingTool; }
+    public boolean dynamicCrosshairDisplayCorrectTool() { return CONFIG_STORE.config().crosshairConfig.displayCorrectTool; }
     public boolean dynamicCrosshairHoldingMeleeWeapon() { return CONFIG_STORE.config().crosshairConfig.holdingMeleeWeapon; }
     public boolean dynamicCrosshairMeleeWeaponOnEntity() { return CONFIG_STORE.config().crosshairConfig.meleeWeaponOnEntity; }
     public boolean dynamicCrosshairMeleeWeaponOnBreakableBlock() { return CONFIG_STORE.config().crosshairConfig.meleeWeaponOnBreakableBlock; }

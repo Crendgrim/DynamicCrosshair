@@ -33,7 +33,7 @@ public class ConfigUpdater implements mod.crend.yaclx.opt.ConfigUpdater {
 		return false;
 	}
 
-	private boolean updateBooleanToEnum(JsonObject json) {
+	private boolean updateDynamicCrosshairMode(JsonObject json) {
 		if (json.has("dynamicCrosshair")) {
 			JsonElement dynamicCrosshair = json.get("dynamicCrosshair");
 			if (!(dynamicCrosshair instanceof JsonPrimitive dynamicCrosshairP) || dynamicCrosshairP.isBoolean()) {
@@ -43,9 +43,69 @@ public class ConfigUpdater implements mod.crend.yaclx.opt.ConfigUpdater {
 		}
 		return false;
 	}
+	private boolean updateBlockTargeting(JsonObject json) {
+		if (json.get("crosshairConfig") instanceof JsonObject crosshairConfig) {
+			if (crosshairConfig.get("onBlock") instanceof JsonPrimitive onBlock && !onBlock.isBoolean()) {
+				switch (onBlock.getAsString()) {
+					case "IfTargeting" -> {
+						crosshairConfig.add("onBlock", new JsonPrimitive(true));
+						crosshairConfig.add("onInteractableBlock", new JsonPrimitive(true));
+					}
+					case "IfInteractable" -> {
+						crosshairConfig.add("onBlock", new JsonPrimitive(false));
+						crosshairConfig.add("onInteractableBlock", new JsonPrimitive(true));
+					}
+					case "Disabled" -> {
+						crosshairConfig.add("onBlock", new JsonPrimitive(false));
+						crosshairConfig.add("onInteractableBlock", new JsonPrimitive(false));
+					}
+					default -> crosshairConfig.add("onBlock", new JsonPrimitive(true));
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean updateDisabledModifierStyle(JsonObject json) {
+		boolean result = false;
+		if (json.get("crosshairModifiers") instanceof JsonObject crosshairModifiers) {
+			if (crosshairModifiers.get("modInteractable") instanceof JsonObject modInteractable) {
+				if (modInteractable.get("style") instanceof JsonPrimitive style && style.getAsString().equals("Disabled")) {
+					if (json.get("crosshairConfig") instanceof JsonObject crosshairConfig) {
+						crosshairConfig.add("onInteractableBlock", new JsonPrimitive(false));
+					}
+					result = true;
+				}
+			}
+			if (crosshairModifiers.get("modCorrectTool") instanceof JsonObject modCorrectTool) {
+				if (modCorrectTool.get("style") instanceof JsonPrimitive style && style.getAsString().equals("Disabled")) {
+					if (json.get("crosshairConfig") instanceof JsonObject crosshairConfig) {
+						crosshairConfig.add("displayCorrectTool", new JsonPrimitive(false));
+					}
+					result = true;
+				}
+			}
+			if (crosshairModifiers.get("modIncorrectTool") instanceof JsonObject modIncorrectTool) {
+				if (modIncorrectTool.get("style") instanceof JsonPrimitive style && style.getAsString().equals("Disabled")) {
+					if (json.get("crosshairConfig") instanceof JsonObject crosshairConfig) {
+						crosshairConfig.add("displayCorrectTool", new JsonPrimitive(false));
+					}
+					result = true;
+				}
+			}
+		}
+		return result;
+	}
 
 	public boolean updateConfigFile(JsonObject json) {
-		boolean result = updateBooleanToEnum(json);
+		boolean result = updateDynamicCrosshairMode(json);
+		if (updateBlockTargeting(json)) {
+			result = true;
+		}
+		if (updateDisabledModifierStyle(json)) {
+			result = true;
+		}
 		if (updateAdditionalItems(json, "additionalTools")) {
 			result = true;
 		}

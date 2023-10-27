@@ -6,7 +6,6 @@ import net.minecraft.util.Identifier;
 
 @SuppressWarnings("unused")
 public enum CrosshairConfigModifier implements NameableEnum {
-    Disabled(CrosshairStyle.EMPTY),
     Dot(CrosshairStyle.DOT),
     DiagonalCross(CrosshairStyle.CROSS_DIAGONAL_SMALL),
     Brackets(CrosshairStyle.BRACKETS),

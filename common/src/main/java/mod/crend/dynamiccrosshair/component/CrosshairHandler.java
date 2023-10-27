@@ -5,7 +5,6 @@ import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.CrosshairContextChange;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.InvalidContextState;
-import mod.crend.dynamiccrosshair.config.InteractableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -14,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +33,9 @@ public class CrosshairHandler {
         return activeCrosshair;
     }
 
-
     private static boolean isBlockInteractable(CrosshairContext context) {
         // interactable blocks if not sneaking
-        if (DynamicCrosshair.config.dynamicCrosshairOnBlock() != InteractableCrosshairPolicy.Disabled && context.isWithBlock() && context.shouldInteract()) {
+        if (context.isWithBlock() && context.shouldInteract()) {
             for (DynamicCrosshairApi api : context.apis()) {
                 try {
                     if (api.isAlwaysInteractableBlock(context.getBlockState()) || api.isInteractableBlock(context.getBlockState())) {
@@ -93,7 +90,7 @@ public class CrosshairHandler {
                     LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
                 }
             }
-        } else if (context.isWithBlock() && context.shouldInteract()) {
+        } else if (context.isWithBlock() && context.shouldInteract() && DynamicCrosshair.config.dynamicCrosshairOnInteractableBlock()) {
             for (DynamicCrosshairApi api : context.apis()) {
                 try {
                     if (api.isAlwaysInteractableBlock(context.getBlockState())) {
@@ -183,7 +180,7 @@ public class CrosshairHandler {
                 }
             }
         // Block
-        } else if (context.isWithBlock()) {
+        } else if (context.isWithBlock() && DynamicCrosshair.config.dynamicCrosshairOnInteractableBlock()) {
             BlockState blockState = context.getBlockState();
             for (DynamicCrosshairApi api : context.apis()) {
                 try {
@@ -301,12 +298,11 @@ public class CrosshairHandler {
                     }
                 }
                 case BLOCK -> {
-                    switch (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
-                        case IfTargeting -> activeCrosshair.setVariant(CrosshairVariant.OnBlock);
-                        case IfInteractable -> {
-                            if (isBlockInteractable(state.context)) {
-                                activeCrosshair.setVariant(CrosshairVariant.OnBlock);
-                            }
+                    if (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
+                        activeCrosshair.setVariant(CrosshairVariant.OnBlock);
+                    } else if (DynamicCrosshair.config.dynamicCrosshairOnInteractableBlock()) {
+                        if (isBlockInteractable(state.context)) {
+                            activeCrosshair.setVariant(CrosshairVariant.OnBlock);
                         }
                     }
                 }
