@@ -26,7 +26,7 @@ public class Config {
     @SerialEntry
     public boolean hideWithMap = true;
     @SerialEntry
-    public boolean fixCenteredCrosshair = true;
+    public boolean fixCenteredCrosshair = false;
     @SerialEntry
     public CrosshairConfig crosshairConfig = new CrosshairConfig();
 
