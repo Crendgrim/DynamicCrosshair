@@ -92,6 +92,9 @@ public class Config {
         @SerialEntry
         @TransitiveObject
         public CrosshairColorSettings color = new CrosshairColorSettings();
+        @SerialEntry
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.isModifier")
+        public boolean isModifier = true;
     }
 
     @SerialEntry

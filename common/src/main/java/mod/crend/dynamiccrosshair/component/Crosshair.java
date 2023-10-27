@@ -167,6 +167,20 @@ public class Crosshair implements Cloneable {
             }
             this.lockModifierUse = other.lockModifierUse;
         }
+        boolean modifierIsModifier = switch (modifierUse) {
+            case SHIELD -> DynamicCrosshair.config.getCrosshairModifierShield().isModifier();
+            case USE_ITEM -> DynamicCrosshair.config.getCrosshairModifierUsableItem().isModifier();
+            case INTERACTABLE -> DynamicCrosshair.config.getCrosshairModifierInteractable().isModifier();
+            case NONE -> switch (modifierHit) {
+                case CORRECT_TOOL -> DynamicCrosshair.config.getCrosshairModifierCorrectTool().isModifier();
+                case INCORRECT_TOOL -> DynamicCrosshair.config.getCrosshairModifierIncorrectTool().isModifier();
+                case NONE -> true;
+            };
+        };
+        if (!modifierIsModifier) {
+            setVariant(CrosshairVariant.NONE);
+            this.lockStyle = true;
+        }
         return ret;
     }
     public static Crosshair combine(Crosshair one, Crosshair other) {

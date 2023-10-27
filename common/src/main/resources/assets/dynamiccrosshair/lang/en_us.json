@@ -53,6 +53,8 @@
   "dynamiccrosshair.option.crosshairStyle.color.customColor.description": "Set a custom color for the crosshair. The format is #AARRGGBB (alpha, red, green, blue).",
   "dynamiccrosshair.option.crosshairStyle.color.forceColor.description": "This disables the crosshair from inverting colors when over certain textures",
   "dynamiccrosshair.option.crosshairStyle.color.forceColor": "Force single color crosshair",
+  "dynamiccrosshair.option.crosshairStyle.isModifier": "Is Modifier",
+  "dynamiccrosshair.option.crosshairStyle.isModifier.description": "If true, consider this a modifier that gets drawn in addition to the primary crosshair.\nIf false, this replaces the main crosshair completely.",
   "dynamiccrosshair.group.crosshairStyle.regular": "Regular",
   "dynamiccrosshair.group.crosshairStyle.regular.description": "General crosshair when no others apply.",
   "dynamiccrosshair.group.crosshairStyle.onBlock": "Looking at block",

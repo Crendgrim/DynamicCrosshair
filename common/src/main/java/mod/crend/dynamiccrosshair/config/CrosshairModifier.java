@@ -8,4 +8,8 @@ public record CrosshairModifier(Config.CrosshairModifierSettings settings) {
 	public CrosshairColor getColor() {
 		return new CrosshairColor(settings.color.crosshairColor, settings.color.customColor.getRGB(), settings.color.forceColor);
 	}
+
+	public boolean isModifier() {
+		return settings.isModifier;
+	}
 }
