@@ -10,12 +10,13 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.util.Identifier;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value=InGameHud.class, priority=900)
+@Mixin(value=InGameHud.class, priority=700)
 public class InGameHudMixin {
 
     @ModifyExpressionValue(method = "renderCrosshair", at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;debugEnabled:Z"))
@@ -26,7 +27,7 @@ public class InGameHudMixin {
 
     @WrapOperation(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V", ordinal = 0))
     private void dynamiccrosshair$drawCrosshair(DrawContext context, Identifier texture, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
-        if (!CrosshairHandler.shouldShowCrosshair()) return;
+        if (!CrosshairHandler.forceShowCrosshair && !CrosshairHandler.shouldShowCrosshair()) return;
 
         // Set up color first (and clean it up after) so that we can tint the vanilla crosshair even when dynamic style is off
         CrosshairRenderer.preRender();

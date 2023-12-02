@@ -10,5 +10,7 @@ dependencies {
 
     modImplementation (name: "yaclx", group: "mod.crend.yaclx", version: "${project.yaclx_version}-fabric")
 
+    modCompileOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-fabric")
+
     modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
 }
