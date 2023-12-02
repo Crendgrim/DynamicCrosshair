@@ -28,6 +28,7 @@ public class CrosshairHandler {
 
     private static Crosshair activeCrosshair = new Crosshair();
     private static boolean shouldShowCrosshair = true;
+    public static boolean forceShowCrosshair = false;
 
     public static Crosshair getActiveCrosshair() {
         return activeCrosshair;

@@ -24,6 +24,9 @@
     ],
     "modmenu": [
       "mod.crend.dynamiccrosshair.fabric.screen.ModMenuIntegration"
+    ],
+    "autohud": [
+      "mod.crend.dynamiccrosshair.AutoHudCompat"
     ]
   },
   "mixins": [

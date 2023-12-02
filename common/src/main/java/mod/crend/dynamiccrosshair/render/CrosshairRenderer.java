@@ -2,6 +2,7 @@ package mod.crend.dynamiccrosshair.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import mod.crend.dynamiccrosshair.AutoHudCompat;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
@@ -13,12 +14,16 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.Window;
 
 public class CrosshairRenderer {
+	public static boolean autoHudCompat = false;
+
 	private static void setColor(final CrosshairColor color) {
 		int argb = color.getColor();
 		// convert ARGB hex to r, g, b, a floats
-		RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, ((argb >> 24) & 0xFF) / 255.0f);
-		if (color.forced()) {
-			RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+		float alpha = ((argb >> 24) & 0xFF) / 255.0f;
+		if (autoHudCompat) alpha *= AutoHudCompat.getAlpha();
+		RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, alpha);
+		if (color.forced() || autoHudCompat) {
+			RenderSystem.defaultBlendFunc();
 		} else {
 			RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 		}
@@ -52,6 +57,10 @@ public class CrosshairRenderer {
 		Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
 		if (crosshair.hasStyle()) {
 			CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
+			setColor(crosshairStyle.getColor());
+			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
+		} else if (CrosshairHandler.forceShowCrosshair) {
+			CrosshairStyle crosshairStyle = Crosshair.REGULAR.getCrosshairStyle();
 			setColor(crosshairStyle.getColor());
 			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
 		}
