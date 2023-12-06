@@ -8,8 +8,6 @@ pluginManagement {
 }
 
 include("common")
-include("fabric")
-include("forge")
-include("neoforge")
+enabled_platforms.split(",").each {include(it)}
 
 rootProject.name = "dynamiccrosshair"

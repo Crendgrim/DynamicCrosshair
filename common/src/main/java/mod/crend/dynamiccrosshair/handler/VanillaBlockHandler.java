@@ -8,6 +8,7 @@ import mod.crend.dynamiccrosshair.mixin.*;
 import mod.crend.yaclx.type.BlockOrTag;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.CampfireBlockEntity;
+import net.minecraft.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
 import net.minecraft.block.entity.SignText;
 import net.minecraft.entity.mob.MobEntity;
@@ -93,6 +94,7 @@ public class VanillaBlockHandler {
                 ||  block instanceof AbstractCandleBlock
                 ||  block instanceof CampfireBlock
                 ||  block instanceof ChiseledBookshelfBlock
+                ||  block instanceof DecoratedPotBlock
         );
     }
 
@@ -126,7 +128,7 @@ public class VanillaBlockHandler {
         // Special case: Signs eat all inputs
         if (block instanceof AbstractSignBlock && context.getBlockEntity() instanceof SignBlockEntity signBlockEntity) {
             Item handItem = context.getItem();
-            SignText signText = signBlockEntity.getTextFacing(context.player);
+            SignText signText = signBlockEntity.getText(signBlockEntity.isPlayerFacingFront(context.player));
 
             if (signBlockEntity.isWaxed()) {
                 if (signText.hasRunCommandClickEvent(context.player)) {
@@ -236,6 +238,16 @@ public class VanillaBlockHandler {
                 if (mob.getHoldingEntity() == context.player) {
                     return Crosshair.USABLE;
                 }
+            }
+        }
+
+        if (block instanceof DecoratedPotBlock && context.getBlockEntity() instanceof DecoratedPotBlockEntity decoratedPotBlockEntity) {
+            ItemStack itemStack = context.getItemStack();
+            ItemStack itemStack2 = decoratedPotBlockEntity.getStack();
+            if (!itemStack.isEmpty() && (itemStack2.isEmpty() || (ItemStack.canCombine(itemStack2, itemStack) && itemStack2.getCount() < itemStack2.getMaxCount()))) {
+                return Crosshair.USABLE;
+            } else {
+                return Crosshair.INTERACTABLE;
             }
         }
 
