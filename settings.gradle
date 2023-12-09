@@ -10,4 +10,4 @@ pluginManagement {
 include("common")
 enabled_platforms.split(",").each {include(it)}
 
-rootProject.name = "dynamiccrosshair"
+rootProject.name = mod_id

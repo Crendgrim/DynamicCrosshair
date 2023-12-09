@@ -33,12 +33,8 @@
   ],
 
   "depends": {
-    "fabric-key-binding-api-v1": "*",
-
-    "fabricloader": "*",
-    "minecraft": "${supported_version_pattern}",
-    "java": "*"
-  },
-  "suggests": {
+    "fabricloader": "${fabric_loader_version_range}",
+    "fabric-api": "${fabric_api_version_range}",
+    "minecraft": "${minecraft_version_range_fabric}"
   }
 }

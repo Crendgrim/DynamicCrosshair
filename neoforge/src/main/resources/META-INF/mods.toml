@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[1,)"
+loaderVersion = "${neoforge_loader_version_range}"
 issueTrackerURL = "https://github.com/Crendgrim/DynamicCrosshair/issues"
 license = "LGPL-3.0"
 
@@ -11,7 +11,7 @@ authors = "Crendgrim"
 description = '''
 Dynamic Crosshair that changes shape based on what is targeted
 '''
-logoFile = "icon.png"
+logoFile = "assets/dynamiccrosshair/icon.png"
 displayTest = "IGNORE_ALL_VERSION"
 
 [[mixins]]
@@ -20,20 +20,20 @@ config = "dynamiccrosshair-common.mixins.json"
 [[dependencies.dynamiccrosshair]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[20.2.59-beta,)"
+versionRange = "${neoforge_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dynamiccrosshair]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.2,)"
+versionRange = "${minecraft_version_range_forge}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dynamiccrosshair]]
 modId = "yet_another_config_lib"
 mandatory = false
-versionRange = "[2.5,)"
+versionRange = "${yacl_version_range_neoforge}"
 ordering = "NONE"
 side = "BOTH"

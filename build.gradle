@@ -27,7 +27,7 @@ allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
 
-    archivesBaseName = rootProject.archives_base_name
+    archivesBaseName = rootProject.mod_id
     version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
     group = rootProject.maven_group
 

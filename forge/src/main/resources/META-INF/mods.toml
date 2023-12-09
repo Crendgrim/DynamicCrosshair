@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[41,)"
+loaderVersion = "${forge_loader_version_range}"
 issueTrackerURL = "https://github.com/Crendgrim/DynamicCrosshair/issues"
 license = "LGPL-3.0"
 
@@ -11,26 +11,19 @@ authors = "Crendgrim"
 description = '''
 Dynamic Crosshair that changes shape based on what is targeted
 '''
-logoFile = "icon.png"
+logoFile = "assets/dynamiccrosshair/icon.png"
 displayTest = "IGNORE_ALL_VERSION"
 
 [[dependencies.dynamiccrosshair]]
 modId = "forge"
 mandatory = true
-versionRange = "[41,)"
+versionRange = "${forge_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.dynamiccrosshair]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19,)"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.dynamiccrosshair]]
-modId = "yet_another_config_lib"
-mandatory = false
-versionRange = "[2.5,)"
+versionRange = "${minecraft_version_range_forge}"
 ordering = "NONE"
 side = "BOTH"
