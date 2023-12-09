@@ -22,9 +22,7 @@ repositories {
 
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
-    //implementation(include("com.github.LlamaLad7.MixinExtras:mixinextras-neoforge:${project.mixin_extras_version}"))
 
-   // modImplementation "dev.isxander.yacl:yet-another-config-lib-forge:${project.yacl_version}"
     modImplementation include(name: "yaclx", group: "mod.crend.yaclx", version:"${project.yaclx_version}-neoforge")
 
     modCompileOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-neoforge")

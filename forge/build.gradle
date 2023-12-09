@@ -25,10 +25,10 @@ configurations {
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
-    //modApi "dev.architectury:architectury-forge:${rootProject.architectury_version}"
+
+    implementation annotationProcessor("com.github.LlamaLad7.MixinExtras:mixinextras-common:${project.mixin_extras_version}")
     implementation(include("com.github.LlamaLad7.MixinExtras:mixinextras-forge:${project.mixin_extras_version}"))
 
-   // modImplementation "dev.isxander.yacl:yet-another-config-lib-forge:${project.yacl_version}"
     modImplementation include(name: "yaclx", group: "mod.crend.yaclx", version:"${project.yaclx_version}-forge")
 
     modCompileOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-forge")

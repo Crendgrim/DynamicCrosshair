@@ -15,7 +15,7 @@ logoFile = "icon.png"
 displayTest = "IGNORE_ALL_VERSION"
 
 [[mixins]]
-config = "dynamiccrosshair-neoforge.mixins.json"
+config = "dynamiccrosshair-common.mixins.json"
 
 [[dependencies.dynamiccrosshair]]
 modId = "neoforge"

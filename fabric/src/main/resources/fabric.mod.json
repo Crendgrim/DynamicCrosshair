@@ -19,9 +19,6 @@
     "client": [
       "mod.crend.dynamiccrosshair.fabric.DynamicCrosshairFabric"
     ],
-    "preLaunch": [
-      "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
-    ],
     "modmenu": [
       "mod.crend.dynamiccrosshair.fabric.screen.ModMenuIntegration"
     ],

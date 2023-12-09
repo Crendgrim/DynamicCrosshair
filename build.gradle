@@ -10,22 +10,16 @@ architectury {
 subprojects {
     apply plugin: "dev.architectury.loom"
 
-    loom {
-        silentMojangMappingsLicense()
-    }
-
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        if (project.name == "common" || project.name == "fabric") {
-            mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
-        } else {
+        if (project.name == "forge") {
             mappings loom.layered() {
                 it.mappings("net.fabricmc:yarn:${project.yarn_mappings}:v2")
                 it.mappings file("${rootDir}/mappings/yarnpatch.tiny")
             }
+        } else {
+            mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
         }
-
-        implementation annotationProcessor("com.github.LlamaLad7.MixinExtras:mixinextras-common:${project.mixin_extras_version}")
     }
 }
 
