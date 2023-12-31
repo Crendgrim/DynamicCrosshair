@@ -9,7 +9,6 @@ architectury {
 }
 
 loom {
-
     forge {
         mixinConfig "dynamiccrosshair-common.mixins.json"
     }
@@ -26,8 +25,8 @@ configurations {
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.forge_version}"
 
-    implementation annotationProcessor("com.github.LlamaLad7.MixinExtras:mixinextras-common:${project.mixin_extras_version}")
-    implementation(include("com.github.LlamaLad7.MixinExtras:mixinextras-forge:${project.mixin_extras_version}"))
+    implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixin_extras_version}"))
+    implementation(include("io.github.llamalad7:mixinextras-forge:${project.mixin_extras_version}"))
 
     modImplementation include(name: "yaclx", group: "mod.crend.yaclx", version:"${project.yaclx_version}-forge")
 

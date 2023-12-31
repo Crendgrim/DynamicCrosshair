@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -21,6 +22,8 @@ public class DynamicCrosshairMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
+        // Forge doesn't init MixinExtras properly, manually force it if it hasn't been initialised yet.
+        MixinExtrasBootstrap.init();
     }
 
     @Override

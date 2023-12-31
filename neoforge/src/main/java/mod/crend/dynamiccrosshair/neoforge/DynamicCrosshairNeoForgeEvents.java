@@ -24,7 +24,6 @@ public class DynamicCrosshairNeoForgeEvents {
 
 		@SubscribeEvent
 		static void onClientSetup(FMLClientSetupEvent event) {
-			MixinExtrasBootstrap.init();
 			DynamicCrosshair.init();
 			ConfigScreen.register(ConfigHandler.CONFIG_STORE);
 		}

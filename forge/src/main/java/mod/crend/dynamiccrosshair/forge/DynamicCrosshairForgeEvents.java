@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair.forge;
 
-import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import mod.crend.dynamiccrosshair.AutoHudCompat;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
@@ -24,7 +23,6 @@ public class DynamicCrosshairForgeEvents {
 
 		@SubscribeEvent
 		static void onClientSetup(FMLClientSetupEvent event) {
-			MixinExtrasBootstrap.init();
 			DynamicCrosshair.init();
 			ConfigScreen.register(ConfigHandler.CONFIG_STORE);
 		}
