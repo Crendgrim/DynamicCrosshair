@@ -40,7 +40,10 @@ public class ApiList {
 	public ApiList add(String namespace) {
 		if (!Identifier.DEFAULT_NAMESPACE.equals(namespace)) {
 			if (DynamicCrosshair.apis.containsKey(namespace)) {
-				apis.add(DynamicCrosshair.apis.get(namespace));
+				DynamicCrosshairApi api = DynamicCrosshair.apis.get(namespace);
+				if (!apis.contains(api)) {
+					apis.add(api);
+				}
 			}
 		}
 		return this;

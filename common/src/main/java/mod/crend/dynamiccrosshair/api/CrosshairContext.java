@@ -64,16 +64,6 @@ public class CrosshairContext {
 		apiList = null;
 		itemStackMainHand = null;
 		itemStackOffHand = null;
-		world = MinecraftClient.getInstance().world;
-		for (DynamicCrosshairApi api : apis()) {
-			try {
-				ClientWorld useWorld = api.overrideWorld();
-				if (useWorld != null) {
-					world = useWorld;
-					break;
-				}
-			} catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException ignored) { }
-		}
 		switch (hitResult.getType()) {
 			case BLOCK -> {
 				BlockHitResult blockHitResult = (BlockHitResult) hitResult;
@@ -85,6 +75,16 @@ public class CrosshairContext {
 				withEntity = true;
 				entity = entityHitResult.getEntity();
 			}
+		}
+		world = MinecraftClient.getInstance().world;
+		for (DynamicCrosshairApi api : apis()) {
+			try {
+				ClientWorld useWorld = api.overrideWorld();
+				if (useWorld != null) {
+					world = useWorld;
+					break;
+				}
+			} catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException ignored) { }
 		}
 	}
 

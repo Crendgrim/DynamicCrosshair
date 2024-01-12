@@ -207,6 +207,19 @@ public class Crosshair implements Cloneable {
     }
 
     @Override
+    public String toString() {
+        return "Crosshair{" +
+                "variant=" + variant +
+                ", modifierUse=" + modifierUse +
+                ", modifierHit=" + modifierHit +
+                ", lockStyle=" + lockStyle +
+                ", lockModifierUse=" + lockModifierUse +
+                ", lockModifierHit=" + lockModifierHit +
+                ", changed=" + changed +
+                '}';
+    }
+
+    @Override
     public Crosshair clone() {
         try {
             return (Crosshair) super.clone();
