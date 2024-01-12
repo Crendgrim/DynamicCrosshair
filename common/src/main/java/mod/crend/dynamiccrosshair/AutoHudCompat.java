@@ -30,4 +30,8 @@ public class AutoHudCompat implements AutoHudApi {
 		return AutoHudRenderer.alpha;
 	}
 
+	public static float getMinimumAlpha() {
+		return (float) AutoHud.config.crosshair().maximumFade();
+	}
+
 }

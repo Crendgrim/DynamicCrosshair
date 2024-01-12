@@ -16,11 +16,14 @@ import net.minecraft.client.util.Window;
 public class CrosshairRenderer {
 	public static boolean autoHudCompat = false;
 
-	private static void setColor(final CrosshairColor color) {
+	private static void setColor(final CrosshairColor color, boolean forcedCrosshair) {
 		int argb = color.getColor();
 		// convert ARGB hex to r, g, b, a floats
 		float alpha = ((argb >> 24) & 0xFF) / 255.0f;
-		if (autoHudCompat) alpha *= AutoHudCompat.getAlpha();
+		if (autoHudCompat) {
+			if (forcedCrosshair) alpha *= AutoHudCompat.getMinimumAlpha();
+			else alpha *= AutoHudCompat.getAlpha();
+		}
 		RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, alpha);
 		if (color.forced() || autoHudCompat) {
 			RenderSystem.defaultBlendFunc();
@@ -30,7 +33,7 @@ public class CrosshairRenderer {
 	}
 
 	public static void preRender() {
-		setColor(DynamicCrosshair.config.getColor());
+		setColor(DynamicCrosshair.config.getColor(), false);
 	}
 
 	public static void fixCenteredCrosshairPre(DrawContext context, int x, int y) {
@@ -57,15 +60,15 @@ public class CrosshairRenderer {
 		Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
 		if (crosshair.hasStyle()) {
 			CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
-			setColor(crosshairStyle.getColor());
+			setColor(crosshairStyle.getColor(), false);
 			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
 		} else if (CrosshairHandler.forceShowCrosshair) {
 			CrosshairStyle crosshairStyle = Crosshair.REGULAR.getCrosshairStyle();
-			setColor(crosshairStyle.getColor());
+			setColor(crosshairStyle.getColor(), true);
 			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
 		}
 		for (CrosshairModifier modifier : crosshair.getModifiers()) {
-			setColor(modifier.getColor());
+			setColor(modifier.getColor(), false);
 			context.drawGuiTexture(modifier.getStyle().getIdentifier(), x, y, 15, 15);
 		}
 	}
