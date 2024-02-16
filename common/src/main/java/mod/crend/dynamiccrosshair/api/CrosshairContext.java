@@ -285,7 +285,7 @@ public class CrosshairContext {
 		};
 	}
 	public boolean includeShield() {
-		return DynamicCrosshair.config.dynamicCrosshairHoldingShield();
+		return DynamicCrosshair.config.dynamicCrosshairHoldingShield() && !isCoolingDown();
 	}
 	public boolean includeHoldingBlock() {
 		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingBlock()) {
