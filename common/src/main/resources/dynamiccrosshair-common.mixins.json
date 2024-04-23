@@ -15,7 +15,6 @@
     "FurnaceMinecartEntityAccessor",
     "HoeItemAccessor",
     "ItemAccessor",
-    "ParrotEntityAccessor",
     "RedstoneWireBlockAccessor",
     "ShovelItemAccessor",
     "TrapdoorBlockAccessor"

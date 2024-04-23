@@ -37,8 +37,8 @@ dependencies {
 
     modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    modRuntimeOnly "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
-    modImplementation include(name: "yaclx", group: "mod.crend.yaclx", version: "${project.yaclx_version}-fabric")
+    modRuntimeOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
+    modImplementation include(name: "libbamboo", group: "mod.crend.libbamboo", version: "${project.libbamboo_version}-fabric")
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     modCompileOnly("curse.maven:mythic-mounts-${project.mythicmounts_version}") { transitive = false }

@@ -5,7 +5,7 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
-import mod.crend.yaclx.forge.ConfigScreen;
+import mod.crend.libbamboo.forge.ConfigScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

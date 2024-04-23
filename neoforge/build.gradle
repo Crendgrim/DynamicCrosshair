@@ -18,12 +18,20 @@ configurations {
 
 repositories {
     maven { url "https://maven.neoforged.net/releases/" }
+    maven {
+        name 'Maven for PR #794' // https://github.com/neoforged/NeoForge/pull/794
+        url 'https://prmaven.neoforged.net/NeoForge/pr794'
+        content {
+            includeModule('net.neoforged', 'neoforge')
+            includeModule('net.neoforged', 'testframework')
+        }
+    }
 }
 
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
-    modImplementation include(name: "yaclx", group: "mod.crend.yaclx", version:"${project.yaclx_version}-neoforge")
+    modImplementation include(name: "libbamboo", group: "mod.crend.libbamboo", version:"${project.libbamboo_version}-neoforge")
 
     modCompileOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-neoforge")
 

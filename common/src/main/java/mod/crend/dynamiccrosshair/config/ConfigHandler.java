@@ -1,8 +1,8 @@
 package mod.crend.dynamiccrosshair.config;
 
-import mod.crend.yaclx.type.BlockOrTag;
-import mod.crend.yaclx.type.ItemOrTag;
-import mod.crend.yaclx.opt.ConfigStore;
+import mod.crend.libbamboo.type.BlockOrTag;
+import mod.crend.libbamboo.type.ItemOrTag;
+import mod.crend.libbamboo.opt.ConfigStore;
 
 import java.util.Collections;
 import java.util.List;

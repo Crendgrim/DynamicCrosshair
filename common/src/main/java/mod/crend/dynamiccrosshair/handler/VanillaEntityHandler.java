@@ -6,8 +6,8 @@ import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.mixin.ArmorStandEntityAccessor;
 import mod.crend.dynamiccrosshair.mixin.BoatEntityAccessor;
 import mod.crend.dynamiccrosshair.mixin.FurnaceMinecartEntityAccessor;
-import mod.crend.dynamiccrosshair.mixin.ParrotEntityAccessor;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.ItemFrameEntity;
@@ -77,7 +77,7 @@ public class VanillaEntityHandler {
                         return Crosshair.INTERACTABLE;
                     }
                 } else if (itemStack.isOf(Items.NAME_TAG)) {
-                    if (itemStack.hasCustomName()) {
+                    if (itemStack.contains(DataComponentTypes.CUSTOM_NAME)) {
                         // rename armor stand
                         return Crosshair.USABLE;
                     }
@@ -116,6 +116,20 @@ public class VanillaEntityHandler {
                 || entity.getType() == EntityType.WOLF) {
             TameableEntity pet = (TameableEntity) entity;
             if (pet.isTamed() && pet.isOwner(context.player)) {
+                if (pet instanceof WolfEntity wolf) {
+                    if (handItem instanceof DyeItem dye && wolf.getCollarColor() != dye.getColor()) {
+                        return Crosshair.USABLE;
+                    }
+                    if (handItem == Items.WOLF_ARMOR && !wolf.hasArmor() && !wolf.isBaby()) {
+                        return Crosshair.USABLE;
+                    } else if (handItem == Items.SHEARS && wolf.hasArmor()) {
+                        return Crosshair.USABLE;
+                    }
+                } else if (pet instanceof CatEntity cat) {
+                    if (handItem instanceof DyeItem dye && cat.getCollarColor() != dye.getColor()) {
+                        return Crosshair.USABLE;
+                    }
+                }
                 return Crosshair.INTERACTABLE;
             }
             return null;
@@ -175,7 +189,7 @@ public class VanillaEntityHandler {
             return null;
         } else if (entity instanceof ParrotEntity parrot) {
             //noinspection ConstantValue
-            if (!parrot.isTamed() && ParrotEntityAccessor.getTAMING_INGREDIENTS().contains(handItem)) {
+            if (!parrot.isTamed() && context.getItemStack().isIn(ItemTags.PARROT_FOOD)) {
                 return Crosshair.USABLE;
             }
             if (handItem == Items.COOKIE) {
@@ -204,6 +218,8 @@ public class VanillaEntityHandler {
             if (!allayItemStack.isEmpty() && context.isMainHand() && handItemStack.isEmpty()) {
                 return Crosshair.INTERACTABLE;
             }
+        } else if (entity instanceof ArmadilloEntity && handItem == Items.BRUSH) {
+            return Crosshair.USABLE;
         }
         return null;
     }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class ConfigUpdater implements mod.crend.yaclx.opt.ConfigUpdater {
+public class ConfigUpdater implements mod.crend.libbamboo.opt.ConfigUpdater {
 	private Stream<Item> buildAdditionalItemList(String configString) {
 		return Arrays.stream(configString.split(";"))
 				.filter(s -> !s.isBlank())

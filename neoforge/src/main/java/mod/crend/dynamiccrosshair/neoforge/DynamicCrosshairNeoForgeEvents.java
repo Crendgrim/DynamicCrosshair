@@ -6,7 +6,7 @@ import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
-import mod.crend.yaclx.neoforge.ConfigScreen;
+import mod.crend.libbamboo.neoforge.ConfigScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.InterModComms;

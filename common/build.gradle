@@ -7,9 +7,9 @@ dependencies {
     // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
-    modImplementation (name: "yaclx", group: "mod.crend.yaclx", version: "${project.yaclx_version}-fabric")
+    modImplementation (name: "libbamboo", group: "mod.crend.libbamboo", version: "${project.libbamboo_version}-fabric")
 
     modCompileOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-fabric")
 
-    modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:${project.yacl_version}"
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
 }

@@ -4,10 +4,10 @@ import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
 import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
-import mod.crend.yaclx.render.ItemOrTagRenderer;
-import mod.crend.yaclx.type.BlockOrTag;
-import mod.crend.yaclx.type.ItemOrTag;
-import mod.crend.yaclx.auto.annotation.*;
+import mod.crend.libbamboo.render.ItemOrTagRenderer;
+import mod.crend.libbamboo.type.BlockOrTag;
+import mod.crend.libbamboo.type.ItemOrTag;
+import mod.crend.libbamboo.auto.annotation.*;
 
 import java.awt.Color;
 import java.util.Collections;

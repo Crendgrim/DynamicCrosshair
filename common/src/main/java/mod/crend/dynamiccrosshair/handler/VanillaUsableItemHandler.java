@@ -10,10 +10,17 @@ import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.mixin.AxeItemAccessor;
 import mod.crend.dynamiccrosshair.mixin.HoeItemAccessor;
 import mod.crend.dynamiccrosshair.mixin.ShovelItemAccessor;
-import mod.crend.yaclx.type.ItemOrTag;
+import mod.crend.libbamboo.type.ItemOrTag;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.enums.DoubleBlockHalf;
+import net.minecraft.component.ComponentHolder;
+import net.minecraft.component.DataComponentType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BannerPatternsComponent;
+import net.minecraft.component.type.BundleContentsComponent;
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EquipmentSlot;
@@ -23,10 +30,11 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -45,7 +53,7 @@ public class VanillaUsableItemHandler {
 
     public static boolean isUsableItem(ItemStack handItemStack) {
         Item handItem = handItemStack.getItem();
-        return (handItem.isFood()
+        return (handItemStack.contains(DataComponentTypes.FOOD)
                 || handItem instanceof ArmorItem
                 || handItem instanceof ElytraItem
                 || handItem instanceof FireworkRocketItem
@@ -67,9 +75,10 @@ public class VanillaUsableItemHandler {
     }
 
     public static Crosshair checkUsableItem(CrosshairContext context) {
-        Item handItem = context.getItem();
+        ItemStack handItemStack = context.getItemStack();
+        Item handItem = handItemStack.getItem();
         // Enable crosshair on food and drinks also when not targeting if "when interactable" is chosen
-        if (handItem.isFood()) {
+        if (handItemStack.contains(DataComponentTypes.FOOD)) {
             // Special case: sweet and glow berries can sometimes be placed
             if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled
                     && (handItem == Items.SWEET_BERRIES || handItem == Items.GLOW_BERRIES)) {
@@ -77,7 +86,7 @@ public class VanillaUsableItemHandler {
                     if (context.canPlaceItemAsBlock()) return Crosshair.HOLDING_BLOCK;
                 }
             }
-            if (context.player.canConsume(false) || handItem.getFoodComponent().isAlwaysEdible()) {
+            if (context.player.canConsume(false) || handItemStack.get(DataComponentTypes.FOOD).canAlwaysEat()) {
                 return Crosshair.USABLE;
             }
         }
@@ -102,7 +111,8 @@ public class VanillaUsableItemHandler {
             return Crosshair.USABLE;
         }
         if (handItem instanceof BundleItem) {
-            if (context.getItemStack().getOrCreateNbt().contains("Items")) {
+            BundleContentsComponent bundleContentsComponent = handItemStack.get(DataComponentTypes.BUNDLE_CONTENTS);
+            if (bundleContentsComponent != null && !bundleContentsComponent.isEmpty()) {
                 return Crosshair.USABLE;
             }
         }
@@ -194,7 +204,8 @@ public class VanillaUsableItemHandler {
     }
 
     public static Crosshair checkUsableItemOnBlock(CrosshairContext context) {
-        Item handItem = context.getItem();
+        ItemStack handItemStack = context.getItemStack();
+        Item handItem = handItemStack.getItem();
 
         if (handItem instanceof SpawnEggItem) return Crosshair.USABLE;
 
@@ -246,17 +257,23 @@ public class VanillaUsableItemHandler {
                 if (handItem instanceof GlassBottleItem) {
                     return Crosshair.USABLE;
                 }
-                if (handItem instanceof PotionItem && PotionUtil.getPotion(context.getItemStack()) == Potions.WATER) {
-                    return Crosshair.USABLE;
+                if (handItem instanceof PotionItem) {
+                    PotionContentsComponent potionContentsComponent = handItemStack.getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT);
+                    if (potionContentsComponent.matches(Potions.WATER)) {
+                        return Crosshair.USABLE;
+                    }
                 }
                 if (handItem instanceof BlockItem blockItem && blockItem.getBlock() instanceof ShulkerBoxBlock sbb && sbb.getColor() != null) {
                     return Crosshair.USABLE;
                 }
-                if (handItem instanceof DyeableItem dyeableItem && dyeableItem.hasColor(context.getItemStack())) {
+                if (handItemStack.isIn(ItemTags.DYEABLE) && !handItemStack.contains(DataComponentTypes.DYED_COLOR)) {
                     return Crosshair.USABLE;
                 }
-                if (handItem instanceof BannerItem && BannerBlockEntity.getPatternCount(context.getItemStack()) > 0) {
-                    return Crosshair.USABLE;
+                if (handItem instanceof BannerItem) {
+                    BannerPatternsComponent bannerPatternsComponent = handItemStack.getOrDefault(DataComponentTypes.BANNER_PATTERNS, BannerPatternsComponent.DEFAULT);
+                    if (!bannerPatternsComponent.layers().isEmpty()) {
+                        return Crosshair.USABLE;
+                    }
                 }
             }
         }

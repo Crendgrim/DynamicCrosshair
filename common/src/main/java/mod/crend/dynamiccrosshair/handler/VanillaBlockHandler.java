@@ -5,42 +5,48 @@ import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.component.ModifierUse;
 import mod.crend.dynamiccrosshair.mixin.*;
-import mod.crend.yaclx.type.BlockOrTag;
+import mod.crend.libbamboo.type.BlockOrTag;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.CampfireBlockEntity;
-import net.minecraft.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.block.entity.SignText;
+import net.minecraft.block.entity.*;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.state.property.Property;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec2f;
+import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 public class VanillaBlockHandler {
 
     public static Crosshair checkToolWithBlock(CrosshairContext context) {
-        Item handItem = context.getItem();
+        ItemStack handItemStack = context.getItemStack();
+        Item handItem = handItemStack.getItem();
         BlockPos blockPos = context.getBlockPos();
         BlockState blockState = context.getBlockState();
         if (blockState == null) {
             return null;
         }
         if (handItem instanceof MiningToolItem) {
-            if (handItem.isSuitableFor(blockState)
+            if (handItemStack.isSuitableFor(blockState)
                     && handItem.canMine(blockState, context.world, blockPos, context.player)) {
                 return Crosshair.CORRECT_TOOL;
             } else {
                 return Crosshair.INCORRECT_TOOL;
             }
         }
-        if (handItem.getMiningSpeedMultiplier(context.getItemStack(), blockState) > 1.0f
+        if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
                 && handItem.canMine(blockState, context.world, blockPos, context.player)) {
             return Crosshair.CORRECT_TOOL;
         }
@@ -217,10 +223,9 @@ public class VanillaBlockHandler {
         }
 
         if (block instanceof ChiseledBookshelfBlock) {
-            Optional<Vec2f> hitPos = ChiseledBookshelfBlockAccessor.invokeGetHitPos(context.getBlockHitResult(), blockState.get(HorizontalFacingBlock.FACING));
-            if (hitPos.isPresent()) {
-                int i = ChiseledBookshelfBlockAccessor.invokeGetSlotForHitPos(hitPos.get());
-                if (blockState.get(ChiseledBookshelfBlock.SLOT_OCCUPIED_PROPERTIES.get(i))) {
+            OptionalInt optionalInt = ((ChiseledBookshelfBlockAccessor) block).invokeGetSlotForHitPos(context.getBlockHitResult(), blockState);
+            if (optionalInt.isPresent()) {
+                if (blockState.get(ChiseledBookshelfBlock.SLOT_OCCUPIED_PROPERTIES.get(optionalInt.getAsInt()))) {
                     return Crosshair.INTERACTABLE;
                 } else if (context.getItemStack().isIn(ItemTags.BOOKSHELF_BOOKS)) {
                     return Crosshair.USABLE;
@@ -244,7 +249,7 @@ public class VanillaBlockHandler {
         if (block instanceof DecoratedPotBlock && context.getBlockEntity() instanceof DecoratedPotBlockEntity decoratedPotBlockEntity) {
             ItemStack itemStack = context.getItemStack();
             ItemStack itemStack2 = decoratedPotBlockEntity.getStack();
-            if (!itemStack.isEmpty() && (itemStack2.isEmpty() || (ItemStack.canCombine(itemStack2, itemStack) && itemStack2.getCount() < itemStack2.getMaxCount()))) {
+            if (!itemStack.isEmpty() && (itemStack2.isEmpty() || (ItemStack.areItemsAndComponentsEqual(itemStack2, itemStack) && itemStack2.getCount() < itemStack2.getMaxCount()))) {
                 return Crosshair.USABLE;
             } else {
                 return Crosshair.INTERACTABLE;

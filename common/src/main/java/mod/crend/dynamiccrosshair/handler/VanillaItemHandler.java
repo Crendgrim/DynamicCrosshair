@@ -5,7 +5,7 @@ import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import mod.crend.yaclx.type.ItemOrTag;
+import mod.crend.libbamboo.type.ItemOrTag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -113,12 +113,13 @@ public class VanillaItemHandler {
     }
 
     public static Crosshair checkMeleeWeapon(CrosshairContext context) {
-        Item handItem = context.getItem();
+        ItemStack handItemStack = context.getItemStack();
+        Item handItem = handItemStack.getItem();
 
         if (handItem instanceof SwordItem) {
             if (context.canUseWeaponAsTool() && !DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnBreakableBlock()) {
                 BlockState blockState = context.getBlockState();
-                if (handItem.getMiningSpeedMultiplier(context.getItemStack(), blockState) > 1.0f
+                if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
                         && handItem.canMine(blockState, context.world, context.getBlockPos(), context.player)) {
                     return null;
                 }

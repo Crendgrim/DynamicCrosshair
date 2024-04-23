@@ -28,7 +28,7 @@ dependencies {
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixin_extras_version}"))
     implementation(include("io.github.llamalad7:mixinextras-forge:${project.mixin_extras_version}"))
 
-    modImplementation include(name: "yaclx", group: "mod.crend.yaclx", version:"${project.yaclx_version}-forge")
+    modImplementation include(name: "libbamboo", group: "mod.crend.libbamboo", version:"${project.libbamboo_version}-forge")
 
     modCompileOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-forge")
 
