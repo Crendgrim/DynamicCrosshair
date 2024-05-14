@@ -1,6 +1,14 @@
 package mod.crend.dynamiccrosshair.api;
 
-public class Crosshair implements Cloneable {
+public record Crosshair(
+        CrosshairVariant variant,
+        ModifierUse modifierUse,
+        ModifierHit modifierHit,
+        boolean lockStyle,
+        boolean lockModifierUse,
+        boolean lockModifierHit,
+        boolean changed
+){
 
     public enum Flag {
         FixedStyle,
@@ -11,45 +19,43 @@ public class Crosshair implements Cloneable {
 
     public static final Crosshair NONE = new Crosshair();
     public static final Crosshair REGULAR = new Crosshair(CrosshairVariant.Regular);
-    public static final Crosshair HOLDING_BLOCK = new Crosshair(CrosshairVariant.HoldingBlock).setFlag(Flag.FixedAll);
-    public static final Crosshair MELEE_WEAPON = new Crosshair(CrosshairVariant.HoldingMeleeWeapon).setFlag(Flag.FixedStyle);
-    public static final Crosshair RANGED_WEAPON = new Crosshair(CrosshairVariant.HoldingRangedWeapon).setFlag(Flag.FixedAll);
-    public static final Crosshair THROWABLE = new Crosshair(CrosshairVariant.HoldingThrowable).setFlag(Flag.FixedAll);
-    public static final Crosshair TOOL = new Crosshair(CrosshairVariant.HoldingTool).setFlag(Flag.FixedStyle);
-    public static final Crosshair CORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierHit.CORRECT_TOOL).setFlag(Flag.FixedStyle, Flag.FixedModifierHit);
-    public static final Crosshair INCORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierHit.INCORRECT_TOOL).setFlag(Flag.FixedStyle, Flag.FixedModifierHit);
-    public static final Crosshair USABLE = new Crosshair(ModifierUse.USE_ITEM).setFlag(Flag.FixedModifierUse);
-    public static final Crosshair INTERACTABLE = new Crosshair(ModifierUse.INTERACTABLE).setFlag(Flag.FixedModifierUse);
-    public static final Crosshair SHIELD = new Crosshair(ModifierUse.SHIELD).setFlag(Flag.FixedModifierUse);
+    public static final Crosshair HOLDING_BLOCK = new Crosshair(CrosshairVariant.HoldingBlock).withFlag(Flag.FixedAll);
+    public static final Crosshair MELEE_WEAPON = new Crosshair(CrosshairVariant.HoldingMeleeWeapon).withFlag(Flag.FixedStyle);
+    public static final Crosshair RANGED_WEAPON = new Crosshair(CrosshairVariant.HoldingRangedWeapon).withFlag(Flag.FixedAll);
+    public static final Crosshair THROWABLE = new Crosshair(CrosshairVariant.HoldingThrowable).withFlag(Flag.FixedAll);
+    public static final Crosshair TOOL = new Crosshair(CrosshairVariant.HoldingTool).withFlag(Flag.FixedStyle);
+    public static final Crosshair CORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierUse.NONE, ModifierHit.CORRECT_TOOL, true, false, true, true);
+    public static final Crosshair INCORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierUse.NONE, ModifierHit.INCORRECT_TOOL, true, false, true, true);
+    public static final Crosshair USABLE = new Crosshair(ModifierUse.USE_ITEM).withFlag(Flag.FixedModifierUse);
+    public static final Crosshair INTERACTABLE = new Crosshair(ModifierUse.INTERACTABLE).withFlag(Flag.FixedModifierUse);
+    public static final Crosshair SHIELD = new Crosshair(ModifierUse.SHIELD).withFlag(Flag.FixedModifierUse);
 
-    private CrosshairVariant variant = CrosshairVariant.NONE;
-    private ModifierUse modifierUse = ModifierUse.NONE;
-    private ModifierHit modifierHit = ModifierHit.NONE;
-    private boolean lockStyle = false;
-    private boolean lockModifierUse = false;
-    private boolean lockModifierHit = false;
-
-    boolean changed = false;
-
-    public Crosshair() { }
+    public Crosshair() {
+        this(CrosshairVariant.NONE, ModifierUse.NONE, ModifierHit.NONE, false, false, false, false);
+    }
     public Crosshair(CrosshairVariant variant) {
-        this.setVariant(variant);
+        this(variant, ModifierUse.NONE, ModifierHit.NONE, false, false, false, true);
     }
     public Crosshair(ModifierUse modifierUse) {
-        this.setModifierUse(modifierUse);
+        this(CrosshairVariant.NONE, modifierUse, ModifierHit.NONE, false, false, false, true);
     }
     public Crosshair(ModifierHit modifierHit) {
-        this.setModifierHit(modifierHit);
+        this(CrosshairVariant.NONE, ModifierUse.NONE, modifierHit, false, false, false, true);
     }
-    public Crosshair(CrosshairVariant holdingBlock, ModifierUse modifierUse) {
-        this.setVariant(holdingBlock);
-        this.setModifierUse(modifierUse);
+    public Crosshair(CrosshairVariant variant, ModifierUse modifierUse) {
+        this(variant, modifierUse, ModifierHit.NONE, false, false, false, true);
     }
-    public Crosshair(CrosshairVariant holdingBlock, ModifierHit modifierHit) {
-        this.setVariant(holdingBlock);
-        this.setModifierHit(modifierHit);
+    public Crosshair(CrosshairVariant variant, ModifierHit modifierHit) {
+        this(variant, ModifierUse.NONE, modifierHit, false, false, false, true);
     }
-    public Crosshair(InteractionType interactionType) {
+    public Crosshair(CrosshairVariant variant, ModifierUse modifierUse, ModifierHit modifierHit) {
+        this(variant, modifierUse, modifierHit, false, false, false, true);
+    }
+
+    public static Crosshair of(InteractionType interactionType) {
+        CrosshairVariant variant = CrosshairVariant.NONE;
+        ModifierUse modifierUse = ModifierUse.NONE;
+        ModifierHit modifierHit = ModifierHit.NONE;
         switch (interactionType) {
             case USE_ITEM,
                  EQUIP_ITEM,
@@ -65,15 +71,15 @@ public class Crosshair implements Cloneable {
                  PLACE_ITEM_ON_ENTITY,
                  FILL_ITEM_FROM_ENTITY,
                  FILL_ENTITY_FROM_ITEM
-                        -> this.setModifierUse(ModifierUse.USE_ITEM);
+                        -> modifierUse = ModifierUse.USE_ITEM;
             case
                 THROW_ITEM
-                        -> this.setVariant(CrosshairVariant.HoldingThrowable);
+                        -> variant = CrosshairVariant.HoldingThrowable;
 
             case
                 PLACE_BLOCK,
                 PLACE_ENTITY
-                        -> this.setVariant(CrosshairVariant.HoldingBlock);
+                        -> variant = CrosshairVariant.HoldingBlock;
 
             case
                 INTERACT_WITH_BLOCK,
@@ -82,19 +88,20 @@ public class Crosshair implements Cloneable {
                 TAKE_ITEM_FROM_ENTITY,
                 INTERACT_WITH_ENTITY,
                 MOUNT_ENTITY
-                        -> this.setModifierUse(ModifierUse.INTERACTABLE);
+                        -> modifierUse = ModifierUse.INTERACTABLE;
 
-            case MELEE_WEAPON -> this.setVariant(CrosshairVariant.HoldingMeleeWeapon);
-            case RANGED_WEAPON -> this.setVariant(CrosshairVariant.HoldingRangedWeapon);
-            case TOOL -> this.setVariant(CrosshairVariant.HoldingTool);
-            case USABLE_TOOL -> { this.setVariant(CrosshairVariant.HoldingTool); this.setModifierUse(ModifierUse.USE_ITEM); }
-            case CORRECT_TOOL -> { this.setVariant(CrosshairVariant.HoldingTool); this.setModifierHit(ModifierHit.CORRECT_TOOL); }
-            case INCORRECT_TOOL -> { this.setVariant(CrosshairVariant.HoldingTool); this.setModifierHit(ModifierHit.INCORRECT_TOOL); }
-            case SHIELD -> this.setModifierUse(ModifierUse.SHIELD);
+            case MELEE_WEAPON -> variant = CrosshairVariant.HoldingMeleeWeapon;
+            case RANGED_WEAPON -> variant = CrosshairVariant.HoldingRangedWeapon;
+            case TOOL -> variant = CrosshairVariant.HoldingTool;
+            case USABLE_TOOL -> { variant = CrosshairVariant.HoldingTool; modifierUse = ModifierUse.USE_ITEM; }
+            case CORRECT_TOOL -> { variant = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.CORRECT_TOOL; }
+            case INCORRECT_TOOL -> { variant = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.INCORRECT_TOOL; }
+            case SHIELD -> modifierUse = ModifierUse.SHIELD;
 
-            case FORCE_CROSSHAIR -> this.setVariant(CrosshairVariant.Regular);
+            case FORCE_CROSSHAIR -> variant = CrosshairVariant.Regular;
             case EMPTY, NO_ACTION -> { }
         }
+        return new Crosshair(variant, modifierUse, modifierHit);
     }
 
 
@@ -127,83 +134,53 @@ public class Crosshair implements Cloneable {
     public CrosshairVariant getVariant() {
         return this.variant;
     }
-    private void setVariant(CrosshairVariant variant) {
-        this.variant = variant;
-        this.changed = true;
-    }
-
-    private void setModifierHit(ModifierHit modifierHit) {
-        this.modifierHit = modifierHit;
-        this.changed = true;
-    }
-
-    private void setModifierUse(ModifierUse modifierUse) {
-        this.modifierUse = modifierUse;
-        this.changed = true;
-    }
-
-    private Crosshair setFlag(Flag flag) {
-        switch (flag) {
-            case FixedStyle -> lockStyle = true;
-            case FixedModifierUse -> lockModifierUse = true;
-            case FixedModifierHit -> lockModifierHit = true;
-            case FixedAll -> {
-                lockStyle = true;
-                lockModifierUse = true;
-                lockModifierHit = true;
-            }
-        }
-        return this;
-    }
-    private Crosshair setFlag(Flag... flags) {
-        for (Flag flag : flags) {
-            setFlag(flag);
-        }
-        return this;
-    }
 
     public Crosshair withFlag(Flag flag) {
-        return clone().setFlag(flag);
-    }
-    public Crosshair withFlag(Flag... flags) {
-        return clone().setFlag(flags);
+        return switch (flag) {
+            case FixedStyle -> new Crosshair(variant, modifierUse, modifierHit, true, lockModifierUse, lockModifierHit, changed);
+            case FixedModifierUse -> new Crosshair(variant, modifierUse, modifierHit, lockStyle, true, lockModifierHit, changed);
+            case FixedModifierHit -> new Crosshair(variant, modifierUse, modifierHit, lockStyle, lockModifierUse, true, changed);
+            case FixedAll -> new Crosshair(variant, modifierUse, modifierHit, true, true, true, changed);
+        };
     }
 
+
     public Crosshair withModifier(ModifierUse modifier) {
-        Crosshair crosshair = clone();
-        crosshair.setModifierUse(modifier);
-        return crosshair;
+        return new Crosshair(variant, modifier, modifierHit, lockStyle, lockModifierUse, lockModifierHit, changed);
+    }
+    public Crosshair withModifier(ModifierHit modifier) {
+        return new Crosshair(variant, modifierUse, modifier, lockStyle, lockModifierUse, lockModifierHit, changed);
     }
 
     public Crosshair withVariant(CrosshairVariant variant) {
-        Crosshair crosshair = clone();
-        crosshair.setVariant(variant);
-        return crosshair;
+        return new Crosshair(variant, modifierUse, modifierHit, lockStyle, lockModifierUse, lockModifierHit, changed);
     }
 
-    public boolean updateFrom(Crosshair other) {
-        if (other == null) return false;
-        boolean ret = false;
+    public Crosshair updateFrom(Crosshair other) {
+        if (other == null) return this;
+        CrosshairVariant newVariant = this.variant;
+        ModifierUse newModifierUse = this.modifierUse;
+        ModifierHit newModifierHit = this.modifierHit;
+        boolean newLockStyle = this.lockStyle;
+        boolean newLockModifierUse = this.lockModifierUse;
+        boolean newLockModifierHit = this.lockModifierHit;
         if (!this.lockStyle || other.variant == CrosshairVariant.HoldingTool) {
             if (other.variant != CrosshairVariant.NONE) {
-                setVariant(other.variant);
-                ret = true;
+                newVariant = other.variant;
             }
-            this.lockStyle = other.lockStyle;
+            newLockStyle = other.lockStyle;
         }
         if (!this.lockModifierHit) {
             if (other.modifierHit != ModifierHit.NONE) {
-                setModifierHit(other.modifierHit);
-                ret = true;
+                newModifierHit = other.modifierHit;
             }
-            this.lockModifierHit = other.lockModifierHit;
+            newLockModifierHit = other.lockModifierHit;
         }
         if (!this.lockModifierUse) {
             if (other.modifierUse != ModifierUse.NONE) {
-                setModifierUse(other.modifierUse);
-                ret = true;
+                newModifierUse = other.modifierUse;
             }
-            this.lockModifierUse = other.lockModifierUse;
+            newLockModifierUse = other.lockModifierUse;
         }
         /* FIXME
         boolean modifierIsModifier = switch (modifierUse) {
@@ -221,13 +198,11 @@ public class Crosshair implements Cloneable {
             this.lockStyle = true;
         }
          */
-        return ret;
+        return new Crosshair(newVariant, newModifierUse, newModifierHit, newLockStyle, newLockModifierUse, newLockModifierHit, true);
     }
     public static Crosshair combine(Crosshair one, Crosshair other) {
         if (one == null) return other;
-        Crosshair combined = one.clone();
-        combined.updateFrom(other);
-        return combined;
+        return one.updateFrom(other);
     }
 
 
@@ -242,14 +217,5 @@ public class Crosshair implements Cloneable {
                 ", lockModifierHit=" + lockModifierHit +
                 ", changed=" + changed +
                 '}';
-    }
-
-    @Override
-    public Crosshair clone() {
-        try {
-            return (Crosshair) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
     }
 }

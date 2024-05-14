@@ -121,19 +121,19 @@ public class CrosshairHandler {
         if (interactionType == InteractionType.EMPTY || interactionType == InteractionType.NO_ACTION) {
             return context.withApisUntilNonNull(api -> api.computeFromItem(context));
         }
-        return new Crosshair(interactionType);
+        return Crosshair.of(interactionType);
     }
 
     private static Crosshair buildCrosshairAdvancedFromEntity(CrosshairContext context) {
         InteractionType interactionType = ((DynamicCrosshairEntity) context.getEntity()).dynamiccrosshair$compute(context);
-        if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
+        if (interactionType != InteractionType.EMPTY) return Crosshair.of(interactionType);
 
         return context.withApisUntilNonNull(api -> api.computeFromEntity(context));
     }
 
     private static Crosshair buildCrosshairAdvancedFromBlock(CrosshairContext context) {
         InteractionType interactionType = ((DynamicCrosshairBlock) context.getBlock()).dynamiccrosshair$compute(context);
-        if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
+        if (interactionType != InteractionType.EMPTY) return Crosshair.of(interactionType);
 
         return context.withApisUntilNonNull(api -> api.computeFromBlock(context));
     }
@@ -255,9 +255,7 @@ public class CrosshairHandler {
                     }
                 }
             }
-            if (activeCrosshair.updateFrom(buildCrosshairDynamic(state.context))) {
-                return Optional.of(true);
-            }
+            activeCrosshair = activeCrosshair.updateFrom(buildCrosshairDynamic(state.context));
         } catch (CrosshairContextChange crosshairContextChange) {
             // For some reason, we are being asked to re-evaluate the context.
             return buildCrosshair(crosshairContextChange.newHitResult, player);
