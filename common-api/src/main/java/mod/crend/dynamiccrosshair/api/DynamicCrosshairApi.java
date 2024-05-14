@@ -147,4 +147,5 @@ public interface DynamicCrosshairApi extends DynamicCrosshairApiBlockState, Dyna
      */
     default Crosshair computeFromItem(CrosshairContext context) { return null; }
 
+    default Crosshair overrideFromItem(CrosshairContext context, InteractionType interactionType) { return null; }
 }

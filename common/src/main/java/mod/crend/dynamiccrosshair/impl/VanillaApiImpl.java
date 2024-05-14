@@ -4,6 +4,9 @@ import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.Crosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshair.api.DynamicCrosshairRangedItem;
+import mod.crend.dynamiccrosshair.api.InteractionType;
+import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.registry.DynamicCrosshairBlockTags;
 import mod.crend.dynamiccrosshair.registry.DynamicCrosshairEntityTags;
@@ -20,8 +23,11 @@ import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.MiningToolItem;
+import net.minecraft.item.ShearsItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
 
 public class VanillaApiImpl implements DynamicCrosshairApi {
 
@@ -56,45 +62,66 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         return false;
     }
 
-    @Override
-    public Crosshair computeFromItem(CrosshairContext context) {
-        // Special handling for ranged weapons
-        if (context.includeRangedWeapon()) {
-            ItemStack itemStack = context.getItemStack();
-            Item handItem = itemStack.getItem();
-            if (context.api().isRangedWeapon(context.getItemStack())) {
-                if (DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.Always) {
-                    return Crosshair.RANGED_WEAPON;
-                }
-
-                // Policy: IfFullyDrawn
-                if (handItem.getUseAction(itemStack) == UseAction.BOW) {
-                    if (context.isActiveItem()) {
-                        float progress = BowItem.getPullProgress(handItem.getMaxUseTime(itemStack) - context.getPlayer().getItemUseTimeLeft());
-                        if (progress == 1.0f) {
-                            return Crosshair.RANGED_WEAPON;
-                        }
-                    }
-                    return Crosshair.REGULAR.withFlag(Crosshair.Flag.FixedModifierUse);
-                }
-                if (handItem.getUseAction(itemStack) == UseAction.CROSSBOW) {
-                    if (CrossbowItem.isCharged(itemStack)) {
-                        return Crosshair.RANGED_WEAPON;
-                    }
-                    return Crosshair.REGULAR.withFlag(Crosshair.Flag.FixedModifierUse);
-                }
-                if (handItem.getUseAction(itemStack) == UseAction.SPEAR) {
-                    if (context.isActiveItem()) {
-                        int i = handItem.getMaxUseTime(itemStack) - context.getPlayer().getItemUseTimeLeft();
-                        if (i > 10) {
-                            return Crosshair.RANGED_WEAPON;
-                        }
-                    }
-                    return null;
-                }
-                return Crosshair.RANGED_WEAPON;
+    private Crosshair checkToolWithBlock(CrosshairContext context) {
+        ItemStack handItemStack = context.getItemStack();
+        Item handItem = handItemStack.getItem();
+        BlockPos blockPos = context.getBlockPos();
+        BlockState blockState = context.getBlockState();
+        if (blockState == null) {
+            return null;
+        }
+        if (handItem instanceof MiningToolItem) {
+            if (handItemStack.isSuitableFor(blockState)
+                    && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
+                return Crosshair.CORRECT_TOOL;
+            } else {
+                return Crosshair.INCORRECT_TOOL;
             }
         }
+        if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
+                && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
+            return Crosshair.CORRECT_TOOL;
+        }
+        if (handItem instanceof ShearsItem) {
+            // (shears item && correct tool) is handled by the getMiningSpeedMultiplier branch
+            return Crosshair.INCORRECT_TOOL;
+        }
+        return null;
+    }
+
+    @Override
+    public Crosshair overrideFromItem(CrosshairContext context, InteractionType interactionType) {
+        // Special handling for tools
+        if (interactionType == InteractionType.TOOL || interactionType == InteractionType.USABLE_TOOL) {
+            Crosshair crosshair = Crosshair.of(interactionType);
+            if (context.isWithBlock()) {
+                return Crosshair.combine(crosshair, checkToolWithBlock(context));
+            }
+            return null;
+        }
+
+        // Special handling for ranged weapons
+        if (interactionType == InteractionType.RANGED_WEAPON) {
+            DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
+            if (rangedItem.dynamiccrosshair$isCharged(context)) {
+                return Crosshair.RANGED_WEAPON;
+            }
+            return Crosshair.REGULAR.withFlag(Crosshair.Flag.FixedModifierUse);
+        }
+
+        if (interactionType == InteractionType.EMPTY) {
+            UsableCrosshairPolicy usableItemPolicy = DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem();
+            if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
+                ItemStack itemStack = context.getItemStack();
+                if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && context.api().isAlwaysUsable(itemStack)) {
+                    return Crosshair.USABLE;
+                }
+                if (usableItemPolicy == UsableCrosshairPolicy.Always && context.api().isUsable(itemStack)) {
+                    return Crosshair.USABLE;
+                }
+            }
+        }
+
         return null;
     }
 

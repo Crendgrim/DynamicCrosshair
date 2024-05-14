@@ -12,18 +12,11 @@ import mod.crend.dynamiccrosshair.api.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
 import mod.crend.dynamiccrosshair.api.exception.InvalidContextState;
-import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.FilledMapItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
-import net.minecraft.item.ShearsItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,35 +45,8 @@ public class CrosshairHandler {
         return false;
     }
 
-    private static Crosshair checkToolWithBlock(CrosshairContext context) {
-        ItemStack handItemStack = context.getItemStack();
-        Item handItem = handItemStack.getItem();
-        BlockPos blockPos = context.getBlockPos();
-        BlockState blockState = context.getBlockState();
-        if (blockState == null) {
-            return null;
-        }
-        if (handItem instanceof MiningToolItem) {
-            if (handItemStack.isSuitableFor(blockState)
-                    && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
-                return Crosshair.CORRECT_TOOL;
-            } else {
-                return Crosshair.INCORRECT_TOOL;
-            }
-        }
-        if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
-                && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
-            return Crosshair.CORRECT_TOOL;
-        }
-        if (handItem instanceof ShearsItem) {
-            // (shears item && correct tool) is handled by the getMiningSpeedMultiplier branch
-            return Crosshair.INCORRECT_TOOL;
-        }
-        return null;
-    }
 
     private static Crosshair buildCrosshairAdvancedFromItem(CrosshairContext context) {
-        UsableCrosshairPolicy usableItemPolicy = DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem();
         InteractionType interactionType = ((DynamicCrosshairItem) context.getItem()).dynamiccrosshair$compute(context);
         interactionType = switch (interactionType) {
             case MELEE_WEAPON -> context.includeMeleeWeapon() ? interactionType : InteractionType.EMPTY;
@@ -95,32 +61,15 @@ public class CrosshairHandler {
             default -> interactionType;
         };
 
-        // Special handling for tools
-        if (interactionType == InteractionType.TOOL || interactionType == InteractionType.USABLE_TOOL) {
-            Crosshair crosshair = new Crosshair(interactionType);
-            if (context.includeTool()) {
-                if (context.isWithBlock()) {
-                    return Crosshair.combine(crosshair, checkToolWithBlock(context));
-                }
-            }
-            return crosshair;
-        }
-
-        if (interactionType == InteractionType.EMPTY) {
-            if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
-                ItemStack itemStack = context.getItemStack();
-                if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && context.api().isAlwaysUsable(itemStack)) {
-                    return Crosshair.USABLE;
-                }
-                if (usableItemPolicy == UsableCrosshairPolicy.Always && context.api().isUsable(itemStack)) {
-                    return Crosshair.USABLE;
-                }
-            }
-        }
+        InteractionType finalInteractionType = interactionType;
+        Crosshair override = context.withApisUntilNonNull(api -> api.overrideFromItem(context, finalInteractionType));
 
         if (interactionType == InteractionType.EMPTY || interactionType == InteractionType.NO_ACTION) {
             return context.withApisUntilNonNull(api -> api.computeFromItem(context));
         }
+
+        if (override != null) return override;
+
         return Crosshair.of(interactionType);
     }
 

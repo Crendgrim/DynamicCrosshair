@@ -2,14 +2,16 @@ package mod.crend.dynamiccrosshair.mixin.item;
 
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
+import mod.crend.dynamiccrosshair.api.DynamicCrosshairRangedItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Item.class)
-public abstract class ItemMixin implements DynamicCrosshairItem {
+public abstract class ItemMixin implements DynamicCrosshairItem, DynamicCrosshairRangedItem {
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
@@ -38,5 +40,10 @@ public abstract class ItemMixin implements DynamicCrosshairItem {
 		});
 		if (interactionType == null) return InteractionType.EMPTY;
 		return interactionType;
+	}
+
+	@Override
+	public boolean dynamiccrosshair$isCharged(CrosshairContext context) {
+		return true;
 	}
 }

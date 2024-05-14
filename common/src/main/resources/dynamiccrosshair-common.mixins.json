@@ -54,10 +54,12 @@
     "item.BlockItemMixin",
     "item.BoatItemMixin",
     "item.BoneMealItemMixin",
+    "item.BowItemMixin",
     "item.BrushItemMixin",
     "item.BucketItemMixin",
     "item.BundleItemMixin",
     "item.CompassItemMixin",
+    "item.CrossbowItemMixin",
     "item.EndCrystalItemMixin",
     "item.EntityBucketItemMixin",
     "item.FireItemsMixin",
@@ -73,7 +75,8 @@
     "item.ShovelItemMixin",
     "item.SpawnEggItemMixin",
     "item.SpyglassItemMixin",
-    "item.SwordItemMixin"
+    "item.SwordItemMixin",
+    "item.TridentItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
