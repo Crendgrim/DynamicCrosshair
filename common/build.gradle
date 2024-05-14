@@ -1,9 +1,21 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
 architectury {
     common(rootProject.enabled_platforms.split(","))
 }
 
 fabricApi {
     configureDataGeneration()
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
 }
 
 dependencies {
@@ -19,4 +31,7 @@ dependencies {
     modCompileOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-fabric")
 
     modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
+
+    api(project(path: ":common-api", configuration: "namedElements"))
+    shadowCommon(project(path: ":common-api", configuration: "transformProductionFabric")) { transitive false }
 }

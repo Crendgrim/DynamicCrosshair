@@ -17,7 +17,7 @@ public class LecternBlockMixin implements DynamicCrosshairBlock {
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (!context.player.shouldCancelInteraction() && context.getBlockState().get(HAS_BOOK)) {
+		if (!context.getPlayer().shouldCancelInteraction() && context.getBlockState().get(HAS_BOOK)) {
 			return InteractionType.INTERACT_WITH_BLOCK;
 		}
 		Item handItem = context.getItem();

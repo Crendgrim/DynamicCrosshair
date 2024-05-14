@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 public abstract class BlockItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
+		if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
 			if (context.isWithBlock()) {
 				if (context.canPlaceItemAsBlock()) {
 					return InteractionType.PLACE_BLOCK;

@@ -1,11 +1,9 @@
 package mod.crend.dynamiccrosshair.impl;
 
+import mod.crend.dynamiccrosshair.api.internal.ContextedApi;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.CrosshairContextChange;
+import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApiBlockState;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApiEntityType;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApiItemStack;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
@@ -13,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.function.Function;
 
-public class ContextedApiImpl implements DynamicCrosshairApiBlockState, DynamicCrosshairApiEntityType, DynamicCrosshairApiItemStack {
+public class ContextedApiImpl implements ContextedApi {
 
 	private final CrosshairContext context;
 
@@ -21,6 +19,7 @@ public class ContextedApiImpl implements DynamicCrosshairApiBlockState, DynamicC
 		this.context = context;
 	}
 
+	@Override
 	public boolean test(Function<DynamicCrosshairApi, Boolean> lambda) {
 		for (DynamicCrosshairApi api : context.apis()) {
 			try {

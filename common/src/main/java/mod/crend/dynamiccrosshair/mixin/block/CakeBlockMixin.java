@@ -11,7 +11,7 @@ public class CakeBlockMixin implements DynamicCrosshairBlock {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		// Special case: Cake gets eaten (modified), so "use" makes more sense to me
-		if (context.player.canConsume(false) && context.shouldInteract()) {
+		if (context.getPlayer().canConsume(false) && context.shouldInteract()) {
 			return InteractionType.USE_BLOCK;
 		}
 		return InteractionType.NO_ACTION;

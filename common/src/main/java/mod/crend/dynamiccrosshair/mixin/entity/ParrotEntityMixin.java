@@ -29,7 +29,7 @@ public abstract class ParrotEntityMixin extends TameableEntityMixin implements D
 			// :'(
 			return InteractionType.USE_ITEM_ON_ENTITY;
 		}
-		if (!this.isInAir() && this.isTamed() && this.isOwner(context.player)) {
+		if (!this.isInAir() && this.isTamed() && this.isOwner(context.getPlayer())) {
 			return InteractionType.INTERACT_WITH_ENTITY;
 		}
 		return InteractionType.NO_ACTION;

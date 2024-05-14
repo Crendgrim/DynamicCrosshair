@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
@@ -25,9 +25,9 @@ public class FireItemsMixin implements DynamicCrosshairItem {
 			if (CampfireBlock.canBeLit(blockState) || CandleBlock.canBeLit(blockState) || CandleCakeBlock.canBeLit(blockState)) {
 				return InteractionType.USE_ITEM_ON_BLOCK;
 			}
-			BlockPos firePos = context.getBlockPos().offset(((BlockHitResult) context.hitResult).getSide());
-			if (AbstractFireBlock.canPlaceAt(context.world, firePos, context.player.getHorizontalFacing())) {
-				if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
+			BlockPos firePos = context.getBlockPos().offset(((BlockHitResult) context.getHitResult()).getSide());
+			if (AbstractFireBlock.canPlaceAt(context.getWorld(), firePos, context.getPlayer().getHorizontalFacing())) {
+				if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
 					return InteractionType.PLACE_BLOCK;
 				}
 				return InteractionType.USE_ITEM_ON_BLOCK;

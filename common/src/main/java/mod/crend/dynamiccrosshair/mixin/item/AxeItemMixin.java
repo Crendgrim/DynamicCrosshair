@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
@@ -29,7 +29,7 @@ public class AxeItemMixin extends ItemMixin implements DynamicCrosshairItem {
 			}
 			return super.dynamiccrosshair$compute(context);
 		}
-		if (context.isWithEntity() && !DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnEntity()) {
+		if (context.isWithEntity() && !DynamicCrosshairMod.config.dynamicCrosshairMeleeWeaponOnEntity()) {
 			return InteractionType.NO_ACTION;
 		}
 		return InteractionType.MELEE_WEAPON;

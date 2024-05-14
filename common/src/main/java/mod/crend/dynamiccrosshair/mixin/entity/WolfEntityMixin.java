@@ -3,11 +3,8 @@ package mod.crend.dynamiccrosshair.mixin.entity;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Items;
@@ -15,9 +12,6 @@ import net.minecraft.util.DyeColor;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-
-import javax.swing.text.html.Option;
-import java.util.Optional;
 
 @Mixin(WolfEntity.class)
 public abstract class WolfEntityMixin extends TameableEntityMixin implements DynamicCrosshairEntity {
@@ -31,7 +25,7 @@ public abstract class WolfEntityMixin extends TameableEntityMixin implements Dyn
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (this.isTamed() && this.isOwner(context.player)) {
+		if (this.isTamed() && this.isOwner(context.getPlayer())) {
 			if (context.getItem() instanceof DyeItem dye && this.getCollarColor() != dye.getColor()) {
 				return InteractionType.USE_ITEM_ON_ENTITY;
 			}

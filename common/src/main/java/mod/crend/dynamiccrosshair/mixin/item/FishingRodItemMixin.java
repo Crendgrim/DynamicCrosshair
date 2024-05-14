@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 public class FishingRodItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (context.player.fishHook == null) {
+		if (context.getPlayer().fishHook == null) {
 			return InteractionType.RANGED_WEAPON;
 		} else {
 			return InteractionType.USE_ITEM;

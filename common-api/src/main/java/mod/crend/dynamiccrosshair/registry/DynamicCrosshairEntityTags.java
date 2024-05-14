@@ -6,7 +6,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
-public class ModEntityTypeTags {
+public class DynamicCrosshairEntityTags {
 	public static final TagKey<EntityType<?>> IS_INTERACTABLE = of("is_interactable");
 	public static final TagKey<EntityType<?>> IS_ALWAYS_INTERACTABLE = of("is_always_interactable");
 

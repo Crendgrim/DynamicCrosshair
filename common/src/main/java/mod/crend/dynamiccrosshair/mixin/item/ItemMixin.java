@@ -16,12 +16,12 @@ public abstract class ItemMixin implements DynamicCrosshairItem {
 		ItemStack itemStack = context.getItemStack();
 
 		if (itemStack.contains(DataComponentTypes.FOOD)) {
-			if (context.player.canConsume(false) || itemStack.get(DataComponentTypes.FOOD).canAlwaysEat()) {
+			if (context.getPlayer().canConsume(false) || itemStack.get(DataComponentTypes.FOOD).canAlwaysEat()) {
 				return InteractionType.CONSUME_ITEM;
 			}
 		}
 
-		InteractionType interactionType = context.withApis(api -> {
+		InteractionType interactionType = context.withApisUntilNonNull(api -> {
 			if (api.isAlwaysUsable(itemStack)) return InteractionType.USE_ITEM;
 			if (api.isAlwaysUsableOnBlock(itemStack) && context.isWithBlock()) return InteractionType.USE_ITEM_ON_BLOCK;
 			if (api.isAlwaysUsableOnEntity(itemStack) && context.isWithEntity()) return InteractionType.USE_ITEM_ON_ENTITY;

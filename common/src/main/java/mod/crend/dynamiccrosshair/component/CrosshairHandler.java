@@ -1,14 +1,17 @@
 package mod.crend.dynamiccrosshair.component;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.api.Crosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.CrosshairContextChange;
+import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
+import mod.crend.dynamiccrosshair.api.CrosshairVariant;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairBlock;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.api.InvalidContextState;
+import mod.crend.dynamiccrosshair.api.exception.InvalidContextState;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -59,14 +62,14 @@ public class CrosshairHandler {
         }
         if (handItem instanceof MiningToolItem) {
             if (handItemStack.isSuitableFor(blockState)
-                    && handItem.canMine(blockState, context.world, blockPos, context.player)) {
+                    && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
                 return Crosshair.CORRECT_TOOL;
             } else {
                 return Crosshair.INCORRECT_TOOL;
             }
         }
         if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
-                && handItem.canMine(blockState, context.world, blockPos, context.player)) {
+                && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
             return Crosshair.CORRECT_TOOL;
         }
         if (handItem instanceof ShearsItem) {
@@ -77,7 +80,7 @@ public class CrosshairHandler {
     }
 
     private static Crosshair buildCrosshairAdvancedFromItem(CrosshairContext context) {
-        UsableCrosshairPolicy usableItemPolicy = DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem();
+        UsableCrosshairPolicy usableItemPolicy = DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem();
         InteractionType interactionType = ((DynamicCrosshairItem) context.getItem()).dynamiccrosshair$compute(context);
         interactionType = switch (interactionType) {
             case MELEE_WEAPON -> context.includeMeleeWeapon() ? interactionType : InteractionType.EMPTY;
@@ -116,7 +119,7 @@ public class CrosshairHandler {
         }
 
         if (interactionType == InteractionType.EMPTY || interactionType == InteractionType.NO_ACTION) {
-            return context.withApis(api -> api.computeFromItem(context));
+            return context.withApisUntilNonNull(api -> api.computeFromItem(context));
         }
         return new Crosshair(interactionType);
     }
@@ -125,14 +128,14 @@ public class CrosshairHandler {
         InteractionType interactionType = ((DynamicCrosshairEntity) context.getEntity()).dynamiccrosshair$compute(context);
         if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
 
-        return context.withApis(api -> api.computeFromEntity(context));
+        return context.withApisUntilNonNull(api -> api.computeFromEntity(context));
     }
 
     private static Crosshair buildCrosshairAdvancedFromBlock(CrosshairContext context) {
         InteractionType interactionType = ((DynamicCrosshairBlock) context.getBlock()).dynamiccrosshair$compute(context);
         if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
 
-        return context.withApis(api -> api.computeFromBlock(context));
+        return context.withApisUntilNonNull(api -> api.computeFromBlock(context));
     }
 
     private static Crosshair buildCrosshairAdvancedByHand(CrosshairContext context) {
@@ -140,7 +143,7 @@ public class CrosshairHandler {
         // Targeted block / entity
         if (context.isWithEntity()) {
             crosshair = buildCrosshairAdvancedFromEntity(context);
-        } else if (context.isWithBlock() && context.shouldInteract() && DynamicCrosshair.config.dynamicCrosshairOnInteractableBlock()) {
+        } else if (context.isWithBlock() && context.shouldInteract() && DynamicCrosshairMod.config.dynamicCrosshairOnInteractableBlock()) {
             crosshair = buildCrosshairAdvancedFromBlock(context);
         }
         return Crosshair.combine(crosshair, buildCrosshairAdvancedFromItem(context));
@@ -238,16 +241,16 @@ public class CrosshairHandler {
 
             switch (hitResult.getType()) {
                 case ENTITY -> {
-                    if (DynamicCrosshair.config.dynamicCrosshairOnEntity()) {
-                        activeCrosshair.setVariant(CrosshairVariant.OnEntity);
+                    if (DynamicCrosshairMod.config.dynamicCrosshairOnEntity()) {
+                        activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.OnEntity);
                     }
                 }
                 case BLOCK -> {
-                    if (DynamicCrosshair.config.dynamicCrosshairOnBlock()) {
-                        activeCrosshair.setVariant(CrosshairVariant.OnBlock);
-                    } else if (DynamicCrosshair.config.dynamicCrosshairOnInteractableBlock()) {
+                    if (DynamicCrosshairMod.config.dynamicCrosshairOnBlock()) {
+                        activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.OnBlock);
+                    } else if (DynamicCrosshairMod.config.dynamicCrosshairOnInteractableBlock()) {
                         if (isBlockInteractable(state.context)) {
-                            activeCrosshair.setVariant(CrosshairVariant.OnBlock);
+                            activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.OnBlock);
                         }
                     }
                 }
@@ -270,7 +273,7 @@ public class CrosshairHandler {
     // silk touch awareness
     private static boolean checkShowCrosshair() {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null || (state != null && state.context.player != player)) {
+        if (player == null || (state != null && state.context.getPlayer() != player)) {
             state = null;
             return false;
         }
@@ -283,12 +286,12 @@ public class CrosshairHandler {
 
         // Hide crosshair when rendering any screen
         // This makes it not show up when using a transparent GUI resource pack
-        if (DynamicCrosshair.config.isHideWithScreen() && MinecraftClient.getInstance().currentScreen != null) {
+        if (DynamicCrosshairMod.config.isHideWithScreen() && MinecraftClient.getInstance().currentScreen != null) {
             state = null;
             return false;
         }
 
-        if (DynamicCrosshair.config.isHideWithMap()) {
+        if (DynamicCrosshairMod.config.isHideWithMap()) {
             if (player.getMainHandStack().getItem() instanceof FilledMapItem
                     && player.getOffHandStack().isEmpty()) {
                 state = null;
@@ -308,11 +311,11 @@ public class CrosshairHandler {
         if (activeCrosshair.isChanged()) {
             return true;
         }
-        if (DynamicCrosshair.config.isDynamicCrosshair()) {
+        if (DynamicCrosshairMod.config.isDynamicCrosshair()) {
             return false;
         }
         // Dynamic crosshair disabled, no other crosshair computed: make sure to show a crosshair
-        activeCrosshair.setVariant(CrosshairVariant.Regular);
+        activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.Regular);
         return true;
     }
 

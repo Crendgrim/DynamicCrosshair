@@ -23,16 +23,16 @@ public abstract class AbstractSignBlockMixin extends BlockMixin implements Dynam
 		// Special case: Signs eat all inputs
 		if (context.getBlockEntity() instanceof SignBlockEntity signBlockEntity) {
 			Item handItem = context.getItem();
-			SignText signText = signBlockEntity.getText(signBlockEntity.isPlayerFacingFront(context.player));
+			SignText signText = signBlockEntity.getText(signBlockEntity.isPlayerFacingFront(context.getPlayer()));
 
 			if (signBlockEntity.isWaxed()) {
-				if (signText.hasRunCommandClickEvent(context.player)) {
+				if (signText.hasRunCommandClickEvent(context.getPlayer())) {
 					return InteractionType.INTERACT_WITH_ENTITY;
 				}
 				return InteractionType.NO_ACTION;
 			} else {
 				if (handItem instanceof SignChangingItem) {
-					if (signText.hasText(context.player)) {
+					if (signText.hasText(context.getPlayer())) {
 						if (handItem.equals(Items.GLOW_INK_SAC) && !signText.isGlowing()) {
 							return InteractionType.USE_ITEM_ON_ENTITY;
 						}

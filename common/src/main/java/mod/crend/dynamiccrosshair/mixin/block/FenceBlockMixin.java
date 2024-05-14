@@ -20,12 +20,12 @@ public abstract class FenceBlockMixin extends BlockMixin implements DynamicCross
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		BlockPos pos = context.getBlockPos();
-		List<MobEntity> list = context.world.getNonSpectatingEntities(MobEntity.class,
+		List<MobEntity> list = context.getWorld().getNonSpectatingEntities(MobEntity.class,
 				new Box((double) pos.getX() - 7.0, (double) pos.getY() - 7.0, (double) pos.getZ() - 7.0,
 						(double) pos.getX() + 7.0, (double) pos.getY() + 7.0, (double) pos.getZ() + 7.0));
 
 		for (MobEntity mob : list) {
-			if (mob.getHoldingEntity() == context.player) {
+			if (mob.getHoldingEntity() == context.getPlayer()) {
 				// Leash all leaded mobs to fence
 				return InteractionType.USE_ITEM_ON_BLOCK;
 			}

@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.fabric;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import net.fabricmc.api.ClientModInitializer;
@@ -12,7 +13,7 @@ public class DynamicCrosshairFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        DynamicCrosshair.init();
+        DynamicCrosshairMod.init();
 
         ClientTickEvents.END_CLIENT_TICK.register(event -> CrosshairHandler.tick());
 
@@ -20,6 +21,6 @@ public class DynamicCrosshairFabric implements ClientModInitializer {
                 .stream()
                 .map(EntrypointContainer::getEntrypoint)
                 .filter(api -> FabricLoader.getInstance().isModLoaded(api.getModId()))
-                .forEach(DynamicCrosshair::registerApi);
+                .forEach(DynamicCrosshairMod::registerApi);
     }
 }

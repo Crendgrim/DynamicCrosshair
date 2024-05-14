@@ -1,11 +1,6 @@
 package mod.crend.dynamiccrosshair.api;
 
-import mod.crend.dynamiccrosshair.component.Crosshair;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
 
 /**

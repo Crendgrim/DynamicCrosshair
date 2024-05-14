@@ -13,7 +13,7 @@ import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
 
-@AutoYaclConfig(modid=DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
+@AutoYaclConfig(modid= DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
 public class Config {
     @SerialEntry
     public boolean dynamicCrosshair = true;

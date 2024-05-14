@@ -37,7 +37,7 @@ public abstract class MobEntityMixin extends LivingEntity implements DynamicCros
 		if (handItem instanceof SpawnEggItem) return InteractionType.USE_ITEM_ON_ENTITY;
 
 		if (handItem == Items.LEAD) {
-			if (this.canBeLeashedBy(context.player)) {
+			if (this.canBeLeashedBy(context.getPlayer())) {
 				return InteractionType.USE_ITEM_ON_ENTITY;
 			}
 			return InteractionType.NO_ACTION;

@@ -1,13 +1,13 @@
 package mod.crend.dynamiccrosshair.impl;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.api.Crosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
-import mod.crend.dynamiccrosshair.component.Crosshair;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import mod.crend.dynamiccrosshair.registry.ModBlockTags;
-import mod.crend.dynamiccrosshair.registry.ModEntityTypeTags;
-import mod.crend.dynamiccrosshair.registry.ModItemTags;
+import mod.crend.dynamiccrosshair.registry.DynamicCrosshairBlockTags;
+import mod.crend.dynamiccrosshair.registry.DynamicCrosshairEntityTags;
+import mod.crend.dynamiccrosshair.registry.DynamicCrosshairItemTags;
 import mod.crend.libbamboo.type.BlockOrTag;
 import mod.crend.libbamboo.type.ItemOrTag;
 import net.minecraft.block.BlockState;
@@ -47,7 +47,7 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             return true;
         }
         if (context.getItem() instanceof FishingRodItem) {
-            boolean newFishHookStatus = (context.player.fishHook != null);
+            boolean newFishHookStatus = (context.getPlayer().fishHook != null);
             if (newFishHookStatus != fishHookStatus) {
                 fishHookStatus = newFishHookStatus;
                 return true;
@@ -63,14 +63,14 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             ItemStack itemStack = context.getItemStack();
             Item handItem = itemStack.getItem();
             if (context.api().isRangedWeapon(context.getItemStack())) {
-                if (DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.Always) {
+                if (DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.Always) {
                     return Crosshair.RANGED_WEAPON;
                 }
 
                 // Policy: IfFullyDrawn
                 if (handItem.getUseAction(itemStack) == UseAction.BOW) {
                     if (context.isActiveItem()) {
-                        float progress = BowItem.getPullProgress(handItem.getMaxUseTime(itemStack) - context.player.getItemUseTimeLeft());
+                        float progress = BowItem.getPullProgress(handItem.getMaxUseTime(itemStack) - context.getPlayer().getItemUseTimeLeft());
                         if (progress == 1.0f) {
                             return Crosshair.RANGED_WEAPON;
                         }
@@ -85,7 +85,7 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
                 }
                 if (handItem.getUseAction(itemStack) == UseAction.SPEAR) {
                     if (context.isActiveItem()) {
-                        int i = handItem.getMaxUseTime(itemStack) - context.player.getItemUseTimeLeft();
+                        int i = handItem.getMaxUseTime(itemStack) - context.getPlayer().getItemUseTimeLeft();
                         if (i > 10) {
                             return Crosshair.RANGED_WEAPON;
                         }
@@ -103,19 +103,19 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
     @Override
     public boolean isAlwaysInteractable(BlockState blockState) {
-        return blockState.isIn(ModBlockTags.IS_ALWAYS_INTERACTABLE)
-                || BlockOrTag.isContainedIn(blockState.getBlock(), DynamicCrosshair.config.getAdditionalInteractableBlocks())
+        return blockState.isIn(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE)
+                || BlockOrTag.isContainedIn(blockState.getBlock(), DynamicCrosshairMod.config.getAdditionalInteractableBlocks())
                 ;
     }
 
     @Override
     public boolean isAlwaysInteractableInCreativeMode(BlockState blockState) {
-        return blockState.isIn(ModBlockTags.IS_ALWAYS_INTERACTABLE_IN_CREATIVE_MODE);
+        return blockState.isIn(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE_IN_CREATIVE_MODE);
     }
 
     @Override
     public boolean isInteractable(BlockState blockState) {
-        return blockState.isIn(ModBlockTags.IS_INTERACTABLE);
+        return blockState.isIn(DynamicCrosshairBlockTags.IS_INTERACTABLE);
     }
 
 
@@ -123,12 +123,12 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
     @Override
     public boolean isAlwaysInteractable(EntityType<?> entityType) {
-        return entityType.isIn(ModEntityTypeTags.IS_ALWAYS_INTERACTABLE);
+        return entityType.isIn(DynamicCrosshairEntityTags.IS_ALWAYS_INTERACTABLE);
     }
 
     @Override
     public boolean isInteractable(EntityType<?> entityType) {
-        return entityType.isIn(ModEntityTypeTags.IS_INTERACTABLE);
+        return entityType.isIn(DynamicCrosshairEntityTags.IS_INTERACTABLE);
     }
 
 
@@ -136,30 +136,30 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
     @Override
     public boolean isAlwaysUsable(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.ALWAYS_USABLE)
+        return itemStack.isIn(DynamicCrosshairItemTags.ALWAYS_USABLE)
                 || itemStack.getItem().getUseAction(itemStack) == UseAction.DRINK
-                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshair.config.getAdditionalUsableItems())
+                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshairMod.config.getAdditionalUsableItems())
                 ;
     }
 
     @Override
     public boolean isAlwaysUsableOnBlock(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.ALWAYS_USABLE_ON_BLOCK);
+        return itemStack.isIn(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_BLOCK);
     }
 
     @Override
     public boolean isAlwaysUsableOnEntity(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.ALWAYS_USABLE_ON_ENTITY);
+        return itemStack.isIn(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_ENTITY);
     }
 
     @Override
     public boolean isAlwaysUsableOnMiss(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.ALWAYS_USABLE_ON_MISS);
+        return itemStack.isIn(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_MISS);
     }
 
     @Override
     public boolean isUsable(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.USABLE)
+        return itemStack.isIn(DynamicCrosshairItemTags.USABLE)
                 || itemStack.contains(DataComponentTypes.FOOD)
                 ;
     }
@@ -167,23 +167,23 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     @Override
     public boolean isBlock(ItemStack itemStack) {
         return itemStack.getItem() instanceof BlockItem
-                || itemStack.isIn(ModItemTags.BLOCKS)
+                || itemStack.isIn(DynamicCrosshairItemTags.BLOCKS)
                 ;
     }
 
     @Override
     public boolean isMeleeWeapon(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.MELEE_WEAPONS)
-                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshair.config.getAdditionalMeleeWeapons())
+        return itemStack.isIn(DynamicCrosshairItemTags.MELEE_WEAPONS)
+                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshairMod.config.getAdditionalMeleeWeapons())
                 ;
     }
 
     @Override
     public boolean isRangedWeapon(ItemStack itemStack) {
-        if (itemStack.isIn(ModItemTags.RANGED_WEAPONS)) {
+        if (itemStack.isIn(DynamicCrosshairItemTags.RANGED_WEAPONS)) {
             return true;
         }
-        if (ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshair.config.getAdditionalRangedWeapons())) {
+        if (ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshairMod.config.getAdditionalRangedWeapons())) {
             return true;
         }
         return switch (itemStack.getItem().getUseAction(itemStack)) {
@@ -194,22 +194,22 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
     @Override
     public boolean isShield(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.SHIELDS)
+        return itemStack.isIn(DynamicCrosshairItemTags.SHIELDS)
                 || itemStack.getItem().getUseAction(itemStack) == UseAction.BLOCK
                 ;
     }
 
     @Override
     public boolean isThrowable(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.THROWABLES)
-                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshair.config.getAdditionalThrowables())
+        return itemStack.isIn(DynamicCrosshairItemTags.THROWABLES)
+                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshairMod.config.getAdditionalThrowables())
                 ;
     }
 
     @Override
     public boolean isTool(ItemStack itemStack) {
-        return itemStack.isIn(ModItemTags.TOOLS)
-                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshair.config.getAdditionalTools())
+        return itemStack.isIn(DynamicCrosshairItemTags.TOOLS)
+                || ItemOrTag.isContainedIn(itemStack.getItem(), DynamicCrosshairMod.config.getAdditionalTools())
                 ;
     }
 }

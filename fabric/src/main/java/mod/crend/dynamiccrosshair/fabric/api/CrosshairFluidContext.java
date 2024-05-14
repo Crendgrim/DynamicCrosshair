@@ -13,7 +13,7 @@ public class CrosshairFluidContext {
 
 	@SuppressWarnings("UnstableApiUsage")
 	public static boolean canInteractWithFluidStorage(CrosshairContext context, Storage<FluidVariant> storage) {
-		Storage<FluidVariant> handStorage = ContainerItemContext.forPlayerInteraction(context.player, context.getHand()).find(FluidStorage.ITEM);
+		Storage<FluidVariant> handStorage = ContainerItemContext.forPlayerInteraction(context.getPlayer(), context.getHand()).find(FluidStorage.ITEM);
 		if (handStorage == null) return false;
 
 		try (var tx = Transaction.openOuter()) {

@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.datagen;
 
-import mod.crend.dynamiccrosshair.registry.ModItemTags;
+import mod.crend.dynamiccrosshair.registry.DynamicCrosshairItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
@@ -17,7 +17,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(ModItemTags.TOOLS)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.TOOLS)
 				.addOptionalTag(ConventionalItemTags.MINING_TOOLS)
 				.addOptionalTag(ConventionalItemTags.SHEARS_TOOLS)
 				.addOptionalTag(ItemTags.PICKAXES)
@@ -27,7 +27,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.FLINT_AND_STEEL)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.THROWABLES)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.THROWABLES)
 				.add(Items.EGG)
 				.add(Items.SNOWBALL)
 				.add(Items.SPLASH_POTION)
@@ -36,18 +36,18 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.ENDER_PEARL)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.SHIELDS)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.SHIELDS)
 				.add(Items.SHIELD)
 				.addOptionalTag(ConventionalItemTags.SHIELDS_TOOLS)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.MELEE_WEAPONS)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.MELEE_WEAPONS)
 				.addOptionalTag(ItemTags.SWORDS)
 				.addOptionalTag(ConventionalItemTags.MELEE_WEAPONS_TOOLS)
 				.add(Items.MACE)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.RANGED_WEAPONS)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.RANGED_WEAPONS)
 				.add(Items.FISHING_ROD)
 				.add(Items.BOW)
 				.add(Items.CROSSBOW)
@@ -60,7 +60,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 		;
 
 		// NOTE BlockItem is missing here
-		getOrCreateTagBuilder(ModItemTags.BLOCKS)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.BLOCKS)
 				.add(Items.SWEET_BERRIES)
 				.add(Items.GLOW_BERRIES)
 				.add(Items.ARMOR_STAND)
@@ -72,7 +72,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.addOptionalTag(ConventionalItemTags.LAVA_BUCKETS)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.ALWAYS_USABLE)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE)
 				.add(Items.POTION)
 				.addOptionalTag(ConventionalItemTags.POTIONS)
 				.add(Items.HONEY_BOTTLE)
@@ -86,17 +86,17 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.WRITTEN_BOOK)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.ALWAYS_USABLE_ON_BLOCK)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_BLOCK)
 				.add(Items.BRUSH)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.ALWAYS_USABLE_ON_ENTITY)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_ENTITY)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.ALWAYS_USABLE_ON_MISS)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_MISS)
 		;
 
-		getOrCreateTagBuilder(ModItemTags.USABLE)
+		getOrCreateTagBuilder(DynamicCrosshairItemTags.USABLE)
 				.addOptionalTag(ConventionalItemTags.FOODS)
 				.addOptionalTag(ConventionalItemTags.ARMORS)
 				.add(Items.ELYTRA)

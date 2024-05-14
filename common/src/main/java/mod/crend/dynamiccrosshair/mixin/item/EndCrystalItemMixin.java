@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.Mixin;
 public class EndCrystalItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
+		if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
 			if (context.isWithBlock()) {
 				Block block = context.getBlock();
-				if ((block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) && context.world.isAir(context.getBlockPos().up())) {
+				if ((block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) && context.getWorld().isAir(context.getBlockPos().up())) {
 					return InteractionType.PLACE_BLOCK;
 				}
 			}

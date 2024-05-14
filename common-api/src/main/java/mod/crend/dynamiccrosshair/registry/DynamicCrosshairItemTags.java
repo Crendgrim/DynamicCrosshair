@@ -6,7 +6,7 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
-public class ModItemTags {
+public class DynamicCrosshairItemTags {
 	public static final TagKey<Item> TOOLS = of("tools");
 	public static final TagKey<Item> THROWABLES = of("throwables");
 	public static final TagKey<Item> SHIELDS = of("shields");

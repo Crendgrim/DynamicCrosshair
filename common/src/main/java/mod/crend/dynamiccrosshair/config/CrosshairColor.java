@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.config;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 
 public record CrosshairColor(CrosshairConfigColor color, int customColor, boolean forced) {
 	public int getColor() {
@@ -11,7 +11,7 @@ public record CrosshairColor(CrosshairConfigColor color, int customColor, boolea
 		};
 	}
 	private static int getDefaultColor() {
-		CrosshairColor defaultColor = DynamicCrosshair.config.getColor();
+		CrosshairColor defaultColor = DynamicCrosshairMod.config.getColor();
 		return (defaultColor.color() == CrosshairConfigColor.Custom ? defaultColor.customColor : defaultColor.color.color);
 	}
 }

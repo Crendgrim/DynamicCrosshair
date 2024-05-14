@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
@@ -18,14 +18,14 @@ public class SwordItemMixin extends ToolItem implements DynamicCrosshairItem {
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (context.canUseWeaponAsTool() && !DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnBreakableBlock()) {
+		if (context.canUseWeaponAsTool() && !DynamicCrosshairMod.config.dynamicCrosshairMeleeWeaponOnBreakableBlock()) {
 			BlockState blockState = context.getBlockState();
 			if (context.getItemStack().getMiningSpeedMultiplier(blockState) > 1.0f
-					&& this.canMine(blockState, context.world, context.getBlockPos(), context.player)) {
+					&& this.canMine(blockState, context.getWorld(), context.getBlockPos(), context.getPlayer())) {
 				return InteractionType.NO_ACTION;
 			}
 		}
-		if (context.isWithEntity() && !DynamicCrosshair.config.dynamicCrosshairMeleeWeaponOnEntity()) {
+		if (context.isWithEntity() && !DynamicCrosshairMod.config.dynamicCrosshairMeleeWeaponOnEntity()) {
 			return InteractionType.NO_ACTION;
 		}
 		return InteractionType.MELEE_WEAPON;

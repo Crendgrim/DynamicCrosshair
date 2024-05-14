@@ -3,8 +3,9 @@ package mod.crend.dynamiccrosshair.render;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mod.crend.dynamiccrosshair.AutoHudCompat;
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.component.Crosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.api.Crosshair;
+import mod.crend.dynamiccrosshair.component.CrosshairComponent;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairColor;
 import mod.crend.dynamiccrosshair.config.CrosshairModifier;
@@ -33,7 +34,7 @@ public class CrosshairRenderer {
 	}
 
 	public static void preRender() {
-		setColor(DynamicCrosshair.config.getColor(), false);
+		setColor(DynamicCrosshairMod.config.getColor(), false);
 	}
 
 	public static void fixCenteredCrosshairPre(DrawContext context, int x, int y) {
@@ -57,13 +58,13 @@ public class CrosshairRenderer {
 	}
 
 	public static void render(DrawContext context, int x, int y) {
-		Crosshair crosshair = CrosshairHandler.getActiveCrosshair();
+		CrosshairComponent crosshair = new CrosshairComponent(CrosshairHandler.getActiveCrosshair());
 		if (crosshair.hasStyle()) {
 			CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
 			setColor(crosshairStyle.getColor(), false);
 			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
 		} else if (CrosshairHandler.forceShowCrosshair) {
-			CrosshairStyle crosshairStyle = Crosshair.REGULAR.getCrosshairStyle();
+			CrosshairStyle crosshairStyle = new CrosshairComponent(Crosshair.REGULAR).getCrosshairStyle();
 			setColor(crosshairStyle.getColor(), true);
 			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
 		}

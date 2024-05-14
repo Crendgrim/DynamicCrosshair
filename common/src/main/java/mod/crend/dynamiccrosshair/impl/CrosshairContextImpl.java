@@ -1,11 +1,14 @@
-package mod.crend.dynamiccrosshair.api;
+package mod.crend.dynamiccrosshair.impl;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.api.CrosshairContext;
+import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
+import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshair.api.DynamicCrosshairApiItemStack;
+import mod.crend.dynamiccrosshair.api.exception.InvalidContextState;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import mod.crend.dynamiccrosshair.impl.ApiList;
-import mod.crend.dynamiccrosshair.impl.ContextedApiImpl;
 import mod.crend.dynamiccrosshair.mixin.item.BlockItemAccessor;
 import mod.crend.dynamiccrosshair.mixin.item.ItemAccessor;
 import net.minecraft.block.Block;
@@ -36,7 +39,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @SuppressWarnings("unused")
-public class CrosshairContext {
+public class CrosshairContextImpl implements CrosshairContext {
 
 	@NotNull
 	public ClientWorld world;
@@ -47,7 +50,7 @@ public class CrosshairContext {
 
 	private final ContextedApiImpl api;
 
-	public CrosshairContext() {
+	public CrosshairContextImpl() {
 		assert MinecraftClient.getInstance().world != null;
 		assert MinecraftClient.getInstance().player != null;
 		assert MinecraftClient.getInstance().crosshairTarget != null;
@@ -59,6 +62,22 @@ public class CrosshairContext {
 		invalidateHitResult(hitResult);
 	}
 
+	@Override
+	public ClientWorld getWorld() {
+		return world;
+	}
+
+	@Override
+	public ClientPlayerEntity getPlayer() {
+		return player;
+	}
+
+	@Override
+	public HitResult getHitResult() {
+		return hitResult;
+	}
+
+	@Override
 	public void invalidateHitResult(HitResult newHitResult) {
 		assert newHitResult != null;
 		assert MinecraftClient.getInstance().world != null;
@@ -96,6 +115,7 @@ public class CrosshairContext {
 		}
 	}
 
+	@Override
 	public void invalidateItem(Hand hand) {
 		switch (hand) {
 			case MAIN_HAND -> itemStackMainHand = null;
@@ -103,10 +123,12 @@ public class CrosshairContext {
 		}
 	}
 
+	@Override
 	public boolean isTargeting() {
 		return hitResult.getType() != HitResult.Type.MISS;
 	}
 
+	@Override
 	public boolean isEmptyHanded() {
 		return (player.getMainHandStack().isEmpty() && player.getOffHandStack().isEmpty());
 	}
@@ -114,6 +136,7 @@ public class CrosshairContext {
 	/**
 	 * @return true if player is not crouching, or if they are crouching but both hands are empty
 	 */
+	@Override
 	public boolean shouldInteract() {
 		return (!player.shouldCancelInteraction() || isEmptyHanded());
 	}
@@ -124,14 +147,17 @@ public class CrosshairContext {
 	private BlockState blockState = null;
 	private BlockEntity blockEntity = null;
 
+	@Override
 	public boolean isWithBlock() {
 		return withBlock;
 	}
 
+	@Override
 	public BlockPos getBlockPos() {
 		return blockPos;
 	}
 
+	@Override
 	public BlockState getBlockState() {
 		if (!withBlock) throw new InvalidContextState("Called getBlockState() without a targeted block!");
 		if (blockPos == null) throw new InvalidContextState("In getBlockState(): blockPos is null despite targeted block!");
@@ -141,10 +167,12 @@ public class CrosshairContext {
 		return blockState;
 	}
 
+	@Override
 	public Block getBlock() {
 		return getBlockState().getBlock();
 	}
 
+	@Override
 	public BlockEntity getBlockEntity() {
 		if (!withBlock) throw new InvalidContextState("Called getBlockEntity() without a targeted block!");
 		if (blockPos == null) throw new InvalidContextState("In getBlockEntity(): blockPos is null despite targeted block!");
@@ -154,28 +182,34 @@ public class CrosshairContext {
 		return blockEntity;
 	}
 
+	@Override
 	public FluidState getFluidState() {
 		if (!withBlock) throw new InvalidContextState("Called getFluidState() without a targeted block!");
 		if (blockPos == null) throw new InvalidContextState("In getFluidState(): blockPos is null despite targeted block!");
 		return world.getFluidState(blockPos);
 	}
 
+	@Override
 	public BlockHitResult getBlockHitResult() {
 		if (!withBlock) throw new InvalidContextState("Called getFluidState() without a targeted block!");
 		return (BlockHitResult) hitResult;
 	}
 
+	@Override
 	public Direction getBlockHitSide() {
 		return getBlockHitResult().getSide();
 	}
 
+	@Override
 	public BlockHitResult raycastWithFluid(RaycastContext.FluidHandling fluidHandling) {
 		return ItemAccessor.invokeRaycast(world, player, fluidHandling);
 	}
+	@Override
 	public BlockHitResult raycastWithFluid() {
 		return raycastWithFluid(RaycastContext.FluidHandling.ANY);
 	}
 
+	@Override
 	public EntityHitResult raycastForEntity(double d) {
 		Vec3d vCamPos = player.getCameraPosVec(1.0f);
 		Vec3d vRotation = player.getRotationVec(1.0f);
@@ -187,9 +221,11 @@ public class CrosshairContext {
 	private boolean withEntity = false;
 	private Entity entity = null;
 
+	@Override
 	public boolean isWithEntity() {
 		return withEntity;
 	}
+	@Override
 	public Entity getEntity() {
 		if (!withEntity) throw new InvalidContextState("Called getEntity() without a targeted entity!");
 		if (entity == null) throw new InvalidContextState("In getEntity(): entity is null despite targeted entity!");
@@ -201,19 +237,24 @@ public class CrosshairContext {
 	private ItemStack itemStackMainHand = null;
 	private ItemStack itemStackOffHand = null;
 
+	@Override
 	public Hand getHand() {
 		return hand;
 	}
+	@Override
 	public void setHand(Hand hand) {
 		this.hand = hand;
 	}
+	@Override
 	public boolean isMainHand() {
 		return hand == Hand.MAIN_HAND;
 	}
+	@Override
 	public boolean isOffHand() {
 		return hand == Hand.OFF_HAND;
 	}
 
+	@Override
 	public ItemStack getItemStack(Hand hand) {
 		ItemStack itemStack = switch (hand) {
 			case MAIN_HAND -> itemStackMainHand;
@@ -228,26 +269,32 @@ public class CrosshairContext {
 		}
 		return itemStack;
 	}
+	@Override
 	public ItemStack getItemStack() {
 		return getItemStack(hand);
 	}
 
+	@Override
 	public Item getItem() {
 		return getItemStack().getItem();
 	}
 
+	@Override
 	public DynamicCrosshairApiItemStack getItemStackMixin() {
 		return (DynamicCrosshairApiItemStack) (Object) getItemStack();
 	}
 
+	@Override
 	public boolean isActiveItem() {
 		return player.getActiveItem().equals(getItemStack());
 	}
 
+	@Override
 	public boolean isCoolingDown() {
 		return player.getItemCooldownManager().isCoolingDown(getItem());
 	}
 
+	@Override
 	public boolean canPlaceItemAsBlock() {
 		if (!withBlock) return false;
 		BlockItemAccessor blockItem = (BlockItemAccessor) getItem();
@@ -260,47 +307,56 @@ public class CrosshairContext {
 		}
 	}
 
+	@Override
 	public boolean canUseWeaponAsTool() {
-		return isWithBlock() && DynamicCrosshair.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
+		return isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
 	}
 
+	@Override
 	public boolean isRangedWeaponCharged(int bound) {
 		return (isActiveItem() && getItem().getMaxUseTime(getItemStack()) - player.getItemUseTimeLeft() >= bound);
 	}
 
 
+	@Override
 	public boolean includeUsableItem() {
-		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingUsableItem()) {
+		return switch (DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem()) {
 			case Always -> true;
 			case IfInteractable -> !isCoolingDown();
 			case Disabled -> false;
 		};
 	}
+	@Override
 	public boolean includeThrowable() {
-		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingThrowable()) {
+		return switch (DynamicCrosshairMod.config.dynamicCrosshairHoldingThrowable()) {
 			case Always -> true;
 			case IfInteractable -> !isCoolingDown();
 			case Disabled -> false;
 		};
 	}
+	@Override
 	public boolean includeRangedWeapon() {
-		return DynamicCrosshair.config.dynamicCrosshairHoldingRangedWeapon() != UsableCrosshairPolicy.Disabled;
+		return DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() != UsableCrosshairPolicy.Disabled;
 	}
+	@Override
 	public boolean includeMeleeWeapon() {
-		return isMainHand() && DynamicCrosshair.config.dynamicCrosshairHoldingMeleeWeapon();
+		return isMainHand() && DynamicCrosshairMod.config.dynamicCrosshairHoldingMeleeWeapon();
 	}
+	@Override
 	public boolean includeTool() {
-		return isMainHand() && switch (DynamicCrosshair.config.dynamicCrosshairHoldingTool()) {
+		return isMainHand() && switch (DynamicCrosshairMod.config.dynamicCrosshairHoldingTool()) {
 			case Always -> true;
 			case IfTargeting -> isTargeting();
 			case Disabled -> false;
 		};
 	}
+	@Override
 	public boolean includeShield() {
-		return DynamicCrosshair.config.dynamicCrosshairHoldingShield() && !isCoolingDown();
+		return DynamicCrosshairMod.config.dynamicCrosshairHoldingShield() && !isCoolingDown();
 	}
+	@Override
 	public boolean includeHoldingBlock() {
-		return switch (DynamicCrosshair.config.dynamicCrosshairHoldingBlock()) {
+		return switch (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock()) {
 			case Always, IfInteractable -> true;
 			case IfTargeting -> isTargeting();
 			case Disabled -> false;
@@ -310,6 +366,7 @@ public class CrosshairContext {
 
 	private ApiList apiList = null;
 
+	@Override
 	public List<DynamicCrosshairApi> apis() {
 		if (apiList == null) {
 			apiList = new ApiList();
@@ -325,11 +382,13 @@ public class CrosshairContext {
 		return apiList.get();
 	}
 
+	@Override
 	public ContextedApiImpl api() {
 		return api;
 	}
 
-	public <R> @Nullable R withApis(Function<DynamicCrosshairApi, R> lambda) {
+	@Override
+	public <R> @Nullable R withApisUntilNonNull(Function<DynamicCrosshairApi, R> lambda) {
 		for (DynamicCrosshairApi api : apis()) {
 			try {
 				R result = lambda.apply(api);

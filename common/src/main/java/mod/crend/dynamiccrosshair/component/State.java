@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.component;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshair.impl.CrosshairContextImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -156,7 +157,7 @@ public class State {
 	public final CrosshairContext context;
 
 	public State() {
-		context = new CrosshairContext();
+		context = new CrosshairContextImpl();
 	}
 
 	public boolean changed(HitResult hitResult, ClientPlayerEntity player) {

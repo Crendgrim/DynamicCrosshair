@@ -15,7 +15,7 @@ public class ArmorItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(context.getItemStack());
-		if (EnchantmentHelper.hasBindingCurse(context.player.getEquippedStack(slot))) {
+		if (EnchantmentHelper.hasBindingCurse(context.getPlayer().getEquippedStack(slot))) {
 			return InteractionType.NO_ACTION;
 		}
 		return InteractionType.EQUIP_ITEM;

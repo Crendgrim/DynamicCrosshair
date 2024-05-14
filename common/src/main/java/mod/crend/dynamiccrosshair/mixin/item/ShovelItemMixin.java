@@ -21,7 +21,7 @@ public class ShovelItemMixin extends ItemMixin implements DynamicCrosshairItem {
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (context.isWithBlock()) {
 			if (PATH_STATES.get(context.getBlock()) != null) {
-				if (context.world.getBlockState(context.getBlockPos().up()).isAir()) {
+				if (context.getWorld().getBlockState(context.getBlockPos().up()).isAir()) {
 					return InteractionType.USABLE_TOOL;
 				}
 			}

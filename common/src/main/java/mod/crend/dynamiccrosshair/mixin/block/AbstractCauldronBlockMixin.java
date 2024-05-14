@@ -1,20 +1,15 @@
 package mod.crend.dynamiccrosshair.mixin.block;
 
-import mod.crend.dynamiccrosshair.PlatformUtils;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairBlock;
 import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.component.Crosshair;
 import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BannerPatternsComponent;
 import net.minecraft.component.type.PotionContentsComponent;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BannerItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BucketItem;

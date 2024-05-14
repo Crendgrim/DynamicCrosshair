@@ -22,7 +22,7 @@ public abstract class CatEntityMixin extends TameableEntityMixin implements Dyna
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (this.isTamed() && this.isOwner(context.player)) {
+		if (this.isTamed() && this.isOwner(context.getPlayer())) {
 			if (context.getItem() instanceof DyeItem dye && this.getCollarColor() != dye.getColor()) {
 				return InteractionType.USE_ITEM_ON_ENTITY;
 			}

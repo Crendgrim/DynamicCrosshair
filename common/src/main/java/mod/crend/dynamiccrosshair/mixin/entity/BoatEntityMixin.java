@@ -18,7 +18,7 @@ public abstract class BoatEntityMixin implements DynamicCrosshairEntity {
 		if (this instanceof VehicleInventory) {
 			return InteractionType.INTERACT_WITH_ENTITY;
 		}
-		if (!context.player.shouldCancelInteraction() && this.canAddPassenger(context.player)) {
+		if (!context.getPlayer().shouldCancelInteraction() && this.canAddPassenger(context.getPlayer())) {
 			return InteractionType.MOUNT_ENTITY;
 		}
 		return InteractionType.NO_ACTION;

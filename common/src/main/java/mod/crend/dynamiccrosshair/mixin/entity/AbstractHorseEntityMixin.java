@@ -27,7 +27,7 @@ public abstract class AbstractHorseEntityMixin extends AnimalEntityMixin impleme
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (!this.hasPassengers() && !this.isBaby()) {
-			if (this.isTame() && context.player.shouldCancelInteraction()) {
+			if (this.isTame() && context.getPlayer().shouldCancelInteraction()) {
 				return InteractionType.INTERACT_WITH_ENTITY;
 			} else {
 				ItemStack itemStack = context.getItemStack();

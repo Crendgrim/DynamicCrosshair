@@ -21,7 +21,7 @@ public class ShearsItemMixin extends ItemMixin implements DynamicCrosshairItem {
 			if (block instanceof AbstractPlantStemBlock plantStemBlock && !plantStemBlock.hasMaxAge(blockState)) {
 				return InteractionType.USABLE_TOOL;
 			}
-			if (!context.player.shouldCancelInteraction() && block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5) {
+			if (!context.getPlayer().shouldCancelInteraction() && block instanceof BeehiveBlock && blockState.get(BeehiveBlock.HONEY_LEVEL) >= 5) {
 				return InteractionType.USABLE_TOOL;
 			}
 		}

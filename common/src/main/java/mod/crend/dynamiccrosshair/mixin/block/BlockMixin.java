@@ -21,7 +21,7 @@ public abstract class BlockMixin extends AbstractBlock implements DynamicCrossha
 		if (context.api().isAlwaysInteractable(blockState)) {
 			return InteractionType.INTERACT_WITH_BLOCK;
 		}
-		if (context.player.isCreative() && context.api().isAlwaysInteractableInCreativeMode(blockState)) {
+		if (context.getPlayer().isCreative() && context.api().isAlwaysInteractableInCreativeMode(blockState)) {
 			return InteractionType.INTERACT_WITH_BLOCK;
 		}
 

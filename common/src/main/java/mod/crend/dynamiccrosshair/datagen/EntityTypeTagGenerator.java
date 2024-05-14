@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.datagen;
 
-import mod.crend.dynamiccrosshair.registry.ModEntityTypeTags;
+import mod.crend.dynamiccrosshair.registry.DynamicCrosshairEntityTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalEntityTypeTags;
@@ -16,14 +16,14 @@ class EntityTypeTagGenerator extends FabricTagProvider.EntityTypeTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(ModEntityTypeTags.IS_ALWAYS_INTERACTABLE)
+		getOrCreateTagBuilder(DynamicCrosshairEntityTags.IS_ALWAYS_INTERACTABLE)
 				.add(EntityType.LEASH_KNOT)
 				.add(EntityType.CHEST_MINECART)
 				.add(EntityType.HOPPER_MINECART)
 		;
 
-		getOrCreateTagBuilder(ModEntityTypeTags.IS_INTERACTABLE)
-				.addTag(ModEntityTypeTags.IS_ALWAYS_INTERACTABLE)
+		getOrCreateTagBuilder(DynamicCrosshairEntityTags.IS_INTERACTABLE)
+				.addTag(DynamicCrosshairEntityTags.IS_ALWAYS_INTERACTABLE)
 				.add(EntityType.ITEM_FRAME)
 				.addOptionalTag(ConventionalEntityTypeTags.BOATS)
 				.addOptionalTag(ConventionalEntityTypeTags.MINECARTS)

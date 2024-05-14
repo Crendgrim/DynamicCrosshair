@@ -1,6 +1,7 @@
-package mod.crend.dynamiccrosshair.api;
+package mod.crend.dynamiccrosshair.impl;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ public class ApiList {
 	private final List<DynamicCrosshairApi> apis = new LinkedList<>();
 	boolean finalized = false;
 
-	ApiList() { }
+	public ApiList() { }
 
 	public ApiList add(ItemStack itemStack) {
 		if (itemStack != null) {
@@ -39,8 +40,8 @@ public class ApiList {
 
 	public ApiList add(String namespace) {
 		if (!Identifier.DEFAULT_NAMESPACE.equals(namespace)) {
-			if (DynamicCrosshair.apis.containsKey(namespace)) {
-				DynamicCrosshairApi api = DynamicCrosshair.apis.get(namespace);
+			if (DynamicCrosshairMod.apis.containsKey(namespace)) {
+				DynamicCrosshairApi api = DynamicCrosshairMod.apis.get(namespace);
 				if (!apis.contains(api)) {
 					apis.add(api);
 				}
@@ -51,10 +52,10 @@ public class ApiList {
 
 	public List<DynamicCrosshairApi> get() {
 		if (!finalized) {
-			for (String namespace : DynamicCrosshair.alwaysCheckedApis) {
-				apis.add(DynamicCrosshair.apis.get(namespace));
+			for (String namespace : DynamicCrosshairMod.alwaysCheckedApis) {
+				apis.add(DynamicCrosshairMod.apis.get(namespace));
 			}
-			apis.add(DynamicCrosshair.vanillaApi);
+			apis.add(DynamicCrosshairMod.vanillaApi);
 			finalized = true;
 		}
 		return apis;

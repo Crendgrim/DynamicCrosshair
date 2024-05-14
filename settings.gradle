@@ -7,7 +7,11 @@ pluginManagement {
     }
 }
 
+include("common-api")
 include("common")
-enabled_platforms.split(",").each {include(it)}
+enabled_platforms.split(",").each {
+    include(it + "-api")
+    include(it)
+}
 
 rootProject.name = mod_id

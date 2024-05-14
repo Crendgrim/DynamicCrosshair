@@ -44,7 +44,7 @@ public abstract class RedstoneWireBlockMixin extends Block implements DynamicCro
 		if (isFullyConnected(state)) {
 			BlockState blockState = isFullyConnected(state) ? getDefaultState() : this.dotState;
 			blockState = blockState.with(POWER, state.get(POWER));
-			blockState = this.getPlacementState(context.world, blockState, context.getBlockPos());
+			blockState = this.getPlacementState(context.getWorld(), blockState, context.getBlockPos());
 			if (blockState != state) {
 				return InteractionType.INTERACT_WITH_BLOCK;
 			}

@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
@@ -18,7 +18,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.RaycastContext;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,9 +38,9 @@ public class BucketItemMixin extends Item implements DynamicCrosshairItem {
 		BlockHitResult blockHitResult = context.raycastWithFluid(RaycastContext.FluidHandling.SOURCE_ONLY);
 		switch (blockHitResult.getType()) {
 			case BLOCK -> {
-				Block block = context.world.getBlockState(blockHitResult.getBlockPos()).getBlock();
+				Block block = context.getWorld().getBlockState(blockHitResult.getBlockPos()).getBlock();
 				if (this.fluid == Fluids.EMPTY) {
-					FluidState bucketFluidState = context.world.getFluidState(blockHitResult.getBlockPos());
+					FluidState bucketFluidState = context.getWorld().getFluidState(blockHitResult.getBlockPos());
 					if (!bucketFluidState.isEmpty() && bucketFluidState.isStill()) {
 						return InteractionType.FILL_ITEM_FROM_BLOCK;
 					}
@@ -66,7 +65,7 @@ public class BucketItemMixin extends Item implements DynamicCrosshairItem {
 							return InteractionType.FILL_BLOCK_FROM_ITEM;
 						}
 					}
-					if (DynamicCrosshair.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
+					if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
 						return InteractionType.PLACE_BLOCK;
 					}
 				}
@@ -77,7 +76,7 @@ public class BucketItemMixin extends Item implements DynamicCrosshairItem {
 				}
 			}
 			case MISS -> {
-				if (this.fluid != Fluids.EMPTY && DynamicCrosshair.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
+				if (this.fluid != Fluids.EMPTY && DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
 					return InteractionType.PLACE_BLOCK;
 				}
 			}
