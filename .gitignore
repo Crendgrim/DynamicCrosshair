@@ -35,3 +35,8 @@ bin/
 run/
 
 .architectury-transformer/
+
+# others
+
+.cache
+.directory

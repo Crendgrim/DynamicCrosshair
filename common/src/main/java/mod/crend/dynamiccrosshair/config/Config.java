@@ -16,7 +16,7 @@ import java.util.List;
 @AutoYaclConfig(modid=DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
 public class Config {
     @SerialEntry
-    public CrosshairMode dynamicCrosshair = CrosshairMode.Advanced;
+    public boolean dynamicCrosshair = true;
     @SerialEntry
     public boolean disableDebugCrosshair = false;
     @SerialEntry

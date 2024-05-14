@@ -27,7 +27,6 @@
     ]
   },
   "mixins": [
-    "dynamiccrosshair.mixins.json",
     "dynamiccrosshair-common.mixins.json",
     "dynamiccrosshair.compat.mixins.json"
   ],

@@ -2,7 +2,7 @@ package mod.crend.dynamiccrosshair;
 
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
-import mod.crend.dynamiccrosshair.handler.VanillaApiImpl;
+import mod.crend.dynamiccrosshair.impl.VanillaApiImpl;
 
 import java.util.HashMap;
 import java.util.HashSet;

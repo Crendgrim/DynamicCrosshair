@@ -6,7 +6,7 @@
   "dynamiccrosshair.category.tweaks": "Твики",
 
   "dynamiccrosshair.option.dynamicCrosshair": "Динамически прятать прицел",
-  "dynamiccrosshair.option.dynamicCrosshair.description": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность\nПростой режим менее точен, но более производителен.",
+  "dynamiccrosshair.option.dynamicCrosshair.description": "Отображает прицел только если инструмент, оружие в руках или нацелен на сущность.",
   "dynamiccrosshair.option.disableDebugCrosshair": "Отключить осевой прицел в режиме отладки",
   "dynamiccrosshair.option.disableDebugCrosshair.description": "Заменить ось прицела когда открыт F3 дебаг скрин на стандартный(динамичный) прицел.",
   "dynamiccrosshair.option.thirdPersonCrosshair": "Показывать в режиме от 3 лица",
@@ -92,10 +92,6 @@
   "dynamiccrosshair.option.additionalUsableItems": "Дополнительные используемые предметы",
   "dynamiccrosshair.option.additionalUsableItems.description": " Список названий предметов, таких как \"minecraft:fire_charge\". Эти предметы будут добавлены в категорию используемых предметов.",
 
-
-  "dynamiccrosshair.mode.Simple": "Обычный",
-  "dynamiccrosshair.mode.Advanced": "Продвинутый",
-  "dynamiccrosshair.mode.Disabled": "Отключено",
 
   "dynamiccrosshair.policy.Always": "Всегда",
   "dynamiccrosshair.policy.IfTargeting": "Если нацелен",

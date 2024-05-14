@@ -1,0 +1,44 @@
+package mod.crend.dynamiccrosshair.api;
+
+public enum InteractionType {
+	USE_ITEM,
+	EQUIP_ITEM,
+	CONSUME_ITEM,
+	THROW_ITEM,
+	CHARGE_ITEM,
+
+	PLACE_BLOCK,
+	INTERACT_WITH_BLOCK,
+	USE_ITEM_ON_BLOCK,
+	PLACE_ITEM_ON_BLOCK,
+	TAKE_ITEM_FROM_BLOCK,
+	FILL_ITEM_FROM_BLOCK,
+	FILL_BLOCK_FROM_ITEM,
+	USE_BLOCK,
+	MOUNT_BLOCK,
+
+	PLACE_ENTITY,
+	INTERACT_WITH_ENTITY,
+	PICK_UP_ENTITY,
+	USE_ITEM_ON_ENTITY,
+	PLACE_ITEM_ON_ENTITY,
+	TAKE_ITEM_FROM_ENTITY,
+	FILL_ITEM_FROM_ENTITY,
+	FILL_ENTITY_FROM_ITEM,
+	MOUNT_ENTITY,
+
+	MELEE_WEAPON,
+	RANGED_WEAPON,
+	USABLE_TOOL,
+	TOOL,
+	CORRECT_TOOL,
+	INCORRECT_TOOL,
+	SHIELD,
+
+	/** Force a regular crosshair to be displayed */
+	FORCE_CROSSHAIR,
+	/** No interaction specified, use tags for evaluation */
+	EMPTY,
+	/** No interaction, do not fall back to tags */
+	NO_ACTION
+}

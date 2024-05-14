@@ -6,7 +6,7 @@
   "dynamiccrosshair.category.tweaks": "Tweaks",
 
   "dynamiccrosshair.option.dynamicCrosshair": "Dynamically hide",
-  "dynamiccrosshair.option.dynamicCrosshair.description": "Hides the crosshair unless holding a tool, weapon, or targeting an entity.\nSimple mode is less accurate, but more performant.",
+  "dynamiccrosshair.option.dynamicCrosshair.description": "Hides the crosshair unless holding a tool, weapon, or targeting an entity.",
   "dynamiccrosshair.option.disableDebugCrosshair": "Disable debug crosshair",
   "dynamiccrosshair.option.disableDebugCrosshair.description": "Replace the axis crosshair when the F3 debug screen is open with the standard (dynamic) crosshair.",
   "dynamiccrosshair.option.thirdPersonCrosshair": "Show in third person view",
@@ -101,10 +101,6 @@
   "dynamiccrosshair.option.additionalUsableItems.description": "A list of item names or tags, such as \"minecraft:fire_charge\". These items will be added to the usable items category.",
   "dynamiccrosshair.option.additionalInteractableBlocks": "Additional Interactable Blocks",
   "dynamiccrosshair.option.additionalInteractableBlocks.description": "A list of block names or tags, such as \"minecraft:oak_log\" or \"#minecraft:stairs\". These blocks will be added to the interactable blocks category.",
-
-  "dynamiccrosshair.mode.Simple": "Simple",
-  "dynamiccrosshair.mode.Advanced": "Advanced",
-  "dynamiccrosshair.mode.Disabled": "Disabled",
 
   "dynamiccrosshair.policy.Always": "Always",
   "dynamiccrosshair.policy.IfTargeting": "If Targeting",

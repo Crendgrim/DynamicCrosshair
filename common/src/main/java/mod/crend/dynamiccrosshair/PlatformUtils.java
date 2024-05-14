@@ -10,9 +10,4 @@ public class PlatformUtils {
 	public static boolean isModLoaded(String modid) {
 		throw new AssertionError();
 	}
-
-	@ExpectPlatform
-	public static Fluid getFluidFromBucket(BucketItem bucket) {
-		throw new AssertionError();
-	}
 }

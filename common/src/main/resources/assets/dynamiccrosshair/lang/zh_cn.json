@@ -6,7 +6,7 @@
   "dynamiccrosshair.category.tweaks": "调整",
 
   "dynamiccrosshair.option.dynamicCrosshair": "动态地隐藏准星",
-  "dynamiccrosshair.option.dynamicCrosshair.description": "除非手持工具、武器或瞄准实体，否则隐藏准星\n简单模式的精确度较低，但性能较好。",
+  "dynamiccrosshair.option.dynamicCrosshair.description": "除非手持工具、武器或瞄准实体，否则隐藏准星",
   "dynamiccrosshair.option.disableDebugCrosshair": "关闭调试准星（即 F3 模式准星）",
   "dynamiccrosshair.option.disableDebugCrosshair.description": "Replace the axis crosshair when the F3 debug screen is open with the standard (dynamic) crosshair.",
   "dynamiccrosshair.option.thirdPersonCrosshair": "在第三人称视角中显示十字准星",
@@ -89,10 +89,6 @@
   "dynamiccrosshair.option.additionalThrowables.description": "分号分隔的物品名称列表，如：\"minecraft:fire_charge\"。然后这些物品将显示其类别的十字准星。",
   "dynamiccrosshair.option.additionalUsableItems": "额外可使用物品",
   "dynamiccrosshair.option.additionalUsableItems.description": "分号分隔的物品名称列表，如：\"minecraft:fire_charge\"。然后这些物品将显示其类别的十字准星。",
-
-  "dynamiccrosshair.mode.Simple": "简单",
-  "dynamiccrosshair.mode.Advanced": "高级",
-  "dynamiccrosshair.mode.Disabled": "禁用",
 
   "dynamiccrosshair.policy.Always": "总是",
   "dynamiccrosshair.policy.IfTargeting": "若瞄准",

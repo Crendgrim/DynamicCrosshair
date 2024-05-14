@@ -36,8 +36,9 @@ public class ConfigUpdater implements mod.crend.libbamboo.opt.ConfigUpdater {
 	private boolean updateDynamicCrosshairMode(JsonObject json) {
 		if (json.has("dynamicCrosshair")) {
 			JsonElement dynamicCrosshair = json.get("dynamicCrosshair");
-			if (!(dynamicCrosshair instanceof JsonPrimitive dynamicCrosshairP) || dynamicCrosshairP.isBoolean()) {
-				json.add("dynamicCrosshair", new JsonPrimitive(CrosshairMode.Advanced.toString()));
+			if (!(dynamicCrosshair instanceof JsonPrimitive dynamicCrosshairP) || !dynamicCrosshairP.isBoolean()) {
+				if (dynamicCrosshair.getAsString().equals("Disabled")) json.add("dynamicCrosshair", new JsonPrimitive(false));
+				else json.add("dynamicCrosshair", new JsonPrimitive(true));
 				return true;
 			}
 		}

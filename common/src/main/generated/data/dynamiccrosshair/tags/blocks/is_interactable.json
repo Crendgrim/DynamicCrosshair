@@ -1,0 +1,23 @@
+{
+  "values": [
+    "#dynamiccrosshair:is_always_interactable",
+    "#dynamiccrosshair:is_always_interactable_in_creative_mode",
+    "minecraft:command_block",
+    "minecraft:jukebox",
+    "minecraft:lectern",
+    "minecraft:composter",
+    "minecraft:flower_pot",
+    "minecraft:cake",
+    "minecraft:sweet_berry_bush",
+    {
+      "id": "#minecraft:candles",
+      "required": false
+    },
+    {
+      "id": "#minecraft:campfires",
+      "required": false
+    },
+    "minecraft:chiseled_bookshelf",
+    "minecraft:decorated_pot"
+  ]
+}

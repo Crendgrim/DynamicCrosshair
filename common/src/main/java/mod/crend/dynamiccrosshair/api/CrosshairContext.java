@@ -1,10 +1,13 @@
 package mod.crend.dynamiccrosshair.api;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import mod.crend.dynamiccrosshair.mixin.BlockItemAccessor;
-import mod.crend.dynamiccrosshair.mixin.ItemAccessor;
+import mod.crend.dynamiccrosshair.impl.ApiList;
+import mod.crend.dynamiccrosshair.impl.ContextedApiImpl;
+import mod.crend.dynamiccrosshair.mixin.item.BlockItemAccessor;
+import mod.crend.dynamiccrosshair.mixin.item.ItemAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -27,8 +30,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class CrosshairContext {
@@ -40,6 +45,8 @@ public class CrosshairContext {
 	@NotNull
 	public HitResult hitResult;
 
+	private final ContextedApiImpl api;
+
 	public CrosshairContext() {
 		assert MinecraftClient.getInstance().world != null;
 		assert MinecraftClient.getInstance().player != null;
@@ -48,6 +55,7 @@ public class CrosshairContext {
 		player = MinecraftClient.getInstance().player;
 		hand = Hand.MAIN_HAND;
 		hitResult = MinecraftClient.getInstance().crosshairTarget;
+		api = new ContextedApiImpl(this);
 		invalidateHitResult(hitResult);
 	}
 
@@ -228,6 +236,10 @@ public class CrosshairContext {
 		return getItemStack().getItem();
 	}
 
+	public DynamicCrosshairApiItemStack getItemStackMixin() {
+		return (DynamicCrosshairApiItemStack) (Object) getItemStack();
+	}
+
 	public boolean isActiveItem() {
 		return player.getActiveItem().equals(getItemStack());
 	}
@@ -237,7 +249,7 @@ public class CrosshairContext {
 	}
 
 	public boolean canPlaceItemAsBlock() {
-		if (!withBlock) throw new InvalidContextState("Called canPlaceItemAsBlock() without a targeted block!");
+		if (!withBlock) return false;
 		BlockItemAccessor blockItem = (BlockItemAccessor) getItem();
 		ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, hand, getItemStack(), (BlockHitResult) hitResult);
 		try {
@@ -313,4 +325,20 @@ public class CrosshairContext {
 		return apiList.get();
 	}
 
+	public ContextedApiImpl api() {
+		return api;
+	}
+
+	public <R> @Nullable R withApis(Function<DynamicCrosshairApi, R> lambda) {
+		for (DynamicCrosshairApi api : apis()) {
+			try {
+				R result = lambda.apply(api);
+				if (result != null) return result;
+			} catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
+				if (e instanceof CrosshairContextChange) throw e;
+				CrosshairHandler.LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+			}
+		}
+		return null;
+	}
 }

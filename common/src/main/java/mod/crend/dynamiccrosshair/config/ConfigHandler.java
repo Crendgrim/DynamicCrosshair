@@ -14,8 +14,7 @@ public class ConfigHandler {
         CONFIG_STORE.config();
     }
 
-    public boolean isDynamicCrosshair() { return CONFIG_STORE.config().dynamicCrosshair != CrosshairMode.Disabled; }
-    public boolean isDynamicCrosshairSimple() { return CONFIG_STORE.config().dynamicCrosshair == CrosshairMode.Simple; }
+    public boolean isDynamicCrosshair() { return CONFIG_STORE.config().dynamicCrosshair; }
     public boolean isDisableDebugCrosshair() { return CONFIG_STORE.config().disableDebugCrosshair; }
     public boolean isThirdPersonCrosshair() { return CONFIG_STORE.config().thirdPersonCrosshair; }
     public boolean isHideWithScreen() { return CONFIG_STORE.config().hideWithScreen; }
