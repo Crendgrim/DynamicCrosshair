@@ -6,8 +6,20 @@ base {
     archivesName = "${rootProject.archivesBaseName}-api"
 }
 
+fabricApi {
+    configureDataGeneration()
+}
+
 dependencies {
-    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
-    // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation fabricApi.module("fabric-data-generation-api-v1", project.fabric_api_version)
+    modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+    inputs.property "api_version", project.api_version
+
+    filesMatching("fabric.mod.json") {
+        expand "api_version": project.api_version
+    }
 }

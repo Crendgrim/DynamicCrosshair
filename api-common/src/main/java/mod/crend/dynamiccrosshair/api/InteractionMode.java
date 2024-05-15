@@ -4,5 +4,5 @@ public enum InteractionMode {
 	PRIMARY,
 	SECONDARY,
 	BOTH,
-	NONE;
+	NONE
 }

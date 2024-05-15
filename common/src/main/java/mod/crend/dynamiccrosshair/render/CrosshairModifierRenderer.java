@@ -1,7 +1,6 @@
 package mod.crend.dynamiccrosshair.render;
 
 import mod.crend.libbamboo.controller.DecoratedEnumController;
-import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairConfigModifier;
 import net.minecraft.client.gui.DrawContext;
 

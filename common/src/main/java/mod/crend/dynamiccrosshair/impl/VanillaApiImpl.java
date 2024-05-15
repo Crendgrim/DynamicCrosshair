@@ -18,13 +18,9 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FishingRodItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
-import net.minecraft.item.ShearsItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.math.BlockPos;
 
 public class VanillaApiImpl implements DynamicCrosshairApi {
 
@@ -59,33 +55,6 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         return false;
     }
 
-    private Crosshair checkToolWithBlock(CrosshairContext context) {
-        ItemStack handItemStack = context.getItemStack();
-        Item handItem = handItemStack.getItem();
-        BlockPos blockPos = context.getBlockPos();
-        BlockState blockState = context.getBlockState();
-        if (blockState == null) {
-            return null;
-        }
-        if (handItem instanceof MiningToolItem) {
-            if (handItemStack.isSuitableFor(blockState)
-                    && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
-                return new Crosshair(InteractionType.CORRECT_TOOL);
-            } else {
-                return new Crosshair(InteractionType.INCORRECT_TOOL);
-            }
-        }
-        if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
-                && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
-            return new Crosshair(InteractionType.CORRECT_TOOL);
-        }
-        if (handItem instanceof ShearsItem) {
-            // (shears item && correct tool) is handled by the getMiningSpeedMultiplier branch
-            return new Crosshair(InteractionType.INCORRECT_TOOL);
-        }
-        return null;
-    }
-
     @Override
     public Crosshair overrideFromItem(CrosshairContext context, InteractionType interactionType) {
         // Special handling for some item categories
@@ -111,7 +80,7 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             case TOOL, USABLE_TOOL -> {
                 Crosshair crosshair = new Crosshair(interactionType);
                 if (context.isWithBlock()) {
-                    return Crosshair.combine(crosshair, checkToolWithBlock(context));
+                    return Crosshair.combine(crosshair, new Crosshair(context.checkToolWithBlock()));
                 }
             }
 
@@ -146,19 +115,19 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
     @Override
     public boolean isAlwaysInteractable(BlockState blockState) {
-        return blockState.isIn(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE)
+        return blockState.isIn(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE)
                 || BlockOrTag.isContainedIn(blockState.getBlock(), DynamicCrosshairMod.config.getAdditionalInteractableBlocks())
                 ;
     }
 
     @Override
     public boolean isAlwaysInteractableInCreativeMode(BlockState blockState) {
-        return blockState.isIn(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE_IN_CREATIVE_MODE);
+        return blockState.isIn(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE_IN_CREATIVE_MODE);
     }
 
     @Override
     public boolean isInteractable(BlockState blockState) {
-        return blockState.isIn(DynamicCrosshairBlockTags.IS_INTERACTABLE);
+        return blockState.isIn(DynamicCrosshairBlockTags.INTERACTABLE);
     }
 
 
@@ -166,12 +135,12 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
     @Override
     public boolean isAlwaysInteractable(EntityType<?> entityType) {
-        return entityType.isIn(DynamicCrosshairEntityTags.IS_ALWAYS_INTERACTABLE);
+        return entityType.isIn(DynamicCrosshairEntityTags.ALWAYS_INTERACTABLE);
     }
 
     @Override
     public boolean isInteractable(EntityType<?> entityType) {
-        return entityType.isIn(DynamicCrosshairEntityTags.IS_INTERACTABLE);
+        return entityType.isIn(DynamicCrosshairEntityTags.INTERACTABLE);
     }
 
 

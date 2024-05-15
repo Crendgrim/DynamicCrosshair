@@ -9,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 
+import java.util.Objects;
+
 @Mixin(Item.class)
 public abstract class ItemMixin implements DynamicCrosshairItem, DynamicCrosshairRangedItem {
 
@@ -17,7 +19,7 @@ public abstract class ItemMixin implements DynamicCrosshairItem, DynamicCrosshai
 		ItemStack itemStack = context.getItemStack();
 
 		if (itemStack.contains(DataComponentTypes.FOOD)) {
-			if (context.getPlayer().canConsume(false) || itemStack.get(DataComponentTypes.FOOD).canAlwaysEat()) {
+			if (context.getPlayer().canConsume(false) || Objects.requireNonNull(itemStack.get(DataComponentTypes.FOOD)).canAlwaysEat()) {
 				return InteractionType.CONSUME_ITEM;
 			}
 		}

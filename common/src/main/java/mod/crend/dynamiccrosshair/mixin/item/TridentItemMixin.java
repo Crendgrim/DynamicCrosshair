@@ -16,9 +16,7 @@ public abstract class TridentItemMixin extends ItemMixin implements DynamicCross
 	public boolean dynamiccrosshair$isCharged(CrosshairContext context) {
 		if (context.isActiveItem()) {
 			int i = getMaxUseTime(context.getItemStack()) - context.getPlayer().getItemUseTimeLeft();
-			if (i > 10) {
-				return true;
-			}
+			return (i > 10);
 		}
 		return false;
 	}

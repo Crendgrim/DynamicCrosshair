@@ -84,10 +84,6 @@ public interface CrosshairContext {
 		return getItemStack().getItem();
 	}
 
-	default DynamicCrosshairApiItemStack getItemStackMixin() {
-		return (DynamicCrosshairApiItemStack) (Object) getItemStack();
-	}
-
 	boolean isActiveItem();
 
 	boolean isCoolingDown();
@@ -110,4 +106,7 @@ public interface CrosshairContext {
 	ContextedApi api();
 
 	<R> @Nullable R withApisUntilNonNull(Function<DynamicCrosshairApi, R> lambda);
+
+	InteractionType checkToolWithBlock();
+
 }

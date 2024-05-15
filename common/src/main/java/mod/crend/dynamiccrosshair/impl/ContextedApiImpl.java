@@ -28,7 +28,7 @@ public class ContextedApiImpl implements ContextedApi {
 				}
 			} catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
 				if (e instanceof CrosshairContextChange) throw e;
-				CrosshairHandler.LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+				CrosshairHandler.LOGGER.error("Exception occurred during evaluation of API {}", api.getModId(), e);
 			}
 		}
 		return false;

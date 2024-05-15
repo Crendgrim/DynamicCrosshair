@@ -137,7 +137,7 @@ public class CrosshairHandler {
         LOGGER.info("  Offhand:{}", context.getItemStack(Hand.OFF_HAND));
         LOGGER.info("  Block:{}", context.isWithBlock() ? context.getBlockState() : "null");
         LOGGER.info("  Entity:{}", context.isWithEntity() ? context.getEntity() : "null");
-        LOGGER.info("Active APIs: " + apis.stream().map(api -> api.getNamespace() + ":" + api.getModId()).toList());
+        LOGGER.info("Active APIs: {}", apis.stream().map(api -> api.getNamespace() + ":" + api.getModId()).toList());
         LOGGER.info("Forcing invalidation: {}", apis.stream().filter(api -> api.forceInvalidate(context)).collect(Collectors.toList()));
         LOGGER.info("MAIN_HAND.computeCrosshair: {}", ((DynamicCrosshairItem) context.getItem()).dynamiccrosshair$compute(context));
         LOGGER.info(".computeFromItem(MAIN_HAND)");
@@ -175,7 +175,7 @@ public class CrosshairHandler {
                     hitResult = api.overrideHitResult(state.context, hitResult);
                 } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
                     if (e instanceof CrosshairContextChange) throw e;
-                    LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+                    LOGGER.error("Exception occurred during evaluation of API {}", api.getModId(), e);
                 }
             }
 
@@ -209,7 +209,7 @@ public class CrosshairHandler {
         } catch (InvalidContextState invalidContextState) {
             LOGGER.error("Encountered invalid context state: ", invalidContextState);
         } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
-            LOGGER.error("Encountered an unexpected error. This usually is due to outdated mod support." + e);
+            LOGGER.error("Encountered an unexpected error. This usually is due to outdated mod support.", e);
         }
         return Optional.empty();
     }

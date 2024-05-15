@@ -46,7 +46,7 @@ allprojects {
         flatDir { dir "${rootProject.getProjectDir()}/lib" }
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
         options.release = 21
     }
@@ -56,4 +56,4 @@ allprojects {
     }
 }
 
-task publishMod { }
+tasks.register('publishMod') {}

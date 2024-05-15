@@ -16,9 +16,7 @@ public abstract class BowItemMixin extends ItemMixin implements DynamicCrosshair
 	public boolean dynamiccrosshair$isCharged(CrosshairContext context) {
 		if (context.isActiveItem()) {
 			float progress = BowItem.getPullProgress(getMaxUseTime(context.getItemStack()) - context.getPlayer().getItemUseTimeLeft());
-			if (progress == 1.0f) {
-				return true;
-			}
+			return (progress == 1.0f);
 		}
 		return false;
 	}

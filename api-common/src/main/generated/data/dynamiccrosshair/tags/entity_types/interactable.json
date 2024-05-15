@@ -1,6 +1,6 @@
 {
   "values": [
-    "#dynamiccrosshair:is_always_interactable",
+    "#dynamiccrosshair:always_interactable",
     "minecraft:item_frame",
     {
       "id": "#c:boats",

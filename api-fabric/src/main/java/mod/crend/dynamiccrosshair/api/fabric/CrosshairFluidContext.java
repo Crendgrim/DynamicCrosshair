@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 @SuppressWarnings("unused")
 public class CrosshairFluidContext {
 
-	@SuppressWarnings("UnstableApiUsage")
 	public static boolean canInteractWithFluidStorage(CrosshairContext context, Storage<FluidVariant> storage) {
 		Storage<FluidVariant> handStorage = ContainerItemContext.forPlayerInteraction(context.getPlayer(), context.getHand()).find(FluidStorage.ITEM);
 		if (handStorage == null) return false;

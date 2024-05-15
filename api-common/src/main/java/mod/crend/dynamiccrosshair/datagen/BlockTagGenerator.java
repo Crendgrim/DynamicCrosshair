@@ -17,7 +17,7 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE)
+		getOrCreateTagBuilder(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE)
 				.addOptionalTag(ConventionalBlockTags.CHESTS)
 				.addOptionalTag(ConventionalBlockTags.PLAYER_WORKSTATIONS_FURNACES)
 				.addOptionalTag(ConventionalBlockTags.PLAYER_WORKSTATIONS_CRAFTING_TABLES)
@@ -50,7 +50,7 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				.add(Blocks.SMITHING_TABLE)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
+		getOrCreateTagBuilder(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
 				.add(Blocks.COMMAND_BLOCK)
 				.add(Blocks.CHAIN_COMMAND_BLOCK)
 				.add(Blocks.REPEATING_COMMAND_BLOCK)
@@ -58,9 +58,9 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				.add(Blocks.STRUCTURE_VOID)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairBlockTags.IS_INTERACTABLE)
-				.addTag(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE)
-				.addTag(DynamicCrosshairBlockTags.IS_ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
+		getOrCreateTagBuilder(DynamicCrosshairBlockTags.INTERACTABLE)
+				.addTag(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE)
+				.addTag(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
 				.add(Blocks.COMMAND_BLOCK)
 				.add(Blocks.JUKEBOX)
 				.add(Blocks.LECTERN)

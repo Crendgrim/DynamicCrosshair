@@ -23,14 +23,6 @@ dependencies {
     shadowCommon(project(path: ":api-common", configuration: "transformProductionFabric")) { transitive false }
 }
 
-processResources {
-    inputs.property "api_version", project.api_version
-
-    filesMatching("fabric.mod.json") {
-        expand "api_version": project.api_version
-    }
-}
-
 shadowJar {
     exclude "architectury.common.json"
 

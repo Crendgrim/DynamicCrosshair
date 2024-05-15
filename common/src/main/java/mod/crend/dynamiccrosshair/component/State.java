@@ -78,6 +78,7 @@ public class State {
 			y = blockPos.getY();
 			z = blockPos.getZ();
 			side = blockHitResult.getSide();
+			assert MinecraftClient.getInstance().world != null;
 			blockState = MinecraftClient.getInstance().world.getBlockState(blockPos);
 		}
 
@@ -138,6 +139,7 @@ public class State {
 		final Fluid fluid;
 
 		public HitStateFluid(BlockHitResult fluidHitResult) {
+			assert MinecraftClient.getInstance().world != null;
 			FluidState fluidState = MinecraftClient.getInstance().world.getFluidState(fluidHitResult.getBlockPos());
 			fluid = fluidState.getFluid();
 			level = fluid.getLevel(fluidState);
@@ -180,7 +182,7 @@ public class State {
 					return true;
 				}
 			} catch (RuntimeException e) {
-				LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+				LOGGER.error("Exception occurred during evaluation of API {}", api.getModId(), e);
 			}
 		}
 

@@ -25,5 +25,11 @@
     }
   },
 
+  "entrypoints": {
+    "fabric-datagen": [
+      "mod.crend.dynamiccrosshair.datagen.DynamicCrosshairDataGenerator"
+    ]
+  },
+
   "license": "LGPL-3.0"
 }

@@ -16,14 +16,14 @@ class EntityTypeTagGenerator extends FabricTagProvider.EntityTypeTagProvider {
 
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(DynamicCrosshairEntityTags.IS_ALWAYS_INTERACTABLE)
+		getOrCreateTagBuilder(DynamicCrosshairEntityTags.ALWAYS_INTERACTABLE)
 				.add(EntityType.LEASH_KNOT)
 				.add(EntityType.CHEST_MINECART)
 				.add(EntityType.HOPPER_MINECART)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairEntityTags.IS_INTERACTABLE)
-				.addTag(DynamicCrosshairEntityTags.IS_ALWAYS_INTERACTABLE)
+		getOrCreateTagBuilder(DynamicCrosshairEntityTags.INTERACTABLE)
+				.addTag(DynamicCrosshairEntityTags.ALWAYS_INTERACTABLE)
 				.add(EntityType.ITEM_FRAME)
 				.addOptionalTag(ConventionalEntityTypeTags.BOATS)
 				.addOptionalTag(ConventionalEntityTypeTags.MINECARTS)

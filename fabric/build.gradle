@@ -136,4 +136,4 @@ unifiedPublishing {
     }
 }
 
-rootProject.tasks.getByName("publishMod").dependsOn tasks.getByName("publishUnified")
+rootProject.tasks.named("publishMod").get().dependsOn tasks.named("publishUnified")

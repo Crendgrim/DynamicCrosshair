@@ -2,9 +2,9 @@ package mod.crend.dynamiccrosshair.impl;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
+import mod.crend.dynamiccrosshair.api.InteractionType;
 import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApiItemStack;
 import mod.crend.dynamiccrosshair.api.exception.InvalidContextState;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
@@ -23,6 +23,8 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.MiningToolItem;
+import net.minecraft.item.ShearsItem;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -38,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
-@SuppressWarnings("unused")
 public class CrosshairContextImpl implements CrosshairContext {
 
 	@NotNull
@@ -63,17 +64,17 @@ public class CrosshairContextImpl implements CrosshairContext {
 	}
 
 	@Override
-	public ClientWorld getWorld() {
+	public @NotNull ClientWorld getWorld() {
 		return world;
 	}
 
 	@Override
-	public ClientPlayerEntity getPlayer() {
+	public @NotNull ClientPlayerEntity getPlayer() {
 		return player;
 	}
 
 	@Override
-	public HitResult getHitResult() {
+	public @NotNull HitResult getHitResult() {
 		return hitResult;
 	}
 
@@ -232,7 +233,6 @@ public class CrosshairContextImpl implements CrosshairContext {
 		return entity;
 	}
 
-
 	private Hand hand;
 	private ItemStack itemStackMainHand = null;
 	private ItemStack itemStackOffHand = null;
@@ -277,11 +277,6 @@ public class CrosshairContextImpl implements CrosshairContext {
 	@Override
 	public Item getItem() {
 		return getItemStack().getItem();
-	}
-
-	@Override
-	public DynamicCrosshairApiItemStack getItemStackMixin() {
-		return (DynamicCrosshairApiItemStack) (Object) getItemStack();
 	}
 
 	@Override
@@ -390,9 +385,36 @@ public class CrosshairContextImpl implements CrosshairContext {
 				if (result != null) return result;
 			} catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
 				if (e instanceof CrosshairContextChange) throw e;
-				CrosshairHandler.LOGGER.error("Exception occurred during evaluation of API " + api.getModId(), e);
+				CrosshairHandler.LOGGER.error("Exception occurred during evaluation of API {}", api.getModId(), e);
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public InteractionType checkToolWithBlock() {
+		if (!isWithBlock()) {
+			return InteractionType.EMPTY;
+		}
+		BlockState blockState = getBlockState();
+		ItemStack handItemStack = getItemStack();
+		Item handItem = getItem();
+		if (handItem instanceof MiningToolItem) {
+			if (handItemStack.isSuitableFor(blockState)
+					&& handItem.canMine(blockState, getWorld(), blockPos, getPlayer())) {
+				return InteractionType.CORRECT_TOOL;
+			} else {
+				return InteractionType.INCORRECT_TOOL;
+			}
+		}
+		if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
+				&& handItem.canMine(blockState, getWorld(), blockPos, getPlayer())) {
+			return InteractionType.CORRECT_TOOL;
+		}
+		if (handItem instanceof ShearsItem) {
+			// (shears item && correct tool) is handled by the getMiningSpeedMultiplier branch
+			return InteractionType.INCORRECT_TOOL;
+		}
+		return InteractionType.EMPTY;
 	}
 }
