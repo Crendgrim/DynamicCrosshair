@@ -7,10 +7,10 @@ pluginManagement {
     }
 }
 
-include("common-api")
+include("api-common")
 include("common")
 enabled_platforms.split(",").each {
-    include(it + "-api")
+    include("api-" + it)
     include(it)
 }
 

@@ -47,8 +47,8 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    api(project(path: ":common-api", configuration: "namedElements")) { transitive false }
-    include(project(path: ":fabric-api", configuration: "namedElements")) { transitive false }
+    api(project(path: ":api-common", configuration: "namedElements")) { transitive false }
+    api include(project(path: ":api-fabric", configuration: "namedElements")) { transitive false }
 }
 
 processResources {

@@ -32,6 +32,6 @@ dependencies {
 
     modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
 
-    api(project(path: ":common-api", configuration: "namedElements"))
-    shadowCommon(project(path: ":common-api", configuration: "transformProductionFabric")) { transitive false }
+    api(project(path: ":api-common", configuration: "namedElements"))
+    shadowCommon(project(path: ":api-common", configuration: "transformProductionFabric")) { transitive false }
 }
