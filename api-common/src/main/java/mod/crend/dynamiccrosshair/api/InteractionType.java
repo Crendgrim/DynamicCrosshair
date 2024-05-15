@@ -1,42 +1,46 @@
 package mod.crend.dynamiccrosshair.api;
 
 public enum InteractionType {
-	USE_ITEM(InteractionMode.RIGHT_CLICK),
-	EQUIP_ITEM(InteractionMode.RIGHT_CLICK),
-	CONSUME_ITEM(InteractionMode.RIGHT_CLICK),
-	THROW_ITEM(InteractionMode.RIGHT_CLICK),
-	CHARGE_ITEM(InteractionMode.RIGHT_CLICK),
+	USE_ITEM(InteractionMode.SECONDARY),
+	EQUIP_ITEM(InteractionMode.SECONDARY),
+	CONSUME_ITEM(InteractionMode.SECONDARY),
+	THROW_ITEM(InteractionMode.SECONDARY),
+	CHARGE_ITEM(InteractionMode.SECONDARY),
 
-	PLACE_BLOCK(InteractionMode.RIGHT_CLICK),
-	INTERACT_WITH_BLOCK(InteractionMode.RIGHT_CLICK),
-	USE_ITEM_ON_BLOCK(InteractionMode.RIGHT_CLICK),
-	PLACE_ITEM_ON_BLOCK(InteractionMode.RIGHT_CLICK),
-	TAKE_ITEM_FROM_BLOCK(InteractionMode.RIGHT_CLICK),
-	FILL_ITEM_FROM_BLOCK(InteractionMode.RIGHT_CLICK),
-	FILL_BLOCK_FROM_ITEM(InteractionMode.RIGHT_CLICK),
-	USE_BLOCK(InteractionMode.RIGHT_CLICK),
-	MOUNT_BLOCK(InteractionMode.RIGHT_CLICK),
+	TARGET_BLOCK(InteractionMode.PRIMARY),
+	PLACE_BLOCK(InteractionMode.SECONDARY),
+	INTERACT_WITH_BLOCK(InteractionMode.SECONDARY),
+	USE_ITEM_ON_BLOCK(InteractionMode.SECONDARY),
+	PLACE_ITEM_ON_BLOCK(InteractionMode.SECONDARY),
+	TAKE_ITEM_FROM_BLOCK(InteractionMode.SECONDARY),
+	FILL_ITEM_FROM_BLOCK(InteractionMode.SECONDARY),
+	FILL_BLOCK_FROM_ITEM(InteractionMode.SECONDARY),
+	USE_BLOCK(InteractionMode.SECONDARY),
+	MOUNT_BLOCK(InteractionMode.SECONDARY),
 
-	PLACE_ENTITY(InteractionMode.RIGHT_CLICK),
-	INTERACT_WITH_ENTITY(InteractionMode.RIGHT_CLICK),
-	PICK_UP_ENTITY(InteractionMode.RIGHT_CLICK),
-	USE_ITEM_ON_ENTITY(InteractionMode.RIGHT_CLICK),
-	PLACE_ITEM_ON_ENTITY(InteractionMode.RIGHT_CLICK),
-	TAKE_ITEM_FROM_ENTITY(InteractionMode.RIGHT_CLICK),
-	FILL_ITEM_FROM_ENTITY(InteractionMode.RIGHT_CLICK),
-	FILL_ENTITY_FROM_ITEM(InteractionMode.RIGHT_CLICK),
-	MOUNT_ENTITY(InteractionMode.RIGHT_CLICK),
+	TARGET_ENTITY(InteractionMode.PRIMARY),
+	PLACE_ENTITY(InteractionMode.SECONDARY),
+	INTERACT_WITH_ENTITY(InteractionMode.SECONDARY),
+	PICK_UP_ENTITY(InteractionMode.SECONDARY),
+	USE_ITEM_ON_ENTITY(InteractionMode.SECONDARY),
+	PLACE_ITEM_ON_ENTITY(InteractionMode.SECONDARY),
+	TAKE_ITEM_FROM_ENTITY(InteractionMode.SECONDARY),
+	FILL_ITEM_FROM_ENTITY(InteractionMode.SECONDARY),
+	FILL_ENTITY_FROM_ITEM(InteractionMode.SECONDARY),
+	MOUNT_ENTITY(InteractionMode.SECONDARY),
 
-	MELEE_WEAPON(InteractionMode.LEFT_CLICK),
-	RANGED_WEAPON(InteractionMode.RIGHT_CLICK),
+	MELEE_WEAPON(InteractionMode.PRIMARY),
+	RANGED_WEAPON(InteractionMode.SECONDARY),
+	RANGED_WEAPON_CHARGING(InteractionMode.SECONDARY),
+	RANGED_WEAPON_CHARGED(InteractionMode.SECONDARY),
 	USABLE_TOOL(InteractionMode.BOTH),
-	TOOL(InteractionMode.LEFT_CLICK),
-	CORRECT_TOOL(InteractionMode.LEFT_CLICK),
-	INCORRECT_TOOL(InteractionMode.LEFT_CLICK),
-	SHIELD(InteractionMode.RIGHT_CLICK),
+	TOOL(InteractionMode.PRIMARY),
+	CORRECT_TOOL(InteractionMode.PRIMARY),
+	INCORRECT_TOOL(InteractionMode.PRIMARY),
+	SHIELD(InteractionMode.SECONDARY),
 
 	/** Force a regular crosshair to be displayed */
-	FORCE_CROSSHAIR(InteractionMode.LEFT_CLICK),
+	FORCE_REGULAR_CROSSHAIR(InteractionMode.BOTH),
 	/** No interaction specified, use tags for evaluation */
 	EMPTY(InteractionMode.NONE),
 	/** No interaction, do not fall back to tags */
@@ -45,5 +49,27 @@ public enum InteractionType {
 	public final InteractionMode interactionMode;
 	InteractionType(InteractionMode interactionMode) {
 		this.interactionMode = interactionMode;
+	}
+
+	public InteractionType getPrimaryInteractionType() {
+		return switch (interactionMode) {
+			case PRIMARY -> this;
+			case BOTH -> {
+				if (this == USABLE_TOOL) yield TOOL;
+				yield this;
+			}
+			case SECONDARY, NONE -> EMPTY;
+		};
+	}
+
+	public InteractionType getSecondaryInteractionType() {
+		return switch (interactionMode) {
+			case SECONDARY -> this;
+			case BOTH -> {
+				if (this == USABLE_TOOL) yield USE_ITEM_ON_BLOCK;
+				yield this;
+			}
+			case PRIMARY, NONE -> EMPTY;
+		};
 	}
 }

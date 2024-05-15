@@ -12,7 +12,7 @@ public class SpyglassItemMixin extends ItemMixin implements DynamicCrosshairItem
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (DynamicCrosshairMod.config.dynamicCrosshairForceHoldingSpyglass()) {
-			return InteractionType.FORCE_CROSSHAIR;
+			return InteractionType.FORCE_REGULAR_CROSSHAIR;
 		}
 		return super.dynamiccrosshair$compute(context);
 	}

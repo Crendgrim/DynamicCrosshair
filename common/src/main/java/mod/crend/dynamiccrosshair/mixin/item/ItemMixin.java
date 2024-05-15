@@ -43,6 +43,11 @@ public abstract class ItemMixin implements DynamicCrosshairItem, DynamicCrosshai
 	}
 
 	@Override
+	public boolean dynamiccrosshair$isCharging(CrosshairContext context) {
+		return context.isActiveItem() && context.getPlayer().getItemUseTimeLeft() > 0;
+	}
+
+	@Override
 	public boolean dynamiccrosshair$isCharged(CrosshairContext context) {
 		return true;
 	}

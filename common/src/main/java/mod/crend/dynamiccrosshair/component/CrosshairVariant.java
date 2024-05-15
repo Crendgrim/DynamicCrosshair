@@ -1,4 +1,4 @@
-package mod.crend.dynamiccrosshair.api;
+package mod.crend.dynamiccrosshair.component;
 
 public enum CrosshairVariant {
     NONE,

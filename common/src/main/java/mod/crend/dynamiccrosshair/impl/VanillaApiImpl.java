@@ -1,12 +1,12 @@
 package mod.crend.dynamiccrosshair.impl;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.Crosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairRangedItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshair.registry.DynamicCrosshairBlockTags;
 import mod.crend.dynamiccrosshair.registry.DynamicCrosshairEntityTags;
@@ -18,8 +18,6 @@ import net.minecraft.block.ChiseledBookshelfBlock;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -73,18 +71,18 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         if (handItem instanceof MiningToolItem) {
             if (handItemStack.isSuitableFor(blockState)
                     && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
-                return Crosshair.CORRECT_TOOL;
+                return new Crosshair(InteractionType.CORRECT_TOOL);
             } else {
-                return Crosshair.INCORRECT_TOOL;
+                return new Crosshair(InteractionType.INCORRECT_TOOL);
             }
         }
         if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
                 && handItem.canMine(blockState, context.getWorld(), blockPos, context.getPlayer())) {
-            return Crosshair.CORRECT_TOOL;
+            return new Crosshair(InteractionType.CORRECT_TOOL);
         }
         if (handItem instanceof ShearsItem) {
             // (shears item && correct tool) is handled by the getMiningSpeedMultiplier branch
-            return Crosshair.INCORRECT_TOOL;
+            return new Crosshair(InteractionType.INCORRECT_TOOL);
         }
         return null;
     }
@@ -93,7 +91,7 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     public Crosshair overrideFromItem(CrosshairContext context, InteractionType interactionType) {
         // Special handling for tools
         if (interactionType == InteractionType.TOOL || interactionType == InteractionType.USABLE_TOOL) {
-            Crosshair crosshair = Crosshair.of(interactionType);
+            Crosshair crosshair = new Crosshair(interactionType);
             if (context.isWithBlock()) {
                 return Crosshair.combine(crosshair, checkToolWithBlock(context));
             }
@@ -104,9 +102,11 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         if (interactionType == InteractionType.RANGED_WEAPON) {
             DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
             if (rangedItem.dynamiccrosshair$isCharged(context)) {
-                return Crosshair.RANGED_WEAPON;
+                return new Crosshair(InteractionType.RANGED_WEAPON_CHARGED);
+            } else if (rangedItem.dynamiccrosshair$isCharging(context)) {
+                return new Crosshair(InteractionType.RANGED_WEAPON_CHARGING);
             }
-            return Crosshair.REGULAR_FIXED;
+            return new Crosshair(InteractionType.RANGED_WEAPON);
         }
 
         if (interactionType == InteractionType.EMPTY) {
@@ -114,10 +114,10 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
                 ItemStack itemStack = context.getItemStack();
                 if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && context.api().isAlwaysUsable(itemStack)) {
-                    return Crosshair.USABLE;
+                    return new Crosshair(InteractionType.USE_ITEM);
                 }
                 if (usableItemPolicy == UsableCrosshairPolicy.Always && context.api().isUsable(itemStack)) {
-                    return Crosshair.USABLE;
+                    return new Crosshair(InteractionType.USE_ITEM);
                 }
             }
         }

@@ -5,7 +5,6 @@ import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.Crosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
-import mod.crend.dynamiccrosshair.api.CrosshairVariant;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairBlock;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairEntity;
@@ -50,7 +49,8 @@ public class CrosshairHandler {
         InteractionType interactionType = ((DynamicCrosshairItem) context.getItem()).dynamiccrosshair$compute(context);
         interactionType = switch (interactionType) {
             case MELEE_WEAPON -> context.includeMeleeWeapon() ? interactionType : InteractionType.EMPTY;
-            case RANGED_WEAPON -> context.includeRangedWeapon() ? interactionType : InteractionType.EMPTY;
+            case RANGED_WEAPON, RANGED_WEAPON_CHARGING, RANGED_WEAPON_CHARGED ->
+                    context.includeRangedWeapon() ? interactionType : InteractionType.EMPTY;
             case PLACE_BLOCK -> context.includeHoldingBlock() ? interactionType : InteractionType.EMPTY;
             case SHIELD -> context.includeShield() ? interactionType : InteractionType.EMPTY;
             case TOOL, CORRECT_TOOL, INCORRECT_TOOL, USABLE_TOOL ->
@@ -70,19 +70,19 @@ public class CrosshairHandler {
 
         if (override != null) return override;
 
-        return Crosshair.of(interactionType);
+        return new Crosshair(interactionType);
     }
 
     private static Crosshair buildCrosshairAdvancedFromEntity(CrosshairContext context) {
         InteractionType interactionType = ((DynamicCrosshairEntity) context.getEntity()).dynamiccrosshair$compute(context);
-        if (interactionType != InteractionType.EMPTY) return Crosshair.of(interactionType);
+        if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
 
         return context.withApisUntilNonNull(api -> api.computeFromEntity(context));
     }
 
     private static Crosshair buildCrosshairAdvancedFromBlock(CrosshairContext context) {
         InteractionType interactionType = ((DynamicCrosshairBlock) context.getBlock()).dynamiccrosshair$compute(context);
-        if (interactionType != InteractionType.EMPTY) return Crosshair.of(interactionType);
+        if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
 
         return context.withApisUntilNonNull(api -> api.computeFromBlock(context));
     }
@@ -101,7 +101,7 @@ public class CrosshairHandler {
     private static Crosshair buildCrosshairDynamic(CrosshairContext context) {
         // Main hand
         Crosshair crosshair = buildCrosshairAdvancedByHand(context);
-        if (crosshair != null && crosshair.interactionMode().isRightClick()) {
+        if (crosshair != null && crosshair.isSecondaryInteraction()) {
             return crosshair;
         }
 
@@ -183,25 +183,25 @@ public class CrosshairHandler {
             }
 
             // State changed, build new crosshair
-            activeCrosshair = new Crosshair();
+            Crosshair newCrosshair = null;
 
             switch (hitResult.getType()) {
                 case ENTITY -> {
                     if (DynamicCrosshairMod.config.dynamicCrosshairOnEntity()) {
-                        activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.OnEntity);
+                        newCrosshair = new Crosshair(InteractionType.TARGET_ENTITY);
                     }
                 }
                 case BLOCK -> {
                     if (DynamicCrosshairMod.config.dynamicCrosshairOnBlock()) {
-                        activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.OnBlock);
+                        newCrosshair = new Crosshair(InteractionType.TARGET_BLOCK);
                     } else if (DynamicCrosshairMod.config.dynamicCrosshairOnInteractableBlock()) {
                         if (isBlockInteractable(state.context)) {
-                            activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.OnBlock);
+                            newCrosshair = new Crosshair(InteractionType.TARGET_BLOCK);
                         }
                     }
                 }
             }
-            activeCrosshair = activeCrosshair.updateFrom(buildCrosshairDynamic(state.context));
+            activeCrosshair = Crosshair.combine(buildCrosshairDynamic(state.context), newCrosshair);
         } catch (CrosshairContextChange crosshairContextChange) {
             // For some reason, we are being asked to re-evaluate the context.
             return buildCrosshair(crosshairContextChange.newHitResult, player);
@@ -252,14 +252,14 @@ public class CrosshairHandler {
             return result.get();
         }
 
-        if (activeCrosshair.isChanged()) {
+        if (activeCrosshair.hasInteraction()) {
             return true;
         }
         if (DynamicCrosshairMod.config.isDynamicCrosshair()) {
             return false;
         }
         // Dynamic crosshair disabled, no other crosshair computed: make sure to show a crosshair
-        activeCrosshair = activeCrosshair.withVariant(CrosshairVariant.Regular);
+        activeCrosshair = new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR);
         return true;
     }
 
