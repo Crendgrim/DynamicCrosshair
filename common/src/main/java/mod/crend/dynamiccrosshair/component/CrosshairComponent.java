@@ -43,6 +43,13 @@ public class CrosshairComponent {
                  FILL_ITEM_FROM_ENTITY,
                  FILL_ENTITY_FROM_ITEM
                     -> modifierUse = ModifierUse.USE_ITEM;
+            case SPYGLASS -> {
+                if (DynamicCrosshairMod.config.dynamicCrosshairForceHoldingSpyglass()) {
+                    variant = CrosshairVariant.Regular;
+                } else {
+                    modifierUse = ModifierUse.USE_ITEM;
+                }
+            }
             case THROW_ITEM
                     -> variant = CrosshairVariant.HoldingThrowable;
 

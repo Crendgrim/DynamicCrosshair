@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair.impl;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.Crosshair;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
@@ -89,35 +88,52 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
 
     @Override
     public Crosshair overrideFromItem(CrosshairContext context, InteractionType interactionType) {
-        // Special handling for tools
-        if (interactionType == InteractionType.TOOL || interactionType == InteractionType.USABLE_TOOL) {
-            Crosshair crosshair = new Crosshair(interactionType);
-            if (context.isWithBlock()) {
-                return Crosshair.combine(crosshair, checkToolWithBlock(context));
-            }
-            return null;
-        }
+        // Special handling for some item categories
 
-        // Special handling for ranged weapons
-        if (interactionType == InteractionType.RANGED_WEAPON) {
-            DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
-            if (rangedItem.dynamiccrosshair$isCharged(context)) {
-                return new Crosshair(InteractionType.RANGED_WEAPON_CHARGED);
-            } else if (rangedItem.dynamiccrosshair$isCharging(context)) {
-                return new Crosshair(InteractionType.RANGED_WEAPON_CHARGING);
-            }
-            return new Crosshair(InteractionType.RANGED_WEAPON);
-        }
-
-        if (interactionType == InteractionType.EMPTY) {
-            UsableCrosshairPolicy usableItemPolicy = DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem();
-            if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
-                ItemStack itemStack = context.getItemStack();
-                if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && context.api().isAlwaysUsable(itemStack)) {
-                    return new Crosshair(InteractionType.USE_ITEM);
+        if (context.getItemStack().isIn(DynamicCrosshairItemTags.MELEE_WEAPONS) && context.includeMeleeWeapon() && interactionType != InteractionType.USABLE_TOOL) {
+            if (context.canUseWeaponAsTool()) {
+                BlockState blockState = context.getBlockState();
+                if (blockState.getHardness(context.getWorld(), context.getBlockPos()) == 0.0f) {
+                    if (DynamicCrosshairMod.config.dynamicCrosshairMeleeWeaponOnBreakableBlock()) {
+                        return new Crosshair(InteractionType.MELEE_WEAPON);
+                    } else {
+                        return new Crosshair(InteractionType.CORRECT_TOOL);
+                    }
                 }
-                if (usableItemPolicy == UsableCrosshairPolicy.Always && context.api().isUsable(itemStack)) {
-                    return new Crosshair(InteractionType.USE_ITEM);
+            }
+
+            if (context.isWithEntity() && !DynamicCrosshairMod.config.dynamicCrosshairMeleeWeaponOnEntity()) {
+                return new Crosshair(InteractionType.NO_ACTION);
+            }
+        }
+
+        switch (interactionType) {
+            case TOOL, USABLE_TOOL -> {
+                Crosshair crosshair = new Crosshair(interactionType);
+                if (context.isWithBlock()) {
+                    return Crosshair.combine(crosshair, checkToolWithBlock(context));
+                }
+            }
+
+            case RANGED_WEAPON -> {
+                DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
+                if (rangedItem.dynamiccrosshair$isCharged(context)) {
+                    return new Crosshair(InteractionType.RANGED_WEAPON_CHARGED);
+                } else if (rangedItem.dynamiccrosshair$isCharging(context)) {
+                    return new Crosshair(InteractionType.RANGED_WEAPON_CHARGING);
+                }
+            }
+
+            case EMPTY -> {
+                UsableCrosshairPolicy usableItemPolicy = DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem();
+                if (usableItemPolicy != UsableCrosshairPolicy.Disabled) {
+                    ItemStack itemStack = context.getItemStack();
+                    if ((usableItemPolicy == UsableCrosshairPolicy.Always || !context.isCoolingDown()) && context.api().isAlwaysUsable(itemStack)) {
+                        return new Crosshair(InteractionType.USE_ITEM);
+                    }
+                    if (usableItemPolicy == UsableCrosshairPolicy.Always && context.api().isUsable(itemStack)) {
+                        return new Crosshair(InteractionType.USE_ITEM);
+                    }
                 }
             }
         }

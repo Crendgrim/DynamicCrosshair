@@ -23,6 +23,7 @@ public class AbstractCandleBlockMixin implements DynamicCrosshairBlock {
 					 CONSUME_ITEM,
 					 CHARGE_ITEM,
 					 EQUIP_ITEM,
+					 SPYGLASS,
 					 PLACE_BLOCK,
 					 NO_ACTION
 						-> InteractionType.NO_ACTION;

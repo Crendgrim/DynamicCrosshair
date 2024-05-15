@@ -312,11 +312,6 @@ public class CrosshairContextImpl implements CrosshairContext {
 		return isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
 	}
 
-	@Override
-	public boolean isRangedWeaponCharged(int bound) {
-		return (isActiveItem() && getItem().getMaxUseTime(getItemStack()) - player.getItemUseTimeLeft() >= bound);
-	}
-
 
 	@Override
 	public boolean includeUsableItem() {

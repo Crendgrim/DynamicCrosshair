@@ -14,14 +14,12 @@ import org.spongepowered.asm.mixin.Mixin;
 public class EndCrystalItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
-			if (context.isWithBlock()) {
-				Block block = context.getBlock();
-				if ((block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) && context.getWorld().isAir(context.getBlockPos().up())) {
-					return InteractionType.PLACE_BLOCK;
-				}
+		if (context.isWithBlock()) {
+			Block block = context.getBlock();
+			if ((block == Blocks.OBSIDIAN || block == Blocks.BEDROCK) && context.getWorld().isAir(context.getBlockPos().up())) {
+				return InteractionType.PLACE_BLOCK;
 			}
-		} else return InteractionType.PLACE_BLOCK;
+		}
 		return InteractionType.NO_ACTION;
 	}
 }

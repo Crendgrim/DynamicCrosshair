@@ -11,9 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 public class SpyglassItemMixin extends ItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (DynamicCrosshairMod.config.dynamicCrosshairForceHoldingSpyglass()) {
-			return InteractionType.FORCE_REGULAR_CROSSHAIR;
-		}
-		return super.dynamiccrosshair$compute(context);
+		return InteractionType.SPYGLASS;
 	}
 }

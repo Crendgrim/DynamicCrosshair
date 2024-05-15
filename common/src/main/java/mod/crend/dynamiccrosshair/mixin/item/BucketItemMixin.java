@@ -1,10 +1,8 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.config.BlockCrosshairPolicy;
 import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.FluidBlock;
@@ -65,9 +63,7 @@ public class BucketItemMixin extends Item implements DynamicCrosshairItem {
 							return InteractionType.FILL_BLOCK_FROM_ITEM;
 						}
 					}
-					if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
-						return InteractionType.PLACE_BLOCK;
-					}
+					return InteractionType.PLACE_BLOCK;
 				}
 			}
 			case ENTITY -> {
@@ -76,7 +72,7 @@ public class BucketItemMixin extends Item implements DynamicCrosshairItem {
 				}
 			}
 			case MISS -> {
-				if (this.fluid != Fluids.EMPTY && DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.Always) {
+				if (this.fluid != Fluids.EMPTY) {
 					return InteractionType.PLACE_BLOCK;
 				}
 			}

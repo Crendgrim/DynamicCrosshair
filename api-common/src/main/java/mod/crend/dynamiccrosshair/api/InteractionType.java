@@ -6,6 +6,7 @@ public enum InteractionType {
 	CONSUME_ITEM(InteractionMode.SECONDARY),
 	THROW_ITEM(InteractionMode.SECONDARY),
 	CHARGE_ITEM(InteractionMode.SECONDARY),
+	SPYGLASS(InteractionMode.SECONDARY),
 
 	TARGET_BLOCK(InteractionMode.PRIMARY),
 	PLACE_BLOCK(InteractionMode.SECONDARY),

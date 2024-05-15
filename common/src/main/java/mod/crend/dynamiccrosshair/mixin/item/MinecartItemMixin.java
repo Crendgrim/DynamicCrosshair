@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.Mixin;
 public class MinecartItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() == BlockCrosshairPolicy.IfInteractable) {
-			if (context.isWithBlock()) {
-				if (context.getBlockState().isIn(BlockTags.RAILS)) return InteractionType.PLACE_ENTITY;
+		if (context.isWithBlock()) {
+			if (context.getBlockState().isIn(BlockTags.RAILS)) {
+				return InteractionType.PLACE_ENTITY;
 			}
-		} else return InteractionType.PLACE_ENTITY;
+		}
 		return InteractionType.NO_ACTION;
 	}
 }

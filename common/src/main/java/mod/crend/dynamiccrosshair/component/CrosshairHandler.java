@@ -53,9 +53,11 @@ public class CrosshairHandler {
                     context.includeRangedWeapon() ? interactionType : InteractionType.EMPTY;
             case PLACE_BLOCK -> context.includeHoldingBlock() ? interactionType : InteractionType.EMPTY;
             case SHIELD -> context.includeShield() ? interactionType : InteractionType.EMPTY;
-            case TOOL, CORRECT_TOOL, INCORRECT_TOOL, USABLE_TOOL ->
+            case TOOL, CORRECT_TOOL, INCORRECT_TOOL ->
                     context.includeTool() ? interactionType : InteractionType.EMPTY;
-            case USE_ITEM, USE_ITEM_ON_BLOCK, USE_ITEM_ON_ENTITY, CHARGE_ITEM, EQUIP_ITEM, CONSUME_ITEM ->
+            case USABLE_TOOL ->
+                    context.includeTool() ? interactionType : InteractionType.USE_ITEM_ON_BLOCK;
+            case USE_ITEM, USE_ITEM_ON_BLOCK, USE_ITEM_ON_ENTITY, CHARGE_ITEM, EQUIP_ITEM, CONSUME_ITEM, SPYGLASS ->
                     context.includeUsableItem() ? interactionType : InteractionType.EMPTY;
             case THROW_ITEM -> context.includeThrowable() ? interactionType : InteractionType.EMPTY;
             default -> interactionType;
@@ -63,12 +65,11 @@ public class CrosshairHandler {
 
         InteractionType finalInteractionType = interactionType;
         Crosshair override = context.withApisUntilNonNull(api -> api.overrideFromItem(context, finalInteractionType));
+        if (override != null) return override;
 
         if (interactionType == InteractionType.EMPTY || interactionType == InteractionType.NO_ACTION) {
             return context.withApisUntilNonNull(api -> api.computeFromItem(context));
         }
-
-        if (override != null) return override;
 
         return new Crosshair(interactionType);
     }
@@ -101,7 +102,7 @@ public class CrosshairHandler {
     private static Crosshair buildCrosshairDynamic(CrosshairContext context) {
         // Main hand
         Crosshair crosshair = buildCrosshairAdvancedByHand(context);
-        if (crosshair != null && crosshair.isSecondaryInteraction()) {
+        if (crosshair != null && crosshair.hasSecondaryInteraction()) {
             return crosshair;
         }
 

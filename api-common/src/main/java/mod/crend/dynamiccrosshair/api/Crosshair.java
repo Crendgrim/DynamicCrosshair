@@ -33,6 +33,7 @@ public record Crosshair(
                 || other.secondaryInteraction == InteractionType.RANGED_WEAPON_CHARGED) {
             newSecondaryInteraction = other.secondaryInteraction;
         }
+        System.err.println("Combining " + this + " and " + other + " to Crosshair{primaryInteraction=" + newPrimaryInteraction + ", secondaryInteraction=" + newSecondaryInteraction + "}");
         return new Crosshair(newPrimaryInteraction, newSecondaryInteraction);
     }
 
@@ -44,7 +45,7 @@ public record Crosshair(
         return one.combine(other);
     }
 
-    public boolean isSecondaryInteraction() {
+    public boolean hasSecondaryInteraction() {
         return secondaryInteraction != InteractionType.EMPTY;
     }
 

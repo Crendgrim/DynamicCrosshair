@@ -96,8 +96,6 @@ public interface CrosshairContext {
 
 	boolean canUseWeaponAsTool();
 
-	boolean isRangedWeaponCharged(int bound);
-
 	boolean includeUsableItem();
 	boolean includeThrowable();
 	boolean includeRangedWeapon();

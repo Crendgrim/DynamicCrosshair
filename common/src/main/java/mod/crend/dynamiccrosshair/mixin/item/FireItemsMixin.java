@@ -27,10 +27,7 @@ public class FireItemsMixin implements DynamicCrosshairItem {
 			}
 			BlockPos firePos = context.getBlockPos().offset(((BlockHitResult) context.getHitResult()).getSide());
 			if (AbstractFireBlock.canPlaceAt(context.getWorld(), firePos, context.getPlayer().getHorizontalFacing())) {
-				if (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock() != BlockCrosshairPolicy.Disabled) {
-					return InteractionType.PLACE_BLOCK;
-				}
-				return InteractionType.USE_ITEM_ON_BLOCK;
+				return InteractionType.PLACE_BLOCK;
 			}
 		}
 		return InteractionType.NO_ACTION;
