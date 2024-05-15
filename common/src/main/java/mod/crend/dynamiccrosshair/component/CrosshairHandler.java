@@ -101,10 +101,7 @@ public class CrosshairHandler {
     private static Crosshair buildCrosshairDynamic(CrosshairContext context) {
         // Main hand
         Crosshair crosshair = buildCrosshairAdvancedByHand(context);
-        if (crosshair != null
-                && (crosshair.hasStyle() || crosshair.isLockedStyle())
-                && (crosshair.hasModifierUse() || crosshair.isLockedModifierUse())
-        ) {
+        if (crosshair != null && crosshair.interactionMode().isRightClick()) {
             return crosshair;
         }
 

@@ -19,15 +19,6 @@ public class CrosshairComponent {
     public boolean hasStyle() {
         return crosshair.hasStyle();
     }
-    public boolean isLockedStyle() {
-        return crosshair.isLockedStyle();
-    }
-    public boolean hasModifierUse() {
-        return crosshair.hasModifierUse();
-    }
-    public boolean isLockedModifierUse() {
-        return crosshair.isLockedModifierUse();
-    }
 
     public CrosshairStyle getCrosshairStyle() {
         return switch (crosshair.getVariant()) {

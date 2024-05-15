@@ -106,7 +106,7 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             if (rangedItem.dynamiccrosshair$isCharged(context)) {
                 return Crosshair.RANGED_WEAPON;
             }
-            return Crosshair.REGULAR.withFlag(Crosshair.Flag.FixedModifierUse);
+            return Crosshair.REGULAR_FIXED;
         }
 
         if (interactionType == InteractionType.EMPTY) {

@@ -4,58 +4,50 @@ public record Crosshair(
         CrosshairVariant variant,
         ModifierUse modifierUse,
         ModifierHit modifierHit,
-        boolean lockStyle,
-        boolean lockModifierUse,
-        boolean lockModifierHit,
+        InteractionMode interactionMode,
         boolean changed
 ){
-
-    public enum Flag {
-        FixedStyle,
-        FixedModifierUse,
-        FixedModifierHit,
-        FixedAll
-    }
-
     public static final Crosshair NONE = new Crosshair();
-    public static final Crosshair REGULAR = new Crosshair(CrosshairVariant.Regular);
-    public static final Crosshair HOLDING_BLOCK = new Crosshair(CrosshairVariant.HoldingBlock).withFlag(Flag.FixedAll);
-    public static final Crosshair MELEE_WEAPON = new Crosshair(CrosshairVariant.HoldingMeleeWeapon).withFlag(Flag.FixedStyle);
-    public static final Crosshair RANGED_WEAPON = new Crosshair(CrosshairVariant.HoldingRangedWeapon).withFlag(Flag.FixedAll);
-    public static final Crosshair THROWABLE = new Crosshair(CrosshairVariant.HoldingThrowable).withFlag(Flag.FixedAll);
-    public static final Crosshair TOOL = new Crosshair(CrosshairVariant.HoldingTool).withFlag(Flag.FixedStyle);
-    public static final Crosshair CORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierUse.NONE, ModifierHit.CORRECT_TOOL, true, false, true, true);
-    public static final Crosshair INCORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierUse.NONE, ModifierHit.INCORRECT_TOOL, true, false, true, true);
-    public static final Crosshair USABLE = new Crosshair(ModifierUse.USE_ITEM).withFlag(Flag.FixedModifierUse);
-    public static final Crosshair INTERACTABLE = new Crosshair(ModifierUse.INTERACTABLE).withFlag(Flag.FixedModifierUse);
-    public static final Crosshair SHIELD = new Crosshair(ModifierUse.SHIELD).withFlag(Flag.FixedModifierUse);
+    public static final Crosshair REGULAR = new Crosshair(CrosshairVariant.Regular, InteractionMode.NONE);
+    public static final Crosshair REGULAR_FIXED = new Crosshair(CrosshairVariant.Regular, InteractionMode.BOTH);
+    public static final Crosshair HOLDING_BLOCK = new Crosshair(CrosshairVariant.HoldingBlock, InteractionMode.RIGHT_CLICK);
+    public static final Crosshair MELEE_WEAPON = new Crosshair(CrosshairVariant.HoldingMeleeWeapon, InteractionMode.LEFT_CLICK);
+    public static final Crosshair RANGED_WEAPON = new Crosshair(CrosshairVariant.HoldingRangedWeapon, InteractionMode.RIGHT_CLICK);
+    public static final Crosshair THROWABLE = new Crosshair(CrosshairVariant.HoldingThrowable, InteractionMode.RIGHT_CLICK);
+    public static final Crosshair TOOL = new Crosshair(CrosshairVariant.HoldingTool, InteractionMode.LEFT_CLICK);
+    public static final Crosshair CORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierHit.CORRECT_TOOL);
+    public static final Crosshair INCORRECT_TOOL = new Crosshair(CrosshairVariant.HoldingTool, ModifierHit.INCORRECT_TOOL);
+    public static final Crosshair USABLE = new Crosshair(ModifierUse.USE_ITEM);
+    public static final Crosshair INTERACTABLE = new Crosshair(ModifierUse.INTERACTABLE);
+    public static final Crosshair SHIELD = new Crosshair(ModifierUse.SHIELD);
 
     public Crosshair() {
-        this(CrosshairVariant.NONE, ModifierUse.NONE, ModifierHit.NONE, false, false, false, false);
+        this(CrosshairVariant.NONE, ModifierUse.NONE, ModifierHit.NONE, InteractionMode.NONE, false);
     }
-    public Crosshair(CrosshairVariant variant) {
-        this(variant, ModifierUse.NONE, ModifierHit.NONE, false, false, false, true);
+    public Crosshair(CrosshairVariant variant, InteractionMode interactionMode) {
+        this(variant, ModifierUse.NONE, ModifierHit.NONE, interactionMode, true);
     }
     public Crosshair(ModifierUse modifierUse) {
-        this(CrosshairVariant.NONE, modifierUse, ModifierHit.NONE, false, false, false, true);
+        this(CrosshairVariant.NONE, modifierUse, ModifierHit.NONE, InteractionMode.RIGHT_CLICK, true);
     }
     public Crosshair(ModifierHit modifierHit) {
-        this(CrosshairVariant.NONE, ModifierUse.NONE, modifierHit, false, false, false, true);
+        this(CrosshairVariant.NONE, ModifierUse.NONE, modifierHit, InteractionMode.LEFT_CLICK, true);
     }
     public Crosshair(CrosshairVariant variant, ModifierUse modifierUse) {
-        this(variant, modifierUse, ModifierHit.NONE, false, false, false, true);
+        this(variant, modifierUse, ModifierHit.NONE,  InteractionMode.RIGHT_CLICK, true);
     }
     public Crosshair(CrosshairVariant variant, ModifierHit modifierHit) {
-        this(variant, ModifierUse.NONE, modifierHit, false, false, false, true);
+        this(variant, ModifierUse.NONE, modifierHit, InteractionMode.LEFT_CLICK, true);
     }
     public Crosshair(CrosshairVariant variant, ModifierUse modifierUse, ModifierHit modifierHit) {
-        this(variant, modifierUse, modifierHit, false, false, false, true);
+        this(variant, modifierUse, modifierHit, InteractionMode.BOTH, true);
     }
 
     public static Crosshair of(InteractionType interactionType) {
         CrosshairVariant variant = CrosshairVariant.NONE;
         ModifierUse modifierUse = ModifierUse.NONE;
         ModifierHit modifierHit = ModifierHit.NONE;
+        boolean changed = true;
         switch (interactionType) {
             case USE_ITEM,
                  EQUIP_ITEM,
@@ -99,25 +91,18 @@ public record Crosshair(
             case SHIELD -> modifierUse = ModifierUse.SHIELD;
 
             case FORCE_CROSSHAIR -> variant = CrosshairVariant.Regular;
-            case EMPTY, NO_ACTION -> { }
+            case EMPTY, NO_ACTION -> changed = false;
         }
-        return new Crosshair(variant, modifierUse, modifierHit);
+        return new Crosshair(variant, modifierUse, modifierHit, interactionType.interactionMode, changed);
     }
 
 
     public boolean hasStyle() {
         return variant != CrosshairVariant.NONE;
     }
-    public boolean isLockedStyle() {
-        return lockStyle;
-    }
     public boolean hasModifierUse() {
         return modifierUse != ModifierUse.NONE;
     }
-    public boolean isLockedModifierUse() {
-        return lockModifierUse;
-    }
-
 
     public ModifierHit getModifierHit() {
         return modifierHit;
@@ -135,70 +120,53 @@ public record Crosshair(
         return this.variant;
     }
 
-    public Crosshair withFlag(Flag flag) {
-        return switch (flag) {
-            case FixedStyle -> new Crosshair(variant, modifierUse, modifierHit, true, lockModifierUse, lockModifierHit, changed);
-            case FixedModifierUse -> new Crosshair(variant, modifierUse, modifierHit, lockStyle, true, lockModifierHit, changed);
-            case FixedModifierHit -> new Crosshair(variant, modifierUse, modifierHit, lockStyle, lockModifierUse, true, changed);
-            case FixedAll -> new Crosshair(variant, modifierUse, modifierHit, true, true, true, changed);
-        };
-    }
-
-
     public Crosshair withModifier(ModifierUse modifier) {
-        return new Crosshair(variant, modifier, modifierHit, lockStyle, lockModifierUse, lockModifierHit, changed);
+        return new Crosshair(variant, modifier, modifierHit, interactionMode.add(InteractionMode.RIGHT_CLICK), true);
     }
     public Crosshair withModifier(ModifierHit modifier) {
-        return new Crosshair(variant, modifierUse, modifier, lockStyle, lockModifierUse, lockModifierHit, changed);
+        return new Crosshair(variant, modifierUse, modifier, interactionMode.add(InteractionMode.LEFT_CLICK), true);
     }
 
     public Crosshair withVariant(CrosshairVariant variant) {
-        return new Crosshair(variant, modifierUse, modifierHit, lockStyle, lockModifierUse, lockModifierHit, changed);
+        return new Crosshair(variant, modifierUse, modifierHit, interactionMode, true);
     }
 
     public Crosshair updateFrom(Crosshair other) {
         if (other == null) return this;
-        CrosshairVariant newVariant = this.variant;
-        ModifierUse newModifierUse = this.modifierUse;
-        ModifierHit newModifierHit = this.modifierHit;
-        boolean newLockStyle = this.lockStyle;
-        boolean newLockModifierUse = this.lockModifierUse;
-        boolean newLockModifierHit = this.lockModifierHit;
-        if (!this.lockStyle || other.variant == CrosshairVariant.HoldingTool) {
-            if (other.variant != CrosshairVariant.NONE) {
-                newVariant = other.variant;
+        return switch (interactionMode) {
+            case LEFT_CLICK ->
+                    switch (other.interactionMode) {
+                        case LEFT_CLICK -> {
+                            if (this.modifierHit == ModifierHit.NONE && other.modifierHit != ModifierHit.NONE) {
+                                yield new Crosshair(variant, modifierUse, other.modifierHit, InteractionMode.LEFT_CLICK, true);
+                            }
+                            yield this;
+                        }
+                        case RIGHT_CLICK ->
+								new Crosshair(variant, other.modifierUse, modifierHit, InteractionMode.BOTH, true);
+                        case BOTH -> {
+                            if (this.modifierHit == ModifierHit.NONE && other.modifierHit != ModifierHit.NONE) {
+                                yield new Crosshair(variant, other.modifierUse, other.modifierHit, InteractionMode.BOTH, true);
+                            }
+                            yield new Crosshair(variant, other.modifierUse, modifierHit, InteractionMode.BOTH, true);
+                        }
+                        case NONE -> this;
+                    };
+            case RIGHT_CLICK -> {
+                if (this.hasStyle()) yield this;
+                if (this.modifierHit == ModifierHit.NONE && other.modifierHit != ModifierHit.NONE) {
+                    yield new Crosshair(other.variant, modifierUse, other.modifierHit, other.interactionMode.add(InteractionMode.RIGHT_CLICK), true);
+                }
+                yield new Crosshair(other.variant, modifierUse, modifierHit, other.interactionMode.add(InteractionMode.RIGHT_CLICK), true);
             }
-            newLockStyle = other.lockStyle;
-        }
-        if (!this.lockModifierHit) {
-            if (other.modifierHit != ModifierHit.NONE) {
-                newModifierHit = other.modifierHit;
+            case BOTH -> {
+                if (this.modifierHit == ModifierHit.NONE && other.modifierHit != ModifierHit.NONE) {
+                    yield new Crosshair(variant, modifierUse, other.modifierHit, InteractionMode.BOTH, true);
+                }
+                yield this;
             }
-            newLockModifierHit = other.lockModifierHit;
-        }
-        if (!this.lockModifierUse) {
-            if (other.modifierUse != ModifierUse.NONE) {
-                newModifierUse = other.modifierUse;
-            }
-            newLockModifierUse = other.lockModifierUse;
-        }
-        /* FIXME
-        boolean modifierIsModifier = switch (modifierUse) {
-            case SHIELD -> DynamicCrosshair.config.getCrosshairModifierShield().isModifier();
-            case USE_ITEM -> DynamicCrosshair.config.getCrosshairModifierUsableItem().isModifier();
-            case INTERACTABLE -> DynamicCrosshair.config.getCrosshairModifierInteractable().isModifier();
-            case NONE -> switch (modifierHit) {
-                case CORRECT_TOOL -> DynamicCrosshair.config.getCrosshairModifierCorrectTool().isModifier();
-                case INCORRECT_TOOL -> DynamicCrosshair.config.getCrosshairModifierIncorrectTool().isModifier();
-                case NONE -> true;
-            };
+            case NONE -> other;
         };
-        if (!modifierIsModifier) {
-            setVariant(CrosshairVariant.NONE);
-            this.lockStyle = true;
-        }
-         */
-        return new Crosshair(newVariant, newModifierUse, newModifierHit, newLockStyle, newLockModifierUse, newLockModifierHit, true);
     }
     public static Crosshair combine(Crosshair one, Crosshair other) {
         if (one == null) return other;
@@ -212,9 +180,6 @@ public record Crosshair(
                 "variant=" + variant +
                 ", modifierUse=" + modifierUse +
                 ", modifierHit=" + modifierHit +
-                ", lockStyle=" + lockStyle +
-                ", lockModifierUse=" + lockModifierUse +
-                ", lockModifierHit=" + lockModifierHit +
                 ", changed=" + changed +
                 '}';
     }
