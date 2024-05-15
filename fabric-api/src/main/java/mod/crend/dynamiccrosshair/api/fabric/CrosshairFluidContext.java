@@ -1,4 +1,4 @@
-package mod.crend.dynamiccrosshair.fabric.api;
+package mod.crend.dynamiccrosshair.api.fabric;
 
 import mod.crend.dynamiccrosshair.api.CrosshairContext;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;

@@ -17,6 +17,7 @@ configurations {
 
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation fabricApi.module("fabric-transfer-api-v1", project.fabric_api_version)
 
     common(project(path: ":common-api", configuration: "namedElements"))
     shadowCommon(project(path: ":common-api", configuration: "transformProductionFabric")) { transitive false }
