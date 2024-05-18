@@ -28,11 +28,11 @@ public class CrosshairHandler {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(DynamicCrosshair.MOD_ID);
 
-    private static Crosshair activeCrosshair = new Crosshair();
+    private static CrosshairComponent activeCrosshair = new CrosshairComponent(new Crosshair());
     private static boolean shouldShowCrosshair = true;
     public static boolean forceShowCrosshair = false;
 
-    public static Crosshair getActiveCrosshair() {
+    public static CrosshairComponent getActiveCrosshair() {
         return activeCrosshair;
     }
 
@@ -202,7 +202,7 @@ public class CrosshairHandler {
                     }
                 }
             }
-            activeCrosshair = Crosshair.combine(buildCrosshairDynamic(state.context), newCrosshair);
+            activeCrosshair = new CrosshairComponent(Crosshair.combine(buildCrosshairDynamic(state.context), newCrosshair));
         } catch (CrosshairContextChange crosshairContextChange) {
             // For some reason, we are being asked to re-evaluate the context.
             return buildCrosshair(crosshairContextChange.newHitResult, player);
@@ -253,14 +253,14 @@ public class CrosshairHandler {
             return result.get();
         }
 
-        if (activeCrosshair.hasInteraction()) {
+        if (activeCrosshair.getCrosshair().hasInteraction()) {
             return true;
         }
         if (DynamicCrosshairMod.config.isDynamicCrosshair()) {
             return false;
         }
         // Dynamic crosshair disabled, no other crosshair computed: make sure to show a crosshair
-        activeCrosshair = new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR);
+        activeCrosshair = new CrosshairComponent(new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR));
         return true;
     }
 

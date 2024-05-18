@@ -13,13 +13,17 @@ import java.util.Optional;
 public class CrosshairComponent {
 
     public static final CrosshairComponent FORCE_CROSSHAIR = new CrosshairComponent(new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR));
-    public static final CrosshairStyle FORCE_CROSSHAIR_STYLE = FORCE_CROSSHAIR.getPrimaryStyle().get();
 
-    CrosshairVariant primary = CrosshairVariant.NONE;
-    CrosshairVariant secondary = CrosshairVariant.NONE;
-    ModifierHit modifierHit = ModifierHit.NONE;
+    Crosshair crosshair;
+    CrosshairStyle primaryStyle = null;
+    CrosshairStyle secondaryStyle = null;
+    CrosshairModifier hitModifier = null;
 
     public CrosshairComponent(Crosshair crosshair) {
+        this.crosshair = crosshair;
+        CrosshairVariant primary = CrosshairVariant.NONE;
+        CrosshairVariant secondary = CrosshairVariant.NONE;
+        ModifierHit modifierHit = ModifierHit.NONE;
         switch (crosshair.primaryInteraction()) {
             case TARGET_BLOCK -> primary = CrosshairVariant.OnBlock;
             case TARGET_ENTITY -> primary = CrosshairVariant.OnEntity;
@@ -74,30 +78,37 @@ public class CrosshairComponent {
 
             case FORCE_REGULAR_CROSSHAIR -> modifierHit = ModifierHit.NONE;
         }
+        primaryStyle = getCrosshairStyle(primary);
+        secondaryStyle = getCrosshairStyle(secondary);
+        if (primaryStyle != null) {
+            if (secondaryStyle == null || secondaryStyle.isModifier() || !primaryStyle.isModifier()) {
+                if (DynamicCrosshairMod.config.dynamicCrosshairDisplayCorrectTool()) {
+                    switch (modifierHit) {
+                        case CORRECT_TOOL -> hitModifier = DynamicCrosshairMod.config.getCrosshairModifierCorrectTool();
+                        case INCORRECT_TOOL ->
+                                hitModifier = DynamicCrosshairMod.config.getCrosshairModifierIncorrectTool();
+                    }
+                }
+                if (secondaryStyle != null && !secondaryStyle.isModifier() && !primaryStyle.isModifier()) secondaryStyle = null;
+            } else {
+                // !secondaryStyle.isModifier
+                primaryStyle = null;
+            }
+        }
     }
 
-    public Optional<CrosshairStyle> getPrimaryStyle() {
-        return getCrosshairStyle(primary);
+    public CrosshairStyle getPrimaryStyle() {
+        return primaryStyle;
     }
 
-    public Optional<CrosshairStyle> getSecondaryStyle() {
-        return getCrosshairStyle(secondary);
+    public CrosshairStyle getSecondaryStyle() {
+        return secondaryStyle;
     }
 
-    public boolean secondaryStyleIsModifier() {
-        // FIXME this should not be hardcoded
-        return secondary == CrosshairVariant.NONE
-                || secondary == CrosshairVariant.HoldingUsableItem
-                || secondary == CrosshairVariant.HoldingShield
-                || secondary == CrosshairVariant.HoldingRangedWeapon
-                || secondary == CrosshairVariant.CanInteract;
-    }
-
-    private Optional<CrosshairStyle> getCrosshairStyle(CrosshairVariant variant) {
-        if (variant == CrosshairVariant.NONE) return Optional.empty();
-        if (variant == CrosshairVariant.OnBlock && !secondaryStyleIsModifier()) return Optional.empty();
-        return Optional.of(switch (variant) {
-            case Regular -> DynamicCrosshairMod.config.getCrosshairStyleRegular();
+    private CrosshairStyle getCrosshairStyle(CrosshairVariant variant) {
+        return switch (variant) {
+			case NONE -> null;
+			case Regular -> DynamicCrosshairMod.config.getCrosshairStyleRegular();
             case OnBlock -> DynamicCrosshairMod.config.getCrosshairStyleOnBlock();
             case OnEntity -> DynamicCrosshairMod.config.getCrosshairStyleOnEntity();
             case HoldingBlock -> DynamicCrosshairMod.config.getCrosshairStyleHoldingBlock();
@@ -108,18 +119,15 @@ public class CrosshairComponent {
             case HoldingUsableItem -> DynamicCrosshairMod.config.getCrosshairStyleUsableItem();
             case HoldingShield -> DynamicCrosshairMod.config.getCrosshairStyleShield();
             case CanInteract -> DynamicCrosshairMod.config.getCrosshairStyleInteractable();
-			default -> throw new IllegalStateException("Unexpected value: " + variant);
-		});
+		};
     }
 
     public List<CrosshairModifier> getModifiers() {
-        List<CrosshairModifier> modifiers = new LinkedList<>();
-        if (DynamicCrosshairMod.config.dynamicCrosshairDisplayCorrectTool()) {
-            switch (modifierHit) {
-                case CORRECT_TOOL -> modifiers.add(DynamicCrosshairMod.config.getCrosshairModifierCorrectTool());
-                case INCORRECT_TOOL -> modifiers.add(DynamicCrosshairMod.config.getCrosshairModifierIncorrectTool());
-            }
-        }
-        return modifiers;
+        if (hitModifier == null) return List.of();
+        return List.of(hitModifier);
+    }
+
+    public Crosshair getCrosshair() {
+        return crosshair;
     }
 }

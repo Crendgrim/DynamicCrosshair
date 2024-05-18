@@ -8,8 +8,10 @@ public record CrosshairStyle(Config.CrosshairStyleSettings settings) {
 	public static final Identifier CROSS_OPEN = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/cross-open");
 	public static final Identifier CROSS_OPEN_DIAGONAL = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/cross-open-diagonal");
 	public static final Identifier CIRCLE = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/circle");
+	public static final Identifier CIRCLE_LARGE = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/circle-large");
 	public static final Identifier SQUARE = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/square");
 	public static final Identifier DIAMOND = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/diamond");
+	public static final Identifier DIAMOND_LARGE = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/diamond-large");
 	public static final Identifier CARET = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/caret");
 	public static final Identifier DOT = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/dot");
 	public static final Identifier CROSS_DIAGONAL_SMALL = new Identifier(DynamicCrosshair.MOD_ID, "crosshairs/cross-diagonal-small");
@@ -26,5 +28,9 @@ public record CrosshairStyle(Config.CrosshairStyleSettings settings) {
 
 	public CrosshairColor getColor() {
 		return new CrosshairColor(settings.color.crosshairColor, settings.color.customColor.getRGB(), settings.color.forceColor);
+	}
+
+	public boolean isModifier() {
+		return settings.isModifier;
 	}
 }

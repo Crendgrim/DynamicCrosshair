@@ -87,6 +87,9 @@ public class Config {
         @SerialEntry
         @TransitiveObject
         public CrosshairColorSettings color = new CrosshairColorSettings();
+        @SerialEntry
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.isModifier")
+        public boolean isModifier = false;
     }
     public static class CrosshairModifierSettings {
         @SerialEntry
@@ -96,9 +99,6 @@ public class Config {
         @SerialEntry
         @TransitiveObject
         public CrosshairColorSettings color = new CrosshairColorSettings();
-        @SerialEntry
-        @Translation(key="dynamiccrosshair.option.crosshairStyle.isModifier")
-        public boolean isModifier = true;
     }
 
     @SerialEntry
@@ -147,11 +147,14 @@ public class Config {
             holdingTool.style = CrosshairConfigStyle.Square;
             holdingMeleeWeapon.style = CrosshairConfigStyle.Cross;
             holdingRangedWeapon.style = CrosshairConfigStyle.DiagonalCross;
-            holdingThrowable.style = CrosshairConfigStyle.Circle;
+            holdingThrowable.style = CrosshairConfigStyle.CircleLarge;
             holdingBlock.style = CrosshairConfigStyle.Diamond;
             interact.style = CrosshairConfigStyle.Brackets;
             useItem.style = CrosshairConfigStyle.RoundBrackets;
             shield.style = CrosshairConfigStyle.BracketsBottom;
+            interact.isModifier = true;
+            useItem.isModifier = true;
+            shield.isModifier = true;
         }
     }
     public static class CrosshairModifiers {

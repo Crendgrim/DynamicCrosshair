@@ -20,6 +20,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -292,6 +293,7 @@ public class CrosshairContextImpl implements CrosshairContext {
 	@Override
 	public boolean canPlaceItemAsBlock() {
 		if (!withBlock) return false;
+		if (!(getItem() instanceof BlockItem)) return true;
 		BlockItemAccessor blockItem = (BlockItemAccessor) getItem();
 		ItemPlacementContext itemPlacementContext = new ItemPlacementContext(player, hand, getItemStack(), (BlockHitResult) hitResult);
 		try {
@@ -347,8 +349,9 @@ public class CrosshairContextImpl implements CrosshairContext {
 	@Override
 	public boolean includeHoldingBlock() {
 		return switch (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock()) {
-			case Always, IfInteractable -> true;
+			case Always -> true;
 			case IfTargeting -> isTargeting();
+			case IfInteractable -> canPlaceItemAsBlock();
 			case Disabled -> false;
 		};
 	}
