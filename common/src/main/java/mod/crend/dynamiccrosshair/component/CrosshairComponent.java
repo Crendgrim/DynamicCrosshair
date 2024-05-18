@@ -8,24 +8,26 @@ import mod.crend.dynamiccrosshair.config.CrosshairStyle;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class CrosshairComponent {
 
     public static final CrosshairComponent FORCE_CROSSHAIR = new CrosshairComponent(new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR));
+    public static final CrosshairStyle FORCE_CROSSHAIR_STYLE = FORCE_CROSSHAIR.getPrimaryStyle().get();
 
-    CrosshairVariant variant = CrosshairVariant.NONE;
-    ModifierUse modifierUse = ModifierUse.NONE;
+    CrosshairVariant primary = CrosshairVariant.NONE;
+    CrosshairVariant secondary = CrosshairVariant.NONE;
     ModifierHit modifierHit = ModifierHit.NONE;
 
     public CrosshairComponent(Crosshair crosshair) {
         switch (crosshair.primaryInteraction()) {
-            case TARGET_BLOCK -> variant = CrosshairVariant.OnBlock;
-            case TARGET_ENTITY -> variant = CrosshairVariant.OnEntity;
-            case MELEE_WEAPON -> variant = CrosshairVariant.HoldingMeleeWeapon;
-            case TOOL -> variant = CrosshairVariant.HoldingTool;
-            case CORRECT_TOOL -> { variant = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.CORRECT_TOOL; }
-            case INCORRECT_TOOL -> { variant = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.INCORRECT_TOOL; }
-            case FORCE_REGULAR_CROSSHAIR -> variant = CrosshairVariant.Regular;
+            case TARGET_BLOCK -> primary = CrosshairVariant.OnBlock;
+            case TARGET_ENTITY -> primary = CrosshairVariant.OnEntity;
+            case MELEE_WEAPON -> primary = CrosshairVariant.HoldingMeleeWeapon;
+            case TOOL -> primary = CrosshairVariant.HoldingTool;
+            case CORRECT_TOOL -> { primary = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.CORRECT_TOOL; }
+            case INCORRECT_TOOL -> { primary = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.INCORRECT_TOOL; }
+            case FORCE_REGULAR_CROSSHAIR -> primary = CrosshairVariant.Regular;
         }
         switch (crosshair.secondaryInteraction()) {
             case USE_ITEM,
@@ -42,20 +44,20 @@ public class CrosshairComponent {
                  PLACE_ITEM_ON_ENTITY,
                  FILL_ITEM_FROM_ENTITY,
                  FILL_ENTITY_FROM_ITEM
-                    -> modifierUse = ModifierUse.USE_ITEM;
+                    -> secondary = CrosshairVariant.HoldingUsableItem;
             case SPYGLASS -> {
                 if (DynamicCrosshairMod.config.dynamicCrosshairForceHoldingSpyglass()) {
-                    variant = CrosshairVariant.Regular;
+                    primary = CrosshairVariant.Regular;
                 } else {
-                    modifierUse = ModifierUse.USE_ITEM;
+                    secondary = CrosshairVariant.HoldingUsableItem;
                 }
             }
             case THROW_ITEM
-                    -> variant = CrosshairVariant.HoldingThrowable;
+                    -> secondary = CrosshairVariant.HoldingThrowable;
 
             case PLACE_BLOCK,
                  PLACE_ENTITY
-                    -> variant = CrosshairVariant.HoldingBlock;
+                    -> secondary = CrosshairVariant.HoldingBlock;
 
             case INTERACT_WITH_BLOCK,
                  TAKE_ITEM_FROM_BLOCK,
@@ -63,24 +65,39 @@ public class CrosshairComponent {
                  TAKE_ITEM_FROM_ENTITY,
                  INTERACT_WITH_ENTITY,
                  MOUNT_ENTITY
-                    -> modifierUse = ModifierUse.INTERACTABLE;
+                    -> secondary = CrosshairVariant.CanInteract;
 
-            case RANGED_WEAPON, RANGED_WEAPON_CHARGING -> variant = CrosshairVariant.Regular;
-            case RANGED_WEAPON_CHARGED -> variant = CrosshairVariant.HoldingRangedWeapon;
-            case USABLE_TOOL -> { variant = CrosshairVariant.HoldingTool; modifierUse = ModifierUse.USE_ITEM; }
-            case SHIELD -> modifierUse = ModifierUse.SHIELD;
+            case RANGED_WEAPON, RANGED_WEAPON_CHARGING -> primary = CrosshairVariant.Regular;
+            case RANGED_WEAPON_CHARGED -> primary = CrosshairVariant.HoldingRangedWeapon;
+            case USABLE_TOOL -> { primary = CrosshairVariant.HoldingTool; secondary = CrosshairVariant.HoldingUsableItem; }
+            case SHIELD -> secondary = CrosshairVariant.HoldingShield;
 
             case FORCE_REGULAR_CROSSHAIR -> modifierHit = ModifierHit.NONE;
         }
     }
 
-    public boolean hasStyle() {
-        return variant != CrosshairVariant.NONE;
+    public Optional<CrosshairStyle> getPrimaryStyle() {
+        return getCrosshairStyle(primary);
     }
 
-    public CrosshairStyle getCrosshairStyle() {
-        return switch (variant) {
-            case Regular, NONE -> DynamicCrosshairMod.config.getCrosshairStyleRegular();
+    public Optional<CrosshairStyle> getSecondaryStyle() {
+        return getCrosshairStyle(secondary);
+    }
+
+    public boolean secondaryStyleIsModifier() {
+        // FIXME this should not be hardcoded
+        return secondary == CrosshairVariant.NONE
+                || secondary == CrosshairVariant.HoldingUsableItem
+                || secondary == CrosshairVariant.HoldingShield
+                || secondary == CrosshairVariant.HoldingRangedWeapon
+                || secondary == CrosshairVariant.CanInteract;
+    }
+
+    private Optional<CrosshairStyle> getCrosshairStyle(CrosshairVariant variant) {
+        if (variant == CrosshairVariant.NONE) return Optional.empty();
+        if (variant == CrosshairVariant.OnBlock && !secondaryStyleIsModifier()) return Optional.empty();
+        return Optional.of(switch (variant) {
+            case Regular -> DynamicCrosshairMod.config.getCrosshairStyleRegular();
             case OnBlock -> DynamicCrosshairMod.config.getCrosshairStyleOnBlock();
             case OnEntity -> DynamicCrosshairMod.config.getCrosshairStyleOnEntity();
             case HoldingBlock -> DynamicCrosshairMod.config.getCrosshairStyleHoldingBlock();
@@ -88,7 +105,11 @@ public class CrosshairComponent {
             case HoldingMeleeWeapon -> DynamicCrosshairMod.config.getCrosshairStyleHoldingMeleeWeapon();
             case HoldingRangedWeapon -> DynamicCrosshairMod.config.getCrosshairStyleHoldingRangedWeapon();
             case HoldingThrowable -> DynamicCrosshairMod.config.getCrosshairStyleHoldingThrowable();
-        };
+            case HoldingUsableItem -> DynamicCrosshairMod.config.getCrosshairStyleUsableItem();
+            case HoldingShield -> DynamicCrosshairMod.config.getCrosshairStyleShield();
+            case CanInteract -> DynamicCrosshairMod.config.getCrosshairStyleInteractable();
+			default -> throw new IllegalStateException("Unexpected value: " + variant);
+		});
     }
 
     public List<CrosshairModifier> getModifiers() {
@@ -98,11 +119,6 @@ public class CrosshairComponent {
                 case CORRECT_TOOL -> modifiers.add(DynamicCrosshairMod.config.getCrosshairModifierCorrectTool());
                 case INCORRECT_TOOL -> modifiers.add(DynamicCrosshairMod.config.getCrosshairModifierIncorrectTool());
             }
-        }
-        switch (modifierUse) {
-            case USE_ITEM -> modifiers.add(DynamicCrosshairMod.config.getCrosshairModifierUsableItem());
-            case INTERACTABLE -> modifiers.add(DynamicCrosshairMod.config.getCrosshairModifierInteractable());
-            case SHIELD -> modifiers.add(DynamicCrosshairMod.config.getCrosshairModifierShield());
         }
         return modifiers;
     }

@@ -12,7 +12,15 @@ public enum CrosshairConfigStyle implements NameableEnum {
     Circle(CrosshairStyle.CIRCLE),
     Square(CrosshairStyle.SQUARE),
     Diamond(CrosshairStyle.DIAMOND),
-    Caret(CrosshairStyle.CARET);
+    Caret(CrosshairStyle.CARET),
+    Dot(CrosshairStyle.DOT),
+    SmallDiagonalCross(CrosshairStyle.CROSS_DIAGONAL_SMALL),
+    Brackets(CrosshairStyle.BRACKETS),
+    BracketsBottom(CrosshairStyle.BRACKETS_BOTTOM),
+    BracketsTop(CrosshairStyle.BRACKETS_TOP),
+    RoundBrackets(CrosshairStyle.BRACKETS_ROUND),
+    Lines(CrosshairStyle.LINES),
+    LineBottom(CrosshairStyle.LINE_BOTTOM);
 
     private final Identifier style;
     CrosshairConfigStyle(Identifier style) {

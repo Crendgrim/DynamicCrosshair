@@ -9,5 +9,8 @@ public enum CrosshairVariant {
     HoldingMeleeWeapon,
     HoldingRangedWeapon,
     HoldingThrowable,
-    HoldingBlock
+    HoldingBlock,
+    HoldingUsableItem,
+    HoldingShield,
+    CanInteract;
 }

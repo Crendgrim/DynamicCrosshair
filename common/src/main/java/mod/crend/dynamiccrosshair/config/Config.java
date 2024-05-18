@@ -133,6 +133,12 @@ public class Config {
         public CrosshairStyleSettings holdingThrowable = new CrosshairStyleSettings();
         @SerialEntry
         public CrosshairStyleSettings holdingBlock = new CrosshairStyleSettings();
+        @SerialEntry
+        public CrosshairStyleSettings interact = new CrosshairStyleSettings();
+        @SerialEntry
+        public CrosshairStyleSettings useItem = new CrosshairStyleSettings();
+        @SerialEntry
+        public CrosshairStyleSettings shield = new CrosshairStyleSettings();
 
         public CrosshairStyles() {
             regular.style = CrosshairConfigStyle.Cross;
@@ -143,26 +149,20 @@ public class Config {
             holdingRangedWeapon.style = CrosshairConfigStyle.DiagonalCross;
             holdingThrowable.style = CrosshairConfigStyle.Circle;
             holdingBlock.style = CrosshairConfigStyle.Diamond;
+            interact.style = CrosshairConfigStyle.Brackets;
+            useItem.style = CrosshairConfigStyle.RoundBrackets;
+            shield.style = CrosshairConfigStyle.BracketsBottom;
         }
     }
     public static class CrosshairModifiers {
-        @SerialEntry
-        public CrosshairModifierSettings modInteractable = new CrosshairModifierSettings();
-        @SerialEntry
-        public CrosshairModifierSettings modUsableItem = new CrosshairModifierSettings();
-        @SerialEntry
-        public CrosshairModifierSettings modShield = new CrosshairModifierSettings();
         @SerialEntry
         public CrosshairModifierSettings modCorrectTool = new CrosshairModifierSettings();
         @SerialEntry
         public CrosshairModifierSettings modIncorrectTool = new CrosshairModifierSettings();
 
         public CrosshairModifiers() {
-            modInteractable.style = CrosshairConfigModifier.Brackets;
             modCorrectTool.style = CrosshairConfigModifier.Dot;
             modIncorrectTool.style = CrosshairConfigModifier.DiagonalCross;
-            modUsableItem.style = CrosshairConfigModifier.RoundBrackets;
-            modShield.style = CrosshairConfigModifier.BracketsBottom;
         }
     }
 

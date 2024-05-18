@@ -58,15 +58,20 @@ public class CrosshairRenderer {
 
 	public static void render(DrawContext context, int x, int y) {
 		CrosshairComponent crosshair = new CrosshairComponent(CrosshairHandler.getActiveCrosshair());
-		if (crosshair.hasStyle()) {
-			CrosshairStyle crosshairStyle = crosshair.getCrosshairStyle();
+		crosshair.getPrimaryStyle().ifPresentOrElse(crosshairStyle -> {
 			setColor(crosshairStyle.getColor(), false);
 			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
-		} else if (CrosshairHandler.forceShowCrosshair) {
-			CrosshairStyle crosshairStyle = CrosshairComponent.FORCE_CROSSHAIR.getCrosshairStyle();
-			setColor(crosshairStyle.getColor(), true);
+		}, () -> {
+			if (CrosshairHandler.forceShowCrosshair && crosshair.secondaryStyleIsModifier()) {
+				CrosshairStyle crosshairStyle = CrosshairComponent.FORCE_CROSSHAIR_STYLE;
+				setColor(crosshairStyle.getColor(), true);
+				context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
+			}
+		});
+		crosshair.getSecondaryStyle().ifPresent(crosshairStyle -> {
+			setColor(crosshairStyle.getColor(), false);
 			context.drawGuiTexture(crosshairStyle.getStyle().getIdentifier(), x, y, 15, 15);
-		}
+		});
 		for (CrosshairModifier modifier : crosshair.getModifiers()) {
 			setColor(modifier.getColor(), false);
 			context.drawGuiTexture(modifier.getStyle().getIdentifier(), x, y, 15, 15);

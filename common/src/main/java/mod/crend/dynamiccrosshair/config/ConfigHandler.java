@@ -47,11 +47,11 @@ public class ConfigHandler {
     public CrosshairStyle getCrosshairStyleHoldingRangedWeapon() { return new CrosshairStyle(CONFIG_STORE.config().crosshairStyle.holdingRangedWeapon); }
     public CrosshairStyle getCrosshairStyleHoldingThrowable() { return new CrosshairStyle(CONFIG_STORE.config().crosshairStyle.holdingThrowable); }
     public CrosshairStyle getCrosshairStyleHoldingBlock() { return new CrosshairStyle(CONFIG_STORE.config().crosshairStyle.holdingBlock); }
-    public CrosshairModifier getCrosshairModifierInteractable() { return new CrosshairModifier(CONFIG_STORE.config().crosshairModifiers.modInteractable); }
+    public CrosshairStyle getCrosshairStyleInteractable() { return new CrosshairStyle(CONFIG_STORE.config().crosshairStyle.interact); }
+    public CrosshairStyle getCrosshairStyleUsableItem() { return new CrosshairStyle(CONFIG_STORE.config().crosshairStyle.useItem); }
+    public CrosshairStyle getCrosshairStyleShield() { return new CrosshairStyle(CONFIG_STORE.config().crosshairStyle.shield); }
     public CrosshairModifier getCrosshairModifierCorrectTool() { return new CrosshairModifier(CONFIG_STORE.config().crosshairModifiers.modCorrectTool); }
     public CrosshairModifier getCrosshairModifierIncorrectTool() { return new CrosshairModifier(CONFIG_STORE.config().crosshairModifiers.modIncorrectTool); }
-    public CrosshairModifier getCrosshairModifierUsableItem() { return new CrosshairModifier(CONFIG_STORE.config().crosshairModifiers.modUsableItem); }
-    public CrosshairModifier getCrosshairModifierShield() { return new CrosshairModifier(CONFIG_STORE.config().crosshairModifiers.modShield); }
 
     public boolean isTweaksEnabled() {
         return CONFIG_STORE.config().enableTweaks;
