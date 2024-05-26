@@ -2,16 +2,18 @@ package mod.crend.dynamiccrosshair.config;
 
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.render.CrosshairModifierRenderer;
-import mod.crend.dynamiccrosshair.render.CrosshairStyleRenderer;
+import mod.crend.dynamiccrosshair.config.gui.CrosshairStyleController;
+import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
 import mod.crend.libbamboo.render.ItemOrTagRenderer;
 import mod.crend.libbamboo.type.BlockOrTag;
 import mod.crend.libbamboo.type.ItemOrTag;
 import mod.crend.libbamboo.auto.annotation.*;
+import net.minecraft.util.Identifier;
 
 import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @AutoYaclConfig(modid= DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
 public class Config {
@@ -61,44 +63,46 @@ public class Config {
         public boolean forceHoldingSpyglass = false;
     }
 
-    public static class CrosshairColorReader implements EnableIf.Predicate {
-        @Override
-        public boolean test(Object color) {
-            return color == CrosshairConfigColor.Custom;
-        }
-    }
     public static class CrosshairColorSettings {
         @SerialEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.crosshairColor")
-        public CrosshairConfigColor crosshairColor = CrosshairConfigColor.Unchanged;
+        public boolean overrideColor = false;
         @SerialEntry
         @Translation(key="dynamiccrosshair.option.crosshairStyle.color.customColor")
-        @EnableIf(field="crosshairColor", value=CrosshairColorReader.class)
+        @EnableIf(field = "overrideColor", value = EnableIf.BooleanPredicate.class)
         public Color customColor = new Color(0xFFAABBCC, true);
         @SerialEntry
-        @Translation(key="dynamiccrosshair.option.crosshairStyle.color.forceColor")
-        public boolean forceColor = false;
+        @Translation(key="dynamiccrosshair.option.crosshairStyle.color.enableBlend")
+        public boolean enableBlend = true;
     }
     public static class CrosshairStyleSettings {
         @SerialEntry
-        @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
-        @Decorate(decorator = CrosshairStyleRenderer.class)
-        public CrosshairConfigStyle style = CrosshairConfigStyle.Cross;
+        public Identifier style = DynamicCrosshairStyles.DEFAULT;
         @SerialEntry
-        @TransitiveObject
-        public CrosshairColorSettings color = new CrosshairColorSettings();
+        public boolean overrideColor = false;
         @SerialEntry
-        @Translation(key="dynamiccrosshair.option.crosshairStyle.isModifier")
-        public boolean isModifier = false;
-    }
-    public static class CrosshairModifierSettings {
+        public Color customColor = new Color(0xFFAABBCC, true);
         @SerialEntry
-        @Translation(key="dynamiccrosshair.option.crosshairStyle.style")
-        @Decorate(decorator = CrosshairModifierRenderer.class)
-        public CrosshairConfigModifier style;
+        public boolean enableBlend = true;
         @SerialEntry
-        @TransitiveObject
-        public CrosshairColorSettings color = new CrosshairColorSettings();
+        public boolean isModifier = false; // FIXME do not include this for all..
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CrosshairStyleSettings that = (CrosshairStyleSettings) o;
+            return overrideColor == that.overrideColor
+                    && enableBlend == that.enableBlend
+                    && isModifier == that.isModifier
+                    && Objects.equals(style, that.style)
+                    && Objects.equals(customColor, that.customColor);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(style, overrideColor, customColor, enableBlend, isModifier);
+        }
     }
 
     @SerialEntry
@@ -112,46 +116,57 @@ public class Config {
     @TransitiveObject
     @Category(name = "style")
     public CrosshairStyles crosshairStyle = new CrosshairStyles();
-    @SerialEntry
     @Category(name = "style")
+    @SerialEntry
     @TransitiveObject
     public CrosshairModifiers crosshairModifiers = new CrosshairModifiers();
     public static class CrosshairStyles {
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings regular = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings onBlock = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings onEntity = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings holdingTool = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings holdingMeleeWeapon = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings holdingRangedWeapon = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings holdingThrowable = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings holdingBlock = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings interact = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings useItem = new CrosshairStyleSettings();
         @SerialEntry
+        @CustomController(CrosshairStyleController.Factory.class)
         public CrosshairStyleSettings shield = new CrosshairStyleSettings();
 
         public CrosshairStyles() {
-            regular.style = CrosshairConfigStyle.Cross;
-            onBlock.style = CrosshairConfigStyle.Cross;
-            onEntity.style = CrosshairConfigStyle.DiagonalCross;
-            holdingTool.style = CrosshairConfigStyle.Square;
-            holdingMeleeWeapon.style = CrosshairConfigStyle.Cross;
-            holdingRangedWeapon.style = CrosshairConfigStyle.DiagonalCross;
-            holdingThrowable.style = CrosshairConfigStyle.CircleLarge;
-            holdingBlock.style = CrosshairConfigStyle.Diamond;
-            interact.style = CrosshairConfigStyle.Brackets;
-            useItem.style = CrosshairConfigStyle.RoundBrackets;
-            shield.style = CrosshairConfigStyle.BracketsBottom;
+            regular.style = DynamicCrosshairStyles.CROSS_OPEN;
+            onBlock.style = DynamicCrosshairStyles.CROSS_OPEN;
+            onEntity.style = DynamicCrosshairStyles.CROSS_OPEN_DIAGONAL;
+            holdingTool.style = DynamicCrosshairStyles.SQUARE;
+            holdingMeleeWeapon.style = DynamicCrosshairStyles.CROSS_OPEN;
+            holdingRangedWeapon.style = DynamicCrosshairStyles.CROSS_OPEN_DIAGONAL;
+            holdingThrowable.style = DynamicCrosshairStyles.CIRCLE_LARGE;
+            holdingBlock.style = DynamicCrosshairStyles.DIAMOND;
+            interact.style = DynamicCrosshairStyles.BRACKETS;
+            useItem.style = DynamicCrosshairStyles.BRACKETS_ROUND;
+            shield.style = DynamicCrosshairStyles.BRACKETS_BOTTOM;
             interact.isModifier = true;
             useItem.isModifier = true;
             shield.isModifier = true;
@@ -159,13 +174,15 @@ public class Config {
     }
     public static class CrosshairModifiers {
         @SerialEntry
-        public CrosshairModifierSettings modCorrectTool = new CrosshairModifierSettings();
+        @CustomController(CrosshairStyleController.Factory.class)
+        public CrosshairStyleSettings modCorrectTool = new CrosshairStyleSettings();
         @SerialEntry
-        public CrosshairModifierSettings modIncorrectTool = new CrosshairModifierSettings();
+        @CustomController(CrosshairStyleController.Factory.class)
+        public CrosshairStyleSettings modIncorrectTool = new CrosshairStyleSettings();
 
         public CrosshairModifiers() {
-            modCorrectTool.style = CrosshairConfigModifier.Dot;
-            modIncorrectTool.style = CrosshairConfigModifier.DiagonalCross;
+            modCorrectTool.style = DynamicCrosshairStyles.DOT;
+            modIncorrectTool.style = DynamicCrosshairStyles.CROSS_DIAGONAL_SMALL;
         }
     }
 
@@ -204,5 +221,4 @@ public class Config {
     @DescriptionImage(ItemOrTagRenderer.OfBlockOrTag.class)
     @EnableIf(field = "enableTweaks", value = EnableIf.BooleanPredicate.class)
     public List<BlockOrTag> additionalInteractableBlocks = Collections.emptyList();
-
 }
