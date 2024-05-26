@@ -3,12 +3,9 @@ package mod.crend.dynamiccrosshair.component;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.Crosshair;
 import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.config.CrosshairModifier;
-import mod.crend.dynamiccrosshair.config.CrosshairStyle;
+import mod.crend.dynamiccrosshair.style.CrosshairStyle;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public class CrosshairComponent {
 
@@ -17,7 +14,7 @@ public class CrosshairComponent {
     Crosshair crosshair;
     CrosshairStyle primaryStyle = null;
     CrosshairStyle secondaryStyle = null;
-    CrosshairModifier hitModifier = null;
+    CrosshairStyle hitModifier = null;
 
     public CrosshairComponent(Crosshair crosshair) {
         this.crosshair = crosshair;
@@ -122,7 +119,7 @@ public class CrosshairComponent {
 		};
     }
 
-    public List<CrosshairModifier> getModifiers() {
+    public List<CrosshairStyle> getModifiers() {
         if (hitModifier == null) return List.of();
         return List.of(hitModifier);
     }

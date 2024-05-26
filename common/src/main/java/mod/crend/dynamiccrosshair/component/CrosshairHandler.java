@@ -168,7 +168,7 @@ public class CrosshairHandler {
 
     static State state = null;
 
-    private static Optional<Boolean> buildCrosshair(HitResult hitResult, ClientPlayerEntity player) {
+    private static Optional<Boolean> buildCrosshair(HitResult hitResult, ClientPlayerEntity player, boolean recursion) {
         try {
             for (DynamicCrosshairApi api : state.context.apis()) {
                 try {
@@ -205,7 +205,9 @@ public class CrosshairHandler {
             activeCrosshair = new CrosshairComponent(Crosshair.combine(buildCrosshairDynamic(state.context), newCrosshair));
         } catch (CrosshairContextChange crosshairContextChange) {
             // For some reason, we are being asked to re-evaluate the context.
-            return buildCrosshair(crosshairContextChange.newHitResult, player);
+            if (!recursion) {
+                return buildCrosshair(crosshairContextChange.newHitResult, player, true);
+            }
         } catch (InvalidContextState invalidContextState) {
             LOGGER.error("Encountered invalid context state: ", invalidContextState);
         } catch (NoSuchMethodError | NoSuchFieldError | NoClassDefFoundError | RuntimeException e) {
@@ -248,7 +250,7 @@ public class CrosshairHandler {
             state = new State();
         }
 
-        Optional<Boolean> result = buildCrosshair(hitResult, player);
+        Optional<Boolean> result = buildCrosshair(hitResult, player, false);
         if (result.isPresent()) {
             return result.get();
         }

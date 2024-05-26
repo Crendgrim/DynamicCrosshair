@@ -36,7 +36,7 @@ dependencies {
 
     modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-    modRuntimeOnly "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
+    modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}-fabric"
     modImplementation include(name: "libbamboo", group: "mod.crend.libbamboo", version: "${project.libbamboo_version}-fabric")
     modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 
