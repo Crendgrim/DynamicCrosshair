@@ -11,6 +11,7 @@ import mod.crend.dynamiccrosshair.api.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshair.api.InteractionType;
 import mod.crend.dynamiccrosshair.api.exception.InvalidContextState;
+import mod.crend.dynamiccrosshair.style.CrosshairStyle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.FilledMapItem;
@@ -29,6 +30,7 @@ public class CrosshairHandler {
     public static final Logger LOGGER = LoggerFactory.getLogger(DynamicCrosshair.MOD_ID);
 
     private static CrosshairComponent activeCrosshair = new CrosshairComponent(new Crosshair());
+    private static CrosshairStyle defaultCrosshair = DynamicCrosshairMod.config.getDefaultStyle();
     private static boolean shouldShowCrosshair = true;
     public static boolean forceShowCrosshair = false;
 
@@ -270,7 +272,12 @@ public class CrosshairHandler {
         return shouldShowCrosshair;
     }
 
+    public static CrosshairStyle getDefaultCrosshair() {
+        return defaultCrosshair;
+    }
+
     public static void tick() {
         shouldShowCrosshair = checkShowCrosshair();
+        defaultCrosshair = DynamicCrosshairMod.config.getDefaultStyle();
     }
 }

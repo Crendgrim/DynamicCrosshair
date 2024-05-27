@@ -32,7 +32,8 @@ public class CrosshairRenderer {
 	}
 
 	public static void preRender() {
-		setColor(DynamicCrosshairMod.config.getDefaultStyle().color(), DynamicCrosshairMod.config.getDefaultStyle().enableBlend(), false);
+		CrosshairStyle defaultStyle = CrosshairHandler.getDefaultCrosshair();
+		setColor(defaultStyle.color(), defaultStyle.enableBlend(), false);
 	}
 
 	public static void fixCenteredCrosshairPre(DrawContext context, int x, int y) {
