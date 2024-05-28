@@ -42,14 +42,14 @@ public class ConfigHandler {
                 DynamicCrosshairStyles.DEFAULT,
                 CONFIG_STORE.config().color.overrideColor ? CONFIG_STORE.config().color.customColor.getRGB() : 0xFFFFFFFF,
                 CONFIG_STORE.config().color.enableBlend,
-                false
+                true
         );
     }
 
     public boolean isDynamicCrosshairStyle() { return CONFIG_STORE.config().dynamicCrosshairStyle; }
 
     private CrosshairStyle configToCrosshairStyle(Config.CrosshairStyleSettings cfg) {
-        return new CrosshairStyle(cfg.style, cfg.overrideColor ? cfg.customColor.getRGB() : getDefaultStyle().color(), cfg.enableBlend, cfg.isModifier);
+        return new CrosshairStyle(cfg.style, cfg.overrideColor ? cfg.customColor.getRGB() : getDefaultStyle().color(), cfg.enableBlend, cfg.coalesce);
     }
     public CrosshairStyle getCrosshairStyleRegular() { return configToCrosshairStyle(CONFIG_STORE.config().crosshairStyle.regular); }
     public CrosshairStyle getCrosshairStyleOnBlock() { return configToCrosshairStyle(CONFIG_STORE.config().crosshairStyle.onBlock); }

@@ -6,6 +6,6 @@ public record CrosshairStyle(
 		Identifier identifier,
 		int color,
 		boolean enableBlend,
-		boolean isModifier
+		boolean coalesce
 ) {
 }

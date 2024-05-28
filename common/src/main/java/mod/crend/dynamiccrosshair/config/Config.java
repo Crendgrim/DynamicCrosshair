@@ -85,7 +85,7 @@ public class Config {
         @SerialEntry
         public boolean enableBlend = true;
         @SerialEntry
-        public boolean isModifier = false; // FIXME do not include this for all..
+        public boolean coalesce = true;
 
         @Override
         public boolean equals(Object o) {
@@ -94,14 +94,14 @@ public class Config {
             CrosshairStyleSettings that = (CrosshairStyleSettings) o;
             return overrideColor == that.overrideColor
                     && enableBlend == that.enableBlend
-                    && isModifier == that.isModifier
+                    && coalesce == that.coalesce
                     && Objects.equals(style, that.style)
                     && Objects.equals(customColor, that.customColor);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(style, overrideColor, customColor, enableBlend, isModifier);
+            return Objects.hash(style, overrideColor, customColor, enableBlend, coalesce);
         }
     }
 
@@ -163,13 +163,11 @@ public class Config {
             holdingMeleeWeapon.style = DynamicCrosshairStyles.CROSS_OPEN;
             holdingRangedWeapon.style = DynamicCrosshairStyles.CROSS_OPEN_DIAGONAL;
             holdingThrowable.style = DynamicCrosshairStyles.CIRCLE_LARGE;
-            holdingBlock.style = DynamicCrosshairStyles.DIAMOND;
+            holdingBlock.style = DynamicCrosshairStyles.DIAMOND_LARGE;
             interact.style = DynamicCrosshairStyles.BRACKETS;
             useItem.style = DynamicCrosshairStyles.BRACKETS_ROUND;
             shield.style = DynamicCrosshairStyles.BRACKETS_BOTTOM;
-            interact.isModifier = true;
-            useItem.isModifier = true;
-            shield.isModifier = true;
+            holdingRangedWeapon.coalesce = false;
         }
     }
     public static class CrosshairModifiers {

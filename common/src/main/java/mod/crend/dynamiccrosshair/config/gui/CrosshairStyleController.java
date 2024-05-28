@@ -27,7 +27,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 	Option<Boolean> overrideColorOption;
 	Option<Color> customColorOption;
 	Option<Boolean> enableBlendOption;
-	Option<Boolean> isModifierOption;
+	Option<Boolean> coalesceOption;
 
 	public CrosshairStyleController(Option<Config.CrosshairStyleSettings> option) {
 		this.option = option;
@@ -82,12 +82,12 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 				)
 				.controller(TickBoxControllerBuilder::create)
 				.build();
-		isModifierOption = Option.<Boolean>createBuilder()
-				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.isModifier"))
-				.description(OptionDescription.of(Text.translatable("dynamiccrosshair.option.crosshairStyle.isModifier.description")))
-				.binding(option.binding().defaultValue().isModifier,
-						() -> option.pendingValue().isModifier,
-						isModifier -> option.pendingValue().isModifier = isModifier
+		coalesceOption = Option.<Boolean>createBuilder()
+				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.coalesce"))
+				.description(OptionDescription.of(Text.translatable("dynamiccrosshair.option.crosshairStyle.coalesce.description")))
+				.binding(option.binding().defaultValue().coalesce,
+						() -> option.pendingValue().coalesce,
+						coalesce -> option.pendingValue().coalesce = coalesce
 				)
 				.controller(TickBoxControllerBuilder::create)
 				.build();
@@ -100,7 +100,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 						.option(overrideColorOption)
 						.option(customColorOption)
 						.option(enableBlendOption)
-						.option(isModifierOption)
+						.option(coalesceOption)
 						.build())
 				.save(() -> {
 					Config.CrosshairStyleSettings newStyle = new Config.CrosshairStyleSettings();
@@ -108,7 +108,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 					newStyle.customColor = customColorOption.pendingValue();
 					newStyle.overrideColor = overrideColorOption.pendingValue();
 					newStyle.enableBlend = enableBlendOption.pendingValue();
-					newStyle.isModifier = isModifierOption.pendingValue();
+					newStyle.coalesce = coalesceOption.pendingValue();
 					option.requestSet(newStyle);
 					ConfigHandler.CONFIG_STORE.save();
 				})
@@ -118,7 +118,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 			overrideColorOption.requestSet(option.pendingValue().overrideColor);
 			customColorOption.requestSet(option.pendingValue().customColor);
 			enableBlendOption.requestSet(option.pendingValue().enableBlend);
-			isModifierOption.requestSet(option.pendingValue().isModifier);
+			coalesceOption.requestSet(option.pendingValue().coalesce);
 		});
 		return new CrosshairStyleControllerElement(this, screen, widgetDimension);
 	}

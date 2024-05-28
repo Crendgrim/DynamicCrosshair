@@ -87,8 +87,7 @@ public class ConfigUpdater implements mod.crend.libbamboo.opt.ConfigUpdater {
 				case "Circle" -> DynamicCrosshairStyles.CIRCLE;
 				case "CircleLarge" -> DynamicCrosshairStyles.CIRCLE_LARGE;
 				case "Square" -> DynamicCrosshairStyles.SQUARE;
-				case "Diamond" -> DynamicCrosshairStyles.DIAMOND;
-				case "DiamondLarge" -> DynamicCrosshairStyles.DIAMOND_LARGE;
+				case "Diamond" -> DynamicCrosshairStyles.DIAMOND_LARGE;
 				case "Caret" -> DynamicCrosshairStyles.CARET;
 				case "Dot" -> DynamicCrosshairStyles.DOT;
 				case "SmallDiagonalCross" -> DynamicCrosshairStyles.CROSS_DIAGONAL_SMALL;
