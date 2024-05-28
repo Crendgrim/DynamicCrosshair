@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "dynamiccrosshair-datagen",
+  "id": "dynamiccrosshair-api",
   "version": "${api_version}",
 
-  "name": "DynamicCrosshair Data Generator",
-  "description": "DynamicCrosshair tag data generator",
+  "name": "DynamicCrosshair API",
+  "description": "DynamicCrosshair compatibility API",
   "authors": [
     "Crendgrim"
   ],
@@ -23,12 +23,6 @@
       },
       "update_checker": false
     }
-  },
-
-  "entrypoints": {
-    "fabric-datagen": [
-      "mod.crend.dynamiccrosshair.datagen.DynamicCrosshairDataGenerator"
-    ]
   },
 
   "license": "LGPL-3.0"
