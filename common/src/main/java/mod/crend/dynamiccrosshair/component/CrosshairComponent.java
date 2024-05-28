@@ -78,7 +78,7 @@ public class CrosshairComponent {
         primaryStyle = getCrosshairStyle(primary);
         secondaryStyle = getCrosshairStyle(secondary);
         if (primaryStyle != null) {
-            if (secondaryStyle == null || secondaryStyle.isModifier() || !primaryStyle.isModifier()) {
+            if (secondaryStyle == null || secondaryStyle.coalesce() || !primaryStyle.coalesce()) {
                 if (DynamicCrosshairMod.config.dynamicCrosshairDisplayCorrectTool()) {
                     switch (modifierHit) {
                         case CORRECT_TOOL -> hitModifier = DynamicCrosshairMod.config.getCrosshairModifierCorrectTool();
@@ -86,9 +86,9 @@ public class CrosshairComponent {
                                 hitModifier = DynamicCrosshairMod.config.getCrosshairModifierIncorrectTool();
                     }
                 }
-                if (secondaryStyle != null && !secondaryStyle.isModifier() && !primaryStyle.isModifier()) secondaryStyle = null;
+                if (secondaryStyle != null && !secondaryStyle.coalesce() && !primaryStyle.coalesce()) secondaryStyle = null;
             } else {
-                // !secondaryStyle.isModifier
+                // !secondaryStyle.coalesce
                 primaryStyle = null;
             }
         }

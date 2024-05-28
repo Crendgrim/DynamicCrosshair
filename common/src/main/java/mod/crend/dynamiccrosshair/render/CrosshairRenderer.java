@@ -3,7 +3,6 @@ package mod.crend.dynamiccrosshair.render;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mod.crend.dynamiccrosshair.AutoHudCompat;
-import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.component.CrosshairComponent;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
@@ -67,7 +66,7 @@ public class CrosshairRenderer {
 		if (primaryStyle != null) {
 			setColor(primaryStyle.color(), primaryStyle.enableBlend(), false);
 			renderCrosshair(context, primaryStyle.identifier(), x, y);
-		} else if (CrosshairHandler.forceShowCrosshair && (secondaryStyle == null || secondaryStyle.isModifier())) {
+		} else if (CrosshairHandler.forceShowCrosshair && secondaryStyle == null) {
 			CrosshairStyle crosshairStyle = CrosshairComponent.FORCE_CROSSHAIR.getPrimaryStyle();
 			setColor(crosshairStyle.color(), crosshairStyle.enableBlend(), true);
 			renderCrosshair(context, crosshairStyle.identifier(), x, y);
