@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.config.gui;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
+import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
 import dev.isxander.yacl3.api.controller.ColorControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
@@ -46,6 +47,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 	public AbstractWidget provideWidget(YACLScreen screen, Dimension<Integer> widgetDimension) {
 		styleOption = Option.<Identifier>createBuilder()
 				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.style"))
+				.description(OptionDescription.of(Text.translatable("dynamiccrosshair.option.crosshairStyle.style.description")))
 				.binding(option.binding().defaultValue().style,
 						() -> option.pendingValue().style,
 						style -> option.pendingValue().style = style
@@ -54,14 +56,16 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 				.build();
 		customColorOption = Option.<Color>createBuilder()
 				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.customColor"))
+				.description(OptionDescription.of(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.customColor.description")))
 				.binding(option.binding().defaultValue().customColor,
 						() -> option.pendingValue().customColor,
 						color -> option.pendingValue().customColor = color
 				)
-				.controller(ColorControllerBuilder::create)
+				.controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
 				.build();
 		overrideColorOption = Option.<Boolean>createBuilder()
 				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.crosshairColor"))
+				.description(OptionDescription.of(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.crosshairColor.description")))
 				.binding(option.binding().defaultValue().overrideColor,
 						() -> option.pendingValue().overrideColor,
 						overrideColor -> option.pendingValue().overrideColor = overrideColor
@@ -71,6 +75,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 				.build();
 		enableBlendOption = Option.<Boolean>createBuilder()
 				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.enableBlend"))
+				.description(OptionDescription.of(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.enableBlend.description")))
 				.binding(option.binding().defaultValue().enableBlend,
 						() -> option.pendingValue().enableBlend,
 						enableBlend -> option.pendingValue().enableBlend = enableBlend
@@ -79,6 +84,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 				.build();
 		isModifierOption = Option.<Boolean>createBuilder()
 				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.isModifier"))
+				.description(OptionDescription.of(Text.translatable("dynamiccrosshair.option.crosshairStyle.isModifier.description")))
 				.binding(option.binding().defaultValue().isModifier,
 						() -> option.pendingValue().isModifier,
 						isModifier -> option.pendingValue().isModifier = isModifier

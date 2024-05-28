@@ -28,6 +28,7 @@ public class SelectCrosshairElement extends AbstractWidget implements ParentElem
 	final SelectCrosshairController control;
 	Element focusedElement;
 	boolean dragging;
+	int normalHeight;
 
 	List<Element> childrenInSelectMode = new ArrayList<>();
 	List<Element> childrenInEditMode = new ArrayList<>();
@@ -47,6 +48,7 @@ public class SelectCrosshairElement extends AbstractWidget implements ParentElem
 
 	public SelectCrosshairElement(SelectCrosshairController selectCrosshairController, Dimension<Integer> widgetDimension) {
 		super(widgetDimension);
+		normalHeight = widgetDimension.height();
 		this.control = selectCrosshairController;
 		createButtons();
 		toggleButtons();
@@ -125,12 +127,13 @@ public class SelectCrosshairElement extends AbstractWidget implements ParentElem
 		addChild(cancelButton);
 
 		List<AbstractCrosshairStyle> styles = control.getButtons();
-		int n = 1 + Math.ceilDiv(styles.size(), BUTTONS_PER_ROW);
-		setDimension(getDimension().expanded(getDimension().width(), getDimension().height() * n));
+		int n = 2 + Math.ceilDiv(styles.size(), BUTTONS_PER_ROW);
+
+		setDimension(getDimension().withHeight(normalHeight * n));
 
 		int x = getDimension().x();
 		int y = 50;
-		drawCrosshairWidget = new DrawCrosshairWidget(Dimension.ofInt(x + 125, y + 10, 45, 45), control);
+		drawCrosshairWidget = new DrawCrosshairWidget(Dimension.ofInt(x + 90, y + 10, 45, 45), control);
 		addEditModeChild(drawCrosshairWidget);
 
 		int buttonI = 0;
