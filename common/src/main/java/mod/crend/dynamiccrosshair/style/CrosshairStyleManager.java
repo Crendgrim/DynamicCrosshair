@@ -1,5 +1,7 @@
 package mod.crend.dynamiccrosshair.style;
 
+import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
+import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import mod.crend.dynamiccrosshair.PlatformUtils;
 import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
 import net.minecraft.client.MinecraftClient;
@@ -122,5 +124,18 @@ public class CrosshairStyleManager {
 		} catch (IOException ignored) {
 		}
 		return false;
+	}
+
+	public void registerTexture(BufferedImage editImage, Identifier identifier) {
+		try (FastByteArrayOutputStream outputStream = new FastByteArrayOutputStream()) {
+			ImageIO.write(editImage, "PNG", outputStream);
+			NativeImage nativeImage = NativeImage.read(new FastByteArrayInputStream(outputStream.array));
+			textureManager.registerTexture(identifier, new NativeImageBackedTexture(nativeImage));
+		} catch (IOException ignored) {
+		}
+	}
+
+	public NativeImage getTexture(Identifier identifier) {
+		return ((NativeImageBackedTexture) textureManager.getTexture(identifier)).getImage();
 	}
 }

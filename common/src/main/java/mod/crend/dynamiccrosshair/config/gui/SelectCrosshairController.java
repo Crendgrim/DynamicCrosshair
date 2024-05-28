@@ -5,28 +5,20 @@ import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
-import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
-import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
 import mod.crend.dynamiccrosshair.style.AbstractCrosshairStyle;
 import mod.crend.dynamiccrosshair.style.CustomCrosshairStyle;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.NativeImageBackedTexture;
-import net.minecraft.client.texture.TextureManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SelectCrosshairController implements Controller<Identifier> {
 
-	public final TextureManager textureManager = MinecraftClient.getInstance().getTextureManager();
 	Option<Identifier> option;
 	CustomCrosshairStyle editStyle = null;
 	BufferedImage editImage;
@@ -100,12 +92,7 @@ public class SelectCrosshairController implements Controller<Identifier> {
 
 	public void registerTexture() {
 		if (isInEditMode()) {
-			try (FastByteArrayOutputStream outputStream = new FastByteArrayOutputStream()) {
-				ImageIO.write(editImage, "PNG", outputStream);
-				NativeImage nativeImage = NativeImage.read(new FastByteArrayInputStream(outputStream.array));
-				textureManager.registerTexture(editStyle.identifier, new NativeImageBackedTexture(nativeImage));
-			} catch (IOException ignored) {
-			}
+			CrosshairStyleManager.INSTANCE.registerTexture(editImage, editStyle.identifier);
 		}
 	}
 
@@ -117,7 +104,7 @@ public class SelectCrosshairController implements Controller<Identifier> {
 
 	private void loadCurrentTexture() {
 		if (editStyle != null) {
-			NativeImage nativeImage = ((NativeImageBackedTexture) textureManager.getTexture(editStyle.identifier)).getImage();
+			NativeImage nativeImage = CrosshairStyleManager.INSTANCE.getTexture(editStyle.identifier);
 			if (nativeImage != null) {
 				int[] rgba = nativeImage.copyPixelsRgba();
 				int i = 0;
