@@ -40,6 +40,7 @@ remapJar {
 sourcesJar {
     def commonSources = project(":api-common").sourcesJar
     dependsOn commonSources
+    exclude "fabric.mod.json"
     from commonSources.archiveFile.map { zipTree(it) }
 }
 
