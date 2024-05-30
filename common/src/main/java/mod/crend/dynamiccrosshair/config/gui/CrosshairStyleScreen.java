@@ -10,11 +10,13 @@ import org.lwjgl.glfw.GLFW;
 public class CrosshairStyleScreen extends YACLScreen {
 
 	CrosshairStyleController control;
+	SelectCrosshairController nestedControl;
 	PreviewCrosshairWidget previewCrosshairWidget;
 
 	public CrosshairStyleScreen(CrosshairStyleController control, YetAnotherConfigLib config, Screen parent) {
 		super(config, parent);
 		this.control = control;
+		this.nestedControl = (SelectCrosshairController) control.styleOption.controller();
 	}
 
 	@Override
@@ -29,5 +31,32 @@ public class CrosshairStyleScreen extends YACLScreen {
 	public void close() {
 		GLFW.glfwSetInputMode(client.getWindow().getHandle(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 		super.close();
+	}
+
+	@Override
+	public void finishOrSave() {
+		nestedControl.save();
+		super.finishOrSave();
+	}
+
+	@Override
+	public void cancelOrReset() {
+		nestedControl.cancel();
+		super.cancelOrReset();
+	}
+
+	@Override
+	public void undo() {
+		if (!nestedControl.isInEditMode()) {
+			super.undo();
+		}
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		if (tabManager.getCurrentTab() instanceof CategoryTab categoryTab) {
+			categoryTab.saveFinishedButton.active = !nestedControl.isInEditMode();
+		}
 	}
 }
