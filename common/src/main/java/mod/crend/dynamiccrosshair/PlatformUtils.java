@@ -1,8 +1,11 @@
 package mod.crend.dynamiccrosshair;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 
 @SuppressWarnings("unused")
 public class PlatformUtils {
