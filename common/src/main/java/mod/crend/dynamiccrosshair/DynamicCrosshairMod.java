@@ -1,8 +1,8 @@
 package mod.crend.dynamiccrosshair;
 
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import mod.crend.dynamiccrosshair.impl.VanillaApiImpl;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
 
 import java.util.HashMap;
 import java.util.HashSet;

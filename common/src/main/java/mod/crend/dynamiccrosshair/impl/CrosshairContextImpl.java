@@ -1,11 +1,11 @@
 package mod.crend.dynamiccrosshair.impl;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
-import mod.crend.dynamiccrosshair.api.exception.InvalidContextState;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+import mod.crend.dynamiccrosshairapi.exception.CrosshairContextChange;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshairapi.exception.InvalidContextState;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.CrosshairPolicy;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;

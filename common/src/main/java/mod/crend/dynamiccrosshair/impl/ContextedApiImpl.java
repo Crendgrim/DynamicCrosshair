@@ -1,10 +1,10 @@
 package mod.crend.dynamiccrosshair.impl;
 
-import mod.crend.dynamiccrosshair.api.internal.ContextedApi;
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.exception.CrosshairContextChange;
+import mod.crend.dynamiccrosshairapi.internal.ContextedApi;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;

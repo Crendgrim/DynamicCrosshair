@@ -1,7 +1,7 @@
 package mod.crend.dynamiccrosshair.config;
 
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
 import mod.crend.libbamboo.type.BlockOrTag;
 import mod.crend.libbamboo.type.ItemOrTag;
 import mod.crend.libbamboo.opt.ConfigStore;

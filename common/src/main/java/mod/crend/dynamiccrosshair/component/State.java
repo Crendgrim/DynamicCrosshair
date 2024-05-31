@@ -1,9 +1,9 @@
 package mod.crend.dynamiccrosshair.component;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.impl.CrosshairContextImpl;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;

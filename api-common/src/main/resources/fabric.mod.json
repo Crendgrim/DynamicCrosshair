@@ -27,7 +27,7 @@
 
   "entrypoints": {
     "fabric-datagen": [
-      "mod.crend.dynamiccrosshair.datagen.DynamicCrosshairDataGenerator"
+      "mod.crend.dynamiccrosshairapi.internal.datagen.DynamicCrosshairDataGenerator"
     ]
   },
 

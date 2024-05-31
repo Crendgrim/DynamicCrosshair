@@ -1,10 +1,10 @@
 package mod.crend.dynamiccrosshair.fabric;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;

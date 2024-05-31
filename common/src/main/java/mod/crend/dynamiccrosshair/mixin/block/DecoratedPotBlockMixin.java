@@ -1,8 +1,8 @@
 package mod.crend.dynamiccrosshair.mixin.block;
 
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairBlock;
-import mod.crend.dynamiccrosshair.api.InteractionType;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import net.minecraft.block.DecoratedPotBlock;
 import net.minecraft.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.item.ItemStack;

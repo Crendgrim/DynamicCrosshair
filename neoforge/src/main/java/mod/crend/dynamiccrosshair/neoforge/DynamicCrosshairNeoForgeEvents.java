@@ -1,11 +1,11 @@
 package mod.crend.dynamiccrosshair.neoforge;
 
 import mod.crend.dynamiccrosshair.AutoHudCompat;
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
 import mod.crend.libbamboo.neoforge.ConfigScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;

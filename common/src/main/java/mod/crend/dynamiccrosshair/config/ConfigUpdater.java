@@ -1,7 +1,7 @@
 package mod.crend.dynamiccrosshair.config;
 
 import com.google.gson.*;
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;

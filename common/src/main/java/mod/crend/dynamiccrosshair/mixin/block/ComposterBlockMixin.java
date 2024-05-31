@@ -1,9 +1,9 @@
 package mod.crend.dynamiccrosshair.mixin.block;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairBlock;
-import mod.crend.dynamiccrosshair.api.InteractionType;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import net.minecraft.block.ComposterBlock;
 import net.minecraft.item.ItemConvertible;
 import org.spongepowered.asm.mixin.Final;

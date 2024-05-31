@@ -1,9 +1,9 @@
 package mod.crend.dynamiccrosshair.config;
 
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.config.gui.CrosshairStyleController;
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
 import mod.crend.libbamboo.render.ItemOrTagRenderer;
 import mod.crend.libbamboo.type.BlockOrTag;
 import mod.crend.libbamboo.type.ItemOrTag;

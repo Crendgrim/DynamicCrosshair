@@ -1,9 +1,9 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
 import com.mojang.datafixers.util.Pair;
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
-import mod.crend.dynamiccrosshair.api.InteractionType;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import net.minecraft.block.Block;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemUsageContext;

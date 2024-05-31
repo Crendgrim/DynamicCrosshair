@@ -7,6 +7,7 @@ import mod.crend.autohud.component.state.BooleanComponentState;
 import mod.crend.autohud.render.AutoHudRenderer;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.render.CrosshairRenderer;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import net.minecraft.client.network.ClientPlayerEntity;
 
 public class AutoHudCompat implements AutoHudApi {

@@ -1,17 +1,17 @@
 package mod.crend.dynamiccrosshair.component;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.api.Crosshair;
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.exception.CrosshairContextChange;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairBlock;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairEntity;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairItem;
-import mod.crend.dynamiccrosshair.api.InteractionType;
-import mod.crend.dynamiccrosshair.api.exception.InvalidContextState;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshairapi.crosshair.Crosshair;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.exception.CrosshairContextChange;
+import mod.crend.dynamiccrosshairapi.exception.InvalidContextState;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.FilledMapItem;

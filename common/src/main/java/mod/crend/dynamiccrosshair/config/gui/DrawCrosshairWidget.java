@@ -5,7 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.debug.DebugProperties;
 import dev.isxander.yacl3.gui.AbstractWidget;
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;

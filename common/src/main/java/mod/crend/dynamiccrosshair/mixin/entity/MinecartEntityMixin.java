@@ -1,8 +1,8 @@
 package mod.crend.dynamiccrosshair.mixin.entity;
 
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairEntity;
-import mod.crend.dynamiccrosshair.api.InteractionType;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import org.spongepowered.asm.mixin.Mixin;
 

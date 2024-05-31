@@ -1,9 +1,9 @@
 package mod.crend.dynamiccrosshair.component;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.api.Crosshair;
-import mod.crend.dynamiccrosshair.api.InteractionType;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
+import mod.crend.dynamiccrosshairapi.crosshair.Crosshair;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 
 import java.util.List;
 

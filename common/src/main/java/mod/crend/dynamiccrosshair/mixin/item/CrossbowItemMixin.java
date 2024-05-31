@@ -1,7 +1,7 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairRangedItem;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairRangedItem;
 import net.minecraft.item.CrossbowItem;
 import org.spongepowered.asm.mixin.Mixin;
 

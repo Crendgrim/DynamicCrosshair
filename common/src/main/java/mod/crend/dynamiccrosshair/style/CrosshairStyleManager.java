@@ -3,7 +3,7 @@ package mod.crend.dynamiccrosshair.style;
 import it.unimi.dsi.fastutil.io.FastByteArrayInputStream;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import mod.crend.dynamiccrosshair.PlatformUtils;
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.NativeImageBackedTexture;

@@ -1,15 +1,15 @@
 package mod.crend.dynamiccrosshair.impl;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.api.Crosshair;
-import mod.crend.dynamiccrosshair.api.CrosshairContext;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairRangedItem;
-import mod.crend.dynamiccrosshair.api.InteractionType;
 import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairBlockTags;
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairEntityTags;
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairItemTags;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshairapi.crosshair.Crosshair;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairBlockTags;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairEntityTags;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairItemTags;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairRangedItem;
 import mod.crend.libbamboo.tag.ClientTags;
 import mod.crend.libbamboo.type.BlockOrTag;
 import mod.crend.libbamboo.type.ItemOrTag;

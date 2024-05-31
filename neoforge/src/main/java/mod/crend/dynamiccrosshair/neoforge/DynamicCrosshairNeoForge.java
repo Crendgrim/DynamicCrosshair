@@ -1,8 +1,8 @@
 package mod.crend.dynamiccrosshair.neoforge;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 

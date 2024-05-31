@@ -1,6 +1,6 @@
 package mod.crend.dynamiccrosshair.style;
 
-import mod.crend.dynamiccrosshair.registry.DynamicCrosshairStyles;
+import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
