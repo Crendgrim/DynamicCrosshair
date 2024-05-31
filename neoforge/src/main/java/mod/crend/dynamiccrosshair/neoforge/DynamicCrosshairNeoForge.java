@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.neoforge;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
@@ -13,7 +14,7 @@ public class DynamicCrosshairNeoForge {
 
     public static void registerApi(DynamicCrosshairApi api) {
         if (ModList.get().isLoaded(api.getModId())) {
-            DynamicCrosshair.registerApi(api);
+            DynamicCrosshairMod.registerApi(api);
         }
     }
 }

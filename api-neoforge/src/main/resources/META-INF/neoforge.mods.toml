@@ -4,18 +4,15 @@ issueTrackerURL = "https://github.com/Crendgrim/DynamicCrosshair/issues"
 license = "LGPL-3.0"
 
 [[mods]]
-modId = "dynamiccrosshair"
+modId = "dynamiccrosshairapi"
 version = "${version}"
-displayName = "Dynamic Crosshair"
+displayName = "Dynamic Crosshair API"
 authors = "Crendgrim"
 description = '''
-Dynamic Crosshair that changes shape based on what is targeted
+DynamicCrosshair compatibility API
 '''
 logoFile = "dynamiccrosshair.png"
 displayTest = "IGNORE_ALL_VERSION"
-
-[[mixins]]
-config = "dynamiccrosshair-common.mixins.json"
 
 [[dependencies.dynamiccrosshair]]
 modId = "neoforge"
@@ -28,12 +25,5 @@ side = "BOTH"
 modId = "minecraft"
 type = "required"
 versionRange = "${minecraft_version_range_forge}"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.dynamiccrosshair]]
-modId = "yet_another_config_lib"
-type = "optional"
-versionRange = "${yacl_version_range_neoforge}"
 ordering = "NONE"
 side = "BOTH"

@@ -18,14 +18,6 @@ configurations {
 
 repositories {
     maven { url "https://maven.neoforged.net/releases/" }
-    maven {
-        name 'Maven for PR #794' // https://github.com/neoforged/NeoForge/pull/794
-        url 'https://prmaven.neoforged.net/NeoForge/pr794'
-        content {
-            includeModule('net.neoforged', 'neoforge')
-            includeModule('net.neoforged', 'testframework')
-        }
-    }
 }
 
 dependencies {
@@ -37,12 +29,19 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+
+    common(project(path: ":api-common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":api-common", configuration: "transformProductionNeoForge")) { transitive = false }
+    /*
+    api(project(path: ":api-common", configuration: "namedElements")) { transitive false }
+    api include(project(path: ":api-neoforge", configuration: "namedElements")) { transitive false }
+     */
 }
 
 processResources {
     inputs.property "version", project.version
 
-    filesMatching("META-INF/mods.toml") {
+    filesMatching("META-INF/neoforge.mods.toml") {
         expand(project.properties)
     }
 }

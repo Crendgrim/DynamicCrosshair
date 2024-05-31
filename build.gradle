@@ -12,10 +12,10 @@ subprojects {
 
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        if (name == "neoforge") {
+        if (name.contains("neoforge")) {
             mappings loom.layered {
                 it.mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
-                it.mappings file("${rootDir}/mappings/23w13a.tiny")
+                it.mappings file("${rootDir}/mappings/1.20.5.tiny")
             }
         } else {
             mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
