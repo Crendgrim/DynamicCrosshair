@@ -5,14 +5,16 @@ import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
-import dev.isxander.yacl3.api.controller.ColorControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
+import dev.isxander.yacl3.gui.controllers.ColorController;
 import mod.crend.dynamiccrosshair.config.Config;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import mod.crend.libbamboo.auto.annotation.CustomController;
+import mod.crend.libbamboo.controller.NestedController;
+import mod.crend.libbamboo.controller.NestingController;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -61,7 +63,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 						() -> option.pendingValue().customColor,
 						color -> option.pendingValue().customColor = color
 				)
-				.controller(opt -> ColorControllerBuilder.create(opt).allowAlpha(true))
+				.customController(opt -> new NestedController<>(opt, new ColorController(opt, true)))
 				.build();
 		overrideColorOption = Option.<Boolean>createBuilder()
 				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.crosshairColor"))
@@ -70,8 +72,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 						() -> option.pendingValue().overrideColor,
 						overrideColor -> option.pendingValue().overrideColor = overrideColor
 				)
-				.listener((crosshairConfigColorOption, overrideColor) -> customColorOption.setAvailable(overrideColor))
-				.controller(TickBoxControllerBuilder::create)
+				.customController(opt -> new NestingController(opt, customColorOption))
 				.build();
 		enableBlendOption = Option.<Boolean>createBuilder()
 				.name(Text.translatable("dynamiccrosshair.option.crosshairStyle.color.enableBlend"))
@@ -98,9 +99,9 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 						.name(Text.translatable("dynamiccrosshair.group.crosshairStyle"))
 						.option(styleOption)
 						.option(overrideColorOption)
-						.option(customColorOption)
 						.option(enableBlendOption)
 						.option(coalesceOption)
+						.option(customColorOption)
 						.build())
 				.save(() -> {
 					Config.CrosshairStyleSettings newStyle = new Config.CrosshairStyleSettings();
