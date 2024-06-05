@@ -25,6 +25,7 @@ public class AutoHudCompat implements AutoHudApi {
 	@Override
 	public void tickState(ClientPlayerEntity player) {
 		CrosshairHandler.forceShowCrosshair = AutoHud.config.crosshair().active();
+		CrosshairRenderer.autoHudCompat = getAlpha() < 1.0f;
 	}
 
 	public static float getAlpha() {
