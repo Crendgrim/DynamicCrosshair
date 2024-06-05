@@ -77,19 +77,18 @@ public class CrosshairComponent {
         }
         primaryStyle = getCrosshairStyle(primary);
         secondaryStyle = getCrosshairStyle(secondary);
+        if (DynamicCrosshairMod.config.dynamicCrosshairDisplayCorrectTool()) {
+            switch (modifierHit) {
+                case CORRECT_TOOL -> hitModifier = DynamicCrosshairMod.config.getCrosshairModifierCorrectTool();
+                case INCORRECT_TOOL ->
+                        hitModifier = DynamicCrosshairMod.config.getCrosshairModifierIncorrectTool();
+            }
+        }
         if (primaryStyle != null) {
-            if (secondaryStyle == null || secondaryStyle.coalesce() || !primaryStyle.coalesce()) {
-                if (DynamicCrosshairMod.config.dynamicCrosshairDisplayCorrectTool()) {
-                    switch (modifierHit) {
-                        case CORRECT_TOOL -> hitModifier = DynamicCrosshairMod.config.getCrosshairModifierCorrectTool();
-                        case INCORRECT_TOOL ->
-                                hitModifier = DynamicCrosshairMod.config.getCrosshairModifierIncorrectTool();
-                    }
-                }
-                if (secondaryStyle != null && !secondaryStyle.coalesce() && !primaryStyle.coalesce()) secondaryStyle = null;
-            } else {
-                // !secondaryStyle.coalesce
+            if (secondaryStyle != null && !secondaryStyle.coalesce()) {
                 primaryStyle = null;
+            } else if (!primaryStyle.coalesce()) {
+                secondaryStyle = null;
             }
         }
     }

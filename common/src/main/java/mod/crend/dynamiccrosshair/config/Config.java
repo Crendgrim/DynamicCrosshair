@@ -163,10 +163,12 @@ public class Config {
             holdingMeleeWeapon.style = DynamicCrosshairStyles.CROSS_OPEN;
             holdingRangedWeapon.style = DynamicCrosshairStyles.CROSS_OPEN_DIAGONAL;
             holdingThrowable.style = DynamicCrosshairStyles.CIRCLE_LARGE;
-            holdingBlock.style = DynamicCrosshairStyles.DIAMOND_LARGE;
+            holdingBlock.style = DynamicCrosshairStyles.DIAMOND;
             interact.style = DynamicCrosshairStyles.BRACKETS;
             useItem.style = DynamicCrosshairStyles.BRACKETS_ROUND;
             shield.style = DynamicCrosshairStyles.BRACKETS_BOTTOM;
+            onBlock.coalesce = false;
+            onEntity.coalesce = false;
             holdingRangedWeapon.coalesce = false;
         }
     }
