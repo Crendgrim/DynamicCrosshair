@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "#c:tools/mining_tools",
+      "id": "#c:tools/mining_tool",
       "required": false
     },
     {
-      "id": "#c:tools/shears",
+      "id": "#c:tools/shear",
       "required": false
     },
     {

@@ -5,7 +5,7 @@
       "required": false
     },
     {
-      "id": "#c:tools/melee_weapons",
+      "id": "#c:tools/melee_weapon",
       "required": false
     },
     "minecraft:mace"

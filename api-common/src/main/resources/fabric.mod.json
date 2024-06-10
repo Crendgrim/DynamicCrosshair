@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "dynamiccrosshair-datagen",
+  "id": "dynamiccrosshair-api",
   "version": "${api_version}",
 
   "name": "DynamicCrosshair Data Generator",

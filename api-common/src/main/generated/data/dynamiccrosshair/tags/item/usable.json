@@ -12,7 +12,7 @@
     "minecraft:firework_rocket",
     "minecraft:fire_charge",
     {
-      "id": "#minecraft:music_discs",
+      "id": "#c:music_discs",
       "required": false
     },
     "minecraft:honeycomb",

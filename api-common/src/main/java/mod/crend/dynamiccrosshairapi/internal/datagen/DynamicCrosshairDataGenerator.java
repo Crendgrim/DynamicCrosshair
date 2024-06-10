@@ -11,6 +11,7 @@ public class DynamicCrosshairDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(ItemTagGenerator::new);
 		pack.addProvider(BlockTagGenerator::new);
 		pack.addProvider(EntityTypeTagGenerator::new);
+		pack.addProvider(EnglishTagLangGenerator::new);
 	}
 
 }
