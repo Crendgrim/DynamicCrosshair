@@ -18,8 +18,8 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
 		getOrCreateTagBuilder(DynamicCrosshairItemTags.TOOLS)
-				.addOptionalTag(ConventionalItemTags.MINING_TOOLS)
-				.addOptionalTag(ConventionalItemTags.SHEARS_TOOLS)
+				.addOptionalTag(ConventionalItemTags.MINING_TOOL_TOOLS)
+				.addOptionalTag(ConventionalItemTags.SHEAR_TOOLS)
 				.addOptionalTag(ItemTags.PICKAXES)
 				.addOptionalTag(ItemTags.SHOVELS)
 				.addOptionalTag(ItemTags.AXES)
@@ -38,12 +38,12 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 
 		getOrCreateTagBuilder(DynamicCrosshairItemTags.SHIELDS)
 				.add(Items.SHIELD)
-				.addOptionalTag(ConventionalItemTags.SHIELDS_TOOLS)
+				.addOptionalTag(ConventionalItemTags.SHIELD_TOOLS)
 		;
 
 		getOrCreateTagBuilder(DynamicCrosshairItemTags.MELEE_WEAPONS)
 				.addOptionalTag(ItemTags.SWORDS)
-				.addOptionalTag(ConventionalItemTags.MELEE_WEAPONS_TOOLS)
+				.addOptionalTag(ConventionalItemTags.MELEE_WEAPON_TOOLS)
 				.add(Items.MACE)
 		;
 
@@ -52,11 +52,11 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.BOW)
 				.add(Items.CROSSBOW)
 				.add(Items.TRIDENT)
-				.addOptionalTag(ConventionalItemTags.SPEARS_TOOLS)
-				.addOptionalTag(ConventionalItemTags.BOWS_TOOLS)
-				.addOptionalTag(ConventionalItemTags.CROSSBOWS_TOOLS)
-				.addOptionalTag(ConventionalItemTags.FISHING_RODS_TOOLS)
-				.addOptionalTag(ConventionalItemTags.RANGED_WEAPONS_TOOLS)
+				.addOptionalTag(ConventionalItemTags.SPEAR_TOOLS)
+				.addOptionalTag(ConventionalItemTags.BOW_TOOLS)
+				.addOptionalTag(ConventionalItemTags.CROSSBOW_TOOLS)
+				.addOptionalTag(ConventionalItemTags.FISHING_ROD_TOOLS)
+				.addOptionalTag(ConventionalItemTags.RANGED_WEAPON_TOOLS)
 		;
 
 		// NOTE BlockItem is missing here
@@ -103,7 +103,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.FIREWORK_ROCKET)
 				// TODO spawn eggs
 				.add(Items.FIRE_CHARGE)
-				.addOptionalTag(ItemTags.MUSIC_DISCS)
+				.addOptionalTag(ConventionalItemTags.MUSIC_DISCS)
 				.add(Items.HONEYCOMB)
 				.add(Items.ENDER_EYE)
 				.add(Items.GLASS_BOTTLE)

@@ -4,32 +4,24 @@ import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.Leashable;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(MobEntity.class)
-public abstract class MobEntityMixin extends LivingEntity implements DynamicCrosshairEntity {
-
-	protected MobEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
-		super(entityType, world);
-	}
-
-	@Shadow public abstract boolean canBeLeashedBy(PlayerEntity player);
-
-	@Shadow public abstract boolean hasArmorSlot();
+public abstract class MobEntityMixin extends LivingEntityMixin implements DynamicCrosshairEntity {
 
 	@Shadow public abstract boolean isHorseArmor(ItemStack stack);
 
 	@Shadow public abstract boolean isWearingBodyArmor();
+
+	@Shadow public abstract boolean canUseSlot(EquipmentSlot slot);
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
@@ -37,7 +29,7 @@ public abstract class MobEntityMixin extends LivingEntity implements DynamicCros
 		if (handItem instanceof SpawnEggItem) return InteractionType.USE_ITEM_ON_ENTITY;
 
 		if (handItem == Items.LEAD) {
-			if (this.canBeLeashedBy(context.getPlayer())) {
+			if (this instanceof Leashable leashable && leashable.canBeLeashed()) {
 				return InteractionType.USE_ITEM_ON_ENTITY;
 			}
 			return InteractionType.NO_ACTION;
@@ -49,6 +41,6 @@ public abstract class MobEntityMixin extends LivingEntity implements DynamicCros
 			}
 
 		}
-		return InteractionType.EMPTY;
+		return super.dynamiccrosshair$compute(context);
 	}
 }

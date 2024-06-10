@@ -12,6 +12,6 @@ public class DynamicCrosshairBlockTags {
 	public static final TagKey<Block> ALWAYS_INTERACTABLE_IN_CREATIVE_MODE = of("always_interactable_in_creative_mode");
 
 	private static TagKey<Block> of(String path) {
-		return TagKey.of(RegistryKeys.BLOCK, new Identifier(DynamicCrosshair.MOD_ID, path));
+		return TagKey.of(RegistryKeys.BLOCK, Identifier.of(DynamicCrosshair.MOD_ID, path));
 	}
 }

@@ -11,6 +11,6 @@ public class DynamicCrosshairEntityTags {
 	public static final TagKey<EntityType<?>> ALWAYS_INTERACTABLE = of("always_interactable");
 
 	private static TagKey<EntityType<?>> of(String path) {
-		return TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier(DynamicCrosshair.MOD_ID, path));
+		return TagKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of(DynamicCrosshair.MOD_ID, path));
 	}
 }

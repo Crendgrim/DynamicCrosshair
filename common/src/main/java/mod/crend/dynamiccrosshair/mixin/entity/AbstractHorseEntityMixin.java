@@ -3,21 +3,15 @@ package mod.crend.dynamiccrosshair.mixin.entity;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
-import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(AbstractHorseEntity.class)
 public abstract class AbstractHorseEntityMixin extends AnimalEntityMixin implements DynamicCrosshairEntity {
-	protected AbstractHorseEntityMixin(EntityType<? extends PassiveEntity> entityType, World world) {
-		super(entityType, world);
-	}
-
 	@Shadow public abstract boolean isTame();
 
 	@Shadow public abstract boolean canBeSaddled();
@@ -36,7 +30,7 @@ public abstract class AbstractHorseEntityMixin extends AnimalEntityMixin impleme
 						return InteractionType.PLACE_ITEM_ON_ENTITY;
 					}
 
-					if (this.hasArmorSlot() && this.isHorseArmor(itemStack) && !this.isWearingBodyArmor()) {
+					if (this.canUseSlot(EquipmentSlot.BODY) && this.isHorseArmor(itemStack) && !this.isWearingBodyArmor()) {
 						return InteractionType.PLACE_ITEM_ON_ENTITY;
 					}
 				}

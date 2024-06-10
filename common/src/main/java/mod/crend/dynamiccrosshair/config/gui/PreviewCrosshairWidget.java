@@ -11,7 +11,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
 public class PreviewCrosshairWidget extends AbstractWidget {
-	public static final Identifier BACKGROUND = new Identifier(DynamicCrosshair.MOD_ID, "preview-background");
+	public static final Identifier BACKGROUND = DynamicCrosshair.identifier("preview-background");
 
 	CrosshairStyleController control;
 

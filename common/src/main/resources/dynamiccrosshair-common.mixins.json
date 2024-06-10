@@ -37,6 +37,7 @@
     "entity.FurnaceMinecartEntityMixin",
     "entity.IronGolemEntityMixin",
     "entity.ItemFrameEntityMixin",
+    "entity.LivingEntityMixin",
     "entity.MerchantEntityMixin",
     "entity.MilkableEntityMixin",
     "entity.MinecartEntityMixin",

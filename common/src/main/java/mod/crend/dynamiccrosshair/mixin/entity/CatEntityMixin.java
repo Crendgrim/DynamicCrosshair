@@ -3,21 +3,14 @@ package mod.crend.dynamiccrosshair.mixin.entity;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.util.DyeColor;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CatEntity.class)
 public abstract class CatEntityMixin extends TameableEntityMixin implements DynamicCrosshairEntity {
-	protected CatEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
-		super(entityType, world);
-	}
-
 	@Shadow public abstract DyeColor getCollarColor();
 
 	@Override

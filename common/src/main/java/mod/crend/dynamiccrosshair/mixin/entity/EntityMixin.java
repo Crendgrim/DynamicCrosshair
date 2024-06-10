@@ -13,6 +13,8 @@ public abstract class EntityMixin implements DynamicCrosshairEntity {
 
 	@Shadow public abstract EntityType<?> getType();
 
+	@Shadow public abstract boolean hasPassengers();
+
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (context.api().isAlwaysInteractable(getType())) {

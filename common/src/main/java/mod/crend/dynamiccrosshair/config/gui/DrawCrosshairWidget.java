@@ -15,7 +15,7 @@ public class DrawCrosshairWidget extends AbstractWidget {
 	boolean wasMouseOver = false;
 	SelectCrosshairController control;
 
-	public static final Identifier BACKGROUND = new Identifier(DynamicCrosshair.MOD_ID, "crosshair-background");
+	public static final Identifier BACKGROUND = DynamicCrosshair.identifier("crosshair-background");
 
 	public DrawCrosshairWidget(Dimension<Integer> dim, SelectCrosshairController control) {
 		super(dim);

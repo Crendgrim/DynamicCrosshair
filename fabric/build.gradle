@@ -42,7 +42,7 @@ dependencies {
 
     modCompileOnly("curse.maven:mythic-mounts-${project.mythicmounts_version}") { transitive = false }
 
-    modRuntimeOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-fabric")
+    //modRuntimeOnly (name: "autohud", group: "mod.crend.autohud", version: "${project.autohud_version}-fabric")
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }

@@ -3,19 +3,12 @@ package mod.crend.dynamiccrosshair.mixin.entity;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.DolphinEntity;
 import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(DolphinEntity.class)
 public abstract class DolphinEntityMixin extends MobEntityMixin implements DynamicCrosshairEntity {
-	protected DolphinEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
-		super(entityType, world);
-	}
-
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (context.getItemStack().isIn(ItemTags.FISHES)) {

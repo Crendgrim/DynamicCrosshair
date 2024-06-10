@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
@@ -45,7 +44,7 @@ public abstract class ArmorStandEntityMixin extends LivingEntity implements Dyna
 					return InteractionType.USE_ITEM_ON_ENTITY;
 				}
 			} else {
-				EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(itemStack);
+				EquipmentSlot slot = getPreferredEquipmentSlot(itemStack);
 				if (!this.isSlotDisabled(slot) && (slot.getType() != EquipmentSlot.Type.HAND || this.shouldShowArms())) {
 					if (!this.hasStackEquipped(slot) || itemStack.getCount() == 1) {
 						return InteractionType.PLACE_ITEM_ON_ENTITY;

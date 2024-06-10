@@ -4,7 +4,7 @@ import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import net.minecraft.util.Identifier;
 
 public class DynamicCrosshairStyles {
-	public static final Identifier DEFAULT = new Identifier(Identifier.DEFAULT_NAMESPACE, "hud/crosshair");
+	public static final Identifier DEFAULT = Identifier.ofVanilla("hud/crosshair");
 	public static final Identifier CROSS_OPEN = of("cross-open");
 	public static final Identifier CROSS_OPEN_DIAGONAL = of("cross-open-diagonal");
 	public static final Identifier CIRCLE = of("circle");
@@ -24,6 +24,6 @@ public class DynamicCrosshairStyles {
 	public static final Identifier LINE_BOTTOM = of("line-bottom");
 
 	public static Identifier of(String path) {
-		return new Identifier(DynamicCrosshair.MOD_ID, "crosshair/" + path);
+		return Identifier.of(DynamicCrosshair.MOD_ID, "crosshair/" + path);
 	}
 }

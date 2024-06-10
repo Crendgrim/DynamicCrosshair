@@ -20,6 +20,6 @@ public class DynamicCrosshairItemTags {
 	public static final TagKey<Item> ALWAYS_USABLE_ON_MISS = of("always_usable_on_miss");
 
 	private static TagKey<Item> of(String path) {
-		return TagKey.of(RegistryKeys.ITEM, new Identifier(DynamicCrosshair.MOD_ID, path));
+		return TagKey.of(RegistryKeys.ITEM, Identifier.of(DynamicCrosshair.MOD_ID, path));
 	}
 }
