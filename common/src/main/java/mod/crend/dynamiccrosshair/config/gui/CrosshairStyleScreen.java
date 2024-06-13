@@ -57,6 +57,8 @@ public class CrosshairStyleScreen extends YACLScreen {
 		super.tick();
 		if (tabManager.getCurrentTab() instanceof CategoryTab categoryTab) {
 			categoryTab.saveFinishedButton.active = !nestedControl.isInEditMode();
+			categoryTab.cancelResetButton.active = !nestedControl.isInEditMode();
+			categoryTab.undoButton.active = !nestedControl.isInEditMode() && pendingChanges();
 		}
 	}
 }
