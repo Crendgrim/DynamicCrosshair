@@ -167,9 +167,9 @@ public class Config {
             interact.style = DynamicCrosshairStyles.BRACKETS;
             useItem.style = DynamicCrosshairStyles.BRACKETS_ROUND;
             shield.style = DynamicCrosshairStyles.BRACKETS_BOTTOM;
-            onBlock.coalesce = false;
             onEntity.coalesce = false;
             holdingRangedWeapon.coalesce = false;
+            holdingBlock.coalesce = false;
         }
     }
     public static class CrosshairModifiers {
@@ -182,7 +182,13 @@ public class Config {
 
         public CrosshairModifiers() {
             modCorrectTool.style = DynamicCrosshairStyles.DOT;
+            modCorrectTool.overrideColor = true;
+            modCorrectTool.customColor = Color.GREEN;
+            modCorrectTool.enableBlend = false;
             modIncorrectTool.style = DynamicCrosshairStyles.CROSS_DIAGONAL_SMALL;
+            modIncorrectTool.overrideColor = true;
+            modIncorrectTool.customColor = Color.RED;
+            modIncorrectTool.enableBlend = false;
         }
     }
 
