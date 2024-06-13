@@ -25,7 +25,7 @@
     "minecraft:enchanting_table",
     "minecraft:hopper",
     {
-      "id": "#c:shulker_boxes",
+      "id": "#minecraft:shulker_boxes",
       "required": false
     },
     "minecraft:smoker",
@@ -34,6 +34,7 @@
     "minecraft:grindstone",
     "minecraft:cartography_table",
     "minecraft:loom",
+    "minecraft:crafter",
     {
       "id": "#minecraft:beds",
       "required": false
@@ -42,10 +43,26 @@
       "id": "#minecraft:wooden_trapdoors",
       "required": false
     },
+    "minecraft:copper_trapdoor",
+    "minecraft:exposed_copper_trapdoor",
+    "minecraft:weathered_copper_trapdoor",
+    "minecraft:oxidized_copper_trapdoor",
+    "minecraft:waxed_copper_trapdoor",
+    "minecraft:waxed_exposed_copper_trapdoor",
+    "minecraft:waxed_weathered_copper_trapdoor",
+    "minecraft:waxed_oxidized_copper_trapdoor",
     {
       "id": "#minecraft:wooden_doors",
       "required": false
     },
+    "minecraft:copper_door",
+    "minecraft:exposed_copper_door",
+    "minecraft:weathered_copper_door",
+    "minecraft:oxidized_copper_door",
+    "minecraft:waxed_copper_door",
+    "minecraft:waxed_exposed_copper_door",
+    "minecraft:waxed_weathered_copper_door",
+    "minecraft:waxed_oxidized_copper_door",
     {
       "id": "#minecraft:fence_gates",
       "required": false

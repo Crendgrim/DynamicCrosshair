@@ -30,16 +30,37 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				.add(Blocks.DROPPER)
 				.add(Blocks.ENCHANTING_TABLE)
 				.add(Blocks.HOPPER)
-				.addOptionalTag(ConventionalBlockTags.SHULKER_BOXES)
+				.addOptionalTag(BlockTags.SHULKER_BOXES)
 				.add(Blocks.SMOKER)
 				.add(Blocks.BLAST_FURNACE)
 				.add(Blocks.STONECUTTER)
 				.add(Blocks.GRINDSTONE)
 				.add(Blocks.CARTOGRAPHY_TABLE)
 				.add(Blocks.LOOM)
+				.add(Blocks.CRAFTER)
 				.addOptionalTag(BlockTags.BEDS)
 				.addOptionalTag(BlockTags.WOODEN_TRAPDOORS)
+				.add(
+						Blocks.COPPER_TRAPDOOR,
+						Blocks.EXPOSED_COPPER_TRAPDOOR,
+						Blocks.WEATHERED_COPPER_TRAPDOOR,
+						Blocks.OXIDIZED_COPPER_TRAPDOOR,
+						Blocks.WAXED_COPPER_TRAPDOOR,
+						Blocks.WAXED_EXPOSED_COPPER_TRAPDOOR,
+						Blocks.WAXED_WEATHERED_COPPER_TRAPDOOR,
+						Blocks.WAXED_OXIDIZED_COPPER_TRAPDOOR
+				)
 				.addOptionalTag(BlockTags.WOODEN_DOORS)
+				.add(
+						Blocks.COPPER_DOOR,
+						Blocks.EXPOSED_COPPER_DOOR,
+						Blocks.WEATHERED_COPPER_DOOR,
+						Blocks.OXIDIZED_COPPER_DOOR,
+						Blocks.WAXED_COPPER_DOOR,
+						Blocks.WAXED_EXPOSED_COPPER_DOOR,
+						Blocks.WAXED_WEATHERED_COPPER_DOOR,
+						Blocks.WAXED_OXIDIZED_COPPER_DOOR
+				)
 				.addOptionalTag(BlockTags.FENCE_GATES)
 				.addOptionalTag(BlockTags.BUTTONS)
 				.add(Blocks.NOTE_BLOCK)
@@ -72,6 +93,7 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				.addOptionalTag(BlockTags.CAMPFIRES)
 				.add(Blocks.CHISELED_BOOKSHELF)
 				.add(Blocks.DECORATED_POT)
+				.add(Blocks.VAULT)
 		;
 	}
 }

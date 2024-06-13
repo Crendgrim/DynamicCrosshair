@@ -23,6 +23,7 @@
     "block.RedstoneOreMixin",
     "block.RedstoneWireBlockMixin",
     "block.SweetBerryBushBlockMixin",
+    "block.VaultBlockMixin",
     "entity.AbstractDonkeyEntityMixin",
     "entity.AbstractHorseEntityMixin",
     "entity.AllayEntityMixin",

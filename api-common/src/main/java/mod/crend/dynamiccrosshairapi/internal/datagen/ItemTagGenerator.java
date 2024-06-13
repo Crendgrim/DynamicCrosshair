@@ -34,6 +34,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.LINGERING_POTION)
 				.add(Items.EXPERIENCE_BOTTLE)
 				.add(Items.ENDER_PEARL)
+				.add(Items.WIND_CHARGE)
 		;
 
 		getOrCreateTagBuilder(DynamicCrosshairItemTags.SHIELDS)
