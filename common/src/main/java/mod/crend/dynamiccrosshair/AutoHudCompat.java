@@ -19,17 +19,16 @@ public class AutoHudCompat implements AutoHudApi {
 	@Override
 	public void initState(ClientPlayerEntity player) {
 		Component.Crosshair.state = new BooleanComponentState(Component.Crosshair, CrosshairHandler::shouldShowCrosshair);
-		CrosshairRenderer.autoHudCompat = true;
 	}
 
 	@Override
 	public void tickState(ClientPlayerEntity player) {
-		CrosshairHandler.forceShowCrosshair = AutoHud.config.crosshair().active();
-		CrosshairRenderer.autoHudCompat = getAlpha() < 1.0f;
+		CrosshairRenderer.autoHudCompat = getAlpha() < 1.0f && AutoHud.config.crosshair().active();
+		CrosshairHandler.forceShowCrosshair = CrosshairRenderer.autoHudCompat;
 	}
 
 	public static float getAlpha() {
-		return AutoHudRenderer.alpha;
+		return Math.max(Component.Crosshair.getAlpha(1), getMinimumAlpha());
 	}
 
 	public static float getMinimumAlpha() {

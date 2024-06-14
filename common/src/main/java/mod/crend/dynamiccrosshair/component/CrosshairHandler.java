@@ -264,7 +264,7 @@ public class CrosshairHandler {
             return false;
         }
         // Dynamic crosshair disabled, no other crosshair computed: make sure to show a crosshair
-        activeCrosshair = new CrosshairComponent(new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR));
+        activeCrosshair = CrosshairComponent.FORCE_CROSSHAIR;
         return true;
     }
 
