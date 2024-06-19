@@ -1,10 +1,11 @@
 package mod.crend.dynamiccrosshair.forge;
 
 import mod.crend.dynamiccrosshair.AutoHudCompat;
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
 import mod.crend.libbamboo.forge.ConfigScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -23,7 +24,7 @@ public class DynamicCrosshairForgeEvents {
 
 		@SubscribeEvent
 		static void onClientSetup(FMLClientSetupEvent event) {
-			DynamicCrosshair.init();
+			DynamicCrosshairMod.init();
 			ConfigScreen.register(ConfigHandler.CONFIG_STORE);
 		}
 

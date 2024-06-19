@@ -1,7 +1,8 @@
 package mod.crend.dynamiccrosshair.forge;
 
-import mod.crend.dynamiccrosshair.DynamicCrosshair;
-import mod.crend.dynamiccrosshair.api.DynamicCrosshairApi;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
@@ -13,7 +14,7 @@ public class DynamicCrosshairForge {
 
     public static void registerApi(DynamicCrosshairApi api) {
         if (ModList.get().isLoaded(api.getModId())) {
-            DynamicCrosshair.registerApi(api);
+            DynamicCrosshairMod.registerApi(api);
         }
     }
 }

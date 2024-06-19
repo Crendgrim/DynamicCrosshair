@@ -1,0 +1,68 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "me.shedaniel.unified-publishing" version "0.1.+"
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+repositories {
+    maven { url "https://maven.neoforged.net/releases/" }
+}
+
+dependencies {
+    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+
+    common(project(path: ":api-common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":api-common", configuration: "transformProductionForge")) { transitive = false }
+}
+
+processResources {
+    inputs.property "version", rootProject.version
+
+    filesMatching("META-INF/mods.toml") {
+        expand(project.properties)
+    }
+}
+
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier.set("api-forge")
+}
+
+remapJar {
+    enabled false
+}
+
+build {
+    dependsOn shadowJar
+}
+
+jar {
+    archiveClassifier.set("dev")
+}
+
+sourcesJar {
+    def commonSources = project(":api-common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}

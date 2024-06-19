@@ -34,6 +34,9 @@ dependencies {
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+    api(project(path: ":api-common", configuration: "namedElements")) { transitive false }
+    api include(project(path: ":api-forge", configuration: "namedElements")) { transitive false }
 }
 
 processResources {
@@ -49,10 +52,15 @@ shadowJar {
     exclude "architectury.common.json"
 
     configurations = [project.configurations.shadowCommon]
-    archiveClassifier.set("dev-shadow")
+    archiveClassifier.set("forge")
+}
+
+build {
+    dependsOn shadowJar
 }
 
 remapJar {
+    enabled false
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
     archiveClassifier.set("forge")

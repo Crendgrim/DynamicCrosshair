@@ -43,14 +43,6 @@ allprojects {
         maven { url "https://maven.terraformersmc.com/" }
         maven { url "https://maven.quiltmc.org/repository/release" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-        maven {
-            name 'Maven for PR #1076' // https://github.com/neoforged/NeoForge/pull/1076
-            url 'https://prmaven.neoforged.net/NeoForge/pr1076'
-            content {
-                includeModule('net.neoforged', 'testframework')
-                includeModule('net.neoforged', 'neoforge')
-            }
-        }
 
         flatDir { dir "${rootProject.getProjectDir()}/lib" }
     }
@@ -65,4 +57,4 @@ allprojects {
     }
 }
 
-tasks.register('publishMod') {}
+task publishMod {}
