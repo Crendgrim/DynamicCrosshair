@@ -37,6 +37,14 @@ remapJar {
     archiveClassifier.set("api-fabric")
 }
 
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand(project.properties)
+    }
+}
+
 sourcesJar {
     def commonSources = project(":api-common").sourcesJar
     dependsOn commonSources
