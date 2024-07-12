@@ -12,11 +12,9 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class MerchantEntityMixin extends MobEntityMixin implements DynamicCrosshairEntity {
 	@Shadow public abstract boolean hasCustomer();
 
-	@Shadow public abstract TradeOfferList getOffers();
-
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (!this.hasCustomer() && !this.isSleeping() && !this.getOffers().isEmpty()) {
+		if (!this.hasCustomer() && !this.isSleeping()) {
 			return InteractionType.INTERACT_WITH_ENTITY;
 		}
 		return super.dynamiccrosshair$compute(context);
