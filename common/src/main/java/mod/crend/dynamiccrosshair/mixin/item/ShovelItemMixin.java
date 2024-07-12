@@ -1,5 +1,7 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
@@ -19,7 +21,7 @@ public class ShovelItemMixin extends ItemMixin implements DynamicCrosshairItem {
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (context.isWithBlock()) {
+		if (context.isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem() != UsableCrosshairPolicy.Disabled) {
 			if (PATH_STATES.get(context.getBlock()) != null) {
 				if (context.getWorld().getBlockState(context.getBlockPos().up()).isAir()) {
 					return InteractionType.USABLE_TOOL;

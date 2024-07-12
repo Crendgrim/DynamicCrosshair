@@ -1,5 +1,7 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
@@ -20,11 +22,13 @@ public class AxeItemMixin extends ItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (context.canUseWeaponAsTool()) {
-			Block block = context.getBlock();
-			if (STRIPPED_BLOCKS.get(block) != null
-					|| Oxidizable.getDecreasedOxidationBlock(block).isPresent()
-					|| HoneycombItem.WAXED_TO_UNWAXED_BLOCKS.get().get(block) != null) {
-				return InteractionType.USABLE_TOOL;
+			if (context.isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem() != UsableCrosshairPolicy.Disabled) {
+				Block block = context.getBlock();
+				if (STRIPPED_BLOCKS.get(block) != null
+						|| Oxidizable.getDecreasedOxidationBlock(block).isPresent()
+						|| HoneycombItem.WAXED_TO_UNWAXED_BLOCKS.get().get(block) != null) {
+					return InteractionType.USABLE_TOOL;
+				}
 			}
 			return super.dynamiccrosshair$compute(context);
 		}

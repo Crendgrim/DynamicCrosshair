@@ -1,6 +1,8 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
 import com.mojang.datafixers.util.Pair;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
@@ -21,7 +23,7 @@ public class HoeItemMixin extends ItemMixin implements DynamicCrosshairItem {
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (context.isWithBlock()) {
+		if (context.isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem() != UsableCrosshairPolicy.Disabled) {
 			if (TILLING_ACTIONS.get(context.getBlock()) != null) {
 				return InteractionType.USABLE_TOOL;
 			}

@@ -1,5 +1,7 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
+import mod.crend.dynamiccrosshair.config.UsableCrosshairPolicy;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
@@ -15,7 +17,7 @@ public class ShearsItemMixin extends ItemMixin implements DynamicCrosshairItem {
 
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (context.isWithBlock()) {
+		if (context.isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem() != UsableCrosshairPolicy.Disabled) {
 			BlockState blockState = context.getBlockState();
 			Block block = blockState.getBlock();
 			if (block instanceof AbstractPlantStemBlock plantStemBlock && !plantStemBlock.hasMaxAge(blockState)) {
