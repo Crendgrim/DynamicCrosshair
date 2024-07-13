@@ -82,6 +82,8 @@ unifiedPublishing {
         gameLoaders = ["neoforge"]
 
         mainPublication tasks.remapJar
+        secondaryPublication(project(':api-neoforge').tasks.remapJar.archiveFile)
+        secondaryPublication(project(':api-neoforge').tasks.sourcesJar.archiveFile)
 
         relations {
             optional {

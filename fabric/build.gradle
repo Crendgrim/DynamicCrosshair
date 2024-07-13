@@ -100,6 +100,8 @@ unifiedPublishing {
         gameLoaders = ["fabric"]
 
         mainPublication tasks.remapJar
+        secondaryPublication(project(':api-fabric').tasks.remapJar.archiveFile)
+        secondaryPublication(project(':api-fabric').tasks.sourcesJar.archiveFile)
 
         relations {
             depends {
