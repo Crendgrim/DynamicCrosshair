@@ -46,6 +46,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.addOptionalTag(ItemTags.SWORDS)
 				.addOptionalTag(ConventionalItemTags.MELEE_WEAPON_TOOLS)
 				.add(Items.MACE)
+				.add(Items.TRIDENT)
 		;
 
 		getOrCreateTagBuilder(DynamicCrosshairItemTags.RANGED_WEAPONS)

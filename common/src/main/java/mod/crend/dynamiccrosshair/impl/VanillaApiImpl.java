@@ -59,8 +59,8 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     @Override
     public Crosshair overrideFromItem(CrosshairContext context, InteractionType interactionType) {
         // Special handling for some item categories
-
-        if (ClientTags.isInWithLocalFallback(DynamicCrosshairItemTags.MELEE_WEAPONS, context.getItemStack().getRegistryEntry())
+        boolean isRangedMeleeWeapon = false;
+        if (context.api().isMeleeWeapon(context.getItemStack())
                 && context.includeMeleeWeapon()
                 && interactionType != InteractionType.USABLE_TOOL
         ) {
@@ -78,6 +78,11 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             if (context.isWithEntity() && !DynamicCrosshairMod.config.dynamicCrosshairMeleeWeaponOnEntity()) {
                 return new Crosshair(InteractionType.NO_ACTION);
             }
+
+            if (context.api().isRangedWeapon(context.getItemStack())) {
+                isRangedMeleeWeapon = true;
+                interactionType = InteractionType.RANGED_WEAPON;
+            }
         }
 
         switch (interactionType) {
@@ -92,10 +97,13 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
                 if (DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.IfInteractable) {
                     DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
                     if (rangedItem.dynamiccrosshair$isCharged(context)) {
+                        if (isRangedMeleeWeapon) return new Crosshair(InteractionType.MELEE_WEAPON, InteractionType.RANGED_WEAPON_CHARGED);
                         return new Crosshair(InteractionType.RANGED_WEAPON_CHARGED);
                     } else if (rangedItem.dynamiccrosshair$isCharging(context)) {
+                        if (isRangedMeleeWeapon) return new Crosshair(InteractionType.MELEE_WEAPON, InteractionType.RANGED_WEAPON_CHARGING);
                         return new Crosshair(InteractionType.RANGED_WEAPON_CHARGING);
                     } else {
+                        if (isRangedMeleeWeapon) return new Crosshair(InteractionType.MELEE_WEAPON);
                         return new Crosshair(InteractionType.EMPTY);
                     }
                 }
