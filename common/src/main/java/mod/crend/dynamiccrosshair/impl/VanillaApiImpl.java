@@ -89,11 +89,15 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             }
 
             case RANGED_WEAPON -> {
-                DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
-                if (rangedItem.dynamiccrosshair$isCharged(context)) {
-                    return new Crosshair(InteractionType.RANGED_WEAPON_CHARGED);
-                } else if (rangedItem.dynamiccrosshair$isCharging(context)) {
-                    return new Crosshair(InteractionType.RANGED_WEAPON_CHARGING);
+                if (DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.IfInteractable) {
+                    DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
+                    if (rangedItem.dynamiccrosshair$isCharged(context)) {
+                        return new Crosshair(InteractionType.RANGED_WEAPON_CHARGED);
+                    } else if (rangedItem.dynamiccrosshair$isCharging(context)) {
+                        return new Crosshair(InteractionType.RANGED_WEAPON_CHARGING);
+                    } else {
+                        return new Crosshair(InteractionType.EMPTY);
+                    }
                 }
             }
 

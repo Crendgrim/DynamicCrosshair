@@ -64,8 +64,8 @@ public class CrosshairComponent {
                      INTERACT_WITH_ENTITY,
                      MOUNT_ENTITY -> secondary = CrosshairVariant.CanInteract;
 
-                case RANGED_WEAPON, RANGED_WEAPON_CHARGING -> primary = CrosshairVariant.Regular;
-                case RANGED_WEAPON_CHARGED -> primary = CrosshairVariant.HoldingRangedWeapon;
+                case RANGED_WEAPON_CHARGING -> primary = CrosshairVariant.Regular;
+                case RANGED_WEAPON, RANGED_WEAPON_CHARGED -> primary = CrosshairVariant.HoldingRangedWeapon;
                 case USABLE_TOOL -> {
                     primary = CrosshairVariant.HoldingTool;
                     secondary = CrosshairVariant.HoldingUsableItem;
