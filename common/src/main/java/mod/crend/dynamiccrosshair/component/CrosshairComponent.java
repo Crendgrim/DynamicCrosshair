@@ -18,7 +18,7 @@ public class CrosshairComponent {
 
     public CrosshairComponent(Crosshair crosshair) {
         this.crosshair = crosshair;
-        CrosshairVariant primary = CrosshairVariant.NONE;
+        CrosshairVariant primary = CrosshairVariant.Regular;
         CrosshairVariant secondary = CrosshairVariant.NONE;
         ModifierHit modifierHit = ModifierHit.NONE;
         switch (crosshair.primaryInteraction()) {
@@ -28,52 +28,52 @@ public class CrosshairComponent {
             case TOOL -> primary = CrosshairVariant.HoldingTool;
             case CORRECT_TOOL -> { primary = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.CORRECT_TOOL; }
             case INCORRECT_TOOL -> { primary = CrosshairVariant.HoldingTool; modifierHit = ModifierHit.INCORRECT_TOOL; }
-            case FORCE_REGULAR_CROSSHAIR -> primary = CrosshairVariant.Regular;
         }
-        switch (crosshair.secondaryInteraction()) {
-            case USE_ITEM,
-                 EQUIP_ITEM,
-                 CONSUME_ITEM,
-                 CHARGE_ITEM,
-                 USE_ITEM_ON_BLOCK,
-                 PLACE_ITEM_ON_BLOCK,
-                 FILL_ITEM_FROM_BLOCK,
-                 FILL_BLOCK_FROM_ITEM,
-                 USE_BLOCK,
-                 USE_ITEM_ON_ENTITY,
-                 PICK_UP_ENTITY,
-                 PLACE_ITEM_ON_ENTITY,
-                 FILL_ITEM_FROM_ENTITY,
-                 FILL_ENTITY_FROM_ITEM
-                    -> secondary = CrosshairVariant.HoldingUsableItem;
-            case SPYGLASS -> {
-                if (DynamicCrosshairMod.config.dynamicCrosshairForceHoldingSpyglass()) {
-                    primary = CrosshairVariant.Regular;
-                } else {
+        if (crosshair.primaryInteraction() != InteractionType.FORCE_REGULAR_CROSSHAIR) {
+            switch (crosshair.secondaryInteraction()) {
+                case USE_ITEM,
+                     EQUIP_ITEM,
+                     CONSUME_ITEM,
+                     CHARGE_ITEM,
+                     USE_ITEM_ON_BLOCK,
+                     PLACE_ITEM_ON_BLOCK,
+                     FILL_ITEM_FROM_BLOCK,
+                     FILL_BLOCK_FROM_ITEM,
+                     USE_BLOCK,
+                     USE_ITEM_ON_ENTITY,
+                     PICK_UP_ENTITY,
+                     PLACE_ITEM_ON_ENTITY,
+                     FILL_ITEM_FROM_ENTITY,
+                     FILL_ENTITY_FROM_ITEM -> secondary = CrosshairVariant.HoldingUsableItem;
+                case SPYGLASS -> {
+                    if (DynamicCrosshairMod.config.dynamicCrosshairForceHoldingSpyglass()) {
+                        primary = CrosshairVariant.Regular;
+                    } else {
+                        secondary = CrosshairVariant.HoldingUsableItem;
+                    }
+                }
+                case THROW_ITEM -> secondary = CrosshairVariant.HoldingThrowable;
+
+                case PLACE_BLOCK,
+                     PLACE_ENTITY -> secondary = CrosshairVariant.HoldingBlock;
+
+                case INTERACT_WITH_BLOCK,
+                     TAKE_ITEM_FROM_BLOCK,
+                     MOUNT_BLOCK,
+                     TAKE_ITEM_FROM_ENTITY,
+                     INTERACT_WITH_ENTITY,
+                     MOUNT_ENTITY -> secondary = CrosshairVariant.CanInteract;
+
+                case RANGED_WEAPON, RANGED_WEAPON_CHARGING -> primary = CrosshairVariant.Regular;
+                case RANGED_WEAPON_CHARGED -> primary = CrosshairVariant.HoldingRangedWeapon;
+                case USABLE_TOOL -> {
+                    primary = CrosshairVariant.HoldingTool;
                     secondary = CrosshairVariant.HoldingUsableItem;
                 }
+                case SHIELD -> secondary = CrosshairVariant.HoldingShield;
+
+                case FORCE_REGULAR_CROSSHAIR -> modifierHit = ModifierHit.NONE;
             }
-            case THROW_ITEM
-                    -> secondary = CrosshairVariant.HoldingThrowable;
-
-            case PLACE_BLOCK,
-                 PLACE_ENTITY
-                    -> secondary = CrosshairVariant.HoldingBlock;
-
-            case INTERACT_WITH_BLOCK,
-                 TAKE_ITEM_FROM_BLOCK,
-                 MOUNT_BLOCK,
-                 TAKE_ITEM_FROM_ENTITY,
-                 INTERACT_WITH_ENTITY,
-                 MOUNT_ENTITY
-                    -> secondary = CrosshairVariant.CanInteract;
-
-            case RANGED_WEAPON, RANGED_WEAPON_CHARGING -> primary = CrosshairVariant.Regular;
-            case RANGED_WEAPON_CHARGED -> primary = CrosshairVariant.HoldingRangedWeapon;
-            case USABLE_TOOL -> { primary = CrosshairVariant.HoldingTool; secondary = CrosshairVariant.HoldingUsableItem; }
-            case SHIELD -> secondary = CrosshairVariant.HoldingShield;
-
-            case FORCE_REGULAR_CROSSHAIR -> modifierHit = ModifierHit.NONE;
         }
         primaryStyle = getCrosshairStyle(primary);
         secondaryStyle = getCrosshairStyle(secondary);
