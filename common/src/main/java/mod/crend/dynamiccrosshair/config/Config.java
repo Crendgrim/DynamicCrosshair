@@ -58,9 +58,20 @@ public class Config {
         @SerialEntry
         public BlockCrosshairPolicy holdingBlock = BlockCrosshairPolicy.IfInteractable;
         @SerialEntry
+        @EnableIf(field = "holdingBlock", value = BlockCrosshairActivePredicate.class)
+        public boolean holdingBlockInOffhand = true;
+        @SerialEntry
         public UsableCrosshairPolicy holdingUsableItem = UsableCrosshairPolicy.IfInteractable;
         @SerialEntry
         public boolean forceHoldingSpyglass = false;
+    }
+
+    public static class BlockCrosshairActivePredicate implements EnableIf.Predicate {
+        public BlockCrosshairActivePredicate() { }
+        @Override
+        public boolean test(Object value) {
+            return value != BlockCrosshairPolicy.Disabled;
+        }
     }
 
     public static class CrosshairColorSettings {

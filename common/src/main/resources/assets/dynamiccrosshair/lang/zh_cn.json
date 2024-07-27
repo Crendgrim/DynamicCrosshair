@@ -37,6 +37,8 @@
   "dynamiccrosshair.option.crosshairConfig.holdingShield.description": "Show shield crosshair when holding a shield.",
   "dynamiccrosshair.option.crosshairConfig.holdingBlock": "手持方块",
   "dynamiccrosshair.option.crosshairConfig.holdingBlock.description": "Show block crosshair under the following condition:\n§lAlways§r: when a block is being held.\n§lIf Targeting§r: when a block is being held and a block is targeted.\n§lIf Interactable§r: when the held block can be placed at the targeted location.\n§lDisabled§r: do not use held blocks for crosshair computation.",
+  "dynamiccrosshair.option.crosshairConfig.holdingBlockInOffhand": "Holding block in offhand",
+  "dynamiccrosshair.option.crosshairConfig.holdingBlockInOffhand.description": "Include placeable block crosshair when they are held in the off hand.\nIf disabled, only blocks in the main hand cause the block crosshair.",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem": "手持可使用物品",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem.description": "Show usable item crosshair under the following condition:\nAlways: when a usable item (such as food) is being held.\nIf Interactable: when the held usable item can be currently used.\nDisabled: do not use held usable items for crosshair computation.",
   "dynamiccrosshair.option.crosshairConfig.forceHoldingSpyglass": "Force holding spyglass",

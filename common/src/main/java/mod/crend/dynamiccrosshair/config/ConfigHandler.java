@@ -34,6 +34,7 @@ public class ConfigHandler {
     public UsableCrosshairPolicy dynamicCrosshairHoldingThrowable() { return CONFIG_STORE.config().crosshairConfig.holdingThrowable; }
     public boolean dynamicCrosshairHoldingShield() { return CONFIG_STORE.config().crosshairConfig.holdingShield; }
     public BlockCrosshairPolicy dynamicCrosshairHoldingBlock() { return CONFIG_STORE.config().crosshairConfig.holdingBlock; }
+    public boolean dynamicCrosshairHoldingBlockInOffhand() { return CONFIG_STORE.config().crosshairConfig.holdingBlockInOffhand; }
     public UsableCrosshairPolicy dynamicCrosshairHoldingUsableItem() { return CONFIG_STORE.config().crosshairConfig.holdingUsableItem; }
     public boolean dynamicCrosshairForceHoldingSpyglass() { return CONFIG_STORE.config().crosshairConfig.forceHoldingSpyglass; }
 

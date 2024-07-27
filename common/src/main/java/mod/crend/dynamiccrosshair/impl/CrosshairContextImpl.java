@@ -348,6 +348,7 @@ public class CrosshairContextImpl implements CrosshairContext {
 	}
 	@Override
 	public boolean includeHoldingBlock() {
+		if (isOffHand() && !DynamicCrosshairMod.config.dynamicCrosshairHoldingBlockInOffhand()) return false;
 		return switch (DynamicCrosshairMod.config.dynamicCrosshairHoldingBlock()) {
 			case Always -> true;
 			case IfTargeting -> isTargeting();

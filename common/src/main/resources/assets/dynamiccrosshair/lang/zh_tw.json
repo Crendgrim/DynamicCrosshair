@@ -45,6 +45,8 @@
   "dynamiccrosshair.option.crosshairConfig.holdingShield.description": "當手持盾牌時顯示盾牌準心。",
   "dynamiccrosshair.option.crosshairConfig.holdingBlock": "手持方塊",
   "dynamiccrosshair.option.crosshairConfig.holdingBlock.description": "根據以下條件顯示方塊準心：\n§l始終§r：手持方塊時。\n§l如果有目標§r：手持方塊且鎖定方塊時。\n§l如果可互動§r：手持的方塊可以放置在鎖定位置時。\n§l停用§r：不使用握持的方塊來計算準心。",
+  "dynamiccrosshair.option.crosshairConfig.holdingBlockInOffhand": "Holding block in offhand",
+  "dynamiccrosshair.option.crosshairConfig.holdingBlockInOffhand.description": "Include placeable block crosshair when they are held in the off hand.\nIf disabled, only blocks in the main hand cause the block crosshair.",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem": "手持可使用物品",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem.description": "根據以下條件顯示可使用物品準心：\n始終：手持可使用物品（如食物）時。\n如果可互動：手持的可使用物品當前可以使用時。\n停用：不使用握持的可使用物品來計算準心。",
   "dynamiccrosshair.option.crosshairConfig.forceHoldingSpyglass": "強制手持望遠鏡",

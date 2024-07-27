@@ -37,6 +37,8 @@
   "dynamiccrosshair.option.crosshairConfig.holdingShield.description": "Показывать прицел щита, когда щит находится в руках.",
   "dynamiccrosshair.option.crosshairConfig.holdingBlock": "Держит в руках блок",
   "dynamiccrosshair.option.crosshairConfig.holdingBlock.description": "Показывать прицел блока при следующих условиях:\n§lВсегда§r: когда блок находится в руке\n§lПри наведении§r: когда блок находится в руках и блок нацелен.\n§lИнтерактивно§r: когда блок может быть размещен на нацеленное место.\n§lВыключено§r: не использовать удерживаемый блок для изменения прицела.",
+  "dynamiccrosshair.option.crosshairConfig.holdingBlockInOffhand": "Holding block in offhand",
+  "dynamiccrosshair.option.crosshairConfig.holdingBlockInOffhand.description": "Include placeable block crosshair when they are held in the off hand.\nIf disabled, only blocks in the main hand cause the block crosshair.",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem": "Держит в руках используемый предмет",
   "dynamiccrosshair.option.crosshairConfig.holdingUsableItem.description": "Показывать прицел используемого предмета при следующих условиях:\nВсегда: когда используемый предмет находится в руках(например еда).\nИнтерактивно: когда удерживаемый используемый предмет может быть использован в данный момент.\nВыключено: не использовать удерживаемый используемый предмет для изменения прицела.",
   "dynamiccrosshair.option.crosshairConfig.forceHoldingSpyglass": "Держит в руках подзорную трубу",
