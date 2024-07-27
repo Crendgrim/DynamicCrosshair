@@ -17,6 +17,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,6 +157,7 @@ public class State {
 
 	HitState previousState;
 	HitStateFluid previousFluidState = null;
+	Vec3d previousPosition;
 	public final CrosshairContext context;
 
 	public State() {
@@ -171,6 +173,14 @@ public class State {
 
 		if (previousState == null) {
 			previousState = newState;
+			return true;
+		}
+
+		Vec3d newPosition = player.getPos();
+		if (!newPosition.equals(previousPosition)) {
+			previousPosition = newPosition;
+			previousState = newState;
+			context.invalidateHitResult(hitResult);
 			return true;
 		}
 
