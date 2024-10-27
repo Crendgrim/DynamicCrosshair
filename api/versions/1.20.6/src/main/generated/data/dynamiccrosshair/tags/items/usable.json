@@ -1,0 +1,25 @@
+{
+  "values": [
+    {
+      "id": "#c:foods",
+      "required": false
+    },
+    {
+      "id": "#c:armors",
+      "required": false
+    },
+    "minecraft:elytra",
+    "minecraft:firework_rocket",
+    "minecraft:fire_charge",
+    "minecraft:honeycomb",
+    "minecraft:ender_eye",
+    "minecraft:glass_bottle",
+    "minecraft:bucket",
+    {
+      "id": "#c:buckets/empty",
+      "required": false
+    },
+    "minecraft:bone_meal",
+    "minecraft:bundle"
+  ]
+}

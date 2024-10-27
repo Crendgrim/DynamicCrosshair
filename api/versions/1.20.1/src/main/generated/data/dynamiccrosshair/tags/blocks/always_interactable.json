@@ -1,0 +1,56 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:chests",
+      "required": false
+    },
+    "minecraft:beacon",
+    "minecraft:bell",
+    "minecraft:brewing_stand",
+    "minecraft:daylight_detector",
+    "minecraft:dispenser",
+    "minecraft:dropper",
+    "minecraft:enchanting_table",
+    "minecraft:hopper",
+    {
+      "id": "#minecraft:shulker_boxes",
+      "required": false
+    },
+    "minecraft:smoker",
+    "minecraft:blast_furnace",
+    "minecraft:stonecutter",
+    "minecraft:grindstone",
+    "minecraft:cartography_table",
+    "minecraft:loom",
+    {
+      "id": "#minecraft:beds",
+      "required": false
+    },
+    {
+      "id": "#minecraft:wooden_trapdoors",
+      "required": false
+    },
+    {
+      "id": "#minecraft:wooden_doors",
+      "required": false
+    },
+    {
+      "id": "#minecraft:fence_gates",
+      "required": false
+    },
+    {
+      "id": "#minecraft:buttons",
+      "required": false
+    },
+    "minecraft:note_block",
+    "minecraft:lever",
+    "minecraft:comparator",
+    "minecraft:repeater",
+    {
+      "id": "#minecraft:anvil",
+      "required": false
+    },
+    "minecraft:smithing_table"
+  ]
+}

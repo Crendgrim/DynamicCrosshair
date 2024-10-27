@@ -9,10 +9,12 @@
     "Crendgrim"
   ],
   "contact": {
+    "sources": "https://github.com/Crendgrim/DynamicCrosshair",
+    "issues": "https://github.com/Crendgrim/DynamicCrosshair/issues"
   },
 
   "license": "LGPL-3.0",
-  "icon": "dynamiccrosshair.png",
+  "icon": "assets/${id}/icon.png",
 
   "environment": "client",
   "entrypoints": {
@@ -32,8 +34,8 @@
   ],
 
   "depends": {
-    "fabricloader": "${fabric_loader_version_range}",
-    "fabric-api": "${fabric_api_version_range}",
-    "minecraft": "${minecraft_version_range_fabric}"
+    "fabricloader": ">=0.15",
+    "fabric-api": "*",
+    "minecraft": "${minecraft}"
   }
 }

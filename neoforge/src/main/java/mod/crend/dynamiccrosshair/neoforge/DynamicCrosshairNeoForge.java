@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.neoforge;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
+import net.minecraft.client.gui.screen.Screen;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 

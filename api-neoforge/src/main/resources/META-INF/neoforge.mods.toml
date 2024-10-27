@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "${neoforge_loader_version_range}"
+loaderVersion = "*"
 issueTrackerURL = "https://github.com/Crendgrim/DynamicCrosshair/issues"
 license = "LGPL-3.0"
 
@@ -14,16 +14,3 @@ DynamicCrosshair compatibility API
 logoFile = "dynamiccrosshair.png"
 displayTest = "IGNORE_ALL_VERSION"
 
-[[dependencies.dynamiccrosshairapi]]
-modId = "neoforge"
-type = "required"
-versionRange = "${neoforge_version_range}"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.dynamiccrosshairapi]]
-modId = "minecraft"
-type = "required"
-versionRange = "${minecraft_version_range_forge}"
-ordering = "NONE"
-side = "BOTH"

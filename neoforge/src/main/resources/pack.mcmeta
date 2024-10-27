@@ -1,6 +1,6 @@
 {
   "pack": {
-    "description": "DynamicCrosshair",
-    "pack_format": 9
+    "description": "${name}",
+    "pack_format": 15
   }
 }
