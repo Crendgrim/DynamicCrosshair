@@ -21,7 +21,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
+//? if >=1.21.2
+/*import net.minecraft.item.consume.UseAction;*/
 import net.minecraft.util.Identifier;
+//? if <1.21.2
 import net.minecraft.util.UseAction;
 
 public class VanillaApiImpl implements DynamicCrosshairApi {

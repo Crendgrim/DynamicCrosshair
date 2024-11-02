@@ -22,12 +22,16 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntityMixin implements DynamicCrosshairEntity {
 
-	//? if >=1.20.6 {
+	//? if >=1.20.6 <1.21.2 {
 	/*@Shadow public abstract boolean isHorseArmor(ItemStack stack);
 
 	@Shadow public abstract boolean isWearingBodyArmor();
 
 	@Shadow public abstract boolean canUseSlot(EquipmentSlot slot);
+	*///?}
+	//? if >=1.21.2 {
+	/*@Shadow public abstract boolean isWearingBodyArmor();
+	@Shadow public abstract ItemStack getBodyArmor();
 	*///?}
 	//? if <1.21
 	@Shadow public abstract boolean canBeLeashedBy(PlayerEntity player);

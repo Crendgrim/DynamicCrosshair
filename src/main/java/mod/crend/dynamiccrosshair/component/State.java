@@ -33,7 +33,7 @@ public class State {
 		final boolean cancelInteraction;
 		final boolean isCoolingDown;
 		final boolean isOnGround;
-		final boolean isFallFlying;
+		final boolean isGliding;
 
 		public HitState(ClientPlayerEntity player, HitResult hitResult) {
 			this.hitResult = hitResult;
@@ -42,9 +42,13 @@ public class State {
 			activeStack = player.getActiveItem().copy();
 			activeHand = player.getActiveHand();
 			cancelInteraction = player.shouldCancelInteraction();
-			isCoolingDown = (player.getItemCooldownManager().isCoolingDown(mainHandStack.getItem()) || player.getItemCooldownManager().isCoolingDown(offHandStack.getItem()));
+			isCoolingDown = (player.getItemCooldownManager().isCoolingDown(mainHandStack/*? if <1.21.2 {*/.getItem()/*?}*/)
+							|| player.getItemCooldownManager().isCoolingDown(offHandStack/*? if <1.21.2 {*/.getItem()/*?}*/));
 			isOnGround = player.isOnGround();
-			isFallFlying = player.isFallFlying();
+			//? if <1.21.2 {
+			isGliding = player.isFallFlying();
+			//?} else
+			/*isGliding = player.isGliding();*/
 		}
 
 		public boolean isChanged(HitState other) {
@@ -61,7 +65,7 @@ public class State {
 				context.invalidateItem(activeHand);
 				invalidated = true;
 			}
-			return (invalidated || cancelInteraction != other.cancelInteraction || isCoolingDown != other.isCoolingDown || isOnGround != other.isOnGround || isFallFlying != other.isFallFlying);
+			return (invalidated || cancelInteraction != other.cancelInteraction || isCoolingDown != other.isCoolingDown || isOnGround != other.isOnGround || isGliding != other.isGliding);
 		}
 	}
 

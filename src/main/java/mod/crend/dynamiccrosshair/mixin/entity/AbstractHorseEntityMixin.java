@@ -39,11 +39,12 @@ public abstract class AbstractHorseEntityMixin extends AnimalEntityMixin impleme
 					}
 
 					if (
-							//? if >=1.20.6 {
-							/*this.canUseSlot(EquipmentSlot.BODY) && this.isHorseArmor(itemStack) && !this.isWearingBodyArmor()
-							*///?} else {
+							//? if <1.20.6 {
 							this.hasArmorSlot() && this.isHorseArmor(itemStack) && !this.hasArmorInSlot()
-							//?}
+							//?} else if <1.21.2 {
+							/*this.canUseSlot(EquipmentSlot.BODY) && this.isHorseArmor(itemStack) && !this.isWearingBodyArmor()
+							*///?} else
+							/*this.canEquip(itemStack, EquipmentSlot.BODY) && !this.isWearingBodyArmor()*/
 					) {
 						return InteractionType.PLACE_ITEM_ON_ENTITY;
 					}

@@ -5,6 +5,7 @@ import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
 import mod.crend.dynamiccrosshair.render.CrosshairRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
@@ -60,6 +61,8 @@ public class CrosshairStyleControllerElement extends ControllerWidget<CrosshairS
 	protected void drawValueText(DrawContext context, int mouseX, int mouseY, float delta) {
 		CrosshairRenderer.renderCrosshair(context,
 				control.option().pendingValue().style,
+				//? if >=1.21.2
+				/*RenderLayer::getGuiTextured,*/
 				this.getDimension().xLimit() - this.getXPadding() - this.getDecorationPadding() + 2,
 				this.getDimension().y() + 2);
 	}

@@ -4,12 +4,20 @@ import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import net.minecraft.entity.Entity;
+//? if <1.21.2 {
 import net.minecraft.entity.vehicle.BoatEntity;
+//?} else
+/*import net.minecraft.entity.vehicle.AbstractBoatEntity;*/
 import net.minecraft.entity.vehicle.VehicleInventory;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-@Mixin(BoatEntity.class)
+@Mixin(
+		//? if <1.21.2 {
+		BoatEntity.class
+		//?} else
+		/*AbstractBoatEntity.class*/
+)
 public abstract class BoatEntityMixin implements DynamicCrosshairEntity {
 	@Shadow protected abstract boolean canAddPassenger(Entity passenger);
 

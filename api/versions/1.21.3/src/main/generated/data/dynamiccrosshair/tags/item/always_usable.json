@@ -1,0 +1,21 @@
+{
+  "values": [
+    "minecraft:potion",
+    {
+      "id": "#c:potions",
+      "required": false
+    },
+    "minecraft:honey_bottle",
+    "minecraft:golden_apple",
+    "minecraft:enchanted_golden_apple",
+    "minecraft:milk_bucket",
+    {
+      "id": "#c:buckets/milk",
+      "required": false
+    },
+    "minecraft:ominous_bottle",
+    "minecraft:goat_horn",
+    "minecraft:writable_book",
+    "minecraft:written_book"
+  ]
+}

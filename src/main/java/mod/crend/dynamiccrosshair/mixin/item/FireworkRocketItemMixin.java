@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 public class FireworkRocketItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
-		if (context.isWithBlock() || context.getPlayer().isFallFlying()) {
+		if (context.isWithBlock() || context.isFlying()) {
 			return InteractionType.USE_ITEM;
 		}
 		return InteractionType.NO_ACTION;

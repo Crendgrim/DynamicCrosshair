@@ -8,6 +8,7 @@ import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 public class PreviewCrosshairWidget extends AbstractWidget {
@@ -26,7 +27,10 @@ public class PreviewCrosshairWidget extends AbstractWidget {
 
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-		//? if >=1.20.6 {
+		//? if >=1.21.2 {
+		/*context.drawGuiTexture(RenderLayer::getGuiTextured, BACKGROUND, getDimension().x(), getDimension().y(), getDimension().width(), getDimension().height());
+		context.draw();
+		*///?} else if >=1.20.6 {
 		/*context.drawGuiTexture(BACKGROUND, getDimension().x(), getDimension().y(), getDimension().width(), getDimension().height());
 		*///?} else {
 		context.drawTexture(BACKGROUND, getDimension().x(), getDimension().y(), 0, 0, getDimension().width(), getDimension().height(), getDimension().width(), getDimension().height());
@@ -34,7 +38,15 @@ public class PreviewCrosshairWidget extends AbstractWidget {
 		RenderSystem.enableBlend();
 		int color = control.overrideColorOption.pendingValue() ? control.customColorOption.pendingValue().getRGB() : DynamicCrosshairMod.config.getDefaultStyle().color();
 		setColor(color, control.enableBlendOption.pendingValue());
-		CrosshairStyleManager.INSTANCE.get(control.styleOption.pendingValue()).draw(context, getDimension().centerX() - 7, getDimension().centerY() - 7);
+		CrosshairStyleManager.INSTANCE.get(control.styleOption.pendingValue()).draw(
+				context,
+				//? if >=1.21.2
+				/*control.enableBlendOption.pendingValue() ? RenderLayer::getCrosshair : RenderLayer::getGuiTextured,*/
+				getDimension().centerX() - 7,
+				getDimension().centerY() - 7
+		);
+		//? if >=1.21.2
+		/*context.draw();*/
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		RenderSystem.defaultBlendFunc();
 	}

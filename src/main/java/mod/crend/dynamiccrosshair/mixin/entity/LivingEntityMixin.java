@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.mixin.entity;
 
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.ItemStack;
@@ -17,5 +18,7 @@ public abstract class LivingEntityMixin extends EntityMixin implements DynamicCr
 	@Shadow public abstract boolean isSleeping();
 	@Shadow public abstract boolean hasStatusEffect(/*? if >=1.20.6 {*//*RegistryEntry<StatusEffect>*//*?} else {*/StatusEffect/*?}*/ effect);
 	@Shadow public abstract ItemStack getStackInHand(Hand hand);
+	//? if >=1.21.2
+	/*@Shadow public abstract boolean canEquip(ItemStack itemStack, EquipmentSlot equipmentSlot);*/
 }
 

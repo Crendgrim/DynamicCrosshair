@@ -39,6 +39,8 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 		;
 
 		getOrCreateTagBuilder(DynamicCrosshairItemTags.THROWABLES)
+				//? if >=1.21
+				/*.addOptionalTag(ConventionalItemTags.ENDER_PEARLS)*/
 				.add(Items.EGG)
 				.add(Items.SNOWBALL)
 				.add(Items.SPLASH_POTION)

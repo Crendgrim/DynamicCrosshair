@@ -37,6 +37,14 @@ public abstract class ItemMixin implements DynamicCrosshairItem, DynamicCrosshai
 			}
 		}
 
+		//? if >=1.21.2 {
+		/*if (itemStack.contains(DataComponentTypes.EQUIPPABLE)) {
+			if (context.getPlayer().canEquip(itemStack, itemStack.get(DataComponentTypes.EQUIPPABLE).slot())) {
+				return InteractionType.EQUIP_ITEM;
+			}
+		}
+		*///?}
+
 		InteractionType interactionType = context.withApisUntilNonNull(api -> {
 			if (api.isAlwaysUsable(itemStack)) return InteractionType.USE_ITEM;
 			if (api.isAlwaysUsableOnBlock(itemStack) && context.isWithBlock()) return InteractionType.USE_ITEM_ON_BLOCK;

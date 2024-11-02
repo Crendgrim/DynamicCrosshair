@@ -91,7 +91,6 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 		getOrCreateTagBuilder(DynamicCrosshairBlockTags.INTERACTABLE)
 				.addTag(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE)
 				.addTag(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
-				.add(Blocks.COMMAND_BLOCK)
 				.add(Blocks.JUKEBOX)
 				.add(Blocks.LECTERN)
 				.add(Blocks.COMPOSTER)

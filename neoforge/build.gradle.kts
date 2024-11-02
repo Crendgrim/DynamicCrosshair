@@ -50,14 +50,6 @@ repositories {
         name = "Kotlin for Forge"
         setUrl("https://thedarkcolour.github.io/KotlinForForge/")
     }
-    maven("https://maven.isxander.dev/releases")
-    maven {
-        name = "Modrinth"
-        setUrl("https://api.modrinth.com/maven")
-    }
-    flatDir {
-        dirs("${rootProject.projectDir}/lib")
-    }
 }
 
 dependencies {
@@ -75,7 +67,7 @@ dependencies {
     modImplementation(name="libbamboo", group="mod.crend.libbamboo", version="neoforge-${common.mod.dep("libbamboo")}")
     include(name="libbamboo", group="mod.crend.libbamboo", version="neoforge-${common.mod.dep("libbamboo")}")
 
-    modCompileOnly(name="autohud", group="mod.crend.autohud", version="${common.mod.dep("autohud")}-neoforge")
+    modCompileOnly(name="autohud", group="mod.crend.autohud", version="neoforge-${common.mod.dep("autohud")}")
 
     api(project(apicommon.path, "namedElements")) { isTransitive = false }
     api(project(apineoforge.path, "namedElements")) { isTransitive = false }

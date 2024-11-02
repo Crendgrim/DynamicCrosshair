@@ -35,3 +35,22 @@ for (it in stonecutter.tree.nodes) {
         dependsOn("run$type")
     }
 }
+
+allprojects {
+    repositories {
+        maven("https://maven.isxander.dev/releases")
+        maven {
+            name = "Modrinth"
+            setUrl("https://api.modrinth.com/maven")
+        }
+        maven {
+            url = uri("https://cursemaven.com")
+            content {
+                includeGroup("curse.maven")
+            }
+        }
+        flatDir {
+            dirs("${rootProject.projectDir}/lib")
+        }
+    }
+}

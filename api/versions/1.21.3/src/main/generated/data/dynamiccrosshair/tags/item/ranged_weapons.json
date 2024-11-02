@@ -1,0 +1,28 @@
+{
+  "values": [
+    "minecraft:fishing_rod",
+    "minecraft:bow",
+    "minecraft:crossbow",
+    "minecraft:trident",
+    {
+      "id": "#c:tools/spear",
+      "required": false
+    },
+    {
+      "id": "#c:tools/bow",
+      "required": false
+    },
+    {
+      "id": "#c:tools/crossbow",
+      "required": false
+    },
+    {
+      "id": "#c:tools/fishing_rod",
+      "required": false
+    },
+    {
+      "id": "#c:tools/ranged_weapon",
+      "required": false
+    }
+  ]
+}

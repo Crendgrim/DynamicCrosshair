@@ -36,26 +36,13 @@ configurations {
 }
 
 
-repositories {
-    maven("https://maven.isxander.dev/releases")
-    flatDir {
-        dirs("${rootProject.projectDir}/lib")
-    }
-}
-
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft")
     mappings("net.fabricmc:yarn:$minecraft+build.${mod.dep("yarn_build")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${mod.dep("fabric_loader")}")
-    /*
-    "io.github.llamalad7:mixinextras-common:${mod.dep("mixin_extras")}".let {
-        annotationProcessor(it)
-        implementation(it)
-    }
-     */
 
     modImplementation(name="libbamboo", group="mod.crend.libbamboo", version="fabric-${mod.dep("libbamboo")}")
-    modCompileOnly(name="autohud", group="mod.crend.autohud", version="${mod.dep("autohud")}-fabric")
+    modCompileOnly(name="autohud", group="mod.crend.autohud", version="fabric-${mod.dep("autohud")}")
     modImplementation("dev.isxander:yet-another-config-lib:${mod.dep("yacl")}-fabric")
 
     commonBundle(project(apiCommon.path, "namedElements")) { isTransitive = false }

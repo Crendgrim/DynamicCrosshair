@@ -106,7 +106,11 @@ public class SelectCrosshairController implements Controller<Identifier> {
 		if (editStyle != null) {
 			NativeImage nativeImage = CrosshairStyleManager.INSTANCE.getTexture(editStyle.identifier);
 			if (nativeImage != null) {
-				int[] rgba = nativeImage.copyPixelsRgba();
+				int[] rgba =
+						//? if <1.21.2 {
+						nativeImage.copyPixelsRgba();
+						//?} else
+						/*nativeImage.copyPixelsArgb();*/
 				int i = 0;
 				int j = 0;
 				for (int px : rgba) {

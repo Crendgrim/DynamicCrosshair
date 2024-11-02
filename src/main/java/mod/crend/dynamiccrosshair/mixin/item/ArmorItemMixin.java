@@ -9,11 +9,16 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
+//? if <1.21.2
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin({ArmorItem.class, ElytraItem.class})
+@Mixin({
+		ArmorItem.class
+		//? if <1.21.2
+		, ElytraItem.class
+})
 public class ArmorItemMixin implements DynamicCrosshairItem {
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {

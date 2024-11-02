@@ -2,9 +2,12 @@ package mod.crend.dynamiccrosshair.component;
 
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
+import mod.crend.dynamiccrosshair.style.CrosshairStyledPart;
 import mod.crend.dynamiccrosshairapi.crosshair.Crosshair;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairPart;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CrosshairComponent {
@@ -15,6 +18,9 @@ public class CrosshairComponent {
     CrosshairStyle primaryStyle = null;
     CrosshairStyle secondaryStyle = null;
     CrosshairStyle hitModifier = null;
+
+    List<CrosshairStyledPart> stylesWithBlend = new ArrayList<>();
+    List<CrosshairStyledPart> stylesWithoutBlend = new ArrayList<>();
 
     public CrosshairComponent(Crosshair crosshair) {
         this.crosshair = crosshair;
@@ -91,14 +97,35 @@ public class CrosshairComponent {
                 secondaryStyle = null;
             }
         }
-    }
 
-    public CrosshairStyle getPrimaryStyle() {
-        return primaryStyle;
-    }
-
-    public CrosshairStyle getSecondaryStyle() {
-        return secondaryStyle;
+        if (primaryStyle != null) {
+            if (primaryStyle.enableBlend()) {
+                stylesWithBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, primaryStyle));
+            } else {
+                stylesWithoutBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, primaryStyle));
+            }
+        } else if (secondaryStyle == null) {
+            CrosshairStyle crosshairStyle = FORCE_CROSSHAIR.primaryStyle;
+            if (crosshairStyle.enableBlend()) {
+                stylesWithBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, primaryStyle));
+            } else {
+                stylesWithoutBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, primaryStyle));
+            }
+        }
+        if (secondaryStyle != null) {
+            if (secondaryStyle.enableBlend()) {
+                stylesWithBlend.add(new CrosshairStyledPart(CrosshairPart.SECONDARY, secondaryStyle));
+            } else {
+                stylesWithoutBlend.add(new CrosshairStyledPart(CrosshairPart.SECONDARY, secondaryStyle));
+            }
+        }
+        for (CrosshairStyle modifier : getModifiers()) {
+            if (modifier.enableBlend()) {
+                stylesWithBlend.add(new CrosshairStyledPart(CrosshairPart.MODIFIER, modifier));
+            } else {
+                stylesWithoutBlend.add(new CrosshairStyledPart(CrosshairPart.MODIFIER, modifier));
+            }
+        }
     }
 
     private CrosshairStyle getCrosshairStyle(CrosshairVariant variant) {
@@ -125,5 +152,12 @@ public class CrosshairComponent {
 
     public Crosshair getCrosshair() {
         return crosshair;
+    }
+
+    public List<CrosshairStyledPart> getStylesWithBlend() {
+        return stylesWithBlend;
+    }
+    public List<CrosshairStyledPart> getStylesWithoutBlend() {
+        return stylesWithoutBlend;
     }
 }

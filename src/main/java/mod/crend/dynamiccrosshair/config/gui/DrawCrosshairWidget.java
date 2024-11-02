@@ -7,6 +7,7 @@ import dev.isxander.yacl3.debug.DebugProperties;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -50,12 +51,16 @@ public class DrawCrosshairWidget extends AbstractWidget {
 			GlStateManager._texParameter(GlConst.GL_TEXTURE_2D, GlConst.GL_TEXTURE_MAG_FILTER, GlConst.GL_LINEAR);
 			GlStateManager._texParameter(GlConst.GL_TEXTURE_2D, GlConst.GL_TEXTURE_MIN_FILTER, GlConst.GL_LINEAR);
 		}
-		//? if >=1.20.6 {
+		//? if >=1.21.2 {
+		/*context.drawGuiTexture(RenderLayer::getGuiTextured, BACKGROUND, 0, 0, 15, 15);
+		context.drawTexture(RenderLayer::getCrosshair, control.editStyle.identifier, 0, 0, 0, 0, 15, 15, 15, 15);
+		*///?} else if >=1.20.6 {
 		/*context.drawGuiTexture(BACKGROUND, 0, 0, 15, 15);
+		context.drawTexture(control.editStyle.identifier, 0, 0, 0, 0, 15, 15, 15, 15);
 		*///?} else {
 		context.drawTexture(BACKGROUND, 0, 0, 0, 0, 15, 15, 15, 15);
-		//?}
 		context.drawTexture(control.editStyle.identifier, 0, 0, 0, 0, 15, 15, 15, 15);
+		//?}
 		context.getMatrices().pop();
 		if (isMouseOverCanvas(mouseX, mouseY)) {
 			if (!wasMouseOver) {

@@ -143,6 +143,13 @@ public class CrosshairContextImpl implements CrosshairContext {
 		return (!player.shouldCancelInteraction() || isEmptyHanded());
 	}
 
+	@Override
+	public boolean isFlying() {
+		//? if <1.21.2 {
+		return player.isFallFlying();
+		//?} else
+		/*return player.isGliding();*/
+	}
 
 	private boolean withBlock = false;
 	private BlockPos blockPos = null;
@@ -287,7 +294,12 @@ public class CrosshairContextImpl implements CrosshairContext {
 
 	@Override
 	public boolean isCoolingDown() {
-		return player.getItemCooldownManager().isCoolingDown(getItem());
+		return player.getItemCooldownManager().isCoolingDown(
+				//? if <1.21.2 {
+				getItem()
+				//?} else
+				/*getItemStack()*/
+		);
 	}
 
 	@Override

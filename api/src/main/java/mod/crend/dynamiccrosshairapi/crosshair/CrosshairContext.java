@@ -43,6 +43,8 @@ public interface CrosshairContext {
 	 */
 	boolean shouldInteract();
 
+	boolean isFlying();
+
 
 	boolean isWithBlock();
 

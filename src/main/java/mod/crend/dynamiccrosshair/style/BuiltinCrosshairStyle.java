@@ -2,6 +2,7 @@ package mod.crend.dynamiccrosshair.style;
 
 import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 import java.util.LinkedHashMap;
@@ -43,12 +44,19 @@ public class BuiltinCrosshairStyle extends AbstractCrosshairStyle {
 	}
 
 	@Override
-	public void draw(DrawContext context, int x, int y) {
-		//? if >=1.20.6 {
+	public void draw(
+			DrawContext context,
+			//? if >=1.21.2
+			/*Function<Identifier, RenderLayer> renderLayer,*/
+			int x, int y
+	) {
+		//? if <1.20.6 {
+		context.drawTexture(identifier, x, y, 0, 0, 15, 15, 15, 15);
+		//?} else if <1.21.2 {
 		/*context.drawGuiTexture(identifier, x, y, 15, 15);
 		*///?} else {
-		context.drawTexture(identifier, x, y, 0, 0, 15, 15, 15, 15);
-		//?}
+		/*context.drawGuiTexture(renderLayer, identifier, x, y, 15, 15);
+		*///?}
 	}
 
 	//? if <=1.20.1 {
@@ -63,7 +71,10 @@ public class BuiltinCrosshairStyle extends AbstractCrosshairStyle {
 		}
 
 		@Override
-		public void draw(DrawContext context, int x, int y) {
+		public void draw(
+				DrawContext context,
+				int x, int y
+		) {
 			context.drawTexture(DynamicCrosshairStyles.DEFAULT, x, y, 0, 0, 15, 15);
 		}
 	}

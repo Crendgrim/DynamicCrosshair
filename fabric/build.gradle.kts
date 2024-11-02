@@ -46,16 +46,6 @@ configurations {
 
 repositories {
     maven("https://maven.terraformersmc.com/")
-    maven("https://maven.isxander.dev/releases")
-    maven {
-        url = uri("https://cursemaven.com")
-        content {
-            includeGroup("curse.maven")
-        }
-    }
-    flatDir {
-        dirs("${rootProject.projectDir}/lib")
-    }
 }
 
 dependencies {

@@ -46,6 +46,9 @@ public record Crosshair(
         return one.combine(other);
     }
 
+    public boolean hasPrimaryInteraction() {
+        return primaryInteraction != InteractionType.EMPTY;
+    }
     public boolean hasSecondaryInteraction() {
         return secondaryInteraction != InteractionType.EMPTY;
     }
