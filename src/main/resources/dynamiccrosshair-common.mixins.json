@@ -9,6 +9,7 @@
     "block.AbstractCandleBlockMixin",
     "block.AbstractCauldronBlockMixin",
     "block.AbstractSignBlockMixin",
+    "block.AlwaysInteractableBlockMixin",
     "block.BlockMixin",
     "block.CakeBlockMixin",
     "block.CampfireBlockMixin",
@@ -16,6 +17,7 @@
     "block.ChiseledBookshelfBlockMixin",
     "block.ComposterBlockMixin",
     "block.DecoratedPotBlockMixin",
+    "block.DoorBlockMixin",
     "block.EndPortalFrameBlockMixin",
     "block.FenceBlockMixin",
     "block.FlowerPotBlockMixin",
@@ -24,10 +26,12 @@
     "block.RedstoneOreMixin",
     "block.RedstoneWireBlockMixin",
     "block.SweetBerryBushBlockMixin",
+    "block.TrapdoorBlockMixin",
     "block.VaultBlockMixin",
     "entity.AbstractDonkeyEntityMixin",
     "entity.AbstractHorseEntityMixin",
     "entity.AllayEntityMixin",
+    "entity.AlwaysInteractableEntityMixin",
     "entity.AnimalEntityMixin",
     "entity.ArmadilloEntityMixin",
     "entity.ArmorStandEntityMixin",
@@ -50,6 +54,7 @@
     "entity.TameableEntityMixin",
     "entity.WolfEntityMixin",
     "entity.ZombieVillagerEntityMixin",
+    "item.AlwaysUsableItemMixin",
     "item.ArmorItemMixin",
     "item.ArmorStandItemMixin",
     "item.AxeItemMixin",
@@ -74,6 +79,7 @@
     "item.ItemAccessor",
     "item.ItemMixin",
     "item.MinecartItemMixin",
+    "item.PotionItemMixin",
     "item.ShearsItemMixin",
     "item.ShovelItemMixin",
     "item.SpawnEggItemMixin",
@@ -84,7 +90,5 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "plugin": "mod.crend.dynamiccrosshair.DynamicCrosshairMixinPlugin",
-  "mixins": [
-  ]
+  "plugin": "mod.crend.dynamiccrosshair.DynamicCrosshairMixinPlugin"
 }

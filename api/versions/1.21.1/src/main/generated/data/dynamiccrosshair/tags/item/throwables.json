@@ -1,5 +1,9 @@
 {
   "values": [
+    {
+      "id": "#c:ender_pearls",
+      "required": false
+    },
     "minecraft:egg",
     "minecraft:snowball",
     "minecraft:splash_potion",

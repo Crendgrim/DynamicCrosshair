@@ -3,7 +3,6 @@
   "values": [
     "#dynamiccrosshair:always_interactable",
     "#dynamiccrosshair:always_interactable_in_creative_mode",
-    "minecraft:command_block",
     "minecraft:jukebox",
     "minecraft:lectern",
     "minecraft:composter",

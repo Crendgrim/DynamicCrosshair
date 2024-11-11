@@ -6,7 +6,6 @@ plugins {
 }
 stonecutter active "1.20.1" /* [SC] DO NOT EDIT */
 stonecutter.automaticPlatformConstants = true
-stonecutter.debug = true
 
 // Builds every version into `build/libs/{mod.version}/{loader}`
 stonecutter registerChiseled tasks.register("chiseledBuild", stonecutter.chiseled) {

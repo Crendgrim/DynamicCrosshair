@@ -27,7 +27,10 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				/*.addOptionalTag(ConventionalBlockTags.PLAYER_WORKSTATIONS_FURNACES)
 				.addOptionalTag(ConventionalBlockTags.PLAYER_WORKSTATIONS_CRAFTING_TABLES)
 				.addOptionalTag(ConventionalBlockTags.BARRELS)
-				 *///?}
+				 *///?} else {
+				.add(Blocks.BARREL)
+				.add(Blocks.FURNACE)
+				//?}
 				.add(Blocks.BEACON)
 				.add(Blocks.BELL)
 				.add(Blocks.BREWING_STAND)
