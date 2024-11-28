@@ -47,6 +47,7 @@ public class CrosshairComponent {
                      FILL_BLOCK_FROM_ITEM,
                      USE_BLOCK,
                      USE_ITEM_ON_ENTITY,
+                     PICK_UP_BLOCK,
                      PICK_UP_ENTITY,
                      PLACE_ITEM_ON_ENTITY,
                      FILL_ITEM_FROM_ENTITY,
@@ -66,9 +67,10 @@ public class CrosshairComponent {
                 case INTERACT_WITH_BLOCK,
                      TAKE_ITEM_FROM_BLOCK,
                      MOUNT_BLOCK,
-                     TAKE_ITEM_FROM_ENTITY,
                      INTERACT_WITH_ENTITY,
-                     MOUNT_ENTITY -> secondary = CrosshairVariant.CanInteract;
+                     TAKE_ITEM_FROM_ENTITY,
+                     MOUNT_ENTITY,
+                     PICK_UP_ITEM -> secondary = CrosshairVariant.CanInteract;
 
                 case RANGED_WEAPON_CHARGING -> primary = CrosshairVariant.Regular;
                 case RANGED_WEAPON, RANGED_WEAPON_CHARGED -> primary = CrosshairVariant.HoldingRangedWeapon;

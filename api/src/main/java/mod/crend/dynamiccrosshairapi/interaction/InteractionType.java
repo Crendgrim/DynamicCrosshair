@@ -7,10 +7,12 @@ public enum InteractionType {
 	THROW_ITEM(InteractionMode.SECONDARY),
 	CHARGE_ITEM(InteractionMode.SECONDARY),
 	SPYGLASS(InteractionMode.SECONDARY),
+	PICK_UP_ITEM(InteractionMode.SECONDARY),
 
 	TARGET_BLOCK(InteractionMode.PRIMARY),
 	PLACE_BLOCK(InteractionMode.SECONDARY),
 	INTERACT_WITH_BLOCK(InteractionMode.SECONDARY),
+	PICK_UP_BLOCK(InteractionMode.SECONDARY),
 	USE_ITEM_ON_BLOCK(InteractionMode.SECONDARY),
 	PLACE_ITEM_ON_BLOCK(InteractionMode.SECONDARY),
 	TAKE_ITEM_FROM_BLOCK(InteractionMode.SECONDARY),
