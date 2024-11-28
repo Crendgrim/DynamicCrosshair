@@ -4,6 +4,7 @@ plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
     id("com.github.johnrengelman.shadow")
+    id("me.modmuss50.mod-publish-plugin")
 }
 
 val loader = prop("loom.platform")!!
@@ -58,8 +59,8 @@ dependencies {
 
     modImplementation("dev.isxander:yet-another-config-lib:${common.mod.dep("yacl")}-fabric")
 
-    modImplementation(name="libbamboo", group="mod.crend.libbamboo", version="fabric-${common.mod.dep("libbamboo")}")
-    include(name="libbamboo", group="mod.crend.libbamboo", version="fabric-${common.mod.dep("libbamboo")}")
+    modImplementation(name="libbamboo", group="mod.crend", version="${common.mod.dep("libbamboo")}-fabric")
+    include(name="libbamboo", group="mod.crend", version="${common.mod.dep("libbamboo")}-fabric")
 
     modImplementation("com.terraformersmc:modmenu:${common.mod.dep("modmenu")}")
 
@@ -133,4 +134,47 @@ tasks.register<Copy>("buildAndCollect") {
     from(tasks.remapJar.get().archiveFile, tasks.remapSourcesJar.get().archiveFile)
     into(rootProject.layout.buildDirectory.file("libs/${mod.version}/$loader"))
     dependsOn("build")
+}
+
+publishMods {
+    displayName = "[Fabric ${common.mod.prop("mc_title")}] ${mod.name} ${mod.version}"
+
+    val modrinthToken = providers.gradleProperty("MODRINTH_TOKEN").orNull
+    val curseforgeToken = providers.gradleProperty("CURSEFORGE_TOKEN").orNull
+    dryRun = modrinthToken == null || curseforgeToken == null
+
+    file = tasks.remapJar.get().archiveFile
+    val apiFile = apifabric.tasks.remapJar.get().archiveFile
+    version = "${mod.version}+$minecraft-$loader"
+    changelog = mod.prop("changelog")
+    type = STABLE
+    modLoaders.add(loader)
+
+    val supportedVersions = common.mod.prop("mc_targets").split(" ")
+
+    modrinth {
+        projectId = property("publish.modrinth").toString()
+        accessToken = modrinthToken
+        minecraftVersions.addAll(supportedVersions)
+        additionalFiles.from(apiFile)
+
+        requires("fabric-api")
+        optional("dynamiccrosshaircompat")
+        optional("yacl")
+        optional("modmenu")
+    }
+    curseforge {
+        projectId = property("publish.curseforge").toString()
+        projectSlug = property("publish.curseforge_slug").toString()
+        accessToken = curseforgeToken
+        minecraftVersions.addAll(supportedVersions)
+        additionalFiles.from(apiFile)
+        clientRequired = true
+        serverRequired = false
+
+        requires("fabric-api")
+        optional("dynamic-crosshair-compat")
+        optional("yacl")
+        optional("modmenu")
+    }
 }

@@ -3,6 +3,7 @@ plugins {
     id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT" apply false
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
+    id("me.modmuss50.mod-publish-plugin") version "0.8.1" apply false
 }
 stonecutter active "1.20.1" /* [SC] DO NOT EDIT */
 stonecutter.automaticPlatformConstants = true
@@ -24,6 +25,22 @@ for (it in stonecutter.tree.branches) {
     }
 }
 
+stonecutter registerChiseled tasks.register("chiseledPublishToMavenLocal", stonecutter.chiseled) {
+    group = "project"
+    ofTask("publishToMavenLocal")
+}
+
+stonecutter registerChiseled tasks.register("chiseledPublish", stonecutter.chiseled) {
+    group = "project"
+    ofTask("publishMods")
+}
+
+stonecutter registerChiseled tasks.register("chiseledRunDatagen", stonecutter.chiseled) {
+    group = "project"
+    versions { branch, _ -> branch == "api" }
+    ofTask("runDatagen")
+}
+
 // Runs active versions for each loader
 for (it in stonecutter.tree.nodes) {
     if (it.metadata != stonecutter.current || it.branch.id.isEmpty()) continue
@@ -37,6 +54,7 @@ for (it in stonecutter.tree.nodes) {
 
 allprojects {
     repositories {
+        mavenLocal()
         maven("https://maven.isxander.dev/releases")
         maven {
             name = "Modrinth"
@@ -47,9 +65,6 @@ allprojects {
             content {
                 includeGroup("curse.maven")
             }
-        }
-        flatDir {
-            dirs("${rootProject.projectDir}/lib")
         }
     }
 }

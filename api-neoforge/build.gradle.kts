@@ -4,6 +4,7 @@ plugins {
     id("dev.architectury.loom")
     id("architectury-plugin")
     id("com.github.johnrengelman.shadow")
+    id("maven-publish")
 }
 
 val loader = prop("loom.platform")!!
@@ -136,5 +137,20 @@ tasks.register<Copy>("buildAndCollect") {
 artifacts {
     add("finishedBundle", tasks.remapJar.get().archiveFile) {
         builtBy(tasks.remapJar)
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = mod.prop("group")
+            artifactId = mod.prop("id")
+            version = "${mod.version}+${minecraft}-${loader}-api"
+
+            artifact(tasks.remapJar.get().archiveFile)
+            artifact(tasks.remapSourcesJar.get().archiveFile) {
+                classifier = "sources"
+            }
+        }
     }
 }

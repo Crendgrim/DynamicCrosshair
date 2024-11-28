@@ -41,8 +41,8 @@ dependencies {
     mappings("net.fabricmc:yarn:$minecraft+build.${mod.dep("yarn_build")}:v2")
     modImplementation("net.fabricmc:fabric-loader:${mod.dep("fabric_loader")}")
 
-    modImplementation(name="libbamboo", group="mod.crend.libbamboo", version="fabric-${mod.dep("libbamboo")}")
-    modCompileOnly(name="autohud", group="mod.crend.autohud", version="fabric-${mod.dep("autohud")}")
+    modImplementation(name="libbamboo", group="mod.crend", version="${mod.dep("libbamboo")}-fabric")
+    modCompileOnly(name="autohud", group="mod.crend", version="${mod.dep("autohud")}-fabric")
     modImplementation("dev.isxander:yet-another-config-lib:${mod.dep("yacl")}-fabric")
 
     commonBundle(project(apiCommon.path, "namedElements")) { isTransitive = false }
