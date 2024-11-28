@@ -16,7 +16,6 @@
   "license": "LGPL-3.0",
   "icon": "assets/${id}/icon.png",
 
-  "environment": "client",
   "entrypoints": {
     "client": [
       "mod.crend.dynamiccrosshair.fabric.DynamicCrosshairFabric"
@@ -29,8 +28,18 @@
     ]
   },
   "mixins": [
-    "dynamiccrosshair-common.mixins.json",
-    "dynamiccrosshair.compat.mixins.json"
+    {
+      "config": "dynamiccrosshair-common.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "dynamiccrosshair-fabric.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "dynamiccrosshair.compat.mixins.json",
+      "environment": "client"
+    }
   ],
 
   "depends": {

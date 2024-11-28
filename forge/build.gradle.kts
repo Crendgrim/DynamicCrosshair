@@ -85,7 +85,8 @@ loom {
 
     forge.convertAccessWideners = true
     forge.mixinConfigs(
-        "dynamiccrosshair-common.mixins.json"
+        "dynamiccrosshair-common.mixins.json",
+        "dynamiccrosshair-forge.mixins.json"
     )
 
     runConfigs.all {

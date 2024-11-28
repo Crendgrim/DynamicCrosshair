@@ -17,3 +17,6 @@ displayTest = "IGNORE_ALL_VERSION"
 
 [[mixins]]
 config = "dynamiccrosshair-common.mixins.json"
+
+[[mixins]]
+config = "dynamiccrosshair-neoforge.mixins.json"
