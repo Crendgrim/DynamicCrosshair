@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 
 public class DynamicCrosshairStyles {
 	public static final Identifier DEFAULT
-			//? if <=1.20.1 {
+			//? if <1.20.5 {
 			= of("crosshair");
 			//?} else {
 			/*= VersionUtils.getVanillaIdentifier("hud/crosshair");
@@ -31,7 +31,7 @@ public class DynamicCrosshairStyles {
 	public static final Identifier LINE_BOTTOM = of("line-bottom");
 
 	public static Identifier of(String path) {
-		//? if <=1.20.1 {
+		//? if <1.20.5 {
 		return VersionUtils.getIdentifier(DynamicCrosshair.MOD_ID, "textures/gui/sprites/crosshair/" + path + ".png");
 		//?} else {
 		/*return VersionUtils.getIdentifier(DynamicCrosshair.MOD_ID, "crosshair/" + path);

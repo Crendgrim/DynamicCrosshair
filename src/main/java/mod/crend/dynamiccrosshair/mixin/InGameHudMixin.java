@@ -36,7 +36,7 @@ public class InGameHudMixin {
     }*///?}
 
     @ModifyExpressionValue(method = "renderCrosshair",
-            //? if <1.20.6 {
+            //? if <1.20.3 {
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;debugEnabled:Z")
             //?} else {
             /*at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z")
@@ -49,7 +49,7 @@ public class InGameHudMixin {
 
     @WrapOperation(method = "renderCrosshair", at = @At(
             value = "INVOKE",
-            //? if <1.20.6 {
+            //? if <1.20.3 {
             target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V",
             //?} else if <1.21.2 {
             /*target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V",
@@ -63,13 +63,13 @@ public class InGameHudMixin {
             /*Function<Identifier, RenderLayer> renderLayers,*/
             Identifier texture,
             int x, int y,
-            //? if <1.20.6
+            //? if <1.20.3
             int u, int v,
             int width, int height,
             Operation<Void> original
     ) {
         CrosshairRenderer.wrapRender(context, x, y,
-                //? if <1.20.6 {
+                //? if <1.20.3 {
                 () -> original.call(context, texture, x, y, u, v, width, height),
                 () -> original.call(context, texture, x, y, u, v, width, height)
                 //?} else if <1.21.2 {

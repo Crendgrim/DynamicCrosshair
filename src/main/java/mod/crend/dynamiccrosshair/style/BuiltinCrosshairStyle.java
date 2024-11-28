@@ -58,25 +58,4 @@ public class BuiltinCrosshairStyle extends AbstractCrosshairStyle {
 		/*context.drawGuiTexture(renderLayer, identifier, x, y, 15, 15);
 		*///?}
 	}
-
-	//? if <=1.20.1 {
-	public static class VanillaCrosshairStyle extends AbstractCrosshairStyle {
-		public VanillaCrosshairStyle() {
-			super(DynamicCrosshairStyles.DEFAULT);
-		}
-
-		@Override
-		public boolean isCustom() {
-			return false;
-		}
-
-		@Override
-		public void draw(
-				DrawContext context,
-				int x, int y
-		) {
-			context.drawTexture(DynamicCrosshairStyles.DEFAULT, x, y, 0, 0, 15, 15);
-		}
-	}
-	//?}
 }

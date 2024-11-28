@@ -5,7 +5,6 @@ import mod.crend.dynamiccrosshairapi.VersionUtils;
 import net.minecraft.block.Block;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 
 public class DynamicCrosshairBlockTags {
 	public static final TagKey<Block> INTERACTABLE = of("interactable");

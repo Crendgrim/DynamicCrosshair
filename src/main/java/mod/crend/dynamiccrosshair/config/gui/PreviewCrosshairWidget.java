@@ -12,7 +12,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 public class PreviewCrosshairWidget extends AbstractWidget {
-	//? if <=1.20.1 {
+	//? if <1.20.5 {
 	public static final Identifier BACKGROUND = DynamicCrosshair.identifier("textures/gui/sprites/preview-background.png");
 	//?} else {
 	/*public static final Identifier BACKGROUND = DynamicCrosshair.identifier("preview-background");

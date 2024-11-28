@@ -11,21 +11,34 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.InterModComms;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
+import net.neoforged.neoforge.common.NeoForge;
+//? if <1.20.5 {
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+//?} else {
+/*import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+*///?}
 
 public class DynamicCrosshairNeoForgeEvents {
 
-	@EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	//? if <1.20.5 {
+	@Mod.EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	//?} else
+	/*@EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)*/
 	public static class ModBus {
 
 		@SubscribeEvent
 		static void onClientSetup(FMLClientSetupEvent event) {
 			DynamicCrosshairMod.init();
 			ConfigScreen.register(ConfigHandler.CONFIG_STORE);
+			// Delay initialising the client tick event, see that method.
+			NeoForge.EVENT_BUS.addListener(ModBus::onClientTick);
 		}
 
 		@SubscribeEvent
@@ -41,14 +54,18 @@ public class DynamicCrosshairNeoForgeEvents {
 					.map(msg -> (DynamicCrosshairApi) msg.messageSupplier().get())
 					.forEach(DynamicCrosshairNeoForge::registerApi);
 		}
-	}
 
-	@EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-	public static class ForgeBus {
-
-		@SubscribeEvent
-		static void onClientTick(ClientTickEvent.Post event) {
+		// Do not use @SubscribeEvent on the game bus because the mod "placebo" forces the game bus to run early for some reason.
+		static void onClientTick(
+				//? if <1.20.5 {
+				TickEvent.ClientTickEvent event
+				//?} else
+				/*ClientTickEvent.Post event*/
+		) {
+			//? if <1.20.5
+			if (event.phase == TickEvent.Phase.START) return;
 			CrosshairHandler.tick();
 		}
 	}
+
 }

@@ -16,7 +16,7 @@ public class DrawCrosshairWidget extends AbstractWidget {
 	boolean wasMouseOver = false;
 	SelectCrosshairController control;
 
-	//? if <=1.20.1 {
+	//? if <1.20.5 {
 	public static final Identifier BACKGROUND = DynamicCrosshair.identifier("textures/gui/sprites/crosshair-background.png");
 	//?} else {
 	/*public static final Identifier BACKGROUND = DynamicCrosshair.identifier("crosshair-background");

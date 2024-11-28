@@ -24,8 +24,8 @@ public class AutoHudCompat implements AutoHudApi {
 		return DynamicCrosshair.MOD_ID;
 	}
 
-	public static final Component CROSSHAIR_SECONDARY = Component.builder("dynamiccrosshair:secondary").config(AutoHud.config.crosshair()).build();
-	public static final Component CROSSHAIR_MODIFIER = Component.builder("dynamiccrosshair:modifier").config(AutoHud.config.crosshair()).build();
+	public static final Component CROSSHAIR_SECONDARY = Component.builder(DynamicCrosshair.AUTOHUD_COMPONENT_SECONDARY).config(AutoHud.config.crosshair()).build();
+	public static final Component CROSSHAIR_MODIFIER = Component.builder(DynamicCrosshair.AUTOHUD_COMPONENT_MODIFIER).config(AutoHud.config.crosshair()).build();
 
 	public static final ComponentRenderer CROSSHAIR_RENDER_PRIMARY = ComponentRenderer.builder(Components.Crosshair)
 			.fade()

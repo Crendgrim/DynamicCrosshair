@@ -100,11 +100,19 @@ tasks.remapJar {
 tasks.shadowJar {
     configurations = listOf(shadowBundle)
     archiveClassifier = "dev-shadow"
-    exclude("fabric.mod.json", "architectury.common.json")
+    exclude(
+        "fabric.mod.json",
+        "architectury.common.json",
+        if (stonecutter.eval(minecraft, "<=1.20.4")) "META-INF/neoforge.mods.toml" else "META-INF/mods.toml"
+    )
 }
 
 tasks.processResources {
-    properties(listOf("META-INF/neoforge.mods.toml", "pack.mcmeta"),
+    properties(
+        listOf(
+            if (stonecutter.eval(minecraft, "<=1.20.4")) "META-INF/mods.toml" else "META-INF/neoforge.mods.toml",
+            "pack.mcmeta"
+        ),
         "id" to mod.id,
         "name" to mod.name,
         "api_version" to mod.api_version,

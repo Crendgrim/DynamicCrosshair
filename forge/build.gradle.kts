@@ -61,7 +61,9 @@ dependencies {
         include(it)
     }
 
-    modImplementation("dev.isxander:yet-another-config-lib:${common.mod.dep("yacl")}-forge")
+    if (stonecutter.eval(minecraft, "<1.20.3")) {
+        modRuntimeOnly("dev.isxander:yet-another-config-lib:${common.mod.dep("yacl")}-forge")
+    }
 
     modImplementation(name="libbamboo", group="mod.crend.libbamboo", version="forge-${common.mod.dep("libbamboo")}")
     include(name="libbamboo", group="mod.crend.libbamboo", version="forge-${common.mod.dep("libbamboo")}")
