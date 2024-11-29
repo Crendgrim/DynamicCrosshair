@@ -1,6 +1,7 @@
 package mod.crend.dynamiccrosshair.forge;
 
 import mod.crend.dynamiccrosshair.AutoHudCompat;
+import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
@@ -10,6 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 
@@ -17,6 +19,11 @@ public class DynamicCrosshairForgeEvents {
 
 	@Mod.EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 	public static class ModBus {
+
+		@SubscribeEvent
+		static void onClientSetup(FMLClientSetupEvent event) {
+			DynamicCrosshairMod.init();
+		}
 
 		@SubscribeEvent
 		static void onInterModEnqueue(InterModEnqueueEvent event) {

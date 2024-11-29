@@ -14,13 +14,12 @@ import net.minecraftforge.fml.common.Mod;
 @Mod(DynamicCrosshair.MOD_ID)
 public class DynamicCrosshairForge {
     public DynamicCrosshairForge(/*? if >=1.21.1 {*//*FMLJavaModLoadingContext context*//*?}*/) {
-        DynamicCrosshairMod.init();
         ConfigScreen.register(
                 //? if <1.21.1 {
                 ModLoadingContext.get(),
                 //?} else
                 /*context,*/
-                ConfigHandler.CONFIG_STORE
+                () -> ConfigHandler.CONFIG_STORE
         );
     }
 
