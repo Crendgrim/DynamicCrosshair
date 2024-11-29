@@ -170,10 +170,7 @@ if (common.mod.publish("neoforge")) {
             minecraftVersions.addAll(supportedVersions)
             additionalFiles.from(apiFile)
 
-            requires("fabric-api")
-            optional("dynamiccrosshaircompat")
             optional("yacl")
-            optional("modmenu")
         }
         curseforge {
             projectId = property("publish.curseforge").toString()
@@ -184,10 +181,7 @@ if (common.mod.publish("neoforge")) {
             clientRequired = true
             serverRequired = false
 
-            requires("fabric-api")
-            optional("dynamic-crosshair-compat")
             optional("yacl")
-            optional("modmenu")
         }
     }
 }
