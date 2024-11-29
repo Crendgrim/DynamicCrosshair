@@ -136,45 +136,47 @@ tasks.register<Copy>("buildAndCollect") {
     dependsOn("build")
 }
 
-publishMods {
-    displayName = "[Fabric ${common.mod.prop("mc_title")}] ${mod.name} ${mod.version}"
+if (common.mod.publish("fabric")) {
+    publishMods {
+        displayName = "[Fabric ${common.mod.prop("mc_title")}] ${mod.name} ${mod.version}"
 
-    val modrinthToken = providers.gradleProperty("MODRINTH_TOKEN").orNull
-    val curseforgeToken = providers.gradleProperty("CURSEFORGE_TOKEN").orNull
-    dryRun = modrinthToken == null || curseforgeToken == null
+        val modrinthToken = providers.gradleProperty("MODRINTH_TOKEN").orNull
+        val curseforgeToken = providers.gradleProperty("CURSEFORGE_TOKEN").orNull
+        dryRun = common.mod.publish("dryrun") || modrinthToken == null || curseforgeToken == null
 
-    file = tasks.remapJar.get().archiveFile
-    val apiFile = apifabric.tasks.remapJar.get().archiveFile
-    version = "${mod.version}+$minecraft-$loader"
-    changelog = mod.prop("changelog")
-    type = STABLE
-    modLoaders.add(loader)
+        file = tasks.remapJar.get().archiveFile
+        val apiFile = apifabric.tasks.remapJar.get().archiveFile
+        version = "${mod.version}+$minecraft-$loader"
+        changelog = mod.prop("changelog")
+        type = STABLE
+        modLoaders.add(loader)
 
-    val supportedVersions = common.mod.prop("mc_targets").split(" ")
+        val supportedVersions = common.mod.prop("mc_targets").split(" ")
 
-    modrinth {
-        projectId = property("publish.modrinth").toString()
-        accessToken = modrinthToken
-        minecraftVersions.addAll(supportedVersions)
-        additionalFiles.from(apiFile)
+        modrinth {
+            projectId = property("publish.modrinth").toString()
+            accessToken = modrinthToken
+            minecraftVersions.addAll(supportedVersions)
+            additionalFiles.from(apiFile)
 
-        requires("fabric-api")
-        optional("dynamiccrosshaircompat")
-        optional("yacl")
-        optional("modmenu")
-    }
-    curseforge {
-        projectId = property("publish.curseforge").toString()
-        projectSlug = property("publish.curseforge_slug").toString()
-        accessToken = curseforgeToken
-        minecraftVersions.addAll(supportedVersions)
-        additionalFiles.from(apiFile)
-        clientRequired = true
-        serverRequired = false
+            requires("fabric-api")
+            optional("dynamiccrosshaircompat")
+            optional("yacl")
+            optional("modmenu")
+        }
+        curseforge {
+            projectId = property("publish.curseforge").toString()
+            projectSlug = property("publish.curseforge_slug").toString()
+            accessToken = curseforgeToken
+            minecraftVersions.addAll(supportedVersions)
+            additionalFiles.from(apiFile)
+            clientRequired = true
+            serverRequired = false
 
-        requires("fabric-api")
-        optional("dynamic-crosshair-compat")
-        optional("yacl")
-        optional("modmenu")
+            requires("fabric-api")
+            optional("dynamic-crosshair-compat")
+            optional("yacl")
+            optional("modmenu")
+        }
     }
 }
