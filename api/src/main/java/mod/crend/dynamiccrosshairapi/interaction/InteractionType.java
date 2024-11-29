@@ -34,7 +34,7 @@ public enum InteractionType {
 
 	MELEE_WEAPON(InteractionMode.PRIMARY),
 	RANGED_WEAPON(InteractionMode.SECONDARY),
-	RANGED_WEAPON_CHARGING(InteractionMode.SECONDARY),
+	RANGED_WEAPON_CHARGING(InteractionMode.BOTH),
 	RANGED_WEAPON_CHARGED(InteractionMode.SECONDARY),
 	USABLE_TOOL(InteractionMode.BOTH),
 	TOOL(InteractionMode.PRIMARY),

@@ -50,7 +50,7 @@ public class Config {
         @SerialEntry
         public boolean meleeWeaponOnBreakableBlock = false;
         @SerialEntry
-        public UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.IfInteractable;
+        public UsableCrosshairPolicy holdingRangedWeapon = UsableCrosshairPolicy.Always;
         @SerialEntry
         public UsableCrosshairPolicy holdingThrowable = UsableCrosshairPolicy.IfInteractable;
         @SerialEntry

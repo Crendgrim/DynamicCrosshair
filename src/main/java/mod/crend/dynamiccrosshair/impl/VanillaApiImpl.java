@@ -98,7 +98,10 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
             }
 
             case RANGED_WEAPON -> {
-                if (DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.IfInteractable) {
+                if (DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() != UsableCrosshairPolicy.Disabled) {
+                    if (DynamicCrosshairMod.config.dynamicCrosshairHoldingRangedWeapon() == UsableCrosshairPolicy.Always) {
+                        return new Crosshair(InteractionType.RANGED_WEAPON);
+                    }
                     DynamicCrosshairRangedItem rangedItem = (DynamicCrosshairRangedItem) context.getItem();
                     if (rangedItem.dynamiccrosshair$isCharged(context)) {
                         if (isRangedMeleeWeapon) return new Crosshair(InteractionType.MELEE_WEAPON, InteractionType.RANGED_WEAPON_CHARGED);
@@ -108,7 +111,7 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
                         return new Crosshair(InteractionType.RANGED_WEAPON_CHARGING);
                     } else {
                         if (isRangedMeleeWeapon) return new Crosshair(InteractionType.MELEE_WEAPON);
-                        return new Crosshair(InteractionType.EMPTY);
+                        return new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR);
                     }
                 }
             }
