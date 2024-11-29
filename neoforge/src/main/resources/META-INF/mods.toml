@@ -11,7 +11,7 @@ authors = "Crendgrim"
 description = '''
 Dynamic Crosshair that changes shape based on what is targeted
 '''
-logoFile = "assets/${id}/icon.png"
+logoFile = "${id}.png"
 logoBlur = false
 displayTest = "IGNORE_ALL_VERSION"
 
