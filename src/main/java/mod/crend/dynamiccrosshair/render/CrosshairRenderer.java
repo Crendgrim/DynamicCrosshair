@@ -94,7 +94,6 @@ public class CrosshairRenderer {
 			RenderSystem.defaultBlendFunc();
 		}
 		CustomFramebufferRenderer.draw(context);
-		RenderSystem.defaultBlendFunc();
 	}
 
 	private static void renderStyles(DrawContext context, int x, int y, List<CrosshairStyledPart> styles) {
@@ -127,7 +126,10 @@ public class CrosshairRenderer {
 
 	public static void postRender() {
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-		RenderSystem.defaultBlendFunc();
+		//? if <1.21.2 {
+		RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
+		//?} else
+		//RenderSystem.defaultBlendFunc();
 	}
 
 	public static void wrapRender(DrawContext context, int x, int y, Runnable originalRenderCall, Runnable noBlendRenderCall) {
