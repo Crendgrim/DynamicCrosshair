@@ -12,6 +12,7 @@ import net.minecraft.block.BellBlock;
 import net.minecraft.block.BrewingStandBlock;
 import net.minecraft.block.ButtonBlock;
 import net.minecraft.block.CartographyTableBlock;
+import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.block.DaylightDetectorBlock;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.DropperBlock;
@@ -41,6 +42,7 @@ import org.spongepowered.asm.mixin.Mixin;
 		CartographyTableBlock.class,
 		//? if >=1.20.3
 		/*CrafterBlock.class,*/
+		CraftingTableBlock.class,
 		DaylightDetectorBlock.class,
 		DispenserBlock.class,
 		DropperBlock.class,
