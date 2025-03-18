@@ -5,12 +5,13 @@ import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairRangedItem;
 
-//? if >=1.20.6
-/*import net.minecraft.component.DataComponentTypes;*/
+//? if >=1.20.6 {
+/*import net.minecraft.component.DataComponentTypes;
+*///?} else
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import java.util.Objects;
 
 @Mixin(Item.class)
 public abstract class DynamicCrosshairBaseItem implements DynamicCrosshairItem, DynamicCrosshairRangedItem {
@@ -26,15 +27,19 @@ public abstract class DynamicCrosshairBaseItem implements DynamicCrosshairItem, 
 				itemStack.isFood()
 				//?}
 		) {
-			if (context.getPlayer().canConsume(false)
-					//? if >=1.20.6 {
-					/*|| Objects.requireNonNull(itemStack.get(DataComponentTypes.FOOD)).canAlwaysEat()
-					*///?} else {
-					|| Objects.requireNonNull(itemStack.getItem().getFoodComponent()).isAlwaysEdible()
-					//?}
-			) {
+			if (context.getPlayer().canConsume(false)) {
 				return InteractionType.CONSUME_ITEM;
 			}
+			//? if >=1.20.6 {
+			/*if (itemStack.get(DataComponentTypes.FOOD).canAlwaysEat()) {
+				return InteractionType.CONSUME_ITEM;
+			}
+			*///?} else {
+			FoodComponent foodComponent = itemStack.getFoodProperties(context.getPlayer());
+			if (foodComponent != null && foodComponent.isAlwaysEdible()) {
+				return InteractionType.CONSUME_ITEM;
+			}
+			//?}
 		}
 
 		//? if >=1.21.2 {
