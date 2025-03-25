@@ -1,6 +1,6 @@
 plugins {
     id("dev.kikugie.stonecutter")
-    id("dev.architectury.loom") version "1.7-SNAPSHOT" apply false
+    id("dev.architectury.loom") version "1.10-SNAPSHOT" apply false
     id("architectury-plugin") version "3.4-SNAPSHOT" apply false
     id("com.github.johnrengelman.shadow") version "8.1.1" apply false
     id("me.modmuss50.mod-publish-plugin") version "0.8.1" apply false
@@ -55,6 +55,7 @@ for (it in stonecutter.tree.nodes) {
 allprojects {
     repositories {
         mavenLocal()
+        maven("https://thedarkcolour.github.io/KotlinForForge/")
         maven("https://maven.isxander.dev/releases")
         maven {
             name = "Modrinth"

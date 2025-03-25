@@ -96,7 +96,7 @@ public class CrosshairStyleManager {
 		styles.put(identifier, new CustomCrosshairStyle(identifier, name));
 		try {
 			NativeImage nativeImage = NativeImage.read(new FileInputStream(file));
-			textureManager.registerTexture(identifier, new NativeImageBackedTexture(nativeImage));
+			textureManager.registerTexture(identifier, new NativeImageBackedTexture(/*? if >1.21.4 {*//*() -> "crosshair-" + identifier.getPath(), *//*?}*/nativeImage));
 		} catch (IOException ignored) {
 		}
 	}
@@ -115,7 +115,7 @@ public class CrosshairStyleManager {
 			File file = crosshairDirectory.resolve(editStyle.name + ".png").toFile();
 			if (file.exists()) {
 				NativeImage nativeImage = NativeImage.read(new FileInputStream(file));
-				textureManager.registerTexture(editStyle.identifier, new NativeImageBackedTexture(nativeImage));
+				textureManager.registerTexture(editStyle.identifier, new NativeImageBackedTexture(/*? if >1.21.4 {*//*() -> "crosshair-" + editStyle.identifier.getPath(), *//*?}*/nativeImage));
 				return true;
 			} else {
 				textureManager.destroyTexture(editStyle.identifier);
@@ -130,7 +130,7 @@ public class CrosshairStyleManager {
 		try (FastByteArrayOutputStream outputStream = new FastByteArrayOutputStream()) {
 			ImageIO.write(editImage, "PNG", outputStream);
 			NativeImage nativeImage = NativeImage.read(new FastByteArrayInputStream(outputStream.array));
-			textureManager.registerTexture(identifier, new NativeImageBackedTexture(nativeImage));
+			textureManager.registerTexture(identifier, new NativeImageBackedTexture(/*? if >1.21.4 {*//*() -> "crosshair-" + identifier.getPath(), *//*?}*/nativeImage));
 		} catch (IOException ignored) {
 		}
 	}

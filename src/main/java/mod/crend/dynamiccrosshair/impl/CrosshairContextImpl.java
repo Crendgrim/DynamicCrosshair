@@ -24,8 +24,8 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.ShearsItem;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -40,6 +40,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Function;
+
+//? if <=1.21.4
+import net.minecraft.item.MiningToolItem;
 
 public class CrosshairContextImpl implements CrosshairContext {
 
@@ -415,16 +418,25 @@ public class CrosshairContextImpl implements CrosshairContext {
 		BlockState blockState = getBlockState();
 		ItemStack handItemStack = getItemStack();
 		Item handItem = getItem();
-		if (handItem instanceof MiningToolItem) {
+		if (
+				//? if <=1.21.4 {
+				handItem instanceof MiningToolItem
+				//?} else {
+				/*handItemStack.isIn(ItemTags.AXES)
+				|| handItemStack.isIn(ItemTags.SHOVELS)
+				|| handItemStack.isIn(ItemTags.PICKAXES)
+				|| handItemStack.isIn(ItemTags.HOES)
+				*///?}
+		) {
 			if (handItemStack.isSuitableFor(blockState)
-					&& handItem.canMine(blockState, getWorld(), blockPos, getPlayer())) {
+					&& handItem.canMine(/*? if >1.21.4 {*//*handItemStack, *//*?}*/blockState, getWorld(), blockPos, getPlayer())) {
 				return InteractionType.CORRECT_TOOL;
 			} else {
 				return InteractionType.INCORRECT_TOOL;
 			}
 		}
 		if (handItemStack.getMiningSpeedMultiplier(blockState) > 1.0f
-				&& handItem.canMine(blockState, getWorld(), blockPos, getPlayer())) {
+				&& handItem.canMine(/*? if >1.21.4 {*//*handItemStack, *//*?}*/blockState, getWorld(), blockPos, getPlayer())) {
 			return InteractionType.CORRECT_TOOL;
 		}
 		if (handItem instanceof ShearsItem) {

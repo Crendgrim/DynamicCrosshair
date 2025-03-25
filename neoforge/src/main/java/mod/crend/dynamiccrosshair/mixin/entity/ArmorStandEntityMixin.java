@@ -1,8 +1,9 @@
 package mod.crend.dynamiccrosshair.mixin.entity;
 
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
-import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
+
 //? if >=1.20.6
 /*import net.minecraft.component.DataComponentTypes;*/
 import net.minecraft.entity.EntityType;
@@ -41,7 +42,9 @@ public abstract class ArmorStandEntityMixin extends LivingEntity implements Dyna
 				}
 			} else if (itemStack.isOf(Items.NAME_TAG)) {
 				if (
-						//? if >=1.20.6 {
+						//? if >=1.21.5 {
+						/*itemStack.has(DataComponentTypes.CUSTOM_NAME)
+						*///?} else if >=1.20.6 {
 						/*itemStack.contains(DataComponentTypes.CUSTOM_NAME)
 						*///?} else {
 						itemStack.hasCustomName()

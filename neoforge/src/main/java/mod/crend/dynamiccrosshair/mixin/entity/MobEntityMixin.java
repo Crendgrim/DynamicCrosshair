@@ -1,16 +1,17 @@
 package mod.crend.dynamiccrosshair.mixin.entity;
 
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
-import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
+
 //? if >=1.20.6 {
 /*import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
 *///?}
+
 //? if >=1.21
 /*import net.minecraft.entity.Leashable;*/
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 //? if >=1.20.6
 /*import net.minecraft.item.ItemStack;*/
@@ -36,6 +37,10 @@ public abstract class MobEntityMixin extends LivingEntityMixin implements Dynami
 	//? if <1.21
 	@Shadow public abstract boolean canBeLeashedBy(PlayerEntity player);
 
+	//? if >1.21.4 {
+	/*@Shadow public abstract boolean hasSaddleEquipped();
+	*///?}
+
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		Item handItem = context.getItem();
@@ -55,7 +60,9 @@ public abstract class MobEntityMixin extends LivingEntityMixin implements Dynami
 		}
 		if (handItem == Items.NAME_TAG) {
 			if (
-					//? if >=1.20.6 {
+					//? if >=1.21.5 {
+					/*context.getItemStack().has(DataComponentTypes.CUSTOM_NAME)
+					*///?} else if >=1.20.6 {
 					/*context.getItemStack().contains(DataComponentTypes.CUSTOM_NAME)
 					*///?} else {
 					context.getItemStack().hasCustomName()

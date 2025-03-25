@@ -1,9 +1,10 @@
 package mod.crend.dynamiccrosshair.mixin.block;
 
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
-import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
 import net.minecraft.block.JukeboxBlock;
+
 //? >=1.20.6
 /*import net.minecraft.component.DataComponentTypes;*/
 //? <1.21
@@ -22,7 +23,9 @@ public class JukeboxBlockMixin implements DynamicCrosshairBlock {
 		if (context.getBlockState().get(HAS_RECORD)) {
 			return InteractionType.TAKE_ITEM_FROM_BLOCK;
 		} else if (
-				//? >=1.21 {
+				//? if >=1.21.5 {
+				/*context.getItemStack().has(DataComponentTypes.JUKEBOX_PLAYABLE)
+				*///?} else if >=1.21 {
 				/*context.getItemStack().contains(DataComponentTypes.JUKEBOX_PLAYABLE)
 				*///?} else {
 				context.getItem() instanceof MusicDiscItem

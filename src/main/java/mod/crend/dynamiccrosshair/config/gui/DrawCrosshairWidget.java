@@ -1,7 +1,5 @@
 package mod.crend.dynamiccrosshair.config.gui;
 
-import com.mojang.blaze3d.platform.GlConst;
-import com.mojang.blaze3d.platform.GlStateManager;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.debug.DebugProperties;
 import dev.isxander.yacl3.gui.AbstractWidget;
@@ -10,6 +8,11 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
+
+//? if <=1.21.4 {
+import com.mojang.blaze3d.platform.GlConst;
+import com.mojang.blaze3d.platform.GlStateManager;
+//?}
 
 public class DrawCrosshairWidget extends AbstractWidget {
 	boolean focused = false;
@@ -47,10 +50,11 @@ public class DrawCrosshairWidget extends AbstractWidget {
 		context.getMatrices().push();
 		context.getMatrices().translate(getDimension().x(), getDimension().y(), 105);
 		context.getMatrices().scale(3, 3, 0);
+		//? if <=1.21.4 {
 		if (DebugProperties.IMAGE_FILTERING) {
 			GlStateManager._texParameter(GlConst.GL_TEXTURE_2D, GlConst.GL_TEXTURE_MAG_FILTER, GlConst.GL_LINEAR);
 			GlStateManager._texParameter(GlConst.GL_TEXTURE_2D, GlConst.GL_TEXTURE_MIN_FILTER, GlConst.GL_LINEAR);
-		}
+		}//?}
 		//? if >=1.21.2 {
 		/*context.drawGuiTexture(RenderLayer::getGuiTextured, BACKGROUND, 0, 0, 15, 15);
 		context.drawTexture(RenderLayer::getCrosshair, control.editStyle.identifier, 0, 0, 0, 0, 15, 15, 15, 15);

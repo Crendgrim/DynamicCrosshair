@@ -1,0 +1,15 @@
+{
+  "values": [
+    {
+      "id": "#c:ender_pearls",
+      "required": false
+    },
+    "minecraft:egg",
+    "minecraft:snowball",
+    "minecraft:splash_potion",
+    "minecraft:lingering_potion",
+    "minecraft:experience_bottle",
+    "minecraft:ender_pearl",
+    "minecraft:wind_charge"
+  ]
+}

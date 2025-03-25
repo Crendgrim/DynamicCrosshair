@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair.render;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mod.crend.dynamiccrosshair.AutoHudCompat;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
@@ -9,7 +8,6 @@ import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
 import mod.crend.dynamiccrosshair.style.CrosshairStyledPart;
-import mod.crend.libbamboo.render.CustomFramebufferRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
@@ -19,17 +17,24 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 import java.util.function.Function;
 
+//? if <=1.21.4 {
+import mod.crend.libbamboo.render.CustomFramebufferRenderer;
+import com.mojang.blaze3d.platform.GlStateManager;
+//?}
+
 public class CrosshairRenderer {
 	public static boolean autoHudCompat = false;
 
 	private static void setColor(int argb, boolean enableBlend) {
 		// convert ARGB hex to r, g, b, a floats
 		RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, ((argb >> 24) & 0xFF) / 255.0f);
+		//? if <=1.21.4 {
 		if (!enableBlend || autoHudCompat) {
 			RenderSystem.defaultBlendFunc();
 		} else {
 			RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 		}
+		//?}
 	}
 
 	public static void preRender() {
@@ -83,10 +88,13 @@ public class CrosshairRenderer {
 	}
 
 	private static void preRenderHalf() {
+		//? if <=1.21.4 {
 		RenderSystem.defaultBlendFunc();
 		CustomFramebufferRenderer.init();
+		//?}
 	}
 	private static void postRenderHalf(DrawContext context, boolean blend) {
+		//? if <=1.21.4 {
 		RenderSystem.enableBlend();
 		if (blend) {
 			RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
@@ -94,6 +102,8 @@ public class CrosshairRenderer {
 			RenderSystem.defaultBlendFunc();
 		}
 		CustomFramebufferRenderer.draw(context);
+		//?}
+		context.draw();
 	}
 
 	private static void renderStyles(DrawContext context, int x, int y, List<CrosshairStyledPart> styles) {
@@ -128,8 +138,8 @@ public class CrosshairRenderer {
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		//? if <1.21.2 {
 		RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-		//?} else
-		//RenderSystem.defaultBlendFunc();
+		//?} else if <=1.21.4
+		/*RenderSystem.defaultBlendFunc();*/
 	}
 
 	public static void wrapRender(DrawContext context, int x, int y, Runnable originalRenderCall, Runnable noBlendRenderCall) {

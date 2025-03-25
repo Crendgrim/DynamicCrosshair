@@ -1,15 +1,15 @@
 package mod.crend.dynamiccrosshair.mixin;
 
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
+import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairRangedItem;
-import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+
 //? if >=1.20.6
 /*import net.minecraft.component.DataComponentTypes;*/
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-
 import java.util.Objects;
 
 @Mixin(Item.class)
@@ -20,7 +20,9 @@ public abstract class DynamicCrosshairBaseItem implements DynamicCrosshairItem, 
 		ItemStack itemStack = context.getItemStack();
 
 		if (
-				//? if >=1.20.6 {
+				//? if >=1.21.5 {
+				/*itemStack.has(DataComponentTypes.FOOD)
+				*///?} else if >=1.20.6 {
 				/*itemStack.contains(DataComponentTypes.FOOD)
 				*///?} else {
 				itemStack.isFood()
@@ -38,7 +40,12 @@ public abstract class DynamicCrosshairBaseItem implements DynamicCrosshairItem, 
 		}
 
 		//? if >=1.21.2 {
-		/*if (itemStack.contains(DataComponentTypes.EQUIPPABLE)) {
+		/*if (
+				//? if >=1.21.5 {
+				/^itemStack.has(DataComponentTypes.EQUIPPABLE)
+				^///?} else
+				itemStack.contains(DataComponentTypes.EQUIPPABLE)
+		) {
 			if (context.getPlayer().canEquip(itemStack, itemStack.get(DataComponentTypes.EQUIPPABLE).slot())) {
 				return InteractionType.EQUIP_ITEM;
 			}

@@ -28,28 +28,34 @@ public class AutoHudCompat implements AutoHudApi {
 	public static final Component CROSSHAIR_MODIFIER = Component.builder(DynamicCrosshair.AUTOHUD_COMPONENT_MODIFIER).config(AutoHud.config.crosshair()).build();
 
 	public static final ComponentRenderer CROSSHAIR_RENDER_PRIMARY = ComponentRenderer.builder(Components.Crosshair)
+			//? if <=1.21.4 {
 			.fade()
 			.beginRender(context -> AutoHudRenderLayer.FADE_MODE.preRender(Components.Crosshair, context))
 			.endRender(context -> {
 				context.draw();
 				AutoHudRenderLayer.FADE_MODE.postRender(Components.Crosshair, context);
 			})
+			//?}
 			.build();
 	public static final ComponentRenderer CROSSHAIR_RENDER_SECONDARY = ComponentRenderer.builder(CROSSHAIR_SECONDARY)
+			//? if <=1.21.4 {
 			.fade()
 			.beginRender(context -> AutoHudRenderLayer.FADE_MODE.preRender(CROSSHAIR_SECONDARY, context))
 			.endRender(context -> {
 				context.draw();
 				AutoHudRenderLayer.FADE_MODE.postRender(CROSSHAIR_SECONDARY, context);
 			})
+			//?}
 			.build();
 	public static final ComponentRenderer CROSSHAIR_RENDER_MODIFIER = ComponentRenderer.builder(CROSSHAIR_MODIFIER)
+			//? if <=1.21.4 {
 			.fade()
 			.beginRender(context -> AutoHudRenderLayer.FADE_MODE.preRender(CROSSHAIR_MODIFIER, context))
 			.endRender(context -> {
 				context.draw();
 				AutoHudRenderLayer.FADE_MODE.postRender(CROSSHAIR_MODIFIER, context);
 			})
+			//?}
 			.build();
 
 	public static boolean shouldRenderCrosshairPrimary() {
@@ -93,7 +99,7 @@ public class AutoHudCompat implements AutoHudApi {
 					context,
 					style.identifier(),
 					//? if >=1.21.2
-					/*RenderLayer::getGuiTextured,*/
+					/*style.enableBlend() ? RenderLayer::getCrosshair : RenderLayer::getGuiTextured,*/
 					x, y
 			);
 		});

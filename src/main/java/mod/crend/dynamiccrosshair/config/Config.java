@@ -178,7 +178,6 @@ public class Config {
             interact.style = DynamicCrosshairStyles.BRACKETS;
             useItem.style = DynamicCrosshairStyles.BRACKETS_ROUND;
             shield.style = DynamicCrosshairStyles.BRACKETS_BOTTOM;
-            onEntity.coalesce = false;
             holdingRangedWeapon.coalesce = false;
             holdingBlock.coalesce = false;
         }

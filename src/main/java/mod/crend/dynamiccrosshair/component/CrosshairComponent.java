@@ -107,11 +107,11 @@ public class CrosshairComponent {
                 stylesWithoutBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, primaryStyle));
             }
         } else if (secondaryStyle == null) {
-            CrosshairStyle crosshairStyle = FORCE_CROSSHAIR.primaryStyle;
-            if (crosshairStyle.enableBlend()) {
-                stylesWithBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, primaryStyle));
+            CrosshairStyle forceCrosshair = FORCE_CROSSHAIR.primaryStyle;
+            if (forceCrosshair.enableBlend()) {
+                stylesWithBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, forceCrosshair));
             } else {
-                stylesWithoutBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, primaryStyle));
+                stylesWithoutBlend.add(new CrosshairStyledPart(CrosshairPart.PRIMARY, forceCrosshair));
             }
         }
         if (secondaryStyle != null) {
@@ -161,5 +161,14 @@ public class CrosshairComponent {
     }
     public List<CrosshairStyledPart> getStylesWithoutBlend() {
         return stylesWithoutBlend;
+    }
+
+    public String toString() {
+        return "CrosshairComponent{"
+                + "blend=["
+                + String.join(", ", stylesWithBlend.stream().map(p -> p.part() + ":" + p.style()).toList())
+                + "] noblend=["
+                + String.join(", ", stylesWithoutBlend.stream().map(p -> p.part() + ":" + p.style()).toList())
+                + "]}";
     }
 }

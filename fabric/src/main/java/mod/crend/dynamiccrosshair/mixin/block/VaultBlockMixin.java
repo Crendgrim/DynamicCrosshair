@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 //? if >=1.20.5 {
 /*import net.minecraft.block.VaultBlock;
 import net.minecraft.block.enums.VaultState;
-*/
-//?}
+
+*///?}
 
 //? if >=1.20.5 {
 /*@Mixin(VaultBlock.class)

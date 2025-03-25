@@ -15,9 +15,11 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class AbstractHorseEntityMixin extends AnimalEntityMixin implements DynamicCrosshairEntity {
 	@Shadow public abstract boolean isTame();
 
+	//? if <=1.21.4 {
 	@Shadow public abstract boolean canBeSaddled();
 
 	@Shadow public abstract boolean isSaddled();
+	//?}
 
 	//? if <1.20.6 {
 	@Shadow public abstract boolean isHorseArmor(ItemStack item);
@@ -27,6 +29,10 @@ public abstract class AbstractHorseEntityMixin extends AnimalEntityMixin impleme
 	@Shadow public abstract boolean hasArmorInSlot();
 	//?}
 
+	//? if >1.21.4 {
+	/*@Shadow public abstract boolean canUseSlot(EquipmentSlot par1);
+	*///?}
+
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (!this.hasPassengers() && !this.isBaby()) {
@@ -35,7 +41,12 @@ public abstract class AbstractHorseEntityMixin extends AnimalEntityMixin impleme
 			} else {
 				ItemStack itemStack = context.getItemStack();
 				if (!itemStack.isEmpty()) {
-					if (this.canBeSaddled() && !this.isSaddled() && itemStack.isOf(Items.SADDLE)) {
+					if (
+							//? if <=1.21.4 {
+							this.canBeSaddled() && !this.isSaddled() && itemStack.isOf(Items.SADDLE)
+							//?} else
+							/*this.canUseSlot(EquipmentSlot.SADDLE) && !this.hasSaddleEquipped()*/
+					) {
 						return InteractionType.PLACE_ITEM_ON_ENTITY;
 					}
 

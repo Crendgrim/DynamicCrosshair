@@ -1,10 +1,11 @@
 package mod.crend.dynamiccrosshair.mixin.item;
 
+import mod.crend.dynamiccrosshairapi.VersionUtils;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
+//? if <=1.21.4
 import net.minecraft.item.SwordItem;
-
 
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -13,9 +14,12 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 //?} else {
 /*import mod.crend.dynamiccrosshair.mixin.DynamicCrosshairBaseItem;
-*/
-//?}
+*///?}
 
+//? if >1.21.4 {
+/*@Mixin(value = VersionUtils.class, remap = false)
+public class SwordItemMixin { }
+*///?} else {
 @Mixin(SwordItem.class)
 public class SwordItemMixin extends /*? if <1.21.2 {*/ToolItem/*?} else {*//*DynamicCrosshairBaseItem*//*?}*/ implements DynamicCrosshairItem {
 	//? if <1.21.2 {
@@ -29,3 +33,4 @@ public class SwordItemMixin extends /*? if <1.21.2 {*/ToolItem/*?} else {*//*Dyn
 		return InteractionType.MELEE_WEAPON;
 	}
 }
+//?}

@@ -17,8 +17,8 @@ import net.minecraft.item.BucketItem;
 import net.minecraft.component.type.BannerPatternsComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.registry.tag.ItemTags;
-*/
-//?}
+
+*///?}
 
 //? if <1.20.6
 import net.minecraft.item.DyeableItem;

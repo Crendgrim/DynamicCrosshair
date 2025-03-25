@@ -13,8 +13,8 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.item.ToolMaterial;
 //?} else {
 /*import mod.crend.dynamiccrosshair.mixin.DynamicCrosshairBaseItem;
-*/
-//?}
+
+*///?}
 
 @Mixin(SwordItem.class)
 public class SwordItemMixin extends /*? if <1.21.2 {*/ToolItem/*?} else {*//*DynamicCrosshairBaseItem*//*?}*/ implements DynamicCrosshairItem {

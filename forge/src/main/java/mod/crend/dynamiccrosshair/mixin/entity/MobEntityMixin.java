@@ -7,8 +7,8 @@ import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 //? if >=1.20.6 {
 /*import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EquipmentSlot;
-*/
-//?}
+
+*///?}
 
 //? if >=1.21
 /*import net.minecraft.entity.Leashable;*/

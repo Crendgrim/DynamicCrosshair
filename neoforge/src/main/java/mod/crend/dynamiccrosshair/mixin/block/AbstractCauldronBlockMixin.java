@@ -1,22 +1,23 @@
 package mod.crend.dynamiccrosshair.mixin.block;
 
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
-import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
+import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
 import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.block.entity.BannerBlockEntity;
+import net.minecraft.item.BannerItem;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.BucketItem;
+
 //? if >=1.20.6 {
 /*import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BannerPatternsComponent;
 import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.registry.tag.ItemTags;
 *///?}
-import net.minecraft.item.BannerItem;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.DyeItem;
+
 //? if <1.20.6
 import net.minecraft.item.DyeableItem;
 import net.minecraft.item.GlassBottleItem;
@@ -27,7 +28,6 @@ import net.minecraft.item.PowderSnowBucketItem;
 //? if <1.20.6
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
-import net.minecraft.registry.tag.ItemTags;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(AbstractCauldronBlock.class)
@@ -68,7 +68,11 @@ public abstract class AbstractCauldronBlockMixin extends Block implements Dynami
 			}
 			if (
 					//? if >=1.20.6 {
-					/*handItemStack.isIn(ItemTags.DYEABLE) && handItemStack.contains(DataComponentTypes.DYED_COLOR)
+					/*handItemStack.isIn(ItemTags.DYEABLE)
+							//? if >=1.21.5 {
+							/^&& handItemStack.has(DataComponentTypes.DYED_COLOR)
+							^///?} else
+							&& handItemStack.contains(DataComponentTypes.DYED_COLOR)
 					*///?} else {
 					handItem instanceof DyeableItem dyeableItem && dyeableItem.hasColor(handItemStack)
 					//?}

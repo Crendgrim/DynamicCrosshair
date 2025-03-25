@@ -7,8 +7,8 @@ import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 //? if >=1.21.2 {
 /*import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EquipmentSlot;*/
-//?}
+import net.minecraft.entity.EquipmentSlot;
+*///?}
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.item.DyeItem;
 //? if >=1.20.5

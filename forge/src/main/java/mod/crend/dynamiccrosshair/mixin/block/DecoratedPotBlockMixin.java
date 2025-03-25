@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.Mixin;
 //? if >=1.20.6 {
 /*import net.minecraft.block.entity.DecoratedPotBlockEntity;
 import net.minecraft.item.ItemStack;
-*/
-//?}
+
+*///?}
 
 @Mixin(DecoratedPotBlock.class)
 public abstract class DecoratedPotBlockMixin extends DynamicCrosshairBaseBlock implements DynamicCrosshairBlock {

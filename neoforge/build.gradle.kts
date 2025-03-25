@@ -47,10 +47,6 @@ configurations {
 
 repositories {
     maven("https://maven.neoforged.net/releases/")
-    maven {
-        name = "Kotlin for Forge"
-        setUrl("https://thedarkcolour.github.io/KotlinForForge/")
-    }
 }
 
 dependencies {

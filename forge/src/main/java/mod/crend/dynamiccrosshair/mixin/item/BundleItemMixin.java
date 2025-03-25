@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.Mixin;
 //? if >=1.20.6 {
 /*import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
-*/
-//?}
+
+*///?}
 
 @Mixin(BundleItem.class)
 public class BundleItemMixin implements DynamicCrosshairItem {
