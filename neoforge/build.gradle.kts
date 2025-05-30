@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
+    id("dev.kikugie.stonecutter")
     id("dev.architectury.loom")
     id("architectury-plugin")
     id("com.github.johnrengelman.shadow")
@@ -9,13 +10,13 @@ plugins {
 
 val loader = prop("loom.platform")!!
 val minecraft: String = stonecutter.current.version
-val apicommon: Project = requireNotNull(stonecutter.node.sibling("api")) {
+val apicommon: Project = requireNotNull(stonecutter.node.sibling("api")?.project) {
     "No common api project for $project"
 }
-val apineoforge: Project = requireNotNull(stonecutter.node.sibling("api-neoforge")) {
+val apineoforge: Project = requireNotNull(stonecutter.node.sibling("api-neoforge")?.project) {
     "No api project for $project"
 }
-val common: Project = requireNotNull(stonecutter.node.sibling("")) {
+val common: Project = requireNotNull(stonecutter.node.sibling("")?.project) {
     "No common project for $project"
 }
 

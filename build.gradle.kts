@@ -1,10 +1,11 @@
 plugins {
+    id("dev.kikugie.stonecutter")
     id("dev.architectury.loom")
     id("architectury-plugin")
 }
 
 val minecraft = stonecutter.current.version
-val apiCommon: Project = requireNotNull(stonecutter.node.sibling("api")) {
+val apiCommon: Project = requireNotNull(stonecutter.node.sibling("api")?.project) {
     "No common api project for $project"
 }
 
@@ -17,7 +18,7 @@ base {
 architectury.common(stonecutter.tree.branches.mapNotNull {
     if (stonecutter.current.project !in it) null
     else if (stonecutter.current.project.startsWith("api")) null
-    else it.prop("loom.platform")
+    else it.project.prop("loom.platform")
 })
 
 val commonBundle: Configuration by configurations.creating {

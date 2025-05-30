@@ -11,7 +11,7 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.kikugie.stonecutter") version "0.5-beta.5"
+    id("dev.kikugie.stonecutter") version "0.7-alpha.16"
 }
 
 var fabricVersions = linkedSetOf(   "1.20.1", "1.21.1", "1.21.3", "1.21.5")

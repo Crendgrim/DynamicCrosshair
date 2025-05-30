@@ -1,12 +1,13 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
+    id("dev.kikugie.stonecutter")
     id("dev.architectury.loom")
     id("architectury-plugin")
 }
 
 val minecraft: String = stonecutter.current.version
-val common: Project = requireNotNull(stonecutter.node.sibling("")) {
+val common: Project = requireNotNull(stonecutter.node.sibling("")?.project) {
     "No common project for $project"
 }
 
@@ -18,7 +19,7 @@ base {
 architectury.common(stonecutter.tree.branches.mapNotNull {
     if (stonecutter.current.project !in it) null
     else if (it.id.startsWith("api")) null
-    else it.prop("loom.platform")
+    else it.project.prop("loom.platform")
 })
 
 dependencies {
@@ -57,6 +58,11 @@ tasks.processResources {
         "api_version" to mod.api_version,
         "minecraft" to mod.prop("mc_dep_fabric")
     )
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+tasks.getByName<AbstractCopyTask>("sourcesJar") {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 tasks.build {
