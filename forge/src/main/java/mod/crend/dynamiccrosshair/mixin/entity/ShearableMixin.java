@@ -6,7 +6,7 @@ import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 import net.minecraft.entity.Shearable;
 
 //? if >=1.20.5
-/*import net.minecraft.entity.mob.BoggedEntity;*/
+import net.minecraft.entity.mob.BoggedEntity;
 import net.minecraft.entity.passive.MooshroomEntity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.passive.SnowGolemEntity;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin({
 		//? if >=1.20.5
-		/*BoggedEntity.class,*/
+		BoggedEntity.class,
 		MooshroomEntity.class,
 		SheepEntity.class,
 		SnowGolemEntity.class

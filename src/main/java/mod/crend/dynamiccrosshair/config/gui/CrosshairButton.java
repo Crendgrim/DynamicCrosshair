@@ -3,8 +3,8 @@ package mod.crend.dynamiccrosshair.config.gui;
 import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import mod.crend.dynamiccrosshair.style.AbstractCrosshairStyle;
+import mod.crend.dynamiccrosshairapi.VersionUtils;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import org.lwjgl.glfw.GLFW;
 
 public class CrosshairButton extends AbstractWidget {
@@ -36,7 +36,7 @@ public class CrosshairButton extends AbstractWidget {
 		);
 		style.draw(context,
 				//? if >=1.21.2
-				/*RenderLayer::getGuiTextured,*/
+				/*VersionUtils.getGuiTextured(),*/
 				getDimension().x() + 4, getDimension().y() + 4);
 	}
 

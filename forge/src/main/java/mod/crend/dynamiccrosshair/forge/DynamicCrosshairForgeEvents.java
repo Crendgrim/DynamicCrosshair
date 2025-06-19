@@ -7,13 +7,16 @@ import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+//? if <1.21.6 {
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+//?} else
+/*import net.minecraftforge.eventbus.api.listener.SubscribeEvent;*/
 
 public class DynamicCrosshairForgeEvents {
 
@@ -44,10 +47,10 @@ public class DynamicCrosshairForgeEvents {
 	public static class ForgeBus {
 
 		@SubscribeEvent
-		static void onClientTick(TickEvent.ClientTickEvent event) {
-			if (event.phase == TickEvent.Phase.END) {
+		static void onClientTick(TickEvent.ClientTickEvent/*? >=1.21.6 {*//*.Post*//*?}*/ event) {
+			//? <1.21.6
+			if (event.phase == TickEvent.Phase.END)
 				CrosshairHandler.tick();
-			}
 		}
 	}
 }

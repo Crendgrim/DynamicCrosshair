@@ -9,16 +9,16 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 //? if >=1.21.1
-/*import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;*/
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(DynamicCrosshair.MOD_ID)
 public class DynamicCrosshairForge {
-    public DynamicCrosshairForge(/*? if >=1.21.1 {*//*FMLJavaModLoadingContext context*//*?}*/) {
+    public DynamicCrosshairForge(/*? if >=1.21.1 {*/FMLJavaModLoadingContext context/*?}*/) {
         ConfigScreen.register(
                 //? if <1.21.1 {
-                ModLoadingContext.get(),
-                //?} else
-                /*context,*/
+                /*ModLoadingContext.get(),
+                *///?} else
+                context,
                 () -> ConfigHandler.CONFIG_STORE
         );
     }

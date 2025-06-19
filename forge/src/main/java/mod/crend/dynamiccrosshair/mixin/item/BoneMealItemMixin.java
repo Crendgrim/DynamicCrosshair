@@ -18,7 +18,7 @@ public class BoneMealItemMixin implements DynamicCrosshairItem {
 			BlockState blockState = context.getBlockState();
 			Block block = context.getBlock();
 			if (block instanceof Fertilizable fertilizable) {
-				if (fertilizable.isFertilizable(context.getWorld(), context.getBlockPos(), blockState/*? if <1.20.3 {*/, true/*?}*/)) {
+				if (fertilizable.isFertilizable(context.getWorld(), context.getBlockPos(), blockState/*? if <1.20.3 {*//*, true*//*?}*/)) {
 					return InteractionType.USE_ITEM_ON_BLOCK;
 				}
 			}

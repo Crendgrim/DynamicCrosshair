@@ -6,9 +6,9 @@ import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairBlock;
 import net.minecraft.block.JukeboxBlock;
 
 //? >=1.20.6
-/*import net.minecraft.component.DataComponentTypes;*/
+import net.minecraft.component.DataComponentTypes;
 //? <1.21
-import net.minecraft.item.MusicDiscItem;
+/*import net.minecraft.item.MusicDiscItem;*/
 import net.minecraft.state.property.BooleanProperty;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,10 +24,10 @@ public class JukeboxBlockMixin implements DynamicCrosshairBlock {
 			return InteractionType.TAKE_ITEM_FROM_BLOCK;
 		} else if (
 				//? >=1.21 {
-				/*context.getItemStack().contains(DataComponentTypes.JUKEBOX_PLAYABLE)
-				*///?} else {
-				context.getItem() instanceof MusicDiscItem
-				//?}
+				context.getItemStack().contains(DataComponentTypes.JUKEBOX_PLAYABLE)
+				//?} else {
+				/*context.getItem() instanceof MusicDiscItem
+				*///?}
 		) {
 			return InteractionType.PLACE_ITEM_ON_BLOCK;
 		}

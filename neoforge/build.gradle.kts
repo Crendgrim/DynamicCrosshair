@@ -48,6 +48,14 @@ configurations {
 
 repositories {
     maven("https://maven.neoforged.net/releases/")
+    maven {
+        name = "Maven for PR #2297" // https://github.com/neoforged/NeoForge/pull/2297
+        setUrl("https://prmaven.neoforged.net/NeoForge/pr2297")
+        content {
+            includeModule("net.neoforged", "neoforge")
+            includeModule("net.neoforged", "testframework")
+        }
+    }
 }
 
 dependencies {
@@ -60,7 +68,7 @@ dependencies {
     })
     "neoForge"("net.neoforged:neoforge:${common.mod.dep("neoforge_loader")}")
 
-    modImplementation("dev.isxander:yet-another-config-lib:${common.mod.dep("yacl")}-neoforge")
+    modCompileOnly("dev.isxander:yet-another-config-lib:${common.mod.dep("yacl")}-neoforge")
 
     modImplementation(name="libbamboo", group="mod.crend", version="${common.mod.dep("libbamboo")}-neoforge")
     include(name="libbamboo", group="mod.crend", version="${common.mod.dep("libbamboo")}-neoforge")
@@ -70,6 +78,8 @@ dependencies {
     api(project(apicommon.path, "namedElements")) { isTransitive = false }
     api(project(apineoforge.path, "namedElements")) { isTransitive = false }
     include(project(apineoforge.path, "finishedBundle"))
+    runtimeOnly(project(apineoforge.path, "finishedBundle"))
+    //include(project(apineoforge.path, "shadowArtifact"))
 
     commonBundle(project(common.path, "namedElements")) { isTransitive = false }
     shadowBundle(project(common.path, "transformProductionNeoForge")) { isTransitive = false }

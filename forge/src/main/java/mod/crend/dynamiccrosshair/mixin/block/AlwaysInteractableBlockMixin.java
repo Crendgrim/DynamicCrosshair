@@ -12,6 +12,8 @@ import net.minecraft.block.BellBlock;
 import net.minecraft.block.BrewingStandBlock;
 import net.minecraft.block.ButtonBlock;
 import net.minecraft.block.CartographyTableBlock;
+
+
 import net.minecraft.block.CraftingTableBlock;
 import net.minecraft.block.DaylightDetectorBlock;
 import net.minecraft.block.DispenserBlock;
@@ -28,7 +30,7 @@ import net.minecraft.block.StonecutterBlock;
 import org.spongepowered.asm.mixin.Mixin;
 
 //? if >=1.20.3
-/*import net.minecraft.block.CrafterBlock;*/
+import net.minecraft.block.CrafterBlock;
 
 @Mixin(value = {
 		AbstractChestBlock.class,
@@ -41,7 +43,7 @@ import org.spongepowered.asm.mixin.Mixin;
 		ButtonBlock.class,
 		CartographyTableBlock.class,
 		//? if >=1.20.3
-		/*CrafterBlock.class,*/
+		CrafterBlock.class,
 		CraftingTableBlock.class,
 		DaylightDetectorBlock.class,
 		DispenserBlock.class,

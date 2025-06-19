@@ -3,20 +3,21 @@ package mod.crend.dynamiccrosshair.mixin.item;
 import mod.crend.dynamiccrosshairapi.crosshair.CrosshairContext;
 import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairItem;
+
+
+import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.item.PotionItem;
-
-
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Mixin;
 
 //? if <1.20.5 {
-import net.minecraft.potion.PotionUtil;
+/*import net.minecraft.potion.PotionUtil;
+*/
 //?} else {
-/*import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.PotionContentsComponent;
-*///?}
+import net.minecraft.component.DataComponentTypes;
+//?}
 
 @Mixin(PotionItem.class)
 public class PotionItemMixin implements DynamicCrosshairItem {
@@ -26,10 +27,10 @@ public class PotionItemMixin implements DynamicCrosshairItem {
 			if (context.getBlockHitSide() != Direction.DOWN
 					&& context.getBlockState().isIn(BlockTags.CONVERTABLE_TO_MUD)
 					//? if <1.20.5 {
-					&& PotionUtil.getPotion(context.getItemStack()) == Potions.WATER
-					//?} else {
-					/*&& context.getItemStack().getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).matches(Potions.WATER)
-					*///?}
+					/*&& PotionUtil.getPotion(context.getItemStack()) == Potions.WATER
+					*///?} else {
+					&& context.getItemStack().getOrDefault(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).matches(Potions.WATER)
+					//?}
 			) {
 				return InteractionType.USE_ITEM_ON_BLOCK;
 			}

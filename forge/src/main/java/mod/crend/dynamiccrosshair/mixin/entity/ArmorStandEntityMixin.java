@@ -5,7 +5,7 @@ import mod.crend.dynamiccrosshairapi.interaction.InteractionType;
 import mod.crend.dynamiccrosshairapi.type.DynamicCrosshairEntity;
 
 //? if >=1.20.6
-/*import net.minecraft.component.DataComponentTypes;*/
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -43,10 +43,10 @@ public abstract class ArmorStandEntityMixin extends LivingEntity implements Dyna
 			} else if (itemStack.isOf(Items.NAME_TAG)) {
 				if (
 						//? if >=1.20.6 {
-						/*itemStack.contains(DataComponentTypes.CUSTOM_NAME)
-						*///?} else {
-						itemStack.hasCustomName()
-						//?}
+						itemStack.contains(DataComponentTypes.CUSTOM_NAME)
+						//?} else {
+						/*itemStack.hasCustomName()
+						*///?}
 				) {
 					// rename armor stand
 					return InteractionType.USE_ITEM_ON_ENTITY;

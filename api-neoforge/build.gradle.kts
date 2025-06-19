@@ -41,6 +41,10 @@ val finishedBundle: Configuration by configurations.creating {
     isCanBeConsumed = true
     isCanBeResolved = false
 }
+val shadowArtifact: Configuration by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
 
 configurations {
     compileClasspath.get().extendsFrom(commonBundle)
@@ -50,6 +54,14 @@ configurations {
 
 repositories {
     maven("https://maven.neoforged.net/releases/")
+    maven {
+        name = "Maven for PR #2297" // https://github.com/neoforged/NeoForge/pull/2297
+        setUrl("https://prmaven.neoforged.net/NeoForge/pr2297")
+        content {
+            includeModule("net.neoforged", "neoforge")
+            includeModule("net.neoforged", "testframework")
+        }
+    }
 }
 
 dependencies {
@@ -138,6 +150,9 @@ tasks.register<Copy>("buildAndCollect") {
 artifacts {
     add("finishedBundle", tasks.remapJar.get().archiveFile) {
         builtBy(tasks.remapJar)
+    }
+    add("shadowArtifact", tasks.shadowJar.get().archiveFile) {
+        builtBy(tasks.shadowJar)
     }
 }
 

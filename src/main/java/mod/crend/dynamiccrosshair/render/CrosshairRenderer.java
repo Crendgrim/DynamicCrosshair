@@ -8,7 +8,7 @@ import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
 import mod.crend.dynamiccrosshair.style.CrosshairStyledPart;
-import net.minecraft.client.MinecraftClient;
+import mod.crend.dynamiccrosshairapi.VersionUtils;import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.Window;
@@ -21,12 +21,17 @@ import java.util.function.Function;
 import mod.crend.libbamboo.render.CustomFramebufferRenderer;
 import com.mojang.blaze3d.platform.GlStateManager;
 //?}
+//? if >1.21.5 {
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;
+import net.minecraft.client.gl.RenderPipelines;
+*///?}
 
 public class CrosshairRenderer {
 	public static boolean autoHudCompat = false;
 
 	private static void setColor(int argb, boolean enableBlend) {
 		// convert ARGB hex to r, g, b, a floats
+		//? if <1.21.6
 		RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, ((argb >> 24) & 0xFF) / 255.0f);
 		//? if <=1.21.4 {
 		if (!enableBlend || autoHudCompat) {
@@ -34,6 +39,8 @@ public class CrosshairRenderer {
 		} else {
 			RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 		}
+		//?}
+		//? if >1.21.5 {
 		//?}
 	}
 
@@ -55,24 +62,35 @@ public class CrosshairRenderer {
 		double j = (window.getFramebufferHeight()) / scale;
 		double dx = (i - 15) / 2.0 - x;
 		double dy = (j - 15) / 2.0 - y;
+		//? if <1.21.6 {
 		context.getMatrices().push();
 		context.getMatrices().translate(dx, dy, 0);
+		//?} else {
+		/*context.getMatrices().pushMatrix();
+		context.getMatrices().setTranslation((float) dx, (float) dy);
+		*///?}
 	}
 	public static void fixCenteredCrosshairPost(DrawContext context) {
-		context.getMatrices().pop();
+		context.getMatrices()./*? if <=1.21.5 {*/pop/*?} else {*//*popMatrix*//*?}*/();
 	}
 
 	public static void renderCrosshair(
 			DrawContext context,
 			Identifier style,
-			//? if >=1.21.2
+			//? if >=1.21.6 {
+			/*RenderPipeline renderLayer,
+			*///?} else if >=1.21.2
 			/*Function<Identifier, RenderLayer> renderLayer,*/
 			int x, int y
+			//? if >1.21.5
+			/*, int color*/
 	) {
 		CrosshairStyleManager.INSTANCE.get(style).draw(context,
 				//? if >=1.21.2
 				/*renderLayer,*/
 				x, y
+				//? if >1.21.5
+				/*, color*/
 		);
 	}
 	public static void renderCrosshair(DrawContext context, CrosshairStyle style, int x, int y) {
@@ -81,10 +99,11 @@ public class CrosshairRenderer {
 				context,
 				style.identifier(),
 				//? if >=1.21.2
-				/*style.enableBlend() ? RenderLayer::getCrosshair : RenderLayer::getGuiTextured,*/
+				/*style.enableBlend() ? VersionUtils.getCrosshair() : VersionUtils.getGuiTextured(),*/
 				x, y
+				//? if >1.21.5
+				/*, style.color()*/
 		);
-
 	}
 
 	private static void preRenderHalf() {
@@ -103,6 +122,7 @@ public class CrosshairRenderer {
 		}
 		CustomFramebufferRenderer.draw(context);
 		//?}
+		//? if <=1.21.5
 		context.draw();
 	}
 
@@ -119,6 +139,7 @@ public class CrosshairRenderer {
 
 
 	public static void render(DrawContext context, int x, int y) {
+		//? if <=1.21.5
 		context.draw();
 
 		CrosshairComponent crosshair = CrosshairHandler.getActiveCrosshair();
@@ -135,6 +156,7 @@ public class CrosshairRenderer {
 	}
 
 	public static void postRender() {
+		//? if <1.21.6
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 		//? if <1.21.2 {
 		RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
@@ -142,6 +164,7 @@ public class CrosshairRenderer {
 		/*RenderSystem.defaultBlendFunc();*/
 	}
 
+	//? if <=1.21.5 {
 	public static void wrapRender(DrawContext context, int x, int y, Runnable originalRenderCall, Runnable noBlendRenderCall) {
 		if (!CrosshairHandler.forceShowCrosshair && !CrosshairHandler.shouldShowCrosshair()) return;
 
@@ -155,6 +178,7 @@ public class CrosshairRenderer {
 			render(context, x, y);
 		} else if (!CrosshairHandler.getDefaultCrosshair().enableBlend()) {
 			noBlendRenderCall.run();
+			//? if <1.21.6
 			context.draw();
 		} else {
 			originalRenderCall.run();
@@ -166,4 +190,34 @@ public class CrosshairRenderer {
 
 		postRender();
 	}
+	//?} else {
+	/*public static void wrapRender(DrawContext context, int x, int y, Identifier oTexture, int oWidth, int oHeight, Runnable originalRenderCall) {
+		if (!CrosshairHandler.forceShowCrosshair && !CrosshairHandler.shouldShowCrosshair()) return;
+
+		if (DynamicCrosshairMod.config.isFixCenteredCrosshair()) {
+			fixCenteredCrosshairPre(context, x, y);
+		}
+
+		if (DynamicCrosshairMod.config.isDynamicCrosshairStyle()) {
+			render(context, x, y);
+		} else if (CrosshairHandler.getDefaultCrosshair().color() != 0xFFFFFFFF) {
+			context.drawGuiTexture(
+					CrosshairHandler.getDefaultCrosshair().enableBlend() ? VersionUtils.getCrosshair() : VersionUtils.getGuiTextured(),
+					oTexture, x, y, oWidth, oHeight,
+					CrosshairHandler.getDefaultCrosshair().color()
+			);
+		} else if (!CrosshairHandler.getDefaultCrosshair().enableBlend()) {
+			context.drawGuiTexture(VersionUtils.getGuiTextured(), oTexture, x, y, oWidth, oHeight);
+		} else {
+			// if we change neither colour nor style, use the original call instead of a direct drawGuiTexture invocation in case some other mod wraps this too
+			originalRenderCall.run();
+		}
+
+		if (DynamicCrosshairMod.config.isFixCenteredCrosshair()) {
+			fixCenteredCrosshairPost(context);
+		}
+
+		postRender();
+	}
+	*///?}
 }

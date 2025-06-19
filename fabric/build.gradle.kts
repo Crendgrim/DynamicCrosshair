@@ -63,7 +63,7 @@ dependencies {
     modImplementation(name="libbamboo", group="mod.crend", version="${common.mod.dep("libbamboo")}-fabric")
     include(name="libbamboo", group="mod.crend", version="${common.mod.dep("libbamboo")}-fabric")
 
-    modImplementation("com.terraformersmc:modmenu:${common.mod.dep("modmenu")}")
+    modCompileOnly("com.terraformersmc:modmenu:${common.mod.dep("modmenu")}")
 
     // Compatibility because they cause a crash
     modCompileOnly("curse.maven:mythic-mounts-${common.mod.dep("mythicmounts")}")

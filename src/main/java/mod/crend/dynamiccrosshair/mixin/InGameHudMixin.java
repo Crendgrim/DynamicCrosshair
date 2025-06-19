@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
-import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.render.CrosshairRenderer;
+import mod.crend.dynamiccrosshairapi.VersionUtils;
 import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -14,11 +14,15 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Function;
+
+//? if >1.21.5
+/*import com.mojang.blaze3d.pipeline.RenderPipeline;*/
 
 // Apply after AutoHud, so we wrap around its crosshair render
 @Mixin(value=InGameHud.class, priority=900)
@@ -31,11 +35,15 @@ public class InGameHudMixin {
             // Weird hack to ensure nothing bad happens if both DynamicCrosshair and AutoHud are active.
             // If nothing gets rendered except for the crosshair with half transparency, it breaks.
             // We have to draw something, so draw it off-screen.
-            context.drawGuiTexture(RenderLayer::getGuiTextured, DynamicCrosshairStyles.DOT, -20, -20, 15, 15);
+            context.drawGuiTexture(VersionUtils.getGuiTextured(), DynamicCrosshairStyles.DOT, -20, -20, 15, 15);
         }
     }*///?}
-
-    @ModifyExpressionValue(method = "renderCrosshair",
+    @ModifyExpressionValue(
+            //? if <=1.21.5 {
+            method = "renderCrosshair",
+            //?} else {
+            /*method = "shouldRenderCrosshair",
+            *///?}
             //? if <1.20.3 {
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;debugEnabled:Z")
             //?} else {
@@ -53,13 +61,17 @@ public class InGameHudMixin {
             target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V",
             //?} else if <1.21.2 {
             /*target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V",
-			*///?} else {
+			*///?} else if <=1.21.5 {
             /*target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIII)V",
+            *///?} else {
+            /*target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/util/Identifier;IIII)V",
             *///?}
             ordinal = 0))
     private void dynamiccrosshair$drawCrosshair(
             DrawContext context,
-            //? if >=1.21.2
+            //? if >1.21.5 {
+            /*RenderPipeline renderLayers,
+            *///?} else if >=1.21.2
             /*Function<Identifier, RenderLayer> renderLayers,*/
             Identifier texture,
             int x, int y,
@@ -75,9 +87,11 @@ public class InGameHudMixin {
                 //?} else if <1.21.2 {
                 /*() -> original.call(context, texture, x, y, width, height),
                 () -> original.call(context, texture, x, y, width, height)
-                *///?} else {
+                *///?} else if <=1.21.5 {
                 /*() -> original.call(context, renderLayers, texture, x, y, width, height),
-                () -> context.drawGuiTexture(RenderLayer::getGuiTextured, texture, x, y, width, height)
+                () -> context.drawGuiTexture(VersionUtils.getGuiTextured(), texture, x, y, width, height)
+                *///?} else {
+                /*texture, width, height, () -> original.call(context, renderLayers, texture, x, y, width, height)
                 *///?}
         );
     }

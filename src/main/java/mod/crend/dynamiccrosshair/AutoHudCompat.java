@@ -12,11 +12,9 @@ import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.render.CrosshairRenderer;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
-import mod.crend.dynamiccrosshairapi.crosshair.CrosshairPart;
+import mod.crend.dynamiccrosshairapi.VersionUtils;import mod.crend.dynamiccrosshairapi.crosshair.CrosshairPart;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
-//? if >=1.21.2
-/*import net.minecraft.client.render.RenderLayer;*/
 
 public class AutoHudCompat implements AutoHudApi {
 	@Override
@@ -93,14 +91,18 @@ public class AutoHudCompat implements AutoHudApi {
 	public static void renderCrosshair(DrawContext context, CrosshairPart part, CrosshairStyle style, int x, int y) {
 		getRenderer(part).wrap(context, () -> {
 			int argb = style.color();
+			//? if <=1.21.5 {
 			float alphaMultiplier = RenderSystem.getShaderColor()[3];
 			RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, alphaMultiplier * ((argb >> 24) & 0xFF) / 255.0f);
+			//?}
 			CrosshairRenderer.renderCrosshair(
 					context,
 					style.identifier(),
 					//? if >=1.21.2
-					/*style.enableBlend() ? RenderLayer::getCrosshair : RenderLayer::getGuiTextured,*/
+					/*style.enableBlend() ? VersionUtils.getCrosshair() : VersionUtils.getGuiTextured(),*/
 					x, y
+					//? if >1.21.5
+					/*, argb*/
 			);
 		});
 	}

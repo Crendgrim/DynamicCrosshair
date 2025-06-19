@@ -16,21 +16,21 @@ import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.fml.event.lifecycle.InterModProcessEvent;
 import net.neoforged.neoforge.common.NeoForge;
 //? if <1.20.5 {
-import net.neoforged.fml.common.Mod;
+/*import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-//?} else {
-/*import net.neoforged.fml.common.EventBusSubscriber;
+*///?} else {
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-*///?}
+//?}
 
 public class DynamicCrosshairNeoForgeEvents {
 
 	//? if <1.20.5 {
-	@Mod.EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-	//?} else
-	/*@EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)*/
+	/*@Mod.EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	*///?} else
+	@EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 	public static class ModBus {
 
 		@SubscribeEvent
@@ -58,12 +58,12 @@ public class DynamicCrosshairNeoForgeEvents {
 		// Do not use @SubscribeEvent on the game bus because the mod "placebo" forces the game bus to run early for some reason.
 		static void onClientTick(
 				//? if <1.20.5 {
-				TickEvent.ClientTickEvent event
-				//?} else
-				/*ClientTickEvent.Post event*/
+				/*TickEvent.ClientTickEvent event
+				*///?} else
+				ClientTickEvent.Post event
 		) {
 			//? if <1.20.5
-			if (event.phase == TickEvent.Phase.START) return;
+			/*if (event.phase == TickEvent.Phase.START) return;*/
 			CrosshairHandler.tick();
 		}
 	}

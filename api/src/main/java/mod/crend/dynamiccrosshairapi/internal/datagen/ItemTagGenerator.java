@@ -8,9 +8,15 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 //?} else {
 /*import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
  *///?}
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
+
+//? if >1.21.5 {
+/*import net.minecraft.data.tag.ProvidedTagBuilder;
+*///?}
 
 import java.util.concurrent.CompletableFuture;
 
@@ -19,9 +25,19 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 		super(output, completableFuture);
 	}
 
+	//? if <1.21.6 {
+	private FabricTagProvider<Item>.FabricTagBuilder makeTagBuilder(TagKey<Item> tagKey) {
+		return getOrCreateTagBuilder(tagKey);
+	}
+	//?} else {
+	/*private ProvidedTagBuilder<Item, Item> makeTagBuilder(TagKey<Item> tagKey) {
+		return valueLookupBuilder(tagKey);
+	}
+	*///?}
+
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.TOOLS)
+		makeTagBuilder(DynamicCrosshairItemTags.TOOLS)
 				//? if <1.20.6 {
 				.addOptionalTag(ConventionalItemTags.SHEARS)
 				//?} else if <1.21 {
@@ -38,7 +54,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.FLINT_AND_STEEL)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.THROWABLES)
+		makeTagBuilder(DynamicCrosshairItemTags.THROWABLES)
 				//? if >=1.21
 				/*.addOptionalTag(ConventionalItemTags.ENDER_PEARLS)*/
 				.add(Items.EGG)
@@ -51,7 +67,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				/*.add(Items.WIND_CHARGE)*/
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.SHIELDS)
+		makeTagBuilder(DynamicCrosshairItemTags.SHIELDS)
 				.add(Items.SHIELD)
 				//? if <1.20.6 {
 				.addOptionalTag(ConventionalItemTags.SHIELDS)
@@ -62,7 +78,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				*///?}
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.MELEE_WEAPONS)
+		makeTagBuilder(DynamicCrosshairItemTags.MELEE_WEAPONS)
 				.addOptionalTag(ItemTags.SWORDS)
 				//? if >=1.21 {
 				/*.addOptionalTag(ConventionalItemTags.MELEE_WEAPON_TOOLS)
@@ -74,7 +90,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.TRIDENT)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.RANGED_WEAPONS)
+		makeTagBuilder(DynamicCrosshairItemTags.RANGED_WEAPONS)
 				.add(Items.FISHING_ROD)
 				.add(Items.BOW)
 				.add(Items.CROSSBOW)
@@ -98,7 +114,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 		;
 
 		// NOTE BlockItem is missing here
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.BLOCKS)
+		makeTagBuilder(DynamicCrosshairItemTags.BLOCKS)
 				.add(Items.SWEET_BERRIES)
 				.add(Items.GLOW_BERRIES)
 				.add(Items.ARMOR_STAND)
@@ -110,7 +126,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.addOptionalTag(ConventionalItemTags.LAVA_BUCKETS)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE)
+		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE)
 				.add(Items.POTION)
 				.addOptionalTag(ConventionalItemTags.POTIONS)
 				.add(Items.HONEY_BOTTLE)
@@ -125,17 +141,17 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.WRITTEN_BOOK)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_BLOCK)
+		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_BLOCK)
 				.add(Items.BRUSH)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_ENTITY)
+		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_ENTITY)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_MISS)
+		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_MISS)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairItemTags.USABLE)
+		makeTagBuilder(DynamicCrosshairItemTags.USABLE)
 				.addOptionalTag(ConventionalItemTags.FOODS)
 				//? if >=1.20.6
 				/*.addOptionalTag(ConventionalItemTags.ARMORS)*/

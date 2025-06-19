@@ -10,6 +10,11 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalEntityTypeTags;
  *///?}
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
+
+//? if >1.21.5 {
+/*import net.minecraft.data.tag.ProvidedTagBuilder;
+*///?}
 
 import java.util.concurrent.CompletableFuture;
 
@@ -18,15 +23,25 @@ class EntityTypeTagGenerator extends FabricTagProvider.EntityTypeTagProvider {
 		super(output, completableFuture);
 	}
 
+	//? if <1.21.6 {
+	private FabricTagProvider<EntityType<?>>.FabricTagBuilder makeTagBuilder(TagKey<EntityType<?>> tagKey) {
+		return getOrCreateTagBuilder(tagKey);
+	}
+	//?} else {
+	/*private ProvidedTagBuilder<EntityType<?>, EntityType<?>> makeTagBuilder(TagKey<EntityType<?>> tagKey) {
+		return valueLookupBuilder(tagKey);
+	}
+	*///?}
+
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(DynamicCrosshairEntityTags.ALWAYS_INTERACTABLE)
+		makeTagBuilder(DynamicCrosshairEntityTags.ALWAYS_INTERACTABLE)
 				.add(EntityType.LEASH_KNOT)
 				.add(EntityType.CHEST_MINECART)
 				.add(EntityType.HOPPER_MINECART)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairEntityTags.INTERACTABLE)
+		makeTagBuilder(DynamicCrosshairEntityTags.INTERACTABLE)
 				.addTag(DynamicCrosshairEntityTags.ALWAYS_INTERACTABLE)
 				.add(EntityType.ITEM_FRAME)
 				.addOptionalTag(ConventionalEntityTypeTags.BOATS)

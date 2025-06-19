@@ -6,8 +6,8 @@ import dev.isxander.yacl3.gui.AbstractWidget;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
+import mod.crend.dynamiccrosshairapi.VersionUtils;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 //? if <=1.21.4
@@ -30,7 +30,8 @@ public class PreviewCrosshairWidget extends AbstractWidget {
 	@Override
 	public void render(DrawContext context, int mouseX, int mouseY, float delta) {
 		//? if >=1.21.2 {
-		/*context.drawGuiTexture(RenderLayer::getGuiTextured, BACKGROUND, getDimension().x(), getDimension().y(), getDimension().width(), getDimension().height());
+		/*context.drawGuiTexture(VersionUtils.getGuiTextured(), BACKGROUND, getDimension().x(), getDimension().y(), getDimension().width(), getDimension().height());
+		//? if <=1.21.5
 		context.draw();
 		*///?} else if >=1.20.6 {
 		/*context.drawGuiTexture(BACKGROUND, getDimension().x(), getDimension().y(), getDimension().width(), getDimension().height());
@@ -44,13 +45,17 @@ public class PreviewCrosshairWidget extends AbstractWidget {
 		CrosshairStyleManager.INSTANCE.get(control.styleOption.pendingValue()).draw(
 				context,
 				//? if >=1.21.2
-				/*control.enableBlendOption.pendingValue() ? RenderLayer::getCrosshair : RenderLayer::getGuiTextured,*/
+				/*control.enableBlendOption.pendingValue() ? VersionUtils.getCrosshair() : VersionUtils.getGuiTextured(),*/
 				getDimension().centerX() - 7,
 				getDimension().centerY() - 7
+				//? if >1.21.5
+				/*, color*/
 		);
+		//? if <=1.21.5 {
 		//? if >=1.21.2
 		/*context.draw();*/
 		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+		//?}
 		//? if <=1.21.4
 		RenderSystem.defaultBlendFunc();
 	}
@@ -58,6 +63,7 @@ public class PreviewCrosshairWidget extends AbstractWidget {
 	private static void setColor(int argb, boolean enableBlend) {
 		// convert ARGB hex to r, g, b, a floats
 		float alpha = ((argb >> 24) & 0xFF) / 255.0f;
+		//? if <=1.21.5
 		RenderSystem.setShaderColor(((argb >> 16) & 0xFF) / 255.0f, ((argb >> 8) & 0xFF) / 255.0f, (argb & 0xFF) / 255.0f, alpha);
 		//? if <=1.21.4 {
 		if (enableBlend) {

@@ -227,7 +227,7 @@ public class CrosshairContextImpl implements CrosshairContext {
 		Vec3d vRotation = player.getRotationVec(1.0f);
 		Vec3d vRaycast = vCamPos.add(vRotation.x * d, vRotation.y * d, vRotation.z * d);
 		Box box = player.getBoundingBox().stretch(vRotation.multiply(d)).expand(1.0, 1.0, 1.0);
-		return ProjectileUtil.raycast(player, vCamPos, vRaycast, box, entity -> !entity.isSpectator() && entity.isCollidable(), d * d);
+		return ProjectileUtil.raycast(player, vCamPos, vRaycast, box, entity -> !entity.isSpectator() && entity.isCollidable(/*? if >=1.21.6 {*//*player*//*?}*/), d * d);
 	}
 
 	private boolean withEntity = false;

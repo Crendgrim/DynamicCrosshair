@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "mod.crend.dynamiccrosshair.mixin",
+  "package": "mod.crend.dynamiccrosshair.neoforge.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "DynamicCrosshairBaseBlock",

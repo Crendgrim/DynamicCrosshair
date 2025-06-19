@@ -8,9 +8,15 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 //?} else {
 /*import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 *///?}
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
+
+//? if >1.21.5 {
+/*import net.minecraft.data.tag.ProvidedTagBuilder;
+*///?}
 
 import java.util.concurrent.CompletableFuture;
 
@@ -19,9 +25,19 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 		super(output, completableFuture);
 	}
 
+	//? if <=1.21.5 {
+	private FabricTagProvider<Block>.FabricTagBuilder makeTagBuilder(TagKey<Block> tagKey) {
+		return getOrCreateTagBuilder(tagKey);
+	}
+	//?} else {
+	/*private ProvidedTagBuilder<Block, Block> makeTagBuilder(TagKey<Block> tagKey) {
+		return valueLookupBuilder(tagKey);
+	}
+	*///?}
+
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		getOrCreateTagBuilder(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE)
+		makeTagBuilder(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE)
 				.addOptionalTag(ConventionalBlockTags.CHESTS)
 				//? if >=1.20.6 {
 				/*.addOptionalTag(ConventionalBlockTags.PLAYER_WORKSTATIONS_FURNACES)
@@ -83,7 +99,7 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				.add(Blocks.SMITHING_TABLE)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
+		makeTagBuilder(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
 				.add(Blocks.COMMAND_BLOCK)
 				.add(Blocks.CHAIN_COMMAND_BLOCK)
 				.add(Blocks.REPEATING_COMMAND_BLOCK)
@@ -91,7 +107,7 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 				.add(Blocks.STRUCTURE_VOID)
 		;
 
-		getOrCreateTagBuilder(DynamicCrosshairBlockTags.INTERACTABLE)
+		makeTagBuilder(DynamicCrosshairBlockTags.INTERACTABLE)
 				.addTag(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE)
 				.addTag(DynamicCrosshairBlockTags.ALWAYS_INTERACTABLE_IN_CREATIVE_MODE)
 				.add(Blocks.JUKEBOX)

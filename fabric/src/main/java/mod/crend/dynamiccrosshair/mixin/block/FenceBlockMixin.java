@@ -25,7 +25,9 @@ public abstract class FenceBlockMixin extends DynamicCrosshairBaseBlock implemen
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		BlockPos pos = context.getBlockPos();
-		//? if >1.20.6 {
+		//? if >1.21.5 {
+		/*List<Leashable> list = Leashable.collectLeashablesAround(context.getWorld(), pos.toCenterPos(), entity -> entity.getLeashHolder() == context.getPlayer());
+		*///?} else if >1.20.6 {
 		/*List<Leashable> list = LeadItem.collectLeashablesAround(context.getWorld(), pos, entity -> entity.getLeashHolder() == context.getPlayer());
 		*///?} else {
 		List<MobEntity> list = context.getWorld().getNonSpectatingEntities(MobEntity.class, new Box(pos.getX() - 7.0, pos.getY() - 7.0, pos.getZ() - 7.0, pos.getX() + 7.0, pos.getY() + 7.0, pos.getZ() + 7.0));
