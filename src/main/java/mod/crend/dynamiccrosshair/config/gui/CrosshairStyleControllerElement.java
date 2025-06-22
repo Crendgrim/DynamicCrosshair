@@ -1,3 +1,4 @@
+//? if yacl {
 package mod.crend.dynamiccrosshair.config.gui;
 
 import dev.isxander.yacl3.api.utils.Dimension;
@@ -74,3 +75,4 @@ public class CrosshairStyleControllerElement extends ControllerWidget<CrosshairS
 		return super.getControlWidth() + this.getDecorationPadding();
 	}
 }
+//?}

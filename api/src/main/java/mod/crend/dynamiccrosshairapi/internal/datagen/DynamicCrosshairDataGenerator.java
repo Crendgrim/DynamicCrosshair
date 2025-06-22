@@ -1,3 +1,4 @@
+//? if fabric {
 package mod.crend.dynamiccrosshairapi.internal.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
@@ -15,3 +16,4 @@ public class DynamicCrosshairDataGenerator implements DataGeneratorEntrypoint {
 	}
 
 }
+//?}

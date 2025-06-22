@@ -196,12 +196,13 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
     public boolean isUsable(ItemStack itemStack) {
         return ClientTags.isInWithLocalFallback(DynamicCrosshairItemTags.USABLE, itemStack.getRegistryEntry())
                 //? if >=1.20.6 {
-                /*|| itemStack.contains(DataComponentTypes.FOOD)
+                /*|| itemStack./^? if neoforge && >=1.21.4 {^//^has^//^?} else {^/contains/^?}^/(DataComponentTypes.FOOD)
                 *///?} else {
                 || itemStack.isFood()
                 //?}
-                //? if >=1.21
-                /*|| itemStack.contains(DataComponentTypes.JUKEBOX_PLAYABLE)*/
+                //? if >=1.21 {
+                /*|| itemStack./^? if neoforge && >=1.21.4 {^//^has^//^?} else {^/contains/^?}^/(DataComponentTypes.JUKEBOX_PLAYABLE)
+                *///?}
                 ;
     }
 

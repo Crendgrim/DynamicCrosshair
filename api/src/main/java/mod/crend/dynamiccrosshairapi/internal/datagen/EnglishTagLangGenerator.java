@@ -1,3 +1,4 @@
+//? if fabric {
 package mod.crend.dynamiccrosshairapi.internal.datagen;
 
 import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairBlockTags;
@@ -38,3 +39,4 @@ public class EnglishTagLangGenerator extends FabricLanguageProvider {
 		 *///?}
 	}
 }
+//?}

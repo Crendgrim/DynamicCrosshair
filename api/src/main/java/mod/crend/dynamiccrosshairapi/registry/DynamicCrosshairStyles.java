@@ -2,7 +2,6 @@ package mod.crend.dynamiccrosshairapi.registry;
 
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import mod.crend.dynamiccrosshairapi.VersionUtils;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.util.Identifier;
 
 public class DynamicCrosshairStyles {

@@ -1,3 +1,4 @@
+//? if yacl {
 package mod.crend.dynamiccrosshair.config.gui;
 
 import dev.isxander.yacl3.api.utils.Dimension;
@@ -252,3 +253,4 @@ public class SelectCrosshairElement extends AbstractWidget implements ParentElem
 		return ParentElement.super.getNavigationPath(navigation);
 	}
 }
+//?}

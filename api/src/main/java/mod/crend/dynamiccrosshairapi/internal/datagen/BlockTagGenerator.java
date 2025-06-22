@@ -1,3 +1,4 @@
+//? if fabric {
 package mod.crend.dynamiccrosshairapi.internal.datagen;
 
 import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairBlockTags;
@@ -125,3 +126,4 @@ class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 		;
 	}
 }
+//?}

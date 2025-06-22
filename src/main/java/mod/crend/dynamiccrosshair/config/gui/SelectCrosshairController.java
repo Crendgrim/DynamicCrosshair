@@ -1,3 +1,4 @@
+//? if yacl {
 package mod.crend.dynamiccrosshair.config.gui;
 
 import dev.isxander.yacl3.api.Controller;
@@ -130,3 +131,4 @@ public class SelectCrosshairController implements Controller<Identifier> {
 		return new SelectCrosshairElement(this, widgetDimension);
 	}
 }
+//?}

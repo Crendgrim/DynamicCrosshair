@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -64,6 +65,10 @@ public interface CrosshairContext {
 
 	Direction getBlockHitSide();
 
+	default ItemUsageContext getItemUsageContext() {
+		return new ItemUsageContext(getPlayer(), getHand(), getBlockHitResult());
+	}
+
 	BlockHitResult raycastWithFluid(RaycastContext.FluidHandling fluidHandling);
 	default BlockHitResult raycastWithFluid() {
 		return raycastWithFluid(RaycastContext.FluidHandling.ANY);
@@ -112,5 +117,4 @@ public interface CrosshairContext {
 	<R> @Nullable R withApisUntilNonNull(Function<DynamicCrosshairApi, R> lambda);
 
 	InteractionType checkToolWithBlock();
-
 }

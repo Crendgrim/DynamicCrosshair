@@ -1,3 +1,4 @@
+//? if yacl {
 package mod.crend.dynamiccrosshair.config.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -83,3 +84,4 @@ public class PreviewCrosshairWidget extends AbstractWidget {
 		return false;
 	}
 }
+//?}

@@ -5,7 +5,6 @@ import mod.crend.dynamiccrosshairapi.VersionUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 
 public class DynamicCrosshairEntityTags {
 	public static final TagKey<EntityType<?>> INTERACTABLE = of("interactable");

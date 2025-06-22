@@ -3,8 +3,8 @@
   "id": "dynamiccrosshair-api",
   "version": "${api_version}",
 
-  "name": "DynamicCrosshair Data Generator",
-  "description": "DynamicCrosshair tag data generator",
+  "name": "DynamicCrosshair API",
+  "description": "DynamicCrosshair compatibility API",
   "authors": [
     "Crendgrim"
   ],

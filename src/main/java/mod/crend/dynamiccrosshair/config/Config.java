@@ -1,6 +1,5 @@
 package mod.crend.dynamiccrosshair.config;
 
-import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import mod.crend.dynamiccrosshair.config.gui.CrosshairStyleController;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairStyles;
@@ -14,6 +13,11 @@ import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+//? if yacl {
+import dev.isxander.yacl3.config.v2.api.SerialEntry;
+//?} else {
+/*import mod.crend.dynamiccrosshair.compat.SerialEntry;
+*///?}
 
 @AutoYaclConfig(modid= DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")
 public class Config {

@@ -1,5 +1,9 @@
 package mod.crend.dynamiccrosshair.config.gui;
 
+import mod.crend.libbamboo.auto.annotation.CustomController;
+import mod.crend.dynamiccrosshair.config.Config;
+
+//? if yacl {
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Controller;
 import dev.isxander.yacl3.api.Option;
@@ -10,9 +14,7 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ColorController;
-import mod.crend.dynamiccrosshair.config.Config;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
-import mod.crend.libbamboo.auto.annotation.CustomController;
 import mod.crend.libbamboo.controller.NestedController;
 import mod.crend.libbamboo.controller.NestingController;
 import net.minecraft.text.Text;
@@ -131,3 +133,9 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 		}
 	}
 }
+//?} else {
+/*public class CrosshairStyleController {
+	public static abstract class Factory implements CustomController.ControllerFactory<Config.CrosshairStyleSettings> {
+	}
+}
+*///?}

@@ -1,3 +1,4 @@
+//? if yacl {
 package mod.crend.dynamiccrosshair.config.gui;
 
 import dev.isxander.yacl3.api.utils.Dimension;
@@ -61,3 +62,4 @@ public class CrosshairButton extends AbstractWidget {
 		return true;
 	}
 }
+//?}

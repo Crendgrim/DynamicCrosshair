@@ -12,6 +12,6 @@ public class DynamicCrosshair {
 	public static final Identifier AUTOHUD_COMPONENT_MODIFIER = identifier("modifier");
 
 	public static Identifier identifier(String path) {
-		return Identifier.of(MOD_ID, path);
+		return VersionUtils.getIdentifier(MOD_ID, path);
 	}
 }
