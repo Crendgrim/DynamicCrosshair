@@ -147,3 +147,20 @@ artifacts {
         builtBy(tasks.remapJar)
     }
 }
+
+tasks.register("publishMods") { }
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = mod.prop("group")
+            artifactId = mod.prop("id")
+            version = "${mod.version}+${minecraft}-${loader}-api"
+
+            artifact(tasks.remapJar.get().archiveFile)
+            artifact(tasks.remapSourcesJar.get().archiveFile) {
+                classifier = "sources"
+            }
+        }
+    }
+}

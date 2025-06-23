@@ -51,6 +51,10 @@ base {
     archivesName.set(mod.id)
 }
 
+val apiBundle: Configuration by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
 val shadowBundle: Configuration by configurations.creating {
     isCanBeConsumed = false
     isCanBeResolved = true
@@ -125,6 +129,7 @@ dependencies {
 
     api(project(dcApi.path, "namedElements")) { isTransitive = false }
     include(project(dcApi.path, "finishedBundle"))
+    apiBundle(project(dcApi.path, "finishedBundle"))
 }
 
 loom {
@@ -188,4 +193,49 @@ tasks.register<Copy>("buildAndCollect") {
     from(tasks.remapJar.get().archiveFile, tasks.remapSourcesJar.get().archiveFile)
     into(rootProject.layout.buildDirectory.file("libs/${mod.version}/$loader"))
     dependsOn("build")
+}
+
+if (mod.publish("current")) {
+    publishMods {
+        displayName = "[${loader.name} ${mod.prop("mc_title")}] ${mod.name} ${mod.version}"
+
+        val modrinthToken = providers.gradleProperty("MODRINTH_TOKEN").orNull
+        val curseforgeToken = providers.gradleProperty("CURSEFORGE_TOKEN").orNull
+        dryRun = mod.publish("dryrun") || modrinthToken == null || curseforgeToken == null
+
+        file = tasks.remapJar.get().archiveFile
+        val apiFile = apiBundle
+        version = "${mod.version}+$minecraft-$loader"
+        changelog = mod.prop("changelog")
+        type = STABLE
+        modLoaders.add(loader.toString())
+
+        val supportedVersions = mod.prop("mc_targets").split(" ")
+
+        modrinth {
+            projectId = property("publish.modrinth").toString()
+            accessToken = modrinthToken
+            minecraftVersions.addAll(supportedVersions)
+            additionalFiles.from(apiFile)
+
+            requires("fabric-api")
+            optional("dynamiccrosshaircompat")
+            optional("yacl")
+            optional("modmenu")
+        }
+        curseforge {
+            projectId = property("publish.curseforge").toString()
+            projectSlug = property("publish.curseforge_slug").toString()
+            accessToken = curseforgeToken
+            minecraftVersions.addAll(supportedVersions)
+            additionalFiles.from(apiFile)
+            clientRequired = true
+            serverRequired = false
+
+            requires("fabric-api")
+            optional("dynamic-crosshair-compat")
+            optional("yacl")
+            optional("modmenu")
+        }
+    }
 }
