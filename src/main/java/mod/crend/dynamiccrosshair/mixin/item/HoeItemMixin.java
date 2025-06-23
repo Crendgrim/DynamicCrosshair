@@ -24,7 +24,8 @@ public class HoeItemMixin extends DynamicCrosshairBaseItem implements DynamicCro
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (context.isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem() != UsableCrosshairPolicy.Disabled) {
-			if (TILLING_ACTIONS.get(context.getBlock()) != null) {
+			var tillingAction = TILLING_ACTIONS.get(context.getBlock());
+			if (tillingAction != null && tillingAction.getFirst().test(context.getItemUsageContext())) {
 				return InteractionType.USABLE_TOOL;
 			}
 		}
