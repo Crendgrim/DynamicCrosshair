@@ -26,18 +26,10 @@ import java.util.Optional;
 public abstract class AxeItemMixin extends DynamicCrosshairBaseItem implements DynamicCrosshairItem {
 	@Shadow @Final protected static Map<Block, Block> STRIPPED_BLOCKS;
 
-	//? if neoforge
-	/*@Shadow protected abstract Optional<BlockState> evaluateNewBlockState(World arg, BlockPos arg2, @Nullable PlayerEntity arg3, BlockState arg4, ItemUsageContext arg5);*/
-
 	@Override
 	public InteractionType dynamiccrosshair$compute(CrosshairContext context) {
 		if (context.canUseWeaponAsTool()) {
 			if (context.isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingUsableItem() != UsableCrosshairPolicy.Disabled) {
-				//? if neoforge {
-				/*if (evaluateNewBlockState(context.getWorld(), context.getBlockPos(), context.getPlayer(), context.getBlockState(), context.getItemUsageContext()).isPresent()) {
-					return InteractionType.USABLE_TOOL;
-				}
-				*///?} else {
 				Block block = context.getBlock();
 				if (STRIPPED_BLOCKS.get(block) != null
 						|| Oxidizable.getDecreasedOxidationBlock(block).isPresent()
@@ -46,7 +38,6 @@ public abstract class AxeItemMixin extends DynamicCrosshairBaseItem implements D
 				) {
 					return InteractionType.USABLE_TOOL;
 				}
-				//?}
 			}
 			return super.dynamiccrosshair$compute(context);
 		}

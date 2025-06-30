@@ -16,7 +16,7 @@ import java.util.Objects;
 //? if yacl {
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 //?} else {
-/*import mod.crend.dynamiccrosshair.compat.SerialEntry;
+/*import mod.crend.libbamboo.opt.yacl.SerialEntry;
 *///?}
 
 @AutoYaclConfig(modid= DynamicCrosshair.MOD_ID, translationKey = "dynamiccrosshair.title", filename = "dynamiccrosshair.json5")

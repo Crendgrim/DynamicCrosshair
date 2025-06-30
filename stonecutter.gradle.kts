@@ -12,7 +12,3 @@ stonecutter parameters {
         match(node.metadata.project.substringAfterLast("-"), "fabric", "neoforge", "forge")
     }
 }
-
-stonecutter tasks {
-    order("publishMods")
-}

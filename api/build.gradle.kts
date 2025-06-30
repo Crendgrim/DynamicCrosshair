@@ -35,6 +35,8 @@ val dataBundle: Configuration by configurations.creating {
 }
 
 repositories {
+    mavenLocal()
+
     when (loader) {
         Loader.Forge -> maven("https://maven.minecraftforge.net")
         Loader.NeoForge -> maven("https://maven.neoforged.net/releases/")
@@ -65,6 +67,8 @@ dependencies {
             "neoForge"("net.neoforged:neoforge:${base.mod.dep("neoforge_loader")}")
         }
     }
+
+    modImplementation("mod.crend:libbamboo:${mod.dep("libbamboo")}")
 
     if (!loader.isFabric()) {
         var fabricProject = stonecutter.node.peer("$minecraft-fabric")!!.project
@@ -140,6 +144,14 @@ tasks.processResources {
         "api_version" to mod.apiVersion,
         "minecraft" to base.mod.prop("mc_dep")
     )
+
+    filesMatching("fabric.mod.json") {
+        filter {
+            // gradle is bugged and thinks this is wrong but it's not
+            if (it.contains("fabric-datagen")) null
+            else it
+        }
+    }
 }
 
 artifacts {

@@ -15,7 +15,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 //?} else if forge {
-/*import mod.crend.libbamboo.forge.ConfigScreen;
+/*import mod.crend.libbamboo.ConfigScreen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -33,7 +33,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 //?} else
 /^import net.minecraftforge.eventbus.api.listener.SubscribeEvent;^/
 *///?} else if neoforge {
-/*import mod.crend.libbamboo.neoforge.ConfigScreen;
+/*import mod.crend.libbamboo.ConfigScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.InterModComms;
@@ -112,11 +112,10 @@ public class DynamicCrosshairMod /*? if fabric {*/implements ClientModInitialize
 
         @SubscribeEvent
         static void onClientSetup(FMLClientSetupEvent event) {
-            System.err.println("DYNAMIC CROSSHAIR ON CLIENT SETUP");
             DynamicCrosshairMod.init();
             CrosshairStyleManager.INSTANCE.init();
             //? if neoforge {
-            /^ConfigScreen.register(ConfigHandler.CONFIG_STORE);
+            /^ConfigScreen.register(() -> ConfigHandler.CONFIG_STORE);
             NeoForge.EVENT_BUS.addListener(ModBus::onClientTick);
             ^///?} else if <1.21.6 {
             MinecraftForge.EVENT_BUS.addListener(ModBus::onClientTick);

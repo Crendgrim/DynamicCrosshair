@@ -2,43 +2,27 @@
 package mod.crend.dynamiccrosshairapi.internal.datagen;
 
 import mod.crend.dynamiccrosshairapi.registry.DynamicCrosshairItemTags;
+import mod.crend.libbamboo.versioned.VersionedTagProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 //? if <1.20.6 {
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 //?} else {
 /*import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
  *///?}
-import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.registry.tag.TagKey;
-
-//? if >1.21.5 {
-/*import net.minecraft.data.tag.ProvidedTagBuilder;
-*///?}
 
 import java.util.concurrent.CompletableFuture;
 
-class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
+class ItemTagGenerator extends VersionedTagProvider.ItemTagProvider {
 	public ItemTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
 		super(output, completableFuture);
 	}
 
-	//? if <1.21.6 {
-	private FabricTagProvider<Item>.FabricTagBuilder makeTagBuilder(TagKey<Item> tagKey) {
-		return getOrCreateTagBuilder(tagKey);
-	}
-	//?} else {
-	/*private ProvidedTagBuilder<Item, Item> makeTagBuilder(TagKey<Item> tagKey) {
-		return valueLookupBuilder(tagKey);
-	}
-	*///?}
-
 	@Override
 	protected void configure(RegistryWrapper.WrapperLookup arg) {
-		makeTagBuilder(DynamicCrosshairItemTags.TOOLS)
+		versionedTagBuilder(DynamicCrosshairItemTags.TOOLS)
 				//? if <1.20.6 {
 				.addOptionalTag(ConventionalItemTags.SHEARS)
 				//?} else if <1.21 {
@@ -55,7 +39,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.FLINT_AND_STEEL)
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.THROWABLES)
+		versionedTagBuilder(DynamicCrosshairItemTags.THROWABLES)
 				//? if >=1.21
 				/*.addOptionalTag(ConventionalItemTags.ENDER_PEARLS)*/
 				.add(Items.EGG)
@@ -68,7 +52,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				/*.add(Items.WIND_CHARGE)*/
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.SHIELDS)
+		versionedTagBuilder(DynamicCrosshairItemTags.SHIELDS)
 				.add(Items.SHIELD)
 				//? if <1.20.6 {
 				.addOptionalTag(ConventionalItemTags.SHIELDS)
@@ -79,7 +63,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				*///?}
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.MELEE_WEAPONS)
+		versionedTagBuilder(DynamicCrosshairItemTags.MELEE_WEAPONS)
 				.addOptionalTag(ItemTags.SWORDS)
 				//? if >=1.21 {
 				/*.addOptionalTag(ConventionalItemTags.MELEE_WEAPON_TOOLS)
@@ -91,7 +75,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.TRIDENT)
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.RANGED_WEAPONS)
+		versionedTagBuilder(DynamicCrosshairItemTags.RANGED_WEAPONS)
 				.add(Items.FISHING_ROD)
 				.add(Items.BOW)
 				.add(Items.CROSSBOW)
@@ -115,7 +99,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 		;
 
 		// NOTE BlockItem is missing here
-		makeTagBuilder(DynamicCrosshairItemTags.BLOCKS)
+		versionedTagBuilder(DynamicCrosshairItemTags.BLOCKS)
 				.add(Items.SWEET_BERRIES)
 				.add(Items.GLOW_BERRIES)
 				.add(Items.ARMOR_STAND)
@@ -127,7 +111,7 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.addOptionalTag(ConventionalItemTags.LAVA_BUCKETS)
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE)
+		versionedTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE)
 				.add(Items.POTION)
 				.addOptionalTag(ConventionalItemTags.POTIONS)
 				.add(Items.HONEY_BOTTLE)
@@ -142,17 +126,17 @@ class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 				.add(Items.WRITTEN_BOOK)
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_BLOCK)
+		versionedTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_BLOCK)
 				.add(Items.BRUSH)
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_ENTITY)
+		versionedTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_ENTITY)
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_MISS)
+		versionedTagBuilder(DynamicCrosshairItemTags.ALWAYS_USABLE_ON_MISS)
 		;
 
-		makeTagBuilder(DynamicCrosshairItemTags.USABLE)
+		versionedTagBuilder(DynamicCrosshairItemTags.USABLE)
 				.addOptionalTag(ConventionalItemTags.FOODS)
 				//? if >=1.20.6
 				/*.addOptionalTag(ConventionalItemTags.ARMORS)*/
