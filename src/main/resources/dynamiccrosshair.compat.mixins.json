@@ -2,8 +2,5 @@
   "minVersion": "0.8",
   "package": "mod.crend.dynamiccrosshair.compat.mixin",
   "compatibilityLevel": "JAVA_17",
-  "client": [
-    "mythicmounts.ColelytraEntityMixin"
-  ],
   "plugin": "mod.crend.dynamiccrosshair.DynamicCrosshairMixinPlugin"
 }

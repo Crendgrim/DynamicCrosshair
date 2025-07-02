@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair;
 
+import dev.kikugie.fletching_table.annotation.fabric.Entrypoint;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import mod.crend.dynamiccrosshair.impl.VanillaApiImpl;
@@ -16,6 +17,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 //?} else if forge {
 /*import mod.crend.libbamboo.ConfigScreen;
+import mod.crend.dynamiccrosshair.compat.AutoHudCompat;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -34,6 +36,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 /^import net.minecraftforge.eventbus.api.listener.SubscribeEvent;^/
 *///?} else if neoforge {
 /*import mod.crend.libbamboo.ConfigScreen;
+import mod.crend.dynamiccrosshair.compat.AutoHudCompat;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.InterModComms;
@@ -52,8 +55,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-//? if forge || neoforge
+//? if fabric {
+@Entrypoint
+//?} else {
 /*@Mod(DynamicCrosshair.MOD_ID)*/
+//?}
 public class DynamicCrosshairMod /*? if fabric {*/implements ClientModInitializer/*?}*/ {
     public static ConfigHandler config;
     public static final Map<String, DynamicCrosshairApi> apis = new HashMap<>();

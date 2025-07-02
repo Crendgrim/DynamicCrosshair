@@ -3,6 +3,7 @@ package mod.crend.dynamiccrosshair.mixin;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.render.CrosshairRenderer;
 import mod.crend.dynamiccrosshairapi.VersionUtils;
@@ -26,6 +27,7 @@ import java.util.function.Function;
 
 // Apply after AutoHud, so we wrap around its crosshair render
 @Mixin(value=InGameHud.class, priority=900)
+@MixinEnvironment(type = MixinEnvironment.Env.CLIENT)
 public class InGameHudMixin {
 
     //? if >=1.21.2 {

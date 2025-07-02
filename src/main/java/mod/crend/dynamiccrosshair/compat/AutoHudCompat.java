@@ -1,6 +1,8 @@
-package mod.crend.dynamiccrosshair;
+package mod.crend.dynamiccrosshair.compat;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+//? if fabric
+import dev.kikugie.fletching_table.annotation.fabric.Entrypoint;
 import mod.crend.autohud.AutoHud;
 import mod.crend.autohud.api.AutoHudApi;
 import mod.crend.autohud.component.Component;
@@ -12,10 +14,13 @@ import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.render.CrosshairRenderer;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
-import mod.crend.dynamiccrosshairapi.VersionUtils;import mod.crend.dynamiccrosshairapi.crosshair.CrosshairPart;
+import mod.crend.dynamiccrosshairapi.VersionUtils;
+import mod.crend.dynamiccrosshairapi.crosshair.CrosshairPart;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 
+//? if fabric
+@Entrypoint
 public class AutoHudCompat implements AutoHudApi {
 	@Override
 	public String modId() {

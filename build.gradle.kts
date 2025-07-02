@@ -1,6 +1,10 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
+    kotlin("jvm") version "2.1.21"
+    id("com.google.devtools.ksp") version "2.1.21-2.0.2"
+    id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.6"
+    id("dev.kikugie.fletching-table.neoforge") version "0.1.0-alpha.6"
     id("dev.kikugie.stonecutter")
     id("dev.architectury.loom")
     id("com.github.johnrengelman.shadow")
@@ -12,17 +16,13 @@ val loader = Loader.of(stonecutter.current.project)
 val dcApi: Project = requireNotNull(stonecutter.node.sibling("api")?.project) {
     "No api project for $project"
 }
-class ModDependencies {
-    operator fun get(name: String) = property("deps.$name").toString()
-}
-val deps = ModDependencies()
 enum class DependencyLevel {
     Include,
     Implementation,
     CompileOnly
 }
 fun modDependency(modId: String, url: String, level: DependencyLevel) {
-    val isPresent = !deps[modId].startsWith("[")
+    val isPresent = !(project.prop("deps.$modId")?.startsWith("[") ?: true)
     stonecutter {
         constants {
             put(modId, isPresent)
@@ -30,7 +30,7 @@ fun modDependency(modId: String, url: String, level: DependencyLevel) {
     }
 
     if (isPresent) {
-        val resolvedUrl = url.replace("{}", deps[modId])
+        val resolvedUrl = url.replace("{}", mod.dep(modId))
         dependencies {
             when (level) {
                 DependencyLevel.Include -> {
@@ -183,8 +183,30 @@ tasks.processResources {
         "version" to mod.version,
         "minecraft" to mod.prop("mc_dep")
     )
+}
+tasks.processTestResources {
+    // Set this because fletching table confuses gradle
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
 
-    filterVersionedMixins(layout.buildDirectory.get())
+fletchingTable {
+    mixins.create("main") {
+        default = "${mod.id}.mixins.json"
+        configs.put("compat", "${mod.id}.compat.mixins.json")
+    }
+    lang.create("main") {
+        patterns.add("assets/${mod.id}/lang/**")
+    }
+    fabric {
+        applyMixinConfig = true
+        mixinEnvironments.put("${mod.id}.mixins.json", "client")
+        mixinEnvironments.put("${mod.id}.compat.mixins.json", "client")
+        entrypointMappings.put("modmenu", "com.terraformersmc.modmenu.api.ModMenuApi")
+        entrypointMappings.put("autohud", "mod.crend.autohud.api.AutoHudApi")
+    }
+    neoforge {
+        applyMixinConfig = loader.isNeoforge()
+    }
 }
 
 tasks.register<Copy>("buildAndCollect") {

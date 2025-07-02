@@ -1,14 +1,15 @@
 package mod.crend.dynamiccrosshair.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import mod.crend.dynamiccrosshair.AutoHudCompat;
+import mod.crend.dynamiccrosshair.compat.AutoHudCompat;
 import mod.crend.dynamiccrosshair.DynamicCrosshairMod;
 import mod.crend.dynamiccrosshair.component.CrosshairComponent;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.style.CrosshairStyle;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
 import mod.crend.dynamiccrosshair.style.CrosshairStyledPart;
-import mod.crend.dynamiccrosshairapi.VersionUtils;import net.minecraft.client.MinecraftClient;
+import mod.crend.dynamiccrosshairapi.VersionUtils;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.Window;
