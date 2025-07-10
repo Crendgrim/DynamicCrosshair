@@ -31,13 +31,18 @@ public abstract class ParrotEntityMixin extends TameableEntityMixin implements D
 		) {
 			return InteractionType.USE_ITEM_ON_ENTITY;
 		}
-		if (context.getItem() == Items.COOKIE) {
+		if (
+				//? >=1.20.6 {
+				/*context.getItemStack().isIn(ItemTags.PARROT_POISONOUS_FOOD)
+				*///?} else
+				context.getItem() == Items.COOKIE
+		) {
 			// :'(
 			return InteractionType.USE_ITEM_ON_ENTITY;
 		}
 		if (!this.isInAir() && this.isTamed() && this.isOwner(context.getPlayer())) {
 			return InteractionType.INTERACT_WITH_ENTITY;
 		}
-		return InteractionType.NO_ACTION;
+		return super.dynamiccrosshair$compute(context);
 	}
 }

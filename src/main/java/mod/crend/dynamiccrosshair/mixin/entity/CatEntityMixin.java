@@ -21,6 +21,9 @@ public abstract class CatEntityMixin extends TameableEntityMixin implements Dyna
 			}
 			return InteractionType.INTERACT_WITH_ENTITY;
 		}
+		if (isBreedingItem(context.getItemStack())) {
+			return InteractionType.USE_ITEM_ON_ENTITY;
+		}
 		return super.dynamiccrosshair$compute(context);
 	}
 }
