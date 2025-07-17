@@ -25,6 +25,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
+//? if fabric {
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+//?}
+
 public interface CrosshairContext {
 
 	ClientWorld getWorld();
@@ -100,6 +105,10 @@ public interface CrosshairContext {
 	boolean canPlaceItemAsBlock();
 
 	boolean canUseWeaponAsTool();
+
+	//? if fabric {
+	boolean canInteractWithFluidStorage(Storage<FluidVariant> storage);
+	//?}
 
 	boolean includeUsableItem();
 	boolean includeThrowable();

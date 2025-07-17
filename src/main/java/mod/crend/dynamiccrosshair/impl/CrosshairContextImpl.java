@@ -25,7 +25,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShearsItem;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
@@ -41,8 +40,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
-//? if <=1.21.4
+//? if <=1.21.4 {
 import net.minecraft.item.MiningToolItem;
+//?} else
+/*import net.minecraft.registry.tag.ItemTags;*/
+
+//? if fabric {
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+//?}
 
 public class CrosshairContextImpl implements CrosshairContext {
 
@@ -323,6 +333,17 @@ public class CrosshairContextImpl implements CrosshairContext {
 	public boolean canUseWeaponAsTool() {
 		return isWithBlock() && DynamicCrosshairMod.config.dynamicCrosshairHoldingTool() != CrosshairPolicy.Disabled;
 	}
+
+	//? if fabric {
+	public boolean canInteractWithFluidStorage(Storage<FluidVariant> storage) {
+		Storage<FluidVariant> handStorage = ContainerItemContext.forPlayerInteraction(getPlayer(), getHand()).find(FluidStorage.ITEM);
+		if (handStorage == null) return false;
+
+		try (var tx = Transaction.openOuter()) {
+			return StorageUtil.move(storage, handStorage, fv -> true, Long.MAX_VALUE, tx) > 0 || StorageUtil.move(handStorage, storage, fv -> true, Long.MAX_VALUE, tx) > 0;
+		}
+	}
+	//?}
 
 
 	@Override
