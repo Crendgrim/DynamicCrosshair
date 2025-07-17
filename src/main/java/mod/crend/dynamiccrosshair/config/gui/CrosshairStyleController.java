@@ -1,5 +1,6 @@
 package mod.crend.dynamiccrosshair.config.gui;
 
+import mod.crend.dynamiccrosshair.compat.YaclIntegration;
 import mod.crend.libbamboo.auto.annotation.CustomController;
 import mod.crend.dynamiccrosshair.config.Config;
 
@@ -114,6 +115,7 @@ public class CrosshairStyleController implements Controller<Config.CrosshairStyl
 					newStyle.coalesce = coalesceOption.pendingValue();
 					option.requestSet(newStyle);
 					ConfigHandler.CONFIG_STORE.save();
+					YaclIntegration.onChange();
 				})
 				.build();
 		ConfigHandler.CONFIG_STORE.withYacl().configChangeEvent.register(() -> {

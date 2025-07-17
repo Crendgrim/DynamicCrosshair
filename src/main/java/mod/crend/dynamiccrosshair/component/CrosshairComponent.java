@@ -12,7 +12,13 @@ import java.util.List;
 
 public class CrosshairComponent {
 
-    public static final CrosshairComponent FORCE_CROSSHAIR = new CrosshairComponent(new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR));
+    public static CrosshairComponent FORCE_CROSSHAIR;
+    public static void init() {
+        FORCE_CROSSHAIR = new CrosshairComponent(new Crosshair(InteractionType.FORCE_REGULAR_CROSSHAIR));
+    }
+    static {
+        init();
+    }
 
     Crosshair crosshair;
     CrosshairStyle primaryStyle = null;

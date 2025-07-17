@@ -1,12 +1,14 @@
 package mod.crend.dynamiccrosshair;
 
 import dev.kikugie.fletching_table.annotation.fabric.Entrypoint;
+import mod.crend.dynamiccrosshair.compat.YaclIntegration;
 import mod.crend.dynamiccrosshair.component.CrosshairHandler;
 import mod.crend.dynamiccrosshair.config.ConfigHandler;
 import mod.crend.dynamiccrosshair.impl.VanillaApiImpl;
 import mod.crend.dynamiccrosshair.style.CrosshairStyleManager;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshair;
 import mod.crend.dynamiccrosshairapi.DynamicCrosshairApi;
+import mod.crend.libbamboo.LibBamboo;
 import mod.crend.libbamboo.PlatformUtils;
 
 //? if fabric {
@@ -79,6 +81,9 @@ public class DynamicCrosshairMod /*? if fabric {*/implements ClientModInitialize
 
     public static void init() {
         config = new ConfigHandler();
+        if (LibBamboo.HAS_YACL) {
+            YaclIntegration.listen();
+        }
     }
 
     //? if fabric {
