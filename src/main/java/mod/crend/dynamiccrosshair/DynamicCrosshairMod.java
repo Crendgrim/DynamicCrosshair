@@ -92,7 +92,15 @@ public class DynamicCrosshairMod /*? if fabric {*/implements ClientModInitialize
         init();
 
         ClientTickEvents.END_CLIENT_TICK.register(event -> CrosshairHandler.tick());
-        ClientLifecycleEvents.CLIENT_STARTED.register(client -> CrosshairStyleManager.INSTANCE.init());
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            /*
+             * Depending on (random) mod load order, the first time we load our config in init(), other mods' content
+             * might not be registered yet. Reload the config after the client has started up to ensure our additional
+             * item and block lists get populated correctly.
+             */
+            ConfigHandler.CONFIG_STORE.reload();
+            CrosshairStyleManager.INSTANCE.init();
+        });
 
         FabricLoader.getInstance().getEntrypointContainers(DynamicCrosshair.MOD_ID, DynamicCrosshairApi.class)
                 .stream()
