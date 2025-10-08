@@ -48,6 +48,9 @@ public class CrosshairHandler {
 
 
     private static Crosshair buildCrosshairAdvancedFromItem(CrosshairContext context) {
+        Crosshair fromApi = context.withApisUntilNonNull(api -> api.computeFromItem(context));
+        if (fromApi != null) return fromApi;
+
         InteractionType interactionType = ((DynamicCrosshairItem) context.getItem()).dynamiccrosshair$compute(context);
         interactionType = switch (interactionType) {
             case MELEE_WEAPON -> context.includeMeleeWeapon() ? interactionType : InteractionType.EMPTY;
@@ -68,26 +71,30 @@ public class CrosshairHandler {
         InteractionType finalInteractionType = interactionType;
         Crosshair override = context.withApisUntilNonNull(api -> api.overrideFromItem(context, finalInteractionType));
         if (override != null) return override;
-
         if (interactionType == InteractionType.EMPTY || interactionType == InteractionType.NO_ACTION) {
-            return context.withApisUntilNonNull(api -> api.computeFromItem(context));
+            return null;
         }
-
         return new Crosshair(interactionType);
     }
 
     private static Crosshair buildCrosshairAdvancedFromEntity(CrosshairContext context) {
+        Crosshair fromApi = context.withApisUntilNonNull(api -> api.computeFromEntity(context));
+        if (fromApi != null) return fromApi;
+
         InteractionType interactionType = ((DynamicCrosshairEntity) context.getEntity()).dynamiccrosshair$compute(context);
         if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
 
-        return context.withApisUntilNonNull(api -> api.computeFromEntity(context));
+        return null;
     }
 
     private static Crosshair buildCrosshairAdvancedFromBlock(CrosshairContext context) {
+        Crosshair fromApi = context.withApisUntilNonNull(api -> api.computeFromBlock(context));
+        if (fromApi != null) return fromApi;
+
         InteractionType interactionType = ((DynamicCrosshairBlock) context.getBlock()).dynamiccrosshair$compute(context);
         if (interactionType != InteractionType.EMPTY) return new Crosshair(interactionType);
 
-        return context.withApisUntilNonNull(api -> api.computeFromBlock(context));
+        return null;
     }
 
     private static Crosshair buildCrosshairAdvancedByHand(CrosshairContext context) {
