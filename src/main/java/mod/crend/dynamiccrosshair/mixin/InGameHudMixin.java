@@ -41,15 +41,17 @@ public class InGameHudMixin {
         }
     }*///?}
     @ModifyExpressionValue(
-            //? if <=1.21.5 {
+            //? if <=1.21.5 || >1.21.8 {
             method = "renderCrosshair",
             //?} else {
             /*method = "shouldRenderCrosshair",
             *///?}
             //? if <1.20.3 {
             at = @At(value = "FIELD", target = "Lnet/minecraft/client/option/GameOptions;debugEnabled:Z")
+            //?} else if <=1.21.8 {
+            //at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z")
             //?} else {
-            /*at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/DebugHud;shouldShowDebugHud()Z")
+            /*at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/debug/DebugHudProfile;isEntryVisible(Lnet/minecraft/util/Identifier;)Z")
             *///?}
     )
     private boolean dynamiccrosshair$debugCrosshair(boolean original) {

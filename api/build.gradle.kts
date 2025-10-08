@@ -51,6 +51,9 @@ dependencies {
         base.mod.dep("neoforge_patch").takeUnless { it.startsWith('[') }?.let {
             mappings("dev.architectury:yarn-mappings-patch-neoforge:$it")
         }
+        base.mod.dep("forge_patch").takeUnless { it.startsWith('[') }?.let {
+            mappings("dev.architectury:yarn-mappings-patch-forge:$it")
+        }
     })
 
     when (loader) {
@@ -138,6 +141,7 @@ tasks.shadowJar {
 }
 
 tasks.processResources {
+    inputs.property("include_datagen", base.mod.prop("include_datagen"))
     properties(listOf("fabric.mod.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml", "pack.mcmeta"),
         "id" to mod.id,
         "name" to mod.name,
@@ -145,11 +149,13 @@ tasks.processResources {
         "minecraft" to base.mod.prop("mc_dep")
     )
 
-    filesMatching("fabric.mod.json") {
-        filter {
-            // gradle is bugged and thinks this is wrong but it's not
-            if (it.contains("fabric-datagen")) null
-            else it
+    if (inputs.properties["include_datagen"] == "false") {
+        filesMatching("fabric.mod.json") {
+            filter {
+                // gradle is bugged and thinks this is wrong but it's not
+                if (it.contains("fabric-datagen")) null
+                else it
+            }
         }
     }
 }

@@ -20,6 +20,11 @@ import org.lwjgl.glfw.GLFW;
 import java.util.ArrayList;
 import java.util.List;
 
+//? if >1.21.8 {
+/*import net.minecraft.client.gui.Click;
+import net.minecraft.client.input.KeyInput;
+*///?}
+
 public class SelectCrosshairElement extends AbstractWidget implements ParentElement {
 	final static int BUTTON_SIZE = 23;
 	final static int BUTTON_SPACING = 25;
@@ -186,9 +191,14 @@ public class SelectCrosshairElement extends AbstractWidget implements ParentElem
 	}
 
 	@Override
+	//? if <=1.21.8 {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+	//?} else {
+	/*public boolean mouseClicked(Click mouseButtonEvent, boolean doubleClick) {
+		int button = mouseButtonEvent.button();
+	*///?}
 		for (Element element : this.children()) {
-			if (element.mouseClicked(mouseX, mouseY, button)) {
+			if (element.mouseClicked(/*? <=1.21.8 {*/mouseX, mouseY, button/*?} else {*//*mouseButtonEvent, doubleClick*//*?}*/)) {
 				this.setFocused(element);
 				if (button == GLFW.GLFW_MOUSE_BUTTON_1 || button == GLFW.GLFW_MOUSE_BUTTON_2) {
 					this.setDragging(true);
@@ -202,14 +212,30 @@ public class SelectCrosshairElement extends AbstractWidget implements ParentElem
 	}
 
 	@Override
+	//? if <=1.21.8 {
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+	//?} else {
+	/*public boolean mouseReleased(Click mouseButtonEvent) {
+	*///?}
 		this.setDragging(false);
+		//? if <=1.21.8 {
 		return this.hoveredElement(mouseX, mouseY).filter(element -> element.mouseReleased(mouseX, mouseY, button)).isPresent();
+		//?} else
+		/*return this.hoveredElement(mouseButtonEvent.x(), mouseButtonEvent.y()).filter(element -> element.mouseReleased(mouseButtonEvent)).isPresent();*/
 	}
 
 	@Override
+	//? if <=1.21.8 {
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-		return this.getFocused() != null && this.isDragging() && this.getFocused().mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+	//?} else {
+	/*public boolean mouseDragged(Click mouseButtonEvent, double dx, double dy) {
+	*///?}
+		return this.getFocused() != null
+				&& this.isDragging()
+				//? if <=1.21.8 {
+				&& this.getFocused().mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+				//?} else
+				/*&& this.getFocused().mouseDragged(mouseButtonEvent, dx, dy);*/
 	}
 
 	@Override

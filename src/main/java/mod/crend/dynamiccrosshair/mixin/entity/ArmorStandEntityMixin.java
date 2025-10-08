@@ -35,7 +35,7 @@ public abstract class ArmorStandEntityMixin extends LivingEntity implements Dyna
 		if (context.isMainHand() || context.getItemStack(Hand.MAIN_HAND).isOf(Items.NAME_TAG)) {
 			ItemStack itemStack = context.getItemStack();
 			if (itemStack.isEmpty()) {
-				Vec3d hitPos = context.getHitResult().getPos().subtract(this.getPos());
+				Vec3d hitPos = context.getHitResult().getPos().subtract(this./*? if <=1.21.8 {*/getPos()/*?} else {*//*getEntityPos()*//*?}*/);
 				EquipmentSlot slot = this.getSlotFromPosition(hitPos);
 				if (this.hasStackEquipped(slot)) {
 					return InteractionType.TAKE_ITEM_FROM_ENTITY;

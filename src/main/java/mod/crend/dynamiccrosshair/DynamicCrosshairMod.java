@@ -117,7 +117,12 @@ public class DynamicCrosshairMod /*? if fabric {*/implements ClientModInitialize
     /*//? if forge {
     /^@Mod.EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     ^///?} else {
-    @EventBusSubscriber(modid = DynamicCrosshair.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(
+        modid = DynamicCrosshair.MOD_ID,
+        //? if <1.21.9
+        bus = EventBusSubscriber.Bus.MOD,
+        value = Dist.CLIENT
+    )
     //?}
     public static class ModBus {
 

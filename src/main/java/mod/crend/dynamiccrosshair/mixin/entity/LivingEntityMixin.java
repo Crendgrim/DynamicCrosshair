@@ -24,5 +24,6 @@ public abstract class LivingEntityMixin extends DynamicCrosshairBaseEntity imple
 	@Shadow public abstract ItemStack getStackInHand(Hand hand);
 	//? if >=1.21.2
 	/*@Shadow public abstract boolean canEquip(ItemStack itemStack, EquipmentSlot equipmentSlot);*/
+	@Shadow public abstract ItemStack getMainHandStack();
 }
 

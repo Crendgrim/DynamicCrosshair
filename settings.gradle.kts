@@ -28,6 +28,7 @@ stonecutter {
         mc("1.21.3", "fabric", "forge", "neoforge")
         mc("1.21.5", "fabric",          "neoforge")
         mc("1.21.6", "fabric", "forge", "neoforge")
+        mc("1.21.9", "fabric", "forge", "neoforge")
 
         branch("api")
     }

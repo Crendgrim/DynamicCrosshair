@@ -94,6 +94,9 @@ dependencies {
         mod.dep("neoforge_patch").takeUnless { it.startsWith('[') }?.let {
             mappings("dev.architectury:yarn-mappings-patch-neoforge:$it")
         }
+        mod.dep("forge_patch").takeUnless { it.startsWith('[') }?.let {
+            mappings("dev.architectury:yarn-mappings-patch-forge:$it")
+        }
     })
 
     when (loader) {

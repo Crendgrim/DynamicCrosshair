@@ -1,0 +1,18 @@
+{
+  "tag.block.dynamiccrosshair.always_interactable": "Always interactable",
+  "tag.block.dynamiccrosshair.always_interactable_in_creative_mode": "Always interactable in creative mode",
+  "tag.block.dynamiccrosshair.interactable": "Interactable",
+  "tag.entity_type.dynamiccrosshair.always_interactable": "Always interactable",
+  "tag.entity_type.dynamiccrosshair.interactable": "Interactable",
+  "tag.item.dynamiccrosshair.always_usable": "Always usable",
+  "tag.item.dynamiccrosshair.always_usable_on_block": "Always usable on block",
+  "tag.item.dynamiccrosshair.always_usable_on_entity": "Always usable on entity",
+  "tag.item.dynamiccrosshair.always_usable_on_miss": "Always usable on miss",
+  "tag.item.dynamiccrosshair.blocks": "Blocks",
+  "tag.item.dynamiccrosshair.melee_weapons": "Melee Weapons",
+  "tag.item.dynamiccrosshair.ranged_weapons": "Ranged Weapons",
+  "tag.item.dynamiccrosshair.shields": "Shields",
+  "tag.item.dynamiccrosshair.throwables": "Throwables",
+  "tag.item.dynamiccrosshair.tools": "Tools",
+  "tag.item.dynamiccrosshair.usable": "Usable"
+}

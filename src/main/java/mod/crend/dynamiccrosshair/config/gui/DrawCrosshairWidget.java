@@ -14,6 +14,11 @@ import com.mojang.blaze3d.platform.GlConst;
 import com.mojang.blaze3d.platform.GlStateManager;
 //?}
 
+//? if >1.21.8 {
+/*import net.minecraft.client.gui.Click;
+import net.minecraft.client.input.KeyInput;
+*///?}
+
 public class DrawCrosshairWidget extends AbstractWidget {
 	boolean focused = false;
 	boolean wasMouseOver = false;
@@ -94,7 +99,14 @@ public class DrawCrosshairWidget extends AbstractWidget {
 	}
 
 	@Override
+	//? if <=1.21.8 {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+	//?} else {
+	/*public boolean mouseClicked(Click mouseButtonEvent, boolean doubleClick) {
+		double mouseX = mouseButtonEvent.x();
+		double mouseY = mouseButtonEvent.y();
+		int button = mouseButtonEvent.button();
+	*///?}
 		if (isMouseOverCanvas((int) mouseX, (int) mouseY)
 				&& (button == GLFW.GLFW_MOUSE_BUTTON_1 || button == GLFW.GLFW_MOUSE_BUTTON_2)
 		) {
@@ -111,8 +123,16 @@ public class DrawCrosshairWidget extends AbstractWidget {
 		}
 		return false;
 	}
+
 	@Override
+	//? if <=1.21.8 {
 	public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
+	//?} else {
+	/*public boolean mouseDragged(Click mouseButtonEvent, double deltaX, double deltaY) {
+		double mouseX = mouseButtonEvent.x();
+		double mouseY = mouseButtonEvent.y();
+		int button = mouseButtonEvent.button();
+	*///?}
 		if (isMouseOverCanvas((int) mouseX, (int) mouseY)
 				&& (button == GLFW.GLFW_MOUSE_BUTTON_1 || button == GLFW.GLFW_MOUSE_BUTTON_2)
 		) {

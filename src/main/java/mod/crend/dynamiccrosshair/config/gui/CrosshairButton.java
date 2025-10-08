@@ -8,6 +8,9 @@ import mod.crend.dynamiccrosshairapi.VersionUtils;
 import net.minecraft.client.gui.DrawContext;
 import org.lwjgl.glfw.GLFW;
 
+//? if >1.21.8
+/*import net.minecraft.client.gui.Click;*/
+
 public class CrosshairButton extends AbstractWidget {
 
 	protected boolean focused = false;
@@ -52,7 +55,12 @@ public class CrosshairButton extends AbstractWidget {
 	}
 
 	@Override
+	//? if <=1.21.8 {
 	public boolean mouseClicked(double mouseX, double mouseY, int button) {
+	//?} else {
+	/*public boolean mouseClicked(Click mouseButtonEvent, boolean doubleClick) {
+		int button = mouseButtonEvent.button();
+	*///?}
 		if (!hovered) return false;
 
 		if (button == GLFW.GLFW_MOUSE_BUTTON_1) {

@@ -15,17 +15,21 @@ import mod.crend.libbamboo.type.BlockOrTag;
 import mod.crend.libbamboo.type.ItemOrTag;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChiseledBookshelfBlock;
-//? if >=1.20.6
-/*import net.minecraft.component.DataComponentTypes;*/
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+
+
 //? if >=1.21.2
 /*import net.minecraft.item.consume.UseAction;*/
-import net.minecraft.util.Identifier;
+//? if >=1.20.6
+/*import net.minecraft.component.DataComponentTypes;*/
 //? if <1.21.2
 import net.minecraft.util.UseAction;
+//? if >1.21.8
+/*import net.minecraft.block.ShelfBlock;*/
 
 public class VanillaApiImpl implements DynamicCrosshairApi {
 
@@ -47,7 +51,11 @@ public class VanillaApiImpl implements DynamicCrosshairApi {
         if (context.isWithEntity() && context.getEntity().getType() == EntityType.ARMOR_STAND) {
             return true;
         }
-        if (context.isWithBlock() && context.getBlock() instanceof ChiseledBookshelfBlock) {
+        if (context.isWithBlock() && (
+                context.getBlock() instanceof ChiseledBookshelfBlock
+                //? if >1.21.8
+                /*|| context.getBlock() instanceof ShelfBlock*/
+        )) {
             return true;
         }
         if (context.getItem() instanceof FishingRodItem) {

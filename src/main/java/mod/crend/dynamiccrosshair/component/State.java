@@ -180,7 +180,7 @@ public class State {
 			return true;
 		}
 
-		Vec3d newPosition = player.getPos();
+		Vec3d newPosition = player./*? if <=1.21.8 {*/getPos()/*?} else {*//*getEntityPos()*//*?}*/;
 		if (!newPosition.equals(previousPosition)) {
 			previousPosition = newPosition;
 			previousState = newState;
